@@ -1,4 +1,4 @@
-import {Aurelia} from 'aurelia-framework'
+import {Aurelia, LogManager} from 'aurelia-framework'
 import { environment } from './environment';
 import {PLATFORM} from 'aurelia-pal';
 import { initialState } from './store/state';
@@ -15,6 +15,21 @@ import { TCustomAttribute } from 'aurelia-i18n';
 import Backend from 'i18next-xhr-backend';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { AppRouter } from 'aurelia-router';
+import { ConsoleAppender } from 'aurelia-logging-console';
+
+import Mousetrap from 'mousetrap';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/pro-solid-svg-icons';
+import { far } from '@fortawesome/pro-regular-svg-icons';
+import { fad } from '@fortawesome/pro-duotone-svg-icons';
+
+import { I18N } from 'aurelia-i18n';
+import { ValidationMessageProvider } from 'aurelia-validation';
+
+LogManager.addAppender(new ConsoleAppender());
+
+library.add(fas as any, far, fad);
 
 export function configure(aurelia: Aurelia) {
   aurelia.use
@@ -27,6 +42,11 @@ export function configure(aurelia: Aurelia) {
   if (environment.testing) {
     aurelia.use.plugin(PLATFORM.moduleName('aurelia-testing'));
   }
+
+  aurelia.use.plugin(PLATFORM.moduleName('aurelia-animator-css'));
+  aurelia.use.plugin(PLATFORM.moduleName('aurelia-async-binding'));
+  aurelia.use.plugin(PLATFORM.moduleName('aurelia-validation'));
+  aurelia.use.plugin(PLATFORM.moduleName('aurelia-fontawesome'));
 
   aurelia.use.plugin(PLATFORM.moduleName('aurelia-store', 'store'), {
     initialState: initialState,
@@ -55,7 +75,8 @@ aurelia.use.plugin(PLATFORM.moduleName('aurelia-i18n'), (instance) => {
             loadPath: './locales/{{lng}}/{{ns}}.json',
         },
         attributes: aliases,
-        ns: ['translation', 'errors', 'buttons', 'notifications', 'titles'],
+        //ns: ['translation', 'errors', 'buttons', 'notifications', 'titles'],
+        ns: [],
         defaultNS: 'translation',
         lng: environment.defaultLocale,
         fallbackLng: 'en',

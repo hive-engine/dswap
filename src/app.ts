@@ -6,14 +6,10 @@ import { AuthorizeStep } from 'resources/pipeline-steps/authorize';
 import { PreRenderStep } from 'resources/pipeline-steps/prerender';
 import { PostRenderStep } from 'resources/pipeline-steps/postrender';
 export class App {
-  public message: string = 'Hello World!';
-
   public router: Router;
 
   public configureRouter(config: RouterConfiguration, router: Router) {
     config.title = environment.siteName;
-
-    console.log('hello');
 
     MaintenanceStep.inMaintenance = environment.maintenanceMode;
 
@@ -31,6 +27,27 @@ export class App {
             moduleId: PLATFORM.moduleName('./routes/home/home', 'home'),
             nav: false,
             title: 'Home',
+        },
+        {
+          route: 'dashboard',
+          name: 'dashboard',
+          moduleId: PLATFORM.moduleName('./routes/dashboard/dashboard'),
+          nav: false,
+          title: 'Dashboard',
+        },
+        {
+          route: 'wallet',
+          name: 'wallet',
+          moduleId: PLATFORM.moduleName('./routes/wallet/wallet'),
+          nav: false,
+          title: 'Wallet',
+        },
+        {
+          route: 'trades',
+          name: 'trades',
+          moduleId: PLATFORM.moduleName('./routes/trades/trades'),
+          nav: false,
+          title: 'trades',
         },
         {
             route: 'maintenance',

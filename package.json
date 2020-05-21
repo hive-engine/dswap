@@ -54,8 +54,10 @@
   },
   "dependencies": {
     "aurelia-animator-css": "^1.0.4",
+    "aurelia-async-binding": "^1.2.0",
     "aurelia-bootstrapper": "^2.3.2",
     "aurelia-dialog": "^2.0.0",
+    "aurelia-fontawesome": "^1.0.0-beta.1",
     "aurelia-i18n": "^3.1.0",
     "aurelia-store": "^1.4.0",
     "aurelia-validation": "^1.6.0",
@@ -65,9 +67,15 @@
     "firebase-functions": "^3.3.0",
     "i18next-xhr-backend": "^3.2.2",
     "izitoast": "^1.4.0",
-    "jquery": "^3.4.1"
+    "jquery": "^3.4.1",
+    "mousetrap": "^1.6.3"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-pro": "^5.12.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.26",
+    "@fortawesome/pro-duotone-svg-icons": "^5.12.0",
+    "@fortawesome/pro-regular-svg-icons": "^5.12.0",
+    "@fortawesome/pro-solid-svg-icons": "^5.12.0",
     "@types/jest": "^24.0.9",
     "@types/jquery": "^3.3.31",
     "@types/lodash": "^4.14.117",

@@ -1,8 +1,14 @@
 <template>
-  <!-- <require from = './components/footer/footer-component.html'></require> -->
-    <nav-bar router.bind="router"></nav-bar>
-
-    <router-view class="space-navbar"></router-view>
+  <!-- <require from = './components/footer/footer-component.html'></require> -->    
+    <nav-header router.bind="router"></nav-header>
+    <div class="row">
+    <div class="col-md-2">
+      <nav-bar router.bind="router"></nav-bar>
+    </div>
+    <div class="col-md-10">
+      <router-view class="space-navbar"></router-view>
+    </div>
+  </div>
   
     <footer-component></footer-component> 
     

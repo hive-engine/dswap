@@ -73,12 +73,12 @@
   color: #fff;
   opacity: 0.8;
 }
-.dswap-card {
+.swap-screen {
   background-color: #065750;
   padding: 10px;
   border-radius: 2px;
   height: 100vh;
-  box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 4px 2px, rgba(0, 0, 0, 0.2) 0px 2px 10px 2px;
+  box-shadow: 0 2px 4px 2px rgba(0,0,0,.15), 0 2px 10px 2px rgba(0,0,0,.2);
 }
 .item-header {
   padding: 5px 10px;
