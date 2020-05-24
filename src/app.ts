@@ -59,8 +59,8 @@ export class App {
         {
             route: 'faq',
             name: 'faq',
-            moduleId: PLATFORM.moduleName('./routes/faq/faq', 'faq'),
-            nav: 4,
+            moduleId: PLATFORM.moduleName('./routes/faq/faq', 'faq'),            
+            nav: false,
             title: 'Faq',
         },
         {

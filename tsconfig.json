@@ -1,33 +1,30 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "target": "es2018",
     "module": "esnext",
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "removeComments": true,
     "sourceMap": true,
-    "target": "es5",
     "lib": [
-      "es2015",
-      "dom"
+      "dom",
+      "esnext"
     ],
     "paths": {
-      "*": [
-        "src/*"
-      ],
-      "base-environment": [
-        "aurelia_project/environments/base"
-      ]
-    },
+        "*": [
+          "src/*"
+        ],
+        "base-environment": [
+          "aurelia_project/environments/base"
+        ]
+      },
     "moduleResolution": "node",
-    "baseUrl": ".",
-    "resolveJsonModule": true,
-    "allowJs": true
+    "allowJs": true,
+    "baseUrl": "."
   },
   "exclude": [
     "node_modules",

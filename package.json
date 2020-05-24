@@ -53,10 +53,12 @@
     }
   },
   "dependencies": {
+    "@hivechain/hivejs": "^1.0.4",
     "aurelia-animator-css": "^1.0.4",
     "aurelia-async-binding": "^1.2.0",
     "aurelia-bootstrapper": "^2.3.2",
     "aurelia-dialog": "^2.0.0",
+    "aurelia-fetch-client": "^1.8.2",
     "aurelia-fontawesome": "^1.0.0-beta.1",
     "aurelia-i18n": "^3.1.0",
     "aurelia-store": "^1.4.0",
@@ -64,11 +66,14 @@
     "bootstrap": "^4.4.1",
     "firebase": "^7.6.2",
     "firebase-admin": "^8.9.0",
-    "firebase-functions": "^3.3.0",
+    "firebase-functions": "^3.3.0",    
     "i18next-xhr-backend": "^3.2.2",
     "izitoast": "^1.4.0",
     "jquery": "^3.4.1",
-    "mousetrap": "^1.6.3"
+    "moment": "^2.24.0",
+    "mousetrap": "^1.6.3",
+    "sscjs": "^0.0.8",
+    "trim-character": "^2.0.1"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-pro": "^5.12.0",
@@ -82,7 +87,7 @@
     "@types/node": "^10.11.6",
     "@types/webpack": "^4.4.15",
     "app-settings-loader": "^1.0.2",
-    "aurelia-cli": "^1.0.2",
+    "aurelia-cli": "^1.2.3",
     "aurelia-loader-nodejs": "^1.0.1",
     "aurelia-pal-nodejs": "^1.2.0",
     "aurelia-testing": "^1.0.0",
@@ -126,10 +131,10 @@
     "typescript": "^3.1.2",
     "url-loader": "^1.1.2",
     "vinyl-fs": "^3.0.3",
-    "webpack": "^4.27.0",
-    "webpack-bundle-analyzer": "^3.0.4",
-    "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9"
+    "webpack": "^4.41.5",
+    "webpack-bundle-analyzer": "^3.6.0",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1"
   },
   "engines": {
     "node": ">=8.9.0"

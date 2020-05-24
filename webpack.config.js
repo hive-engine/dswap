@@ -16,7 +16,7 @@ const when = (condition, config, negativeConfig) =>
   condition ? ensureArray(config) : ensureArray(negativeConfig);
 
 // primary config:
-const title = 'Aurelia Navigation Skeleton';
+const title = 'DSwap';
 const outDir = path.resolve(__dirname, project.platform.output);
 const srcDir = path.resolve(__dirname, 'src');
 const nodeModulesDir = path.resolve(__dirname, 'node_modules');
@@ -52,6 +52,7 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
     // out-of-date dependencies on 3rd party aurelia plugins
     alias: { 
       'base-environment': path.resolve(__dirname, 'aurelia_project/environments/base'),
+      inherits: path.resolve(__dirname, 'node_modules/inherits'),
       'aurelia-binding': path.resolve(__dirname, 'node_modules/aurelia-binding') 
     }
   },
@@ -99,30 +100,65 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
         //   enforce: true
         // },
 
-        // This is the HTTP/1.1 optimised cacheGroup configuration
-        vendors: { // picks up everything from node_modules as long as the sum of node modules is larger than minSize
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          priority: 19,
-          enforce: true, // causes maxInitialRequests to be ignored, minSize still respected if specified in cacheGroup
-          minSize: 30000 // use the default minSize
-        },
-        vendorsAsync: { // vendors async chunk, remaining asynchronously used node modules as single chunk file
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors.async',
-          chunks: 'async',
-          priority: 9,
-          reuseExistingChunk: true,
-          minSize: 10000  // use smaller minSize to avoid too much potential bundle bloat due to module duplication.
-        },
-        commonsAsync: { // commons async chunk, remaining asynchronously used modules as single chunk file
-          name: 'commons.async',
-          minChunks: 2, // Minimum number of chunks that must share a module before splitting
-          chunks: 'async',
-          priority: 0,
-          reuseExistingChunk: true,
-          minSize: 10000  // use smaller minSize to avoid too much potential bundle bloat due to module duplication.
-        }
+        // This is the HTTP/2 optimised cacheGroup configuration
+                // generic 'initial/sync' vendor node module splits: separates out larger modules
+                vendorSplit: { // each node module as separate chunk file if module is bigger than minSize
+                  test: /[\\/]node_modules[\\/]/,
+                  name(module) {
+                      // Extract the name of the package from the path segment after node_modules
+                      const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                      return `vendor.${packageName.replace('@', '')}`;
+                  },
+                  priority: 20
+              },
+              vendors: { // picks up everything else being used from node_modules that is less than minSize
+                  test: /[\\/]node_modules[\\/]/,
+                  name: "vendors",
+                  priority: 19,
+                  enforce: true // create chunk regardless of the size of the chunk
+              },
+              // generic 'async' vendor node module splits: separates out larger modules
+              vendorAsyncSplit: { // vendor async chunks, create each asynchronously used node module as separate chunk file if module is bigger than minSize
+                  test: /[\\/]node_modules[\\/]/,
+                  name(module) {
+                      // Extract the name of the package from the path segment after node_modules
+                      const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                      return `vendor.async.${packageName.replace('@', '')}`;
+                  },
+                  chunks: 'async',
+                  priority: 10,
+                  reuseExistingChunk: true,
+                  minSize: 5000 // only create if 5k or larger
+              },
+              vendorsAsync: { // vendors async chunk, remaining asynchronously used node modules as single chunk file
+                  test: /[\\/]node_modules[\\/]/,
+                  name: 'vendors.async',
+                  chunks: 'async',
+                  priority: 9,
+                  reuseExistingChunk: true,
+                  enforce: true // create chunk regardless of the size of the chunk
+              },
+              // generic 'async' common module splits: separates out larger modules
+              commonAsync: { // common async chunks, each asynchronously used module a separate chunk file if module is bigger than minSize
+                  name(module) {
+                      // Extract the name of the module from last path component. 'src/modulename/' results in 'modulename'
+                      const moduleName = module.context.match(/[^\\/]+(?=\/$|$)/)[0];
+                      return `common.async.${moduleName.replace('@', '')}`;
+                  },
+                  minChunks: 2, // Minimum number of chunks that must share a module before splitting
+                  chunks: 'async',
+                  priority: 1,
+                  reuseExistingChunk: true,
+                  minSize: 5000 // only create if 5k or larger
+              },
+              commonsAsync: { // commons async chunk, remaining asynchronously used modules as single chunk file
+                  name: 'commons.async',
+                  minChunks: 2, // Minimum number of chunks that must share a module before splitting
+                  chunks: 'async',
+                  priority: 0,
+                  reuseExistingChunk: true,
+                  enforce: true // create chunk regardless of the size of the chunk
+              }
       }
     }
   },
@@ -135,37 +171,53 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
   devtool: production ? 'source-maps' : 'inline-source-map',
   module: {
     rules: [{
-        test: /\.module.css$/,
-        issuer: [{ not: [{ test: /\.html$/i }] }],
-        use: production ? productionCss : [loaders.style, loaders.cssModules, loaders.postCss],
-    },
-    {
-        test: /^((?!\.module).)*css$/,
-        issuer: [{ not: [{ test: /\.html$/i }] }],
-        use: production ? productionGlobalCss : [loaders.style, loaders.css, loaders.postCss],
-    },
-    {
-        test: /\.css$/i,
-        issuer: [{ test: /\.html$/i }],
-        use: [loaders.css, loaders.postCss],
-    },
-    { test: /\.html$/i, loader: 'html-loader' },
-    { test: /\.ts$/, loader: 'ts-loader' },
-      // embed small images and fonts as Data Urls and larger ones as files:
-      { test: /\.(png|gif|jpg|cur)$/i, loader: 'url-loader', options: { limit: 8192 } },
-      { test: /\.woff2(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'url-loader', options: { limit: 10000, mimetype: 'application/font-woff2' } },
-      { test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'url-loader', options: { limit: 10000, mimetype: 'application/font-woff' } },
-      // load these fonts normally, as files:
-      { test: /\.(ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/i, loader: 'file-loader' },
-      { test: /environment\.json$/i, use: [
-        {loader: "app-settings-loader", options: {env: production ? 'production' : 'development' }},
-      ]},
+          test: /\.module.css$/,
+          issuer: [{ not: [{ test: /\.html$/i }] }],
+          use: production ? productionCss : [loaders.style, loaders.cssModules, loaders.postCss],
+      },
+      {
+          test: /^((?!\.module).)*css$/,
+          issuer: [{ not: [{ test: /\.html$/i }] }],
+          use: production ? productionGlobalCss : [loaders.style, loaders.css, loaders.postCss],
+      },
+      {
+          test: /\.css$/i,
+          issuer: [{ test: /\.html$/i }],
+          use: [loaders.css, loaders.postCss],
+      },
+      { test: /\.html$/i, loader: 'html-loader' },
+      { test: /\.ts$/, loader: 'ts-loader' },
+      {
+          test: /\.(png|gif|jpg|cur)$/i,
+          loader: 'url-loader',
+          options: { limit: 8192, esModule: false },
+      },
+      {
+          test: /\.woff2(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+          loader: 'url-loader',
+          options: { limit: 10000, mimetype: 'application/font-woff2', esModule: false },
+      },
+      {
+          test: /\.woff(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+          loader: 'url-loader',
+          options: { limit: 10000, mimetype: 'application/font-woff', esModule: false },
+      },
+      {
+          test: /\.(ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/i,
+          loader: 'file-loader',
+          options: {
+              esModule: false,
+          },
+      },
       ...when(coverage, {
-        test: /\.[jt]s$/i, loader: 'istanbul-instrumenter-loader',
-        include: srcDir, exclude: [/\.(spec|test)\.[jt]s$/i],
-        enforce: 'post', options: { esModules: true },
-      })
-    ]
+          test: /\.[jt]s$/i,
+          loader: 'istanbul-instrumenter-loader',
+          include: srcDir,
+          exclude: [/\.(spec|test)\.[jt]s$/i],
+          enforce: 'post',
+          options: { esModules: true },
+      }),
+    ],
   },
   plugins: [
     ...when(!karma, new DuplicatePackageCheckerPlugin()),
