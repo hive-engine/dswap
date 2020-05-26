@@ -28,7 +28,7 @@ jobs:
           node-version: '10.x'
 
       - name: Install npm dependencies
-        run: FONTAWESOME_NPM_AUTH_TOKEN=${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}} npm install
+        run: npm install
 
       - name: Run Tests
         run: npm test
