@@ -66,3 +66,4 @@ deploy-key
 \.DS_Store
 
 steem-engine-dex-firebase-adminsdk-qldnz-94f36e5f75.json
+.npmrc
