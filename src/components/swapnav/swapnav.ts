@@ -1,3 +1,6 @@
+import { customElement, autoinject, bindable } from "aurelia-framework";
+import { DswapOrderModal } from "../../modals/dswap-order";
+import { DialogService } from "aurelia-dialog";
 //import { SteemEngine } from 'services/steem-engine';
 import { SigninModal } from 'modals/signin';
 import { DialogService } from 'aurelia-dialog';
@@ -6,6 +9,7 @@ import { autoinject } from 'aurelia-dependency-injection';
 import { connectTo } from 'aurelia-store';
 import { faWallet } from '@fortawesome/pro-duotone-svg-icons';
 import { AuthService } from 'services/auth-service';
+
 
 @autoinject()
 @customElement('swapnav')
@@ -34,5 +38,13 @@ export class SwapNav {
                 this.router.navigateToRoute('tokens');
             }
         });
+    }
+
+    initiateMarketMaker() {
+        this.dialogService
+            .open({ viewModel: DswapOrderModal })
+            .whenClosed((response) => {
+                console.log(response);
+            });
     }
 }

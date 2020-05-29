@@ -37,6 +37,8 @@ const loaders = {
   postCss: { loader: 'postcss-loader' },
 };
 
+const productionCss = [{ loader: MiniCssExtractPlugin.loader}, loaders.cssModules, loaders.postCss];
+
 const productionGlobalCss = [{
     loader: MiniCssExtractPlugin.loader,
   },

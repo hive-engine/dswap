@@ -8,33 +8,37 @@ import { connectTo } from 'aurelia-store';
 import styles from './nav-bar.module.css';
 
 @autoinject()
-@customElement('nav-bar')
+@customElement("nav-bar")
 @connectTo()
 export class NavBar {
-    @bindable router;
-    //@bindable loggedIn;
-    //@bindable iconWallet = faWallet;
+  @bindable router;
+  //@bindable loggedIn;
+  //@bindable iconWallet = faWallet;
 
-    private styles = styles;
+  private styles = styles;
 
-    private state: State;
+  private state: State;
 
-    constructor(private dialogService: DialogService) {        
-      
-    }
+  constructor(private dialogService: DialogService) {}
 
-    async logout() {
-        // await this.se.logout();        
-        //this.router.navigateToRoute('home');
-    }
+  async logout() {
+    // await this.se.logout();
+    //this.router.navigateToRoute('home');
+  }
 
-    signin() {
-        // this.dialogService.open({ viewModel: SigninModal }).whenClosed(response => {
-        //     console.log(response);
-        //     if (!response.wasCancelled) {
-        //         // redirect to home if login was successfull
-        //         this.router.navigateToRoute('tokens');
-        //     }
-        // });
-    }
+  signin() {
+    // this.dialogService.open({ viewModel: SigninModal }).whenClosed(response => {
+    //     console.log(response);
+    //     if (!response.wasCancelled) {
+    //         // redirect to home if login was successfull
+    //         this.router.navigateToRoute('tokens');
+    //     }
+    // });
+  }
+
+  addActive(e) {
+    $(".removeActivate").removeClass("activateIt");
+    $(".dashboardActive").toggleClass("dashboardActive");
+    $("#" + e).addClass("activateIt");
+  }
 }

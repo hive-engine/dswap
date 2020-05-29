@@ -1,41 +1,37 @@
 <template bindable="selected">
-    <div class="dswap-nav top-nav">
-        <div class="logo">
-            <img src="../../images/dswap_standalone.png" class="logo-image" alt="brand_img">
-        </div>
-        <div class="dswap-nav-links">
-            <a class="each-link" href=""><div class="small-wrap">
-                <span>Send</span><img class="img-send" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAABn0lEQVRYhe2WLU/DUBSGbzEUSUgL/ALmEGiKAEWCpI5JEghoLAJ+AHoocEgmsZghaQiGEBLkQgC5QXgQO0tvun53t4Rkr2lzPu773nvuOa1SE0xQAwAL8IDNuomXgGPgiQG8OkhngV3gFvghxAswZYrUBnygDfQ10g/gTd5PTBCvAGdAVyP9Bm6AJjAHvIu9MS7SaF2HeACOgHkt1hdfpyppUl1f5QSWE/LaEndQhnQa2AKugF6krhfABmCl5DtyH770U8kiHfZrS4iG6MtufMCOyXOBvYjtUHLbecmbDFpFR0cWclLyXCCQ+H3Nfic2P68AfaEesFowJwBcsTe0co2cWNqCDnAvyY/AYoHYBc13KvZWbvIiIjLILeBZfOVGb5qINHLxr4mv2uiNE5FFLnnn4q8+emMu2ciFi8TbhO07ttGr7zpx5xJbePRm1siyrK5Sal0pFejmhPAdeV7mFZAbWd1BmdE7ThGEo/faCHmWCMLRu21UQIIIT94/gRnjAkRE9NsBZUZvRRHRFjX/15siwtxfbw4RLtD8E/J/j19UDHPD88Jh+wAAAABJRU5ErkJggg==">
-            </div></a>
-            <a class="each-link" href=""><div class="small-wrap">
-                <span>Receive</span><img class="img-receive" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAABFklEQVRYhe2UTW7CQAxGnaqwrtSrdAM3ABZwkpyiG37uwGGQOAFcANiVC7B63Uyk0dQzTBwSlLbfKrIn/l48jkX+9WQVWhCgFbOi+OH30oZRHb2mkhqxRamOPr0D/QEAZsAFOAOTIKfKTKUVcMaVTnUAUkDJIQy5Yokmw5p1BcBQRI5e6AAMrKY5hmEL10qHV+F5yxXkAlxdaASM3fNXZwBNlarXnz3wawGy9sC9eaj2QHjO2w8f0XdThrHCBoB6+lN/gXkGtPZarqAfHcgdJsvQtdYBIFrbz7UCALyJyA5YKLmpiOyB91QBi7bVlwGli92AuXdm7mIA5aMBQoilB0HwvGza5SwBnwrkphPzCES35gGEav4NdvUl/wCRrDYAAAAASUVORK5CYII=">
-            </div></a>
-        </div>
-        <div class="container-fluid">
-          <div class="navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav">
-                  <li class="nav-item ${row.isActive ? 'active' : ''}" repeat.for="row of router.navigation | authFilter:loggedIn:claims"><a class="nav-link" href.bind="row.href">${row.title & t}</a></li>
-              </ul>
-              <ul class="navbar-nav ml-auto">                    
-                  <li class="nav-item wallet" if.bind="loggedIn">
-                      <a class="nav-link" href="javascript:void(0);" route-href="route: wallet;">
-                          <font-awesome-icon class="d-none d-md-block" icon.bind="iconWallet"></font-awesome-icon>
-                          <span class="d-md-none">${'Wallet' & t}</span>
-                      </a>
-                  </li>
-                  <li class="nav-item active" if.bind="!loggedIn">
-                      <a class="btn nav-link" click.delegate="signin()">${'Sign In' & t}</a>
-                  </li>
-                  <li else class="nav-item dropdown active">
-                      <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          
-                      </a>
-                  </li>
-              </ul>
-          </div>
-        </div>
-        <!-- <div class="dswap-nav-options ml-auto">
-            <button class="add-wallet-btn each-link" disabled="disabled">Add Wallet</button>
-        </div> -->
+  <div class="dswap-nav">
+    <div class="logo">
+      <img
+        src="../../images/dswap_standalone.png"
+        class="logo-image"
+        alt="brand_img"
+      />
     </div>
+    <div class="dswap-nav-links">
+      <a class="each-link" href=""
+        ><div class="small-wrap">
+          <span>Send</span
+          ><img
+            class="img-send"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAADE0lEQVRYhe2VO2gUYRDHf7O3pxEUH5igjSa5gBaxEhtBg2+w0MIHKt5JYmElCMkFAxaHoMEkIlgoiFzibQRRsQiKokYQrezEIBZ5CRZqqoiiJLvfWGTviPfY7AWjCE61d3Pf/H87M9//4H/8jz8RitT0NG+uzSR356fsudStcVrXiOEwjh7FIqbGNMw5wKqbp5dGjTmgaALVjQjip96PjC56OScA1d2pCrG/7hGVOJ63SyHqp8YBD1gmSC+plPmtALGe5vXGiiSEb0dQWe5/7QFPRXCixn4wIe4ggOd5vcVqlA2Qm6voUYWYoNnUW0QyGrF7Ro6c/zT125aDorIEeDXaePHdrAEC5vpBkXuIpEfiF17nnxOVOICKOKVqlwSou3xyvrdk/k4Liavn7VWY56fGBe1TJTOc6OpnWgt+OZ9uqzS4uwCXiH0nHIAiNTeaN1lixY1wQGCxX30SuK+ijroL+0YbUz8AODaVjGVaqlRk33C882quVMQ9xNQy3s+OJBAg5iQT6nAWi9XTXumVKL3i2bcGm9rHihWIZVqqFOlHqa+90SrDxzquAKjgt19Ltv/XDqg+Akn6nyZU2D4S73wRdDgnDvXAgIi5C1Dd3bwW2ACMq7uwL6iGlX0YSnR9tlx7K/AGmCfKtdXOqZWlDtal2yoVeeqLvzMeO4YSXZ8BIpYVBxDlTm5cMwEADDa1j1muvc2HWBvR6LNiEHXptkpju/3AOl98y2hj50cAFFHhMIBRE9j+AoAwEIHiQLWT3AzUUMJ680NKJfKFPJncGp1c4AaJA9RmWq+DHhfk3FCi40zZHcjGYFP7mKDbgQGmOvHY2O4zX3xA0IZ88eruVAXofihtvaEBoGAx6ymycNND7K97gMUEWG9ZAFCwEwCoPVl0dGGst2yAIhBFb0dduq0SmNF6ZwUQBmKa9T4Mst5ZA8wEkbNeCN1+CLiGQZF/RdWYE2JZz4EvExXuig8HL30PW6usDmQj/4qKZT0BEOV2OeKzBoDC/w4IZ72/DQAKdiKU9c5JxDItVTEnmfgr4v98/ARbkItun4uisAAAAABJRU5ErkJggg=="
+          /></div
+      ></a>
+      <a class="each-link" href=""
+        ><div class="small-wrap">
+          <span>Receive</span
+          ><img
+            class="img-send"
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAAxUlEQVRYhe2W2xGEIAxFw46VUJhdUIVdUJit4NfOZDPkYaLD6nD+RALXPAWYTAaTeou5liYZ7euW8D76rNlhPlald7FIL6li7gtzLQ3vtdoBGDyQa2maayN27hDgw3uxtSKGIHK41U4UILlwX7ck5YTlclWARsT1X8QDaJ3TdU0YZ48Z3ge60BLiSsq6LpXkcA+cSqKzvf4RORCahhzclHznNJS8dUkOeKehlVArxngqwCTgin7vFuD9EQH4Ff7XVTCZDOcA0DWJf80Cx4cAAAAASUVORK5CYII="
+          /></div
+      ></a>
+    </div>
+    <div class="dswap-nav-options ml-auto">
+      <button
+        class="add-wallet-btn each-link"
+        click.delegate="initiateMarketMaker()"
+      >
+        Add Wallet
+      </button>
+    </div>
+  </div>
 </template>
