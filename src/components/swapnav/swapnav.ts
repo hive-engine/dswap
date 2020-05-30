@@ -1,11 +1,8 @@
 import { customElement, autoinject, bindable } from "aurelia-framework";
 import { DswapOrderModal } from "../../modals/dswap-order";
-import { DialogService } from "aurelia-dialog";
 //import { SteemEngine } from 'services/steem-engine';
 import { SigninModal } from 'modals/signin';
 import { DialogService } from 'aurelia-dialog';
-import { customElement, bindable } from 'aurelia-framework';
-import { autoinject } from 'aurelia-dependency-injection';
 import { connectTo } from 'aurelia-store';
 import { faWallet } from '@fortawesome/pro-duotone-svg-icons';
 import { AuthService } from 'services/auth-service';

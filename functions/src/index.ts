@@ -4,11 +4,11 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 
-import * as serviceAccount from './steem-engine-dex-firebase-adminsdk-qldnz-94f36e5f75.json';
+import * as serviceAccount from './dswap-2b352-firebase-adminsdk-ebt14-cb88dcd45b.json';
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as any),
-    databaseURL: "https://steem-engine-dex.firebaseio.com"
+    databaseURL: "https://dswap-2b352.firebaseio.com"
 });
 
 import { authRouter } from './routes/auth';
@@ -36,7 +36,7 @@ export const createUserRoles = functions.auth.user().onCreate((user) => {
         member: true
     };
 
-    const adminUsers = ['yabapmatt', 'aggroed', 'beggars'];
+    const adminUsers = ['yabapmatt', 'aggroed', 'beggars', 'lion200'];
 
     if (adminUsers.includes(user.uid)) {
         customClaims.admin = true;
