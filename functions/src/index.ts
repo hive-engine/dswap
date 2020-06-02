@@ -4,11 +4,11 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 
-import * as serviceAccount from './dswap-2b352-firebase-adminsdk-ebt14-cb88dcd45b.json';
+import * as serviceAccount from './hive-engine-firebase-adminsdk.json';
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as any),
-    databaseURL: "https://dswap-2b352.firebaseio.com"
+    databaseURL: "https://tribaldex-d22e0.firebaseio.com"
 });
 
 import { authRouter } from './routes/auth';

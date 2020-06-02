@@ -32,7 +32,7 @@ export class SwapNav {
             console.log(response);
             if (!response.wasCancelled) {
                 // redirect to home if login was successfull
-                this.router.navigateToRoute('tokens');
+                this.router.navigateToRoute('/');
             }
         });
     }

@@ -26,18 +26,27 @@
       ></a>
     </div>
     <div class="dswap-nav-options ml-auto">
-        <button
-        class="add-wallet-btn each-link"
-        click.delegate="signin()"
-      >
-        Sign in
-      </button>
-      <button
-        class="add-wallet-btn each-link"
-        click.delegate="initiateMarketMaker()"
-      >
-        Add Wallet
-      </button>
+        <ul>
+            <li class="nav-item active" if.bind="!loggedIn">
+                <a class="btn nav-link" click.delegate="signin()">${'Sign In' & t}</a>
+            </li>
+            <li else class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="javascript:void(0);" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ${state.account.name}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                    <a class="dropdown-item" href="javascript:void(0);" click.delegate="logout()">${'Logout' & t}</a>                
+                </div>
+            </li>
+            <li>
+                <a
+                    class="add-wallet-btn each-link"
+                    click.delegate="initiateMarketMaker()"
+                >
+                    Add Wallet
+                </a>
+            </li>
+        </ul>
     </div>
   </div>
 </template>

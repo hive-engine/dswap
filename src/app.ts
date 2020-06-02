@@ -1,12 +1,58 @@
+import { autoinject } from 'aurelia-framework';
+import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
 import { PLATFORM } from 'aurelia-pal';
-import { Router, RouterConfiguration } from 'aurelia-router';
+import { Router, RouterConfiguration, RouterEvent } from 'aurelia-router';
 import { environment } from 'environment';
 import { MaintenanceStep } from 'resources/pipeline-steps/maintenance';
 import { AuthorizeStep } from 'resources/pipeline-steps/authorize';
 import { PreRenderStep } from 'resources/pipeline-steps/prerender';
 import { PostRenderStep } from 'resources/pipeline-steps/postrender';
+
+import { getCurrentFirebaseUser } from 'store/actions';
+import { Store, CallingAction, MiddlewarePlacement, dispatchify } from 'aurelia-store';
+
+function lastCalledActionMiddleware(state: State, originalState: State, settings = {}, action: CallingAction) {
+    state.$action = {
+        name: action.name,
+        params: action.params ?? {},
+    };
+
+    return state;
+}
+@autoinject()
 export class App {
-  public router: Router;
+  private loggedIn = false;
+    private loading = false;
+    private claims;
+    private notifications = [];
+
+    public router: Router;
+    public subscription: Subscription;
+    private state: State;
+
+  constructor(
+    private ea: EventAggregator,
+    private store: Store<State>
+) {
+    this.store.registerMiddleware(lastCalledActionMiddleware, MiddlewarePlacement.After);
+}
+
+bind() {
+    this.store.state.subscribe((s: State) => {
+        if (s) {
+            this.state = s;
+
+            this.loading = s.loading;
+            this.loggedIn = s.loggedIn;
+            this.claims = s?.account?.token?.claims;
+            this.notifications = s?.firebaseUser?.notifications ?? [];
+        }
+    });
+
+    this.subscription = this.ea.subscribe(RouterEvent.Complete, () => {
+        dispatchify(getCurrentFirebaseUser)();
+    });
+}
 
   public configureRouter(config: RouterConfiguration, router: Router) {
     config.title = environment.siteName;
