@@ -64,6 +64,7 @@
         "aurelia-store": "^1.4.0",
         "aurelia-validation": "^1.6.0",
         "bootstrap": "^4.4.1",
+        "crypto-js": "3.1.9-1",
         "firebase": "^7.14.6",
         "firebase-admin": "^8.12.1",
         "firebase-functions": "^3.3.0",
@@ -73,6 +74,7 @@
         "moment": "2.26.0",
         "mousetrap": "^1.6.3",
         "sscjs": "0.0.8",
+        "shortid": "2.2.15",
         "trim-character": "2.0.1"
     },
     "devDependencies": {
