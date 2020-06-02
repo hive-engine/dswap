@@ -12,29 +12,11 @@ import styles from './nav-header.module.css';
 @connectTo()
 export class NavHeader {
     @bindable router;
-    //@bindable loggedIn;
-    //@bindable iconWallet = faWallet;
+    @bindable loggedIn;
 
     private styles = styles;
 
-    private state: State;
-
     constructor(private dialogService: DialogService) {        
       
-    }
-
-    async logout() {
-        // await this.se.logout();        
-        //this.router.navigateToRoute('home');
-    }
-
-    signin() {
-        // this.dialogService.open({ viewModel: SigninModal }).whenClosed(response => {
-        //     console.log(response);
-        //     if (!response.wasCancelled) {
-        //         // redirect to home if login was successfull
-        //         this.router.navigateToRoute('tokens');
-        //     }
-        // });
     }
 }

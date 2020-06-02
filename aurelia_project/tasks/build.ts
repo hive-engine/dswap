@@ -12,9 +12,10 @@ const production = CLIOptions.getEnvironment() === 'prod';
 const server = buildOptions.isApplicable('server');
 const extractCss = buildOptions.isApplicable('extractCss');
 const coverage = buildOptions.isApplicable('coverage');
+const karma = buildOptions.isApplicable('karma');
 
 const config = webpackConfig({
-  production, server, extractCss, coverage, analyze
+  production, server, extractCss, coverage, analyze, karma
 });
 const compiler = webpack(<any>config);
 

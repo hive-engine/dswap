@@ -68,17 +68,24 @@ body {
 .small-wrap span {
   align-self: center;
 }
-.add-wallet-btn {
-  background-color: transparent;
+.dswap-nav-options ul {
+    list-style-type: none;
+}
+.dswap-nav-options ul li {
+    display: inline-block;
+}
+.dswap-nav-options ul li a {
+    background-color: transparent;
   border: 1px solid #387973;
   border-radius: 8px;
   padding: 10px 15px;
   color: #22a275;
 }
-.add-wallet-btn:hover {
-  background-color: #387973;
-  color: #fff;
-  opacity: 0.8;
+.dswap-nav-options ul li a:hover {
+    background-color: #387973;
+    color: #fff;
+    opacity: 0.8;
+    border-radius: 8px;
 }
 .swap-screen {
   background-color: #fff;

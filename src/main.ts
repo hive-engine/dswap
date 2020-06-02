@@ -27,11 +27,13 @@ import { fad } from '@fortawesome/pro-duotone-svg-icons';
 import { I18N } from 'aurelia-i18n';
 import { ValidationMessageProvider } from 'aurelia-validation';
 
+import { authStateChanged } from './common/firebase';
+
 LogManager.addAppender(new ConsoleAppender());
 
 library.add(fas as any, far, fad);
 
-export function configure(aurelia: Aurelia) {
+export async function configure(aurelia: Aurelia) {
   aurelia.use
     .standardConfiguration()
     .feature(PLATFORM.moduleName('resources/index'))
@@ -93,5 +95,7 @@ aurelia.use.plugin(PLATFORM.moduleName('aurelia-i18n'), (instance) => {
     });
 });
 
-  aurelia.start().then(() => aurelia.setRoot(PLATFORM.moduleName('app')));
+    await authStateChanged();
+    await aurelia.start();
+    await aurelia.setRoot(PLATFORM.moduleName('app'));
 }
