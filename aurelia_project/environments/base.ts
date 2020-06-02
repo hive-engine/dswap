@@ -3,12 +3,12 @@ export const baseEnvironmentConfiguration: Partial<EnvironmentInterface> = {
     defaultLocale: 'en',
     GRAPHQL_API: 'https://graphql.steem.services/',
     SCOT_API: 'https://scot-api.steem-engine.com/',
-    HISTORY_API: 'https://api.steem-engine.com/history/',
-    CONVERTER_API: 'https://converter-api.steem-engine.com/api/',
+    HISTORY_API: 'https://accounts.hive-engine.com/',
+    CONVERTER_API: 'https://converter-api.hive-engine.com/api/',
     FIREBASE_API: 'https://us-central1-tribaldex-d22e0.cloudfunctions.net/api/',
     maintenanceMode: false,
-    disabledTokens: ['BTC', 'LTC', 'STEEM', 'SBD', 'BCC', 'XAP', 'XRP', 'GOLOS', 'DISNEY', 'AMAZON', 'VOICE', 'ETH', 'EOS', 'LASSE', 'TIME', 'R', 'SCTR', 'ALLAH', 'DONE', 'BNB', 'ETHER', 'LTCPEG', 'SBC', 'LASSECASH', 'HIVE', 'TIX', 'TIXM', 'STEM', 'STEMM', 'LEO', 'LEOM', 'LEOMM', 'NEO', 'NEOX', 'PORN', 'SPORTS', 'BATTLE', 'SIM', 'CTP', 'CTPM', 'EMFOUR', 'CCC', 'CCCM', 'BEER', 'WEED', 'WEEDM', 'WEEDMM', 'SPACO', 'SPACOM', 'NEOXAG', 'NEOXAGM', 'KANDA', 'SAND', 'INFOWARS', 'SPI', 'PAL', 'PALM', 'PALMM', 'ENGAGE', 'BRO'],
-    peggedToken: 'STEEMP',
+    disabledTokens: ['BTC', 'LTC', 'HIVE', 'HBD', 'BCC', 'XAP', 'XRP', 'GOLOS', 'DISNEY', 'AMAZON', 'VOICE', 'ETH', 'EOS', 'LASSE', 'TIME', 'R', 'SCTR', 'ALLAH', 'BNB', 'DONE', 'ETHER', 'LTCPEG', 'SBC'],
+    peggedToken: 'SWAP.HIVE',
     features: {
         nfts: {
             enabled: true

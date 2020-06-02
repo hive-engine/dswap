@@ -27,6 +27,7 @@ interface State {
   loggedIn: boolean;
   loading: boolean;
   tokens: IToken[];
+  peggedTokens: ICoin[];
   tokensLoaded: boolean;
   buyBook: any[];
   sellBook: any[];
@@ -40,4 +41,23 @@ interface State {
   instances: INftInstance[];
   instance: INftInstance;
   nftSellBook: INftSellBook[];
+}
+
+interface ICoinPair {
+    _id: number;
+    exchange_rate: string;
+    from_coin: string;
+    from_coin_symbol: string;
+    to_coin: string;
+    to_coin_symbol: string;
+    __str__: string;
+}
+
+interface ICoin {
+    symbol: string;
+    display_name: string;
+    our_account: string;
+    can_issue: boolean;
+    coin_type: string;
+    symbol_id: string;
 }

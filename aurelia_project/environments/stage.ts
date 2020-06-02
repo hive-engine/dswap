@@ -9,7 +9,7 @@ export const environment: Partial<EnvironmentInterface> = {
     RPC_URL: 'https://testapi.steem-engine.com/',
     NODE_API_URL: 'https://node-api.steem-engine.com/v1/',
 	ACCOUNTS_API_URL: 'https://api.steem-engine.com/accounts',
-	CONVERTER_API: 'https://converter-api.steem-engine.com/api',
+	CONVERTER_API: 'https://converter-api.hive-engine.com/api/',
 	nativeToken: 'SSC',
     steempAccount: 'steemsc'
 };

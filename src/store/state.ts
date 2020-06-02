@@ -16,6 +16,7 @@ export const initialState: State = {
   firebaseUser: {},
   loggedIn: false,
   loading: false,
+  peggedTokens: [],
   tokens: [],
   buyBook: [],
   sellBook: [],

@@ -61,3 +61,23 @@ export async function checkTransaction(trxId: string, retries: number) {
         }
     }
 }
+
+export async function loadCoins(): Promise<ICoin[]> {
+    const url = `${environment.CONVERTER_API}/coins/`;
+
+    const response = await http.fetch(url, {
+        method: 'GET',
+    });
+
+    return response.json() as Promise<ICoin[]>;
+}
+
+export async function loadCoinPairs(): Promise<ICoinPair[]> {
+    const url = `${environment.CONVERTER_API}/pairs/`;
+
+    const response = await http.fetch(url, {
+        method: 'GET',
+    });
+
+    return response.json() as Promise<ICoinPair[]>;
+}
