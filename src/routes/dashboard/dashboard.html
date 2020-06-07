@@ -43,19 +43,17 @@
                                 </div> -->
                             </div>
                             <div class="chart">
-                                <svg viewBox="0 0 240 60" preserveAspectRatio="none" style="height: 90px; width: 100%;">
-                                    
-                                </svg>
+                                <chart class="exchange-chart" data.bind="chartDataBuy" view-model.ref="chartRefBuy"></chart>
                             </div>
-                            <div class="blur"></div>
+                            <!-- <div class="blur"></div> -->
                             <div class="chart-data">
                                 <div class="price-data">
                                     <p class="price-title">Current Price</p>
-                                    <span>$200.00</span>
+                                    <span>${buyTokenStats.lastPriceUsd}</span>
                                 </div>
                                 <div class="change-data">
                                     <p class="change-title">24hrs Change</p>
-                                    <span>6%</span>
+                                    <span>${buyTokenStats.priceChangePercent}</span>
                                 </div>
                             </div>
                         </div>
@@ -109,19 +107,17 @@
                                 </div> -->
                             </div>
                             <div class="chart">
-                                <svg viewBox="0 0 240 60" preserveAspectRatio="none" style="height: 90px; width: 100%;">
-                                    
-                                </svg>
+                                <chart class="exchange-chart" data.bind="chartDataSell" view-model.ref="chartRefSell"></chart>
                             </div>
-                            <div class="blur"></div>
+                            <!-- <div class="blur"></div> -->
                             <div class="chart-data">
                                 <div class="price-data">
                                     <p class="price-title">Current Price</p>
-                                    <span>$200.00</span>
+                                    <span>${sellTokenStats.lastPriceUsd}</span>
                                 </div>
                                 <div class="change-data">
                                     <p class="change-title">24hrs Change</p>
-                                    <span>6%</span>
+                                    <span>${sellTokenStats.priceChangePercent}</span>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +134,7 @@
                                 />
                                 <div class="token-sym">
                                     <div class="input-group-text token-sym-text h-100 input-group-text-dark">
-                                        ETH
+                                        ${buyToken ? buyToken : 'TOKEN'}
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +174,7 @@
                                 />
                                 <div class="token-sym">
                                     <div class="input-group-text token-sym-text h-100 input-group-text-dark">
-                                        ETH
+                                        ${sellToken ? sellToken : 'TOKEN'}
                                     </div>
                                 </div>
                             </div>
@@ -193,8 +189,8 @@
                         Your Estimated Rate
                         <font-awesome-icon class="chart-icon" icon.bind="['fas', 'info-circle']"></font-awesome-icon>
                     </h4>
-                    <div class="estimated-rate-info-wrapper">
-                        <p class="estimated-rate-info">1 ATOM = 0.01328161 ETH</p>
+                    <div class="estimated-rate-info-wrapper" show.bind="buyToken && sellToken">
+                        <p class="estimated-rate-info">1 ${buyToken} = ${unitEstimateRate} ${sellToken}</p>
                     </div>
                     <div class="estimated-trade-info-wrapper">
                         <p class="estimated-trade-info-title">Estimated Trade Details</p>

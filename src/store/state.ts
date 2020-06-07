@@ -30,5 +30,7 @@ export const initialState: State = {
   instance: null,
   instances: [],
   nftSellBook: [],
-  tokensLoaded: false
+  tokensLoaded: false,
+  hivePriceUsd: '',
+  hivePriceUsdDate: null
 };

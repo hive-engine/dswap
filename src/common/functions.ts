@@ -45,7 +45,7 @@ export function addCommas(nStr, currency?) {
     return x1 + x2;
 }
 
-export function usdFormat(val, decimal_limit?, price?, withoutFormatting = false) {
+export function usdFormat(val, decimal_limit?, price?, withoutFormatting = false) {    
     const usd = val * price;
 
     if (decimal_limit != null && !isNaN(parseInt(decimal_limit))) {
@@ -201,4 +201,20 @@ export function trimUsername(username) {
         username = trim(username, '@');
 
     return username;
+}
+
+export async function getPrices() {
+    try {
+        const request = await http.fetch(`https://api.coingecko.com/api/v3/simple/price?ids=HIVE&vs_currencies=USD`, {
+            headers: {
+                'Origin': 'https://dswap.trade',
+                'Referer': 'https://dswap.trade/?p=conversion_history',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'
+            }
+        });
+
+        return request.json();
+    } catch {
+        return null;
+    }
 }

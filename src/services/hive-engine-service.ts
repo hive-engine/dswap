@@ -47,7 +47,7 @@ export class HiveEngineService {
         const coins = await loadCoins();
         let peggedCoins = coins.filter(x => x.coin_type === 'hiveengine');
 
-        const hive = { display_name: 'HIVE', symbol: 'HIVE', symbol_id: 'SWAP.HIVE' } as ICoin;
+        const hive = { display_name: 'HIVE', symbol: 'SWAP.HIVE', symbol_id: 'SWAP.HIVE' } as ICoin;
         peggedCoins.push(hive);
 
         this.state.peggedTokens = peggedCoins;
