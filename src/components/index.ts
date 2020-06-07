@@ -3,6 +3,7 @@ import { FrameworkConfiguration } from 'aurelia-framework';
 
 export function configure(config: FrameworkConfiguration) {
     config.globalResources([
+        PLATFORM.moduleName('./chart/chart'),
         PLATFORM.moduleName('./receive-address/receive-address'),
         PLATFORM.moduleName('./swapnav/swapnav'),
         PLATFORM.moduleName('./nav-bar/nav-bar'),

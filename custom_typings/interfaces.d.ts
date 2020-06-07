@@ -13,7 +13,7 @@ interface EnvironmentInterface {
   GRAPHQL_API: string;
   HISTORY_API: string;
   SCOT_API: string;
-  steempAccount: string;
+  hivePegAccount: string;
   nativeToken: string;
   disabledTokens: string[];
   peggedToken: string;
@@ -27,6 +27,7 @@ interface State {
   loggedIn: boolean;
   loading: boolean;
   tokens: IToken[];
+  peggedTokens: ICoin[];
   tokensLoaded: boolean;
   buyBook: any[];
   sellBook: any[];
@@ -40,4 +41,47 @@ interface State {
   instances: INftInstance[];
   instance: INftInstance;
   nftSellBook: INftSellBook[];
+  hivePriceUsd: string;
+  hivePriceUsdDate: string;
+}
+
+interface ICoinPair {
+    _id: number;
+    exchange_rate: string;
+    from_coin: string;
+    from_coin_symbol: string;
+    to_coin: string;
+    to_coin_symbol: string;
+    __str__: string;
+}
+
+interface ICoin {
+    symbol: string;
+    display_name: string;
+    our_account: string;
+    can_issue: boolean;
+    coin_type: string;
+    symbol_id: string;
+}
+
+interface IHistoryApiItem {
+    _id: string;
+    timestamp: number;
+    symbol: string;
+    volumeSteem: string;
+    volumeToken: string;
+    lowestPrice: string;
+    highestPrice: string;
+    openPrice: string;
+    closePrice: string;
+
+}
+
+interface ITokenStats {
+    symbol: string;
+    lastPrice: string;
+    lastPriceUsd: string;
+    priceChangePercent: string;
+    chart: any;
+    chartData: any;
 }

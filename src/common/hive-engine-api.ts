@@ -61,3 +61,54 @@ export async function checkTransaction(trxId: string, retries: number) {
         }
     }
 }
+
+export async function loadCoins(): Promise<ICoin[]> {
+    const url = `${environment.CONVERTER_API}/coins/`;
+
+    const response = await http.fetch(url, {
+        method: 'GET',
+    });
+
+    return response.json() as Promise<ICoin[]>;
+}
+
+export async function loadCoinPairs(): Promise<ICoinPair[]> {
+    const url = `${environment.CONVERTER_API}/pairs/`;
+
+    const response = await http.fetch(url, {
+        method: 'GET',
+    });
+
+    return response.json() as Promise<ICoinPair[]>;
+}
+
+export async function loadTokenMetrics(symbols = [], limit = 1000, offset = 0): Promise<any[]> {
+    const queryConfig: any = {};
+
+    if (symbols.length) {
+        queryConfig.symbol = { $in: symbols };
+    }
+
+    const results = [];
+    const metrics = await ssc.find('market', 'metrics', queryConfig);        
+
+    return metrics;
+}
+
+export async function loadTokenMarketHistory(symbol: string, timestampStart?: string, timestampEnd?: string): Promise<IHistoryApiItem[]> {
+    let url = `${environment.HISTORY_API}marketHistory?symbol=${symbol.toUpperCase()}`;
+
+    if (timestampStart) {
+        url += `&timestampStart=${timestampStart}`;
+    }
+
+    if (timestampEnd) {
+        url += `&timestampEnd=${timestampEnd}`;
+    }
+
+    const response = await http.fetch(url, {
+        method: 'GET',
+    });
+
+    return response.json() as Promise<IHistoryApiItem[]>;
+}

@@ -16,6 +16,7 @@ export const initialState: State = {
   firebaseUser: {},
   loggedIn: false,
   loading: false,
+  peggedTokens: [],
   tokens: [],
   buyBook: [],
   sellBook: [],
@@ -29,5 +30,7 @@ export const initialState: State = {
   instance: null,
   instances: [],
   nftSellBook: [],
-  tokensLoaded: false
+  tokensLoaded: false,
+  hivePriceUsd: '',
+  hivePriceUsdDate: null
 };
