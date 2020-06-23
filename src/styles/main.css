@@ -833,4 +833,10 @@ font-size: 20px;
     background-color: #387973!important;
     color: #fff!important;
 }
+.choose-token {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 /* ==================================== */
