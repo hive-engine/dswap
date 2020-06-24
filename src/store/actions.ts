@@ -7,6 +7,7 @@ import firebase from 'firebase/app';
 import { log } from 'services/log';
 
 import moment from 'moment';
+import { loadUserBalances } from 'common/hive-engine-api';
 
 export function loading(state: State, boolean: boolean) {
     const newState = { ...state };
@@ -101,6 +102,22 @@ export async function getCurrentFirebaseUser(state: State): Promise<State> {
     return newState;
 }
 
+export async function loadAccountBalances(state: State): Promise<State> {
+    const newState = { ...state };
+
+    if (!newState.loggedIn) {
+        return newState;
+    }
+
+    try {
+        newState.account.balances = await loadUserBalances(newState.account.name);
+    } catch (e) {
+        log.error(e);
+    }
+
+    return newState;
+}
+
 export function resetInstance(state: State): State {
     const newState = { ...state };
 
@@ -109,6 +126,7 @@ export function resetInstance(state: State): State {
     return newState;
 }
 
+store.registerAction('loadAccountBalances', loadAccountBalances);
 store.registerAction('loading', loading);
 store.registerAction('login', login);
 store.registerAction('logout', logout);

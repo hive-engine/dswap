@@ -19,7 +19,7 @@ const DefaultChartOptions = {
         scales: {
             yAxes: [{
                 ticks: {
-                    beginAtZero: true//,
+                    beginAtZero: false//,
                     //max: 100000
                 }
             }]

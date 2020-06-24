@@ -9,12 +9,12 @@ import { Store } from 'aurelia-store';
 import hivejs from '@hivechain/hivejs';
 import { hiveSignerJson, getAccount } from 'common/hive';
 import { loadCoins } from 'common/hive-engine-api';
+import { HiveEngineService } from './hive-engine-service';
 
 const http = new HttpClient();
 
 @autoinject()
-export class HiveEngineService {
-    public http: HttpClient;
+export class TokenService {
     public state: State;
 
     public user = {
@@ -24,10 +24,10 @@ export class HiveEngineService {
 
     public storeSubscription: Subscription;
 
-    constructor(@lazy(HttpClient) getHttpClient: () => HttpClient,
-    private i18n: I18N,
+    constructor(private i18n: I18N,
     private store: Store<State>,
-    private toast: ToastService) {
+    private toast: ToastService,
+    private hes: HiveEngineService) {
         http.configure(config => {
             config
                 .useStandardConfiguration()
@@ -43,13 +43,11 @@ export class HiveEngineService {
         });        
     }
 
-    async getPeggedTokens() {        
-        const coins = await loadCoins();
-        let peggedCoins = coins;//.filter(x => x.coin_type === 'hiveengine');
+    async getDSwapTokens() {        
+        let heTokens = await this.hes.getPeggedTokens();
 
-        const hive = { display_name: 'HIVE', symbol: 'SWAP.HIVE', symbol_id: 'SWAP.HIVE' } as ICoin;
-        peggedCoins.push(hive);
+        this.state.tokens = heTokens;
 
-        return peggedCoins;
+        return heTokens;
     }    
 }
