@@ -26,8 +26,7 @@ interface State {
   firebaseUser: any;
   loggedIn: boolean;
   loading: boolean;
-  tokens: IToken[];
-  peggedTokens: ICoin[];
+  tokens: ICoin[];
   tokensLoaded: boolean;
   buyBook: any[];
   sellBook: any[];
@@ -82,6 +81,22 @@ interface ITokenStats {
     lastPrice: string;
     lastPriceUsd: string;
     priceChangePercent: string;
-    chart: any;
-    chartData: any;
+    balance: number;
+    amount: number;
+}
+
+interface BalanceInterface {
+    metric: any;
+    priceChangeHive: number;
+    _id: number;
+    account: string;
+    balance: string;
+    lastPrice: number;
+    name: string;
+    priceChangePercent: number;
+    scotConfig?: any;
+    symbol: string;
+    usdValue: number;
+    usdValueFormatted: string;
+    metadata: any;
 }

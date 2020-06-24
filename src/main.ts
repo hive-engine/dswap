@@ -3,6 +3,7 @@ import { environment } from './environment';
 import {PLATFORM} from 'aurelia-pal';
 import { initialState } from './store/state';
 
+import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'izitoast/dist/css/iziToast.css';
 import './styles/toast.css';
@@ -32,6 +33,11 @@ import { authStateChanged } from './common/firebase';
 LogManager.addAppender(new ConsoleAppender());
 
 library.add(fas as any, far, fad);
+
+import { getHivePrice } from 'common/functions';
+// Gets the latest Hive price periodically
+getHivePrice();
+setInterval(() => getHivePrice, 300000);
 
 export async function configure(aurelia: Aurelia) {
   aurelia.use

@@ -76,6 +76,7 @@
         "jquery": "^3.4.1",
         "moment": "2.26.0",
         "mousetrap": "^1.6.3",
+        "popper.js": "^1.16.1",
         "sscjs": "0.0.8",
         "shortid": "2.2.15",
         "trim-character": "2.0.1"

@@ -218,3 +218,17 @@ export async function getPrices() {
         return null;
     }
 }
+
+export async function getHivePrice() {
+    try {
+        const response = await getPrices();
+
+        window.hive_price = parseFloat(response.hive.usd);
+
+        return window.hive_price;
+    } catch {
+        window.hive_price = 0;
+
+        return 0;
+    }
+}
