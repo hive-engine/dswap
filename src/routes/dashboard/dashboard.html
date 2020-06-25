@@ -46,10 +46,10 @@
                                 <chart class="exchange-chart" data.bind="chartDataBuy" view-model.ref="chartRefBuy"></chart>
                             </div>
                             <!-- <div class="blur"></div> -->
-                            <div class="chart-data">
+                            <div class="chart-data" show.bind="buyTokenStats">
                                 <div class="price-data">
                                     <p class="price-title">Current Price</p>
-                                    <span>${buyTokenStats.lastPriceUsd}</span>
+                                    <span>${'$' + buyTokenStats.lastPriceUsd}</span>
                                 </div>
                                 <div class="change-data">
                                     <p class="change-title">24hrs Change</p>
@@ -74,21 +74,22 @@
                         <h4 class="action-title">Sell</h4>
                         <div class="sell action-card">
                             <div class="action-card-options">
-                                <select
-                                        class="form-control"
-                                        value.bind="sellToken"
-                                        change.delegate="sellTokenSelected()"
-                                    >
-                                        <option model.bind="null"
-                                            >${'Please select a token...' & t}</option
+                                <div class="form-group">
+                                    <select
+                                            class="form-control"
+                                            value.bind="sellToken"
+                                            change.delegate="sellTokenSelected()"
                                         >
-                                        <option
-                                            value.bind="t.symbol"
-                                            repeat.for="t of sellTokens"
-                                            >${t.display_name & t} (${t.symbol})</option
-                                        >
-                    
-                                    </select>
+                                            <option model.bind="null"
+                                                >${'Please select a token...' & t}</option
+                                            >
+                                            <option
+                                                value.bind="t.symbol"
+                                                repeat.for="t of sellTokens"
+                                                >${t.display_name & t} (${t.symbol})</option
+                                            >
+                        
+                                        </select>
                                 <!-- <div class="token-info">
                                     <div class="token-info-data">
                                         <div class="token-icon">
@@ -105,15 +106,16 @@
                                         ></font-awesome-icon>
                                     </div>
                                 </div> -->
+                                </div>
                             </div>
                             <div class="chart">
                                 <chart class="exchange-chart" data.bind="chartDataSell" view-model.ref="chartRefSell"></chart>
                             </div>
                             <!-- <div class="blur"></div> -->
-                            <div class="chart-data">
+                            <div class="chart-data" show.bind="sellTokenStats">
                                 <div class="price-data">
                                     <p class="price-title">Current Price</p>
-                                    <span>${sellTokenStats.lastPriceUsd}</span>
+                                    <span>${'$' + sellTokenStats.lastPriceUsd}</span>
                                 </div>
                                 <div class="change-data">
                                     <p class="change-title">24hrs Change</p>
@@ -130,6 +132,7 @@
                                 <input
                                     class="form-control transparent-bgn action-input-box text-right"
                                     type="text"
+                                    value.bind="buyTokenAmount"
                                     placeholder="0.000"
                                 />
                                 <div class="token-sym">
@@ -138,15 +141,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="balance-title">Current Balance</p>
-                            <div class="action-quantity-slider">
-                                <input type="range" min="1" max="100" value="50" class="slider" id="myRange" />
-                                <div class="quantity-unit-options">
-                                    <p class="quantity-unit">min</p>
-                                    <p class="quantity-unit">half</p>
-                                    <p class="quantity-unit">max</p>
-                                </div>
-                            </div>
+                            <p class="balance-title">Current Balance: <strong>${buyTokenStats.balance}</strong></p>
+                            
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -157,8 +153,10 @@
                                 </div>
                             </div>
                             <input
-                                class="form-control transparent-bgn add-border-right action-input-box text-right"
+                                class="form-control transparent-bgn add-border-right action-input-box text-right tradeValueUsd"
                                 type="text"
+                                readonly="readonly"
+                                value.bind="tradeValueUsd"
                                 placeholder="0.00"
                             />
                         </div>
@@ -170,6 +168,7 @@
                                 <input
                                     class="form-control transparent-bgn action-input-box text-right"
                                     type="text"
+                                    value.bind="sellTokenAmount"
                                     placeholder="0.000"
                                 />
                                 <div class="token-sym">
@@ -178,7 +177,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="balance-title">Current Balance</p>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <p class="balance-title">Current Balance: <strong>${sellTokenStats.balance}</strong></p>
+                                </div>
+                                <div class="col-sm-3 text-right" show.bind="tradePercentage">
+                                    <p class="balance-title"><strong>${tradePercentage} %</strong></p>
+                                </div>
+                            </div>
+                            <div class="action-quantity-slider">
+                                <input type="range" value.bind="tradePercentage" min="1" max="100" value="50" class="slider" id="myRange" />
+                                <div class="quantity-unit-options">
+                                    <p class="quantity-unit" click.delegate="slideTo(1)">min</p>
+                                    <p class="quantity-unit" click.delegate="slideTo(50)">half</p>
+                                    <p class="quantity-unit" click.delegate="slideTo(100)">max</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -195,20 +209,20 @@
                     <div class="estimated-trade-info-wrapper">
                         <p class="estimated-trade-info-title">Estimated Trade Details</p>
                         <div class="estimated-trade-swap">
-                            <p class="estimated-tokens token-one">0 BTC</p>
+                            <p class="estimated-tokens token-one">${sellTokenAmount} ${sellToken}</p>
                             <font-awesome-icon
                                 class="chart-icon"
                                 icon.bind="['fas', 'arrow-right']"
                             ></font-awesome-icon>
-                            <p class="estimated-tokens token-two">0 EOSP</p>
+                            <p class="estimated-tokens token-two">${buyTokenAmount} ${buyToken}</p>
                         </div>
                         <div class="trade-fee">
                             <p class="trade-fee-title">Miner Fee</p>
                             <p class="trade-fee-value">0.000ETHP</p>
                         </div>
                     </div>
-                    <button class="start-trade" click.delegate="withdraw()">Start trade</button>
-                    <div class="warning">
+                    <button class="start-trade" click.delegate="startTrade()">Start trade</button>
+                    <div class="warning" show.bind="!loggedIn">
                         <font-awesome-icon class="warning-icon" icon.bind="['fas', 'engine-warning']"></font-awesome-icon>
                         <p class="login-required">Login Required</p>
                         <p class="warning-info">Please <a href="">Signup</a> or <a href="">Login</a> to continue</p>

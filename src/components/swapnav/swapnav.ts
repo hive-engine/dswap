@@ -1,11 +1,15 @@
 import { DswapOrderModal } from './../../modals/dswap-order';
+
+import { Subscription } from 'rxjs';
+
 import { customElement, autoinject, bindable } from "aurelia-framework";
 //import { SteemEngine } from 'services/steem-engine';
 import { SigninModal } from 'modals/signin';
 import { DialogService } from 'aurelia-dialog';
-import { connectTo } from 'aurelia-store';
+import { connectTo, Store } from 'aurelia-store';
 import { faWallet } from '@fortawesome/pro-duotone-svg-icons';
 import { AuthService } from 'services/auth-service';
+import { loadAccountBalances } from "store/actions";
 
 
 @autoinject()
@@ -17,9 +21,15 @@ export class SwapNav {
     @bindable claims;
     @bindable iconWallet = faWallet;
 
+    public storeSubscription: Subscription;
     private state: State;
 
-    constructor(private dialogService: DialogService, private authService: AuthService) {        
+    constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<State>) {        
+        this.storeSubscription = this.store.state.subscribe(state => {
+            if (state) {
+                this.state = state;                
+            }
+          });    
     }
 
     async logout() {
@@ -28,11 +38,11 @@ export class SwapNav {
     }
 
     signin() {
-        this.dialogService.open({ viewModel: SigninModal }).whenClosed(response => {
-            console.log(response);
+        this.dialogService.open({ viewModel: SigninModal }).whenClosed(response => {            
             if (!response.wasCancelled) {
+                loadAccountBalances(this.state);
                 // redirect to home if login was successfull
-                this.router.navigateToRoute('/');
+                this.router.navigateToRoute('home');
             }
         });
     }
