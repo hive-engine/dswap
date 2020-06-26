@@ -55,7 +55,11 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
     alias: { 
       'base-environment': path.resolve(__dirname, 'aurelia_project/environments/base'),
       inherits: path.resolve(__dirname, 'node_modules/inherits'),
-      'aurelia-binding': path.resolve(__dirname, 'node_modules/aurelia-binding') 
+      'aurelia-binding': path.resolve(__dirname, 'node_modules/aurelia-binding'),
+      'bn.js': path.resolve(__dirname, 'node_modules/bn.js'),
+      'readable-stream': path.resolve(__dirname, 'node_modules/readable-stream'),
+      'safe-buffer': path.resolve(__dirname, 'node_modules/safe-buffer'),
+      'tslib': path.resolve(__dirname, 'node_modules/tslib'),
     }
   },
   entry: {

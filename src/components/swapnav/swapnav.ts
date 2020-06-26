@@ -1,7 +1,5 @@
-import { DswapOrderModal } from './../../modals/dswap-order';
-
+import { DswapOrderModal } from 'modals/dswap-order';
 import { Subscription } from 'rxjs';
-
 import { customElement, autoinject, bindable } from "aurelia-framework";
 //import { SteemEngine } from 'services/steem-engine';
 import { SigninModal } from 'modals/signin';
