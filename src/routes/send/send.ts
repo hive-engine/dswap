@@ -1,21 +1,15 @@
+import { TokenService } from 'services/token-service';
 import { customElement, autoinject, bindable } from 'aurelia-framework';
-
-import { ToFixedValueConverter } from "./../../resources/value-converters/to-fixed";
+import { ToFixedValueConverter } from 'resources/value-converters/to-fixed';
 import { Subscription } from "rxjs";
 import { HiveEngineService } from "services/hive-engine-service";
 import { DswapOrderModal } from "modals/dswap-order";
 import { DialogService } from "aurelia-dialog";
 import { Store } from "aurelia-store";
 import { ChartComponent } from "components/chart/chart";
-import {
-    loadTokenMarketHistory,
-    loadTokenMetrics,
-} from "common/hive-engine-api";
+import { loadTokenMarketHistory, loadTokenMetrics } from "common/hive-engine-api";
 import moment from "moment";
 import { getPrices, usdFormat } from "common/functions";
-
-
-
 
 @customElement("send")
 @autoinject()
@@ -38,7 +32,7 @@ export class Send {
 
     constructor(
         private dialogService: DialogService,
-        private hes: HiveEngineService,
+        private ts: TokenService,
         private store: Store<State>
     ) {
         this.storeSubscription = this.store.state.subscribe((state) => {
@@ -61,12 +55,12 @@ export class Send {
     }
 
     async refreshTokenLists() {
-        if (!this.state.peggedTokens) {
-            await this.hes.getPeggedTokens();
+        if (!this.state.tokens) {
+            await this.ts.getDSwapTokens();
         }
 
-        this.buyTokens = [...this.state.peggedTokens];
-        this.sellTokens = [...this.state.peggedTokens];
+        this.buyTokens = [...this.state.tokens];
+        this.sellTokens = [...this.state.tokens];
 
         var buyTokenItem = this.sellTokens.find(
             (x) => x.symbol === this.buyToken
