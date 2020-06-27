@@ -11,13 +11,13 @@
             <div class="form-group">
                 <select
                     class="form-control"
-                    value.bind="buyToken"
-                    change.delegate="buyTokenSelected()"
+                    value.bind="token"
+                    change.delegate="tokenSelected()"
                 >
                     <option model.bind="null"
                         >${'Please select a token...' & t}</option
                     >
-                    <option value.bind="t.symbol" repeat.for="t of buyTokens"
+                    <option value.bind="t.symbol" repeat.for="t of tokens"
                         >${t.display_name & t} (${t.symbol})</option
                     >
                 </select>
