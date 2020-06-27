@@ -110,6 +110,20 @@ bind() {
             title: 'Faq',
         },
         {
+            route: 'send',
+            name: 'send',
+            moduleId: PLATFORM.moduleName('./routes/send/send'),            
+            nav: false,
+            title: 'send',
+        },
+        {
+            route: 'receive',
+            name: 'receive',
+            moduleId: PLATFORM.moduleName('./routes/receive/receive'),            
+            nav: false,
+            title: 'receive',
+        },
+        {
             route: 'login',
             name: 'login',
             moduleId: PLATFORM.moduleName('./routes/login/login', 'login'),

@@ -830,7 +830,16 @@ font-size: 20px;
 .hide-this {
   display: none;
 }
-
+.deposit-address-btn {
+    background-color: #387973!important;
+    color: #fff!important;
+}
+.choose-token {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 /* ==================================== */
 
 .dropdown-menu.show {

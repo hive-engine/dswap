@@ -7,7 +7,6 @@ const project = require('./aurelia_project/aurelia.json');
 const { AureliaPlugin, ModuleDependenciesPlugin } = require('aurelia-webpack-plugin');
 const { ProvidePlugin } = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlCriticalPlugin = require('html-critical-webpack-plugin');
 
 // config helpers:
@@ -55,7 +54,11 @@ module.exports = ({ production, server, extractCss, coverage, analyze, karma } =
     alias: { 
       'base-environment': path.resolve(__dirname, 'aurelia_project/environments/base'),
       inherits: path.resolve(__dirname, 'node_modules/inherits'),
-      'aurelia-binding': path.resolve(__dirname, 'node_modules/aurelia-binding') 
+      'aurelia-binding': path.resolve(__dirname, 'node_modules/aurelia-binding'),
+      'bn.js': path.resolve(__dirname, 'node_modules/bn.js'),
+      'readable-stream': path.resolve(__dirname, 'node_modules/readable-stream'),
+      'safe-buffer': path.resolve(__dirname, 'node_modules/safe-buffer'),
+      'tslib': path.resolve(__dirname, 'node_modules/tslib'),
     }
   },
   entry: {
