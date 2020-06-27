@@ -7,7 +7,6 @@ const project = require('./aurelia_project/aurelia.json');
 const { AureliaPlugin, ModuleDependenciesPlugin } = require('aurelia-webpack-plugin');
 const { ProvidePlugin } = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlCriticalPlugin = require('html-critical-webpack-plugin');
 
 // config helpers:
