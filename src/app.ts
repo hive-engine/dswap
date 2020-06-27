@@ -112,14 +112,14 @@ bind() {
         {
             route: 'send',
             name: 'send',
-            moduleId: PLATFORM.moduleName('./routes/send/send', 'send'),            
+            moduleId: PLATFORM.moduleName('./routes/send/send'),            
             nav: false,
             title: 'send',
         },
         {
             route: 'receive',
             name: 'receive',
-            moduleId: PLATFORM.moduleName('./routes/receive/receive', 'receive'),            
+            moduleId: PLATFORM.moduleName('./routes/receive/receive'),            
             nav: false,
             title: 'receive',
         },

@@ -1,11 +1,10 @@
 import { TokenService } from 'services/token-service';
-import { customElement, autoinject, bindable } from 'aurelia-framework';
+import { autoinject } from 'aurelia-framework';
 import { Subscription } from 'rxjs';
 import { DialogService } from 'aurelia-dialog';
 import { Store } from 'aurelia-store';
 
 @autoinject()
-@customElement("send")
 export class Send {
     public storeSubscription: Subscription;
     public state: State;

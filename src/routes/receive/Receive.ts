@@ -1,7 +1,6 @@
-import { customElement, autoinject, bindable } from 'aurelia-framework';
+import { autoinject } from 'aurelia-framework';
 
 @autoinject()
-@customElement("receive")
 export class Receive {
 
 }
