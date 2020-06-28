@@ -1,4 +1,4 @@
-export const baseEnvironmentConfiguration: Partial<EnvironmentInterface> = {
+export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     siteName: 'DSwap',
     defaultLocale: 'en',
     GRAPHQL_API: 'https://graphql.steem.services/',

@@ -1,6 +1,6 @@
 import { baseEnvironmentConfiguration } from 'base-environment';
 
-export const environment: Partial<EnvironmentInterface> = {
+export const environment: Partial<IEnvironment> = {
     ...baseEnvironmentConfiguration,
     debug: false,
     testing: false,    

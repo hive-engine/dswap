@@ -7,14 +7,14 @@ import { Store } from 'aurelia-store';
 @autoinject()
 export class Send {
     public storeSubscription: Subscription;
-    public state: State;
+    public state: IState;
     public tokens: ICoin[];
     public token;    
 
     constructor(
         private dialogService: DialogService,
         private ts: TokenService,
-        private store: Store<State>
+        private store: Store<IState>
     ) {
         this.storeSubscription = this.store.state.subscribe((state) => {
             if (state) {

@@ -215,6 +215,106 @@ export async function loadUserBalances(account: string, limit = 1000, offset = 0
     }
 }
 
+export async function loadTokens(symbols = [], limit = 50, offset = 0): Promise<any[]> {
+    const queryConfig: any = {};
+
+    if (symbols.length) {
+        queryConfig.symbol = { $in: symbols };
+    }
+
+    const results = [];
+
+    const metrics = await ssc.find('market', 'metrics', queryConfig);
+    metrics.sort((a, b) => {
+        return (
+            parseFloat(b.volume) - parseFloat(a.volume)
+        );
+    });
+
+    const limitedMetrics = metrics.slice(offset, limit);
+
+    queryConfig.symbol = {
+        $in: limitedMetrics.map(m => m.symbol)
+    }
+
+    const tokens: any[] = await ssc.find('tokens', 'tokens', queryConfig, limit, offset, [{ index: 'symbol', descending: false }]);
+
+    for (const token of tokens) {
+        if (environment.disabledTokens.includes(token.symbol)) {
+            continue;
+        }
+
+        if (token?.metadata) {
+            token.metadata = JSON.parse(token.metadata);
+        }
+
+        token.highestBid = 0;
+        token.lastPrice = 0;
+        token.lowestAsk = 0;
+        token.marketCap = 0;
+        token.volume = 0;
+        token.priceChangePercent = 0;
+        token.priceChangeHive = 0;
+
+        const metric = limitedMetrics.find(m => token.symbol == m.symbol);
+
+        if (!metric) {
+            return;
+        }
+
+        if (metric) {
+            token.highestBid = parseFloat(metric.highestBid);
+            token.lastPrice = parseFloat(metric.lastPrice);
+            token.lowestAsk = parseFloat(metric.lowestAsk);
+            token.marketCap = token.lastPrice * token.circulatingSupply;
+
+            if (Date.now() / 1000 < metric.volumeExpiration) {
+                token.volume = parseFloat(metric.volume);
+            }
+
+            if (Date.now() / 1000 < metric.lastDayPriceExpiration) {
+                token.priceChangePercent = parseFloat(metric.priceChangePercent);
+                token.priceChangeHive = parseFloat(metric.priceChangeHive);
+            }
+        }
+
+        if (token.symbol === 'SWAP.HIVE') {
+            token.lastPrice = 1;
+        }
+
+        results.push(token);
+    }
+
+    results.sort((a, b) => {
+        return (b.volume > 0 ? b.volume : b.marketCap / 1000000000000) - (a.volume > 0 ? a.volume : a.marketCap / 1000000000000);
+    });
+
+    const hivepBalance = await loadHivepBalance();
+
+    const finalTokens = results.filter(t => !environment.disabledTokens.includes(t.symbol));
+
+    if (hivepBalance && hivepBalance.balance) {
+        const token = finalTokens.find(t => t.symbol === 'SWAP.HIVE');
+
+        if (token) {
+            token.supply -= parseFloat(hivepBalance.balance);
+            (token as any).circulatingSupply -= parseFloat(hivepBalance.balance);
+        }
+    }
+
+    return finalTokens;
+}
+
+export async function loadHivepBalance() {
+    try {
+        const result: any = await ssc.findOne('tokens', 'balances', { account: 'honey-swap', symbol: 'SWAP.HIVE' });
+
+        return result;
+    } catch (e) {
+        return null;
+    }
+}
+
 export async function getScotConfigForAccount(account: string) {
     try {
         const result = await http.fetch(`${environment.SCOT_API}@${account}`);

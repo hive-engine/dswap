@@ -1,4 +1,4 @@
-interface EnvironmentInterface {
+interface IEnvironment {
   debug: boolean;
   testing: boolean;
   FIREBASE_API: string;
@@ -20,7 +20,7 @@ interface EnvironmentInterface {
   features: any;
 }
 
-interface State {
+interface IState {
   $action: any;
   account: AccountInterface;
   firebaseUser: any;
@@ -85,7 +85,7 @@ interface ITokenStats {
     amount: number;
 }
 
-interface BalanceInterface {
+interface IBalance {
     metric: any;
     priceChangeHive: number;
     _id: number;
@@ -100,3 +100,4 @@ interface BalanceInterface {
     usdValueFormatted: string;
     metadata: any;
 }
+

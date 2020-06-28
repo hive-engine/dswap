@@ -20,9 +20,9 @@ export class SwapNav {
     @bindable iconWallet = faWallet;
 
     public storeSubscription: Subscription;
-    private state: State;
+    private state: IState;
 
-    constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<State>) {        
+    constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<IState>) {        
         this.storeSubscription = this.store.state.subscribe(state => {
             if (state) {
                 this.state = state;                

@@ -6,16 +6,18 @@ import { DialogService } from 'aurelia-dialog';
 import { AuthService } from 'services/auth-service';
 import { Store, dispatchify } from 'aurelia-store';
 import { getCurrentFirebaseUser, loadAccountBalances } from 'store/actions';
+import { TokenService } from 'services/token-service';
 
 @autoinject()
 @customElement('wallet')
 export class Wallet {
     public storeSubscription: Subscription;
-    private state: State;
-    private balances: BalanceInterface[] = [];
+    private state: IState;
+    private balances: IBalance[] = [];
+    private wallets: IBalance[] = [];
     private user;
     
-    constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<State>) {        
+    constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<IState>, private tokenService: TokenService) {        
         this.storeSubscription = this.store.state.subscribe(state => {
             if (state) {
                 this.state = state;
@@ -31,10 +33,16 @@ export class Wallet {
             await dispatchify(loadAccountBalances)();
             await dispatchify(getCurrentFirebaseUser)();
 
-            console.log(this.state.tokens.length);
+            await this.loadWallets();
         } catch {
             return new Redirect('');
         }
+    }
+
+    async loadWallets() {
+        this.wallets = await this.tokenService.getDSwapTokenBalances();
+
+        console.log(this.wallets);
     }
 
     withdraw() {

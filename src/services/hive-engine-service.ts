@@ -15,7 +15,7 @@ const http = new HttpClient();
 @autoinject()
 export class HiveEngineService {
     public http: HttpClient;
-    public state: State;
+    public state: IState;
 
     public user = {
       name: '',
@@ -26,7 +26,7 @@ export class HiveEngineService {
 
     constructor(@lazy(HttpClient) getHttpClient: () => HttpClient,
     private i18n: I18N,
-    private store: Store<State>,
+    private store: Store<IState>,
     private toast: ToastService) {
         http.configure(config => {
             config
@@ -49,6 +49,9 @@ export class HiveEngineService {
 
         const hive = { display_name: 'HIVE', symbol: 'SWAP.HIVE', symbol_id: 'SWAP.HIVE' } as ICoin;
         peggedCoins.push(hive);
+
+        const dec = { display_name: 'DEC', symbol: 'DEC', symbol_id: 'DEC' } as ICoin;
+        peggedCoins.push(dec);
 
         return peggedCoins;
     }    

@@ -17,7 +17,7 @@ export class NavBar {
 
   private styles = styles;
 
-  private state: State;
+  private state: IState;
 
   constructor(private dialogService: DialogService) {}
 

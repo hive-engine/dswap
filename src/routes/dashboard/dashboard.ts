@@ -16,7 +16,7 @@ import { TokenService } from 'services/token-service';
 @customElement('dashboard')
 export class Dashboard {
     public storeSubscription: Subscription;
-    public state: State;
+    public state: IState;
     public buyTokens: ICoin[];
     public sellTokens: ICoin[];
     public buyToken;
@@ -35,10 +35,10 @@ export class Dashboard {
 
     private chartDataBuy: any = {};
     private chartDataSell: any = {};
-    private balances: BalanceInterface[] = [];
+    private balances: IBalance[] = [];
     private user;
 
-    constructor(private dialogService: DialogService, private ts: TokenService, private store: Store<State>) {
+    constructor(private dialogService: DialogService, private ts: TokenService, private store: Store<IState>) {
         this.storeSubscription = this.store.state.subscribe(state => {
             if (state) {
                 this.state = state;      

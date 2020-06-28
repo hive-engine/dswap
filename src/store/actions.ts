@@ -9,7 +9,7 @@ import { log } from 'services/log';
 import moment from 'moment';
 import { loadUserBalances } from 'common/hive-engine-api';
 
-export function loading(state: State, boolean: boolean) {
+export function loading(state: IState, boolean: boolean) {
     const newState = { ...state };
 
     newState.loading = Boolean(boolean);
@@ -17,7 +17,7 @@ export function loading(state: State, boolean: boolean) {
     return newState;
 }
 
-export function login(state: State, username: string): State {
+export function login(state: IState, username: string): IState {
     const newState = { ...state };
 
     if (newState?.account) {
@@ -35,7 +35,7 @@ export function login(state: State, username: string): State {
     return newState;
 }
 
-export function logout(state: State): State {
+export function logout(state: IState): IState {
     const newState = { ...state };
 
     newState.account = {
@@ -54,7 +54,7 @@ export function logout(state: State): State {
     return newState;
 }
 
-export function setAccount(state: State, account: Partial<State['account']>): State {
+export function setAccount(state: IState, account: Partial<IState['account']>): IState {
     const newState = { ...state };
 
     if (newState?.account) {
@@ -64,7 +64,7 @@ export function setAccount(state: State, account: Partial<State['account']>): St
     return newState;
 }
 
-export function setTokens(state: State, tokens: any[]): State {
+export function setTokens(state: IState, tokens: any[]): IState {
     const newState = { ...state };
 
     newState.tokens = tokens;
@@ -72,7 +72,7 @@ export function setTokens(state: State, tokens: any[]): State {
     return newState;
 }
 
-export async function getCurrentFirebaseUser(state: State): Promise<State> {
+export async function getCurrentFirebaseUser(state: IState): Promise<IState> {
     const newState = { ...state };
 
     if (!newState.loggedIn) {
@@ -102,7 +102,7 @@ export async function getCurrentFirebaseUser(state: State): Promise<State> {
     return newState;
 }
 
-export async function loadAccountBalances(state: State): Promise<State> {
+export async function loadAccountBalances(state: IState): Promise<IState> {
     const newState = { ...state };
 
     if (!newState.loggedIn) {
@@ -118,7 +118,7 @@ export async function loadAccountBalances(state: State): Promise<State> {
     return newState;
 }
 
-export function resetInstance(state: State): State {
+export function resetInstance(state: IState): IState {
     const newState = { ...state };
 
     newState.instance = null;
