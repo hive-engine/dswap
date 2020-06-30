@@ -41,18 +41,5 @@ export class HiveEngineService {
               this.user = state.account as any;              
           }
         });        
-    }
-
-    async getPeggedTokens() {        
-        const coins = await loadCoins();
-        let peggedCoins = coins;//.filter(x => x.coin_type === 'hiveengine');
-
-        const hive = { display_name: 'HIVE', symbol: 'SWAP.HIVE', symbol_id: 'SWAP.HIVE' } as ICoin;
-        peggedCoins.push(hive);
-
-        const dec = { display_name: 'DEC', symbol: 'DEC', symbol_id: 'DEC' } as ICoin;
-        peggedCoins.push(dec);
-
-        return peggedCoins;
-    }    
+    }  
 }

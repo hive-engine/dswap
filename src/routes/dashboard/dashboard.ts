@@ -6,10 +6,10 @@ import { DswapOrderModal } from 'modals/dswap-order';
 import { DialogService } from 'aurelia-dialog';
 import { Store, dispatchify } from 'aurelia-store';
 import { ChartComponent } from 'components/chart/chart';
-import { loadTokenMarketHistory, loadTokenMetrics, loadUserBalances } from 'common/hive-engine-api';
+import { loadTokenMarketHistory } from 'common/hive-engine-api';
 import moment from 'moment';
 import { getPrices, usdFormat } from 'common/functions';
-import { loadAccountBalances, getCurrentFirebaseUser } from 'store/actions';
+import { getCurrentFirebaseUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
 
 @autoinject()
@@ -17,14 +17,14 @@ import { TokenService } from 'services/token-service';
 export class Dashboard {
     public storeSubscription: Subscription;
     public state: IState;
-    public buyTokens: ICoin[];
-    public sellTokens: ICoin[];
-    public buyToken;
-    public sellToken;
+    public buyTokens: IToken[];
+    public sellTokens: IToken[];
+    public buyTokenSymbol;
+    public sellTokenSymbol;
     private sellTokenAmount;
     private buyTokenAmount;
-    public buyTokenStats : ITokenStats;
-    public sellTokenStats : ITokenStats;
+    public buyToken : IToken;
+    public sellToken : IToken;
     private unitEstimateRate;
     private tradeValueUsd;
     private loggedIn;
@@ -35,15 +35,13 @@ export class Dashboard {
 
     private chartDataBuy: any = {};
     private chartDataSell: any = {};
-    private balances: IBalance[] = [];
     private user;
 
     constructor(private dialogService: DialogService, private ts: TokenService, private store: Store<IState>) {
         this.storeSubscription = this.store.state.subscribe(state => {
             if (state) {
-                this.state = state;      
+                this.state = state;
                 
-                this.balances = [...state.account.balances];
                 this.user = { ...state.firebaseUser };
                 this.loggedIn = state.loggedIn;
             }
@@ -52,7 +50,9 @@ export class Dashboard {
 
     async canActivate() {
         try {
-            await dispatchify(loadAccountBalances)();
+            if (!this.state.tokens) {
+                await this.ts.getDSwapTokens();
+            }
             await dispatchify(getCurrentFirebaseUser)();
         } catch {
             return new Redirect('');
@@ -76,88 +76,63 @@ export class Dashboard {
 
         this.buyTokens = [...this.state.tokens];
         this.sellTokens = [...this.state.tokens];
+        
+        if (this.buyToken)
+            this.sellTokens.splice(this.sellTokens.indexOf(this.sellTokens.find(x => x.symbol == this.buyToken.symbol)), 1);
 
-        var buyTokenItem = this.sellTokens.find(x => x.symbol === this.buyToken);
-        if (buyTokenItem)
-            this.sellTokens.splice(this.sellTokens.indexOf(buyTokenItem), 1);
-
-        var sellTokenItem = this.buyTokens.find(x => x.symbol === this.sellToken);
-        if (sellTokenItem)
-            this.buyTokens.splice(this.buyTokens.indexOf(sellTokenItem), 1);
+        if (this.sellToken)
+            this.buyTokens.splice(this.buyTokens.indexOf(this.buyTokens.find(x => x.symbol == this.sellToken.symbol)), 1);
     }
 
     async calcUnitEstimateRate() {
-        if (this.buyTokenStats && this.sellTokenStats)
-            this.unitEstimateRate = (parseFloat(this.buyTokenStats.lastPrice) / parseFloat(this.sellTokenStats.lastPrice)).toFixed(8);
+        if (this.buyToken && this.sellToken)
+            this.unitEstimateRate = (this.buyToken.metrics.lastPrice / this.sellToken.metrics.lastPrice).toFixed(8);
     }
 
     async buyTokenSelected() {        
         this.chartRefBuy.detached();
-        this.chartDataBuy = await this.loadTokenHistoryData(this.buyToken);
+        this.chartDataBuy = await this.loadTokenHistoryData(this.buyTokenSymbol);
 
         if (this.chartRefBuy)
             this.chartRefBuy.attached();
+        
+        this.buyToken = this.state.tokens.find(x => x.symbol == this.buyTokenSymbol);
+        this.refreshTokenLists();
 
-        this.refreshTokenLists();        
-
-        let balance = await this.getTokenBalance(this.buyToken);
-        this.buyTokenStats = { symbol: this.buyToken, balance: balance } as ITokenStats;
-        await this.getTokenMetrics(this.buyToken, this.buyTokenStats);      
+        if (!this.buyToken.userBalance)
+            await this.getTokenBalance(this.buyToken);
+        
         await this.calcUnitEstimateRate();  
     }
 
-    async getTokenBalance(token) {
-        if (!this.balances)
-            await dispatchify(loadAccountBalances);
-
-        let tokenBalance = this.balances.find(x => x.symbol == token);
-        
-        if (tokenBalance) {
-            return tokenBalance.balance;
-        }
-
-        return 0;
-    }
-
-    async getTokenMetrics(token: any, tokenStats: ITokenStats) {
-        let metrics = await loadTokenMetrics([token]);        
-        if (metrics) {
-            let tokenMetrics = metrics.find(x => x.symbol === token);
-            if (tokenMetrics) {            
-                tokenStats.lastPrice = tokenMetrics.lastPrice;
-                
-                if (!this.state.hivePriceUsd) {
-                    let prices = await getPrices();                    
-                    if (prices)
-                        this.state.hivePriceUsd = prices.hive.usd;                   
-                }
-
-                tokenStats.lastPriceUsd = usdFormat(parseFloat(tokenStats.lastPrice), 3, this.state.hivePriceUsd, true); 
-                tokenStats.priceChangePercent = tokenMetrics.priceChangePercent;
-            }
-        }
+    async getTokenBalance(token) {                
+        if (!token || !token.loadUserBalances) {
+            await this.ts.getDSwapTokenBalances();
+        } 
     }
 
     async tradePercentageChanged(){
-        if (this.buyTokenStats && this.sellTokenStats) {
-            this.sellTokenAmount = (this.tradePercentage / 100) * this.sellTokenStats.balance;
+        if (this.buyToken && this.sellToken) {
+            this.sellTokenAmount = (this.tradePercentage / 100) * this.sellToken.userBalance.balance;
             this.buyTokenAmount = (this.sellTokenAmount / this.unitEstimateRate).toFixed(8);
             
-            this.tradeValueUsd = (this.sellTokenAmount * parseFloat(this.sellTokenStats.lastPriceUsd)).toFixed(2);
+            this.tradeValueUsd = (this.sellTokenAmount * parseFloat(this.sellToken.metrics.lastPriceUsd)).toFixed(2);
         }
     }
 
     async sellTokenSelected() {
         this.chartRefSell.detached();
-        this.chartDataSell = await this.loadTokenHistoryData(this.sellToken);
+        this.chartDataSell = await this.loadTokenHistoryData(this.sellTokenSymbol);
 
         if (this.chartRefSell)
             this.chartRefSell.attached();
-
+        
+        this.sellToken = this.state.tokens.find(x => x.symbol == this.sellTokenSymbol);
         this.refreshTokenLists();
-        let balance = await this.getTokenBalance(this.sellToken);
-        this.sellTokenStats = { symbol: this.sellToken, balance: balance } as ITokenStats;
-        await this.getTokenMetrics(this.sellToken, this.sellTokenStats); 
+
+        if (!this.sellToken.userBalance)
+            await this.getTokenBalance(this.sellToken);
+
         await this.calcUnitEstimateRate();      
     }
 

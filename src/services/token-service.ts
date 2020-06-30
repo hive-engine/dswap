@@ -11,6 +11,7 @@ import hivejs from '@hivechain/hivejs';
 import { hiveSignerJson, getAccount } from 'common/hive';
 import { loadCoins, loadTokenMetrics, loadUserBalances, loadTokens } from 'common/hive-engine-api';
 import { HiveEngineService } from './hive-engine-service';
+import { getPrices, usdFormat } from 'common/functions';
 
 const http = new HttpClient();
 
@@ -44,81 +45,66 @@ export class TokenService {
         });        
     }
 
-    async getDSwapTokens() {        
-        let heTokens = await this.hes.getPeggedTokens();
+    async getDSwapTokens(includeMetrics = true) {        
+        const symbols = environment.enabledTokens;
+        let dTokens = await loadTokens(symbols);
 
-        this.state.tokens = heTokens;
+        if (includeMetrics)
+            await this.enrichTokensWithMetrics(dTokens, symbols);
 
-        return heTokens;
+        this.state.tokens = dTokens;
+
+        return dTokens;
     }    
 
-    async getDSwapTokenBalances() {
-        let tokenBalances: IBalance[] = [];
+    async enrichTokensWithMetrics(dTokens: IToken[], symbols: string[]) {
+        let metrics = await loadTokenMetrics(symbols);
+        
+        for(const m of metrics) {
+            let token = dTokens.find(x => x.symbol == m.symbol);
+            if (token) {
+                m.marketCap = m.lastPrice * parseFloat(token.circulatingSupply);
 
-        if (!this.state.account.balances) {
-            await loadAccountBalances(this.state);
+                if (Date.now() / 1000 < m.volumeExpiration) {
+                    m.volume = parseFloat(m.volume);
+                }
+
+                if (!this.state.hivePriceUsd) {
+                    let prices = await getPrices();                    
+                    if (prices)
+                        this.state.hivePriceUsd = prices.hive.usd;                   
+                }
+
+                m.lastPriceUsd = usdFormat(parseFloat(m.lastPrice), 3, this.state.hivePriceUsd, true); 
+
+                token.metrics = m;                
+            }
         }
+    }
+
+    async enrichTokensWithUserBalances() {
+        let userBalances = await loadUserBalances(this.user.name, environment.enabledTokens);
+        for(let t of this.state.tokens) {
+            let balance = userBalances.find(x => x.symbol == t.symbol);
+            if (balance) {
+                t.userBalance = balance;
+            } else {
+                t.userBalance = { _id: 0, account: this.user.name, balance: 0, stake: "0", symbol: t.symbol };
+            }
+        }
+    }
+
+    async getDSwapTokenBalances() {
+        let tokenBalances: IToken[] = [];
 
         if (!this.state.tokens) {
             await this.getDSwapTokens();
         }
 
-        if (this.state.account.balances && this.state.tokens) {
-            this.FillTokenBalances(tokenBalances);   
-            this.GetTokenDataForMissingBalances(tokenBalances);
-        }
-
+        if (!this.state.tokens.find((x) => x.userBalance != null)) {
+            await this.enrichTokensWithUserBalances();
+        }        
+        
         return tokenBalances;
-    }
-
-    private async GetTokenDataForMissingBalances(tokenBalances: IBalance[]) {
-        const tokensMissingData = tokenBalances.filter(x => x._id == 0);
-        const symbols = tokensMissingData.map(x => x.symbol);
-        console.log(symbols);
-
-        const tokens = await loadTokens(symbols);
-
-        for (let i = 0; i < tokens.length; i++) {
-            let metric = tokens[i];
-
-            let token = tokenBalances.find(x => x.symbol == metric.symbol);
-            if (token)
-            {
-                token.lastPrice = metric.lastPrice;
-                token.priceChangeHive = metric.priceChangeHive;
-                token.priceChangePercent = metric.priceChangePercent;
-            }
-        }
-        console.log(tokens);
-    }
-
-    private async FillTokenBalances(tokenBalances: IBalance[]) {
-        let tokenSymbols = this.state.tokens.map(x => x.symbol);
-
-        for (let i = 0; i < this.state.tokens.length; i++) {
-            let token = this.state.tokens[i];
-
-            var tBalance = this.state.account.balances.find(x => token.symbol == x.symbol);            
-            if (tBalance) {
-                tokenBalances.push(tBalance);
-            } else {
-                let newBalance: IBalance = {
-                    _id: 0,
-                    metric: 0,
-                    priceChangeHive: 0,
-                    account: this.user.name,
-                    balance: "0",
-                    lastPrice: 0,
-                    name: token.display_name,
-                    priceChangePercent: 0,
-                    symbol: token.symbol,
-                    usdValue: 0,
-                    usdValueFormatted: "0",
-                    metadata: ""
-                };
-
-                tokenBalances.push(newBalance);
-            }
-        }       
     }
 }

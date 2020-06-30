@@ -8,7 +8,7 @@ import { Store } from 'aurelia-store';
 export class Send {
     public storeSubscription: Subscription;
     public state: IState;
-    public tokens: ICoin[];
+    public tokens: IToken[];
     public token;    
 
     constructor(

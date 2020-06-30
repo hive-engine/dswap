@@ -14,7 +14,7 @@ export class Wallet {
     public storeSubscription: Subscription;
     private state: IState;
     private balances: IBalance[] = [];
-    private wallets: IBalance[] = [];
+    private wallets: IToken[] = [];
     private user;
     
     constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<IState>, private tokenService: TokenService) {        
@@ -34,8 +34,9 @@ export class Wallet {
             await dispatchify(getCurrentFirebaseUser)();
 
             await this.loadWallets();
-        } catch {
-            return new Redirect('');
+        } catch (e) {
+            console.log(e);
+            //return new Redirect('');
         }
     }
 
