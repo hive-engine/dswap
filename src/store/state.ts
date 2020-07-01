@@ -1,4 +1,4 @@
-export const initialState: State = {
+export const initialState: IState = {
   $action: {
       name: '',
       params: {}

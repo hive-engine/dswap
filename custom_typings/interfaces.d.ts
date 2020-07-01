@@ -1,4 +1,4 @@
-interface EnvironmentInterface {
+interface IEnvironment {
   debug: boolean;
   testing: boolean;
   FIREBASE_API: string;
@@ -15,18 +15,18 @@ interface EnvironmentInterface {
   SCOT_API: string;
   hivePegAccount: string;
   nativeToken: string;
-  disabledTokens: string[];
+  enabledTokens: string[];
   peggedToken: string;
   features: any;
 }
 
-interface State {
+interface IState {
   $action: any;
   account: AccountInterface;
   firebaseUser: any;
   loggedIn: boolean;
   loading: boolean;
-  tokens: ICoin[];
+  tokens: IToken[];
   tokensLoaded: boolean;
   buyBook: any[];
   sellBook: any[];
@@ -85,18 +85,46 @@ interface ITokenStats {
     amount: number;
 }
 
-interface BalanceInterface {
-    metric: any;
+interface ITokenMetadata {
+    desc: string;
+    icon: string;
+    url: string;
+}
+
+interface IToken {
+    _id: number;
+    circulatingSupply: string;    
+    maxSupply: string;
+    metadata: ITokenMetadata;
+    name: string;
+    precision: number;    
+    supply: string;
+    symbol: string;
+    usdValue?: number;
+    usdValueFormatted?: string;
+    metrics?: ITokenMetrics;
+    userBalance?: IBalance;
+}
+
+interface ITokenMetrics {
+    highestBid: number;
+    lastPrice: number;
+    lastPriceUsd: string;
+    lowestAsk: number;
+    marketCap: number;    
     priceChangeHive: number;
+    priceChangePercent: number;
+    symbol: string;
+    volume: number;
+    volumeExpiration: number;
+}
+
+interface IBalance {
     _id: number;
     account: string;
-    balance: string;
-    lastPrice: number;
-    name: string;
-    priceChangePercent: number;
-    scotConfig?: any;
+    balance: number; 
+    usdValue?: number;
+    usdValueFormatted?: string;
+    stake: string;
     symbol: string;
-    usdValue: number;
-    usdValueFormatted: string;
-    metadata: any;
 }

@@ -7,14 +7,16 @@ import { Store } from 'aurelia-store';
 @autoinject()
 export class Send {
     public storeSubscription: Subscription;
-    public state: State;
-    public tokens: ICoin[];
-    public token;    
+    public state: IState;
+    public tokens: IToken[];
+    public tokenSymbol;
+    public token;
+    private sendTokenAddress;
 
     constructor(
         private dialogService: DialogService,
         private ts: TokenService,
-        private store: Store<State>
+        private store: Store<IState>
     ) {
         this.storeSubscription = this.store.state.subscribe((state) => {
             if (state) {
@@ -36,6 +38,6 @@ export class Send {
     }
     
     async tokenSelected() {
-        this.refreshTokenLists();
+        this.token = this.tokens.find(x => x.symbol == this.tokenSymbol);
     }
 }

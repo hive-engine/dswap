@@ -14,7 +14,7 @@ const http = new HttpClient();
 @autoinject()
 export class AuthService {
     public http: HttpClient;
-    public state: State;
+    public state: IState;
 
     public user = {
       name: '',
@@ -25,7 +25,7 @@ export class AuthService {
 
     constructor(@lazy(HttpClient) getHttpClient: () => HttpClient,
     private i18n: I18N,
-    private store: Store<State>,
+    private store: Store<IState>,
     private toast: ToastService) {
         http.configure(config => {
             config

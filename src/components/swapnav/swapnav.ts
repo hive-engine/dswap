@@ -7,7 +7,6 @@ import { DialogService } from 'aurelia-dialog';
 import { connectTo, Store } from 'aurelia-store';
 import { faWallet } from '@fortawesome/pro-duotone-svg-icons';
 import { AuthService } from 'services/auth-service';
-import { loadAccountBalances } from "store/actions";
 
 
 @autoinject()
@@ -20,9 +19,9 @@ export class SwapNav {
     @bindable iconWallet = faWallet;
 
     public storeSubscription: Subscription;
-    private state: State;
+    private state: IState;
 
-    constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<State>) {        
+    constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<IState>) {        
         this.storeSubscription = this.store.state.subscribe(state => {
             if (state) {
                 this.state = state;                
@@ -38,7 +37,6 @@ export class SwapNav {
     signin() {
         this.dialogService.open({ viewModel: SigninModal }).whenClosed(response => {            
             if (!response.wasCancelled) {
-                loadAccountBalances(this.state);
                 // redirect to home if login was successfull
                 this.router.navigateToRoute('home');
             }

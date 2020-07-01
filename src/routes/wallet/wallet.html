@@ -14,143 +14,26 @@
                 </div>
             </div>
         </div>
-        <div class="wallets-info-wrapper">${state.tokens.length}</div>
         <div class="wallets-info-wrapper">
-            <div class="row">
-                <div class="col-md-6 pb-3">
-                    <div class="wallet-card">
-                        <div class="wallet-card-content">
-                            <div class="wallet-card-text">
-                                <h4 class="token-name">Bitcoin</h4>
-                                <div class="token-balance">
-                                    <h6 class="value-title">balance</h6>
-                                    <h4 class="value balance">0 BTC</h4>
-                                </div>
-                                <div class="total-received">
-                                    <h6 class="value-title">
-                                        total received
-                                    </h6>
-                                    <h4 class="value">3.569 BTC</h4>
-                                </div>
+            <div class="col-md-6 pb-3" repeat.for="w of wallets">
+                <div class="wallet-card">
+                    <div class="wallet-card-content">
+                        <div class="wallet-card-text">
+                            <h4 class="token-name">${w.name}</h4>
+                            <div class="token-balance">
+                                <h6 class="value-title">balance</h6>
+                                <h4 class="value balance">${w.userBalance.balance} ${w.symbol}</h4>
                             </div>
-                        </div>
-                        <div class="wallet-card-icon">
-                            <img src="../../images/btc.png" alt="">
+                            <div class="total-received">
+                                <h6 class="value-title">
+                                    total received
+                                </h6>
+                                <h4 class="value">0 ${w.symbol}</h4>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 pb-3">
-                    <div class="wallet-card">
-                        <div class="wallet-card-content">
-                            <div class="wallet-card-text">
-                                <h4 class="token-name eth">Ethereum</h4>
-                                <div class="token-balance">
-                                    <h6 class="value-title">balance</h6>
-                                    <h4 class="value balance">0 ETH</h4>
-                                </div>
-                                <div class="total-received">
-                                    <h6 class="value-title">
-                                        total received
-                                    </h6>
-                                    <h4 class="value">31.569 ETH</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="wallet-card-icon">
-                            <img src="../../images/eth.png" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 pb-3">
-                    <div class="wallet-card">
-                        <div class="wallet-card-content">
-                            <div class="wallet-card-text">
-                                <h4 class="token-name eos">EOS</h4>
-                                <div class="token-balance">
-                                    <h6 class="value-title">balance</h6>
-                                    <h4 class="value balance">0 EOS</h4>
-                                </div>
-                                <div class="total-received">
-                                    <h6 class="value-title">
-                                        total received
-                                    </h6>
-                                    <h4 class="value">3.569 EOS</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="wallet-card-icon">
-                            <img src="../../images/eos.png" alt="">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 pb-3">
-                    <div class="wallet-card">
-                        <div class="wallet-card-content">
-                            <div class="wallet-card-text">
-                                <h4 class="token-name hive">HIVE</h4>
-                                <div class="token-balance">
-                                    <h6 class="value-title">balance</h6>
-                                    <h4 class="value balance">0 HIVE</h4>
-                                </div>
-                                <div class="total-received">
-                                    <h6 class="value-title">
-                                        total received
-                                    </h6>
-                                    <h4 class="value">31.569 HIVE</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="wallet-card-icon">
-                            <img src="../../images/hive.png" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 pb-3">
-                    <div class="wallet-card">
-                        <div class="wallet-card-content">
-                            <div class="wallet-card-text">
-                                <h4 class="token-name usdt">USDT</h4>
-                                <div class="token-balance">
-                                    <h6 class="value-title">balance</h6>
-                                    <h4 class="value balance">0 USDT</h4>
-                                </div>
-                                <div class="total-received">
-                                    <h6 class="value-title">
-                                        total received
-                                    </h6>
-                                    <h4 class="value">3.569 USDT</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="wallet-card-icon">
-                            <img src="../../images/usdt.png" alt="">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 pb-3">
-                    <div class="wallet-card">
-                        <div class="wallet-card-content">
-                            <div class="wallet-card-text">
-                                <h4 class="token-name steem">STEEM</h4>
-                                <div class="token-balance">
-                                    <h6 class="value-title">balance</h6>
-                                    <h4 class="value balance">0 STEEM</h4>
-                                </div>
-                                <div class="total-received">
-                                    <h6 class="value-title">
-                                        total received
-                                    </h6>
-                                    <h4 class="value">31.569 STEEM</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="wallet-card-icon">
-                            <img src="../../images/steem.png" alt="">
-                        </div>
+                    <div class="wallet-card-icon">
+                        <img src.bind="w.metadata.icon" alt.bind="w.name + ' (' + w.symbol + ')'" title.bind="w.name + ' (' + w.symbol + ')'">
                     </div>
                 </div>
             </div>

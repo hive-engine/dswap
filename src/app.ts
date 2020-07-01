@@ -11,7 +11,7 @@ import { PostRenderStep } from 'resources/pipeline-steps/postrender';
 import { getCurrentFirebaseUser } from 'store/actions';
 import { Store, CallingAction, MiddlewarePlacement, dispatchify } from 'aurelia-store';
 
-function lastCalledActionMiddleware(state: State, originalState: State, settings = {}, action: CallingAction) {
+function lastCalledActionMiddleware(state: IState, originalState: IState, settings = {}, action: CallingAction) {
     state.$action = {
         name: action.name,
         params: action.params ?? {},
@@ -28,17 +28,17 @@ export class App {
 
     public router: Router;
     public subscription: Subscription;
-    private state: State;
+    private state: IState;
 
   constructor(
     private ea: EventAggregator,
-    private store: Store<State>
+    private store: Store<IState>
 ) {
     this.store.registerMiddleware(lastCalledActionMiddleware, MiddlewarePlacement.After);
 }
 
 bind() {
-    this.store.state.subscribe((s: State) => {
+    this.store.state.subscribe((s: IState) => {
         if (s) {
             this.state = s;
 
