@@ -64,7 +64,7 @@ export async function checkTransaction(trxId: string, retries: number) {
 }
 
 export async function loadCoins(): Promise<ICoin[]> {
-    const url = `${environment.CONVERTER_API}/coins/`;
+    const url = `${environment.CONVERTER_API}coins/`;
 
     const response = await http.fetch(url, {
         method: 'GET',
@@ -74,7 +74,7 @@ export async function loadCoins(): Promise<ICoin[]> {
 }
 
 export async function loadCoinPairs(): Promise<ICoinPair[]> {
-    const url = `${environment.CONVERTER_API}/pairs/`;
+    const url = `${environment.CONVERTER_API}pairs/`;
 
     const response = await http.fetch(url, {
         method: 'GET',

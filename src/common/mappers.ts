@@ -3,12 +3,24 @@ export function mapTokenResultToIToken(token) {
         _id: token._id,
         circulatingSupply: token.circulatingSupply,        
         maxSupply: token.maxSupply,
-        metadata: null,
+        metadata: mapMetadataToTokenMetadata(token.metadata),
         name: token.name,
         precision: token.precision,        
         supply: token.supply,
         symbol: token.symbol       
     }
+
+    return mapped;
+}
+
+export function mapMetadataToTokenMetadata(metadata) {
+    let metadataParsed = JSON.parse(metadata);
+
+    let mapped: ITokenMetadata = {
+        desc: metadataParsed.desc,
+        icon: metadataParsed.icon,
+        url: metadataParsed.url
+    };
 
     return mapped;
 }

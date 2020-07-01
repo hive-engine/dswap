@@ -102,22 +102,6 @@ export async function getCurrentFirebaseUser(state: IState): Promise<IState> {
     return newState;
 }
 
-export async function loadAccountBalances(state: IState): Promise<IState> {
-    const newState = { ...state };
-
-    if (!newState.loggedIn) {
-        return newState;
-    }
-
-    try {
-        newState.account.balances = await loadUserBalances(newState.account.name);
-    } catch (e) {
-        log.error(e);
-    }
-
-    return newState;
-}
-
 export function resetInstance(state: IState): IState {
     const newState = { ...state };
 
@@ -126,7 +110,6 @@ export function resetInstance(state: IState): IState {
     return newState;
 }
 
-store.registerAction('loadAccountBalances', loadAccountBalances);
 store.registerAction('loading', loading);
 store.registerAction('login', login);
 store.registerAction('logout', logout);

@@ -1,4 +1,3 @@
-import { loadAccountBalances } from 'store/actions';
 import { Subscription } from 'rxjs';
 import { lazy, autoinject } from 'aurelia-framework';
 import { HttpClient, json } from 'aurelia-fetch-client';
@@ -75,7 +74,7 @@ export class TokenService {
                         this.state.hivePriceUsd = prices.hive.usd;                   
                 }
 
-                m.lastPriceUsd = usdFormat(parseFloat(m.lastPrice), 3, this.state.hivePriceUsd, true); 
+                m.lastPriceUsd = usdFormat(parseFloat(m.lastPrice), token.precision, this.state.hivePriceUsd, true); 
 
                 token.metrics = m;                
             }
@@ -95,8 +94,6 @@ export class TokenService {
     }
 
     async getDSwapTokenBalances() {
-        let tokenBalances: IToken[] = [];
-
         if (!this.state.tokens) {
             await this.getDSwapTokens();
         }
@@ -105,6 +102,6 @@ export class TokenService {
             await this.enrichTokensWithUserBalances();
         }        
         
-        return tokenBalances;
+        return this.state.tokens;
     }
 }

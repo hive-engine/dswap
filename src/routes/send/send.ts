@@ -9,7 +9,9 @@ export class Send {
     public storeSubscription: Subscription;
     public state: IState;
     public tokens: IToken[];
-    public token;    
+    public tokenSymbol;
+    public token;
+    private sendTokenAddress;
 
     constructor(
         private dialogService: DialogService,
@@ -36,6 +38,6 @@ export class Send {
     }
     
     async tokenSelected() {
-        this.refreshTokenLists();
+        this.token = this.tokens.find(x => x.symbol == this.tokenSymbol);
     }
 }

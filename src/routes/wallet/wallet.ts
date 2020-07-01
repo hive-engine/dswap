@@ -5,7 +5,7 @@ import { DswapOrderModal } from 'modals/dswap-order';
 import { DialogService } from 'aurelia-dialog';
 import { AuthService } from 'services/auth-service';
 import { Store, dispatchify } from 'aurelia-store';
-import { getCurrentFirebaseUser, loadAccountBalances } from 'store/actions';
+import { getCurrentFirebaseUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
 
 @autoinject()
@@ -13,7 +13,6 @@ import { TokenService } from 'services/token-service';
 export class Wallet {
     public storeSubscription: Subscription;
     private state: IState;
-    private balances: IBalance[] = [];
     private wallets: IToken[] = [];
     private user;
     
@@ -22,15 +21,13 @@ export class Wallet {
             if (state) {
                 this.state = state;
 
-                this.balances = [...state.account.balances];
                 this.user = { ...state.firebaseUser };
             }
           });    
     }
 
     async canActivate() {
-        try {
-            await dispatchify(loadAccountBalances)();
+        try {            
             await dispatchify(getCurrentFirebaseUser)();
 
             await this.loadWallets();
