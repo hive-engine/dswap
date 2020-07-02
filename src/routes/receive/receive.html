@@ -28,19 +28,27 @@
                 src.bind="token ? token.metadata.icon : 'https://img.icons8.com/cute-clipart/128/000000/bitcoin.png'"
             />
             <p class="send-info">
-                Only send <strong>${token ? token.symbol : '[TOKEN]'}</strong> to the following address. Kindly ensure that
-                you copied this address correctly from below.
+                Only send
+                <strong>${token ? token.symbol : '[TOKEN]'}</strong> to the
+                following address. Kindly ensure that you copied this address
+                correctly from below.
             </p>
             <input
                 type="text"
                 name="token-opion"
-                placeholder="Enter address here"
+                placeholder="Get address here by selecting the appropriate token"
                 id="token"
                 value.bind="receiveTokenInfo.address"
                 class="token-option text-center col-sm-4"
                 readonly
             />
-            <input type="button" value="Send" class="send-button mt-3" />
+            <input
+                type="button"
+                value.bind="receiveTokenInfo.address === undefined || '' || null ? 'Generate Address' : 'Copy Address'"
+                class="send-button mt-3"
+                click.delegate="copyDepositAddress()"
+                id="copyBtn"
+            />
         </div>
     </div>
 </template>
