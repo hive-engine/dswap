@@ -8,7 +8,7 @@ ux-dialog-overlay {
 }
 
 ux-dialog-overlay.active {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.795);
     opacity: 1;
 }
 
@@ -45,11 +45,11 @@ ux-dialog {
 }
 
 ux-dialog>ux-dialog-header {
-    background: linear-gradient( 280deg, #0048b3 0%, #a1b9e7 511.72%, #0048b3 100%);
+    background: #387973;
     color: #fff;
     display: block;
     font-size: 22px;
-    font-weight: 300;
+    font-weight: 800;
     padding: 16px;
     text-align: center;
     text-transform: uppercase;
@@ -85,7 +85,7 @@ ux-dialog>ux-dialog-header>button:focus {
 ux-dialog>ux-dialog-body {
     display: block;
     padding: 16px;
-    /*background: url("./images/se-standalone.svg");*/
+    background: url("../images/dswap_low_opacity.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -113,12 +113,12 @@ ux-dialog>ux-dialog-footer button {
 
 .greenBtns {
     margin-top: 0;
-    width: 30%;
-    padding: 0 !important;
-    background-color: #0048b3;
+    /* width: 30%; */
+    padding: 0 5px !important;
+    background-color: #387973;
     color: #fff !important;
     font-weight: bold;
-    font-family: main-font-bold !important;
+    /* font-family: main-font-bold !important; */
     font-size: 16px;
     line-height: 2.5;
     border-radius: 0.25rem;
@@ -127,7 +127,7 @@ ux-dialog>ux-dialog-footer button {
 }
 
 .greenBtns:hover {
-    background-color: #080ba3;
+    background-color: #387973;
 }
 
 .redBtn {
@@ -136,7 +136,7 @@ ux-dialog>ux-dialog-footer button {
     border: 1.5px solid #ca0505!important;
     color: #ca0505!important;
     font-weight: bold;
-    font-family: main-font-bold !important;
+    /* font-family: main-font-bold !important; */
     font-size: 16px;
     line-height: 2.5;
     border-radius: 0.25rem;

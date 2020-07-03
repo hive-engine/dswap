@@ -1,17 +1,17 @@
-import { Router } from 'aurelia-router';
-import { ToastMessage } from 'services/toast-service';
-import { I18N } from 'aurelia-i18n';
-import { dispatchify } from 'aurelia-store';
+import { Router } from "aurelia-router";
+import { ToastMessage } from "services/toast-service";
+import { I18N } from "aurelia-i18n";
+import { dispatchify } from "aurelia-store";
 //import { HiveEngine } from 'services/hive-engine';
-import { DialogController } from 'aurelia-dialog';
-import { autoinject } from 'aurelia-framework';
-import { Subscription } from 'rxjs';
-import { environment } from 'environment';
-import { ToastService } from 'services/toast-service';
-import { login } from 'store/actions';
+import { DialogController } from "aurelia-dialog";
+import { autoinject } from "aurelia-framework";
+import { Subscription } from "rxjs";
+import { environment } from "environment";
+import { ToastService } from "services/toast-service";
+import { login } from "store/actions";
 
-import styles from './signin.module.css';
-import { AuthService } from 'services/auth-service';
+import styles from "./signin.module.css";
+import { AuthService } from "services/auth-service";
 
 @autoinject()
 export class SigninModal {
@@ -24,8 +24,13 @@ export class SigninModal {
     private privateKey;
     private useKeychain = false;
 
-    constructor(private controller: DialogController, private authService: AuthService,
-        private i18n: I18N, private router: Router, private toast: ToastService) {
+    constructor(
+        private controller: DialogController,
+        private authService: AuthService,
+        private i18n: I18N,
+        private router: Router,
+        private toast: ToastService
+    ) {
         this.controller.settings.lock = false;
         this.controller.settings.centerHorizontalOnly = true;
     }
@@ -42,7 +47,9 @@ export class SigninModal {
         try {
             this.loading = true;
 
-            const { username } = await this.authService.login(this.username.trim().toLowerCase()) as any;
+            const { username } = (await this.authService.login(
+                this.username.trim().toLowerCase()
+            )) as any;
 
             await dispatchify(login)(username);
 
@@ -58,8 +65,11 @@ export class SigninModal {
         try {
             this.loading = true;
 
-            const { username } = await this.authService.login(this.username.trim().toLowerCase(), this.privateKey.trim()) as any;
-        
+            const { username } = (await this.authService.login(
+                this.username.trim().toLowerCase(),
+                this.privateKey.trim()
+            )) as any;
+
             await dispatchify(login)(username);
 
             this.controller.close(true);
@@ -68,5 +78,9 @@ export class SigninModal {
         } catch (e) {
             this.loading = false;
         }
+    }
+    hideKeychainBtn() {
+        this.usePrivateKey = !this.usePrivateKey;
+        document.getElementById("activeKeyBtn").style.display = "none";
     }
 }
