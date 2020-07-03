@@ -56,14 +56,15 @@ ux-dialogue {
   color: white;
   background: yellowgreen;
   border: none;
+  border-radius: 8px;
   padding: 11px;
   width: 100%;
 }
 .greenBtns {
   margin-top: 0;
-  width: 30%;
+  /* width: 30%; */
 
-  padding: 0 !important;
+  padding: 0 5px !important;
   background-color: #21be3d;
   color: #fff !important;
   font-weight: bold;
