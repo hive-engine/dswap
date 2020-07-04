@@ -10,14 +10,16 @@
             </div>
             <div class="form-group">
                 <select
-                    class="form-control"
+                class="form-control selectpicker tokenSelect"
                     value.bind="tokenSymbol"
                     change.delegate="tokenSelected()"
                 >
                     <option model.bind="null"
                         >${'Please select a token...' & t}</option
                     >
-                    <option value.bind="t.symbol" repeat.for="t of tokens"
+                    <option value.bind="t.symbol" 
+                            repeat.for="t of tokens"
+                            data-content="${'<img src=\'' + t.metadata.icon + '\' class=\'tokenIcon\' />'} ${t.symbol & t} (${t.name})"
                         >${t.name & t} (${t.symbol})</option
                     >
                 </select>

@@ -868,3 +868,7 @@ input.tradeValueUsd {
     background: transparent;
     color: #387973;
 }
+
+.tokenSelect .tokenIcon {
+    width: 25px;    
+}

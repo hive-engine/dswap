@@ -3,12 +3,16 @@ import { environment } from './environment';
 import {PLATFORM} from 'aurelia-pal';
 import { initialState } from './store/state';
 
+import $ from 'jquery';
+
 import 'bootstrap';
+import 'bootstrap-select';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'izitoast/dist/css/iziToast.css';
 import './styles/toast.css';
 import './styles/main.css';
 import './styles/radio-toggles.css';
+import 'bootstrap-select/dist/css/bootstrap-select.css';
 
 import modalCss from 'styles/modal.css';
 
@@ -83,8 +87,7 @@ aurelia.use.plugin(PLATFORM.moduleName('aurelia-i18n'), (instance) => {
             loadPath: './locales/{{lng}}/{{ns}}.json',
         },
         attributes: aliases,
-        //ns: ['translation', 'errors', 'buttons', 'notifications', 'titles'],
-        ns: [],
+        ns: ['translation', 'errors', 'buttons', 'notifications', 'titles'],
         defaultNS: 'translation',
         lng: environment.defaultLocale,
         fallbackLng: 'en',
@@ -102,6 +105,11 @@ aurelia.use.plugin(PLATFORM.moduleName('aurelia-i18n'), (instance) => {
 });
 
     await authStateChanged();
-    await aurelia.start();
-    await aurelia.setRoot(PLATFORM.moduleName('app'));
+    await aurelia.start()
+        .then(x => x.setRoot(PLATFORM.moduleName('app')))
+        .then(x => {
+            $(document).ready(() => {
+                $('.selectpicker').selectpicker();
+            });
+        });
 }

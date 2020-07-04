@@ -1,3 +1,8 @@
 {
-    
+    "dashboardBuyTokenSymbolRequired": "Please select a token to buy.",
+    "dashboardSellTokenSymbolRequired": "Please select a token to sell.",
+    "dashboardBuyTokenAmountRequired": "Please enter an amount to buy {{buyTokenSymbol}}",
+    "dashboardSellTokenAmountRequired": "Please enter an amount to sell {{sellTokenSymbol}}",
+    "dashboardAmountMustBeGreaterThanZero": "Please enter an amount greater than 0",
+    "dashboardInsufficientBalance": "Insufficient sell token balance entered. Current {{sellTokenSymbol}} balance: {{sellTokenBalance}}. Entered amount: {{sellTokenAmount}}"
 }

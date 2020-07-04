@@ -26,7 +26,16 @@ export class Send {
     }
 
     async bind() {
-        this.refreshTokenLists();
+        await this.refreshTokenLists();        
+        this.refreshSelectPicker();
+    }
+
+    refreshSelectPicker() {
+        $('.selectpicker').selectpicker("refresh");
+    }
+
+    async attached() {
+        this.refreshSelectPicker();
     }
 
     async refreshTokenLists() {
@@ -39,5 +48,9 @@ export class Send {
     
     async tokenSelected() {
         this.token = this.tokens.find(x => x.symbol == this.tokenSymbol);
+        if (!this.token.userBalance)
+        {
+            this.token.userBalance = await this.ts.getUserBalanceOfToken(this.token);
+        }
     }
 }

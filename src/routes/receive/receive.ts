@@ -30,7 +30,16 @@ export class Receive {
     }
 
     async bind() {
-        this.refreshTokenLists();
+        await this.refreshTokenLists();
+        this.refreshSelectPicker();
+    }
+    
+    refreshSelectPicker() {
+        $('.selectpicker').selectpicker("refresh");
+    }
+
+    async attached() {
+        this.refreshSelectPicker();
     }
 
     async refreshTokenLists() {
