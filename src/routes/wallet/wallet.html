@@ -20,11 +20,11 @@
         <div class="wallets-info-wrapper">
             <div class="row">
                 <div class="col-md-6 pb-3" repeat.for="w of wallets">
-                    <a href="">
+                    <a route-href="route:walletTokenDetail; params.bind: { symbol: w.symbol }">
                         <div class="wallet-card">
                             <div class="wallet-card-content">
                                 <div class="wallet-card-text">
-                                    <h4 class="token-name">${w.name}</h4>
+                                    <h4 class="token-name">${token.name}</h4>
                                     <div class="token-balance">
                                         <h6 class="value-title">balance</h6>
                                         <h4 class="value balance">
