@@ -81,8 +81,8 @@ export class TokenService {
         }
     }
 
-    async enrichTokensWithUserBalances() {
-        let userBalances = await loadUserBalances(this.user.name, environment.enabledTokens);
+    async enrichTokensWithUserBalances(symbols) {
+        let userBalances = await loadUserBalances(this.user.name, symbols);
         for(let t of this.state.tokens) {
             let balance = userBalances.find(x => x.symbol == t.symbol);
             if (balance) {
@@ -93,13 +93,24 @@ export class TokenService {
         }
     }
 
+    async getUserBalanceOfToken(symbol) {
+        let userBalances = await loadUserBalances(this.user.name, [symbol]);        
+        let balance = userBalances.find(x => x.symbol == symbol);
+        if (balance) {
+            return balance;
+        } 
+
+        return { _id: 0, account: this.user.name, balance: 0, stake: "0", symbol: symbol };
+    }
+
     async getDSwapTokenBalances() {
         if (!this.state.tokens) {
             await this.getDSwapTokens();
         }
 
         if (!this.state.tokens.find((x) => x.userBalance != null)) {
-            await this.enrichTokensWithUserBalances();
+            let symbols = this.state.tokens.map(x => x.symbol);
+            await this.enrichTokensWithUserBalances(symbols);
         }        
         
         return this.state.tokens;

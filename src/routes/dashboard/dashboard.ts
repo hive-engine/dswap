@@ -11,6 +11,10 @@ import moment from 'moment';
 import { getPrices, usdFormat } from 'common/functions';
 import { getCurrentFirebaseUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
+import { ValidationControllerFactory, ControllerValidateResult, ValidationRules } from 'aurelia-validation';
+import { ToastService, ToastMessage } from 'services/toast-service';
+import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
+import { I18N } from 'aurelia-i18n';
 
 @autoinject()
 @customElement('dashboard')
@@ -36,8 +40,20 @@ export class Dashboard {
     private chartDataBuy: any = {};
     private chartDataSell: any = {};
     private user;
+    private validationController;
+    private renderer;
 
-    constructor(private dialogService: DialogService, private ts: TokenService, private store: Store<IState>) {
+    constructor(private dialogService: DialogService, 
+                private ts: TokenService, 
+                private store: Store<IState>, 
+                private toast: ToastService, 
+                private controllerFactory: ValidationControllerFactory, 
+                private i18n: I18N) {
+
+        this.validationController = controllerFactory.createForCurrentScope();
+
+        this.renderer = new BootstrapFormRenderer();
+        this.validationController.addRenderer(this.renderer);
         this.storeSubscription = this.store.state.subscribe(state => {
             if (state) {
                 this.state = state;
@@ -53,20 +69,46 @@ export class Dashboard {
             if (!this.state.tokens) {
                 await this.ts.getDSwapTokens();
             }
-            await dispatchify(getCurrentFirebaseUser)();
+            await dispatchify(getCurrentFirebaseUser)();            
         } catch {
             return new Redirect('');
         }
     }
 
-    startTrade() {
-        this.dialogService.open({ viewModel: DswapOrderModal }).whenClosed(response => {
-            console.log(response);
-        });
+    async attached() {
+        $('.selectpicker').selectpicker("refresh");
+    }
+
+    async startTrade() {
+        const validationResult: ControllerValidateResult = await this.validationController.validate();
+        
+        for (const result of validationResult.results) {            
+            if (!result.valid) {
+                const toast = new ToastMessage();
+
+                toast.message = this.i18n.tr(result.rule.messageKey, {
+                    buyTokenSymbol: this.buyTokenSymbol,
+                    sellTokenSymbol: this.sellTokenSymbol,
+                    buyTokenAmount: this.buyTokenAmount,
+                    sellTokenAmount: this.sellTokenAmount,
+                    sellTokenBalance: this.sellToken != null ? this.sellToken.userBalance.balance : "",
+                    ns: 'errors' 
+                });
+                
+                this.toast.error(toast);
+            }
+        }
+
+        if (validationResult.valid) {
+            this.dialogService.open({ viewModel: DswapOrderModal }).whenClosed(response => {
+                console.log(response);
+            });
+        }
     }
 
     async bind() {
         this.refreshTokenLists();
+        this.createValidationRules();
     }
 
     async refreshTokenLists(){
@@ -155,5 +197,32 @@ export class Dashboard {
         });
 
         return { ohlcData: candleStickData };
+    }
+
+    private createValidationRules() {
+        const rules = ValidationRules
+            .ensure('buyTokenSymbol')
+                .required()
+                    .withMessageKey('errors:dashboardBuyTokenSymbolRequired')
+            .ensure('sellTokenSymbol')
+                    .required()
+                        .withMessageKey('errors:dashboardSellTokenSymbolRequired')
+            .ensure('buyTokenAmount')
+                .required()
+                    .withMessageKey("errors:dashboardBuyTokenAmountRequired")
+                .then()
+                    .satisfies((value: any, object: any) => parseFloat(value) > 0)
+                    .withMessageKey('errors:dashboardAmountMustBeGreaterThanZero')
+            .ensure('sellTokenAmount')
+                    .required()
+                        .withMessageKey("errors:dashboardSellTokenAmountRequired")
+                    .then()
+                    .satisfies((value: any, object: any) => parseFloat(value) > 0)
+                    .withMessageKey('errors:dashboardAmountMustBeGreaterThanZero')
+                    .satisfies((value: any, object: any) => parseFloat(value) <= this.sellToken.userBalance.balance)
+                    .withMessageKey('errors:dashboardInsufficientBalance')
+        .rules;
+
+        this.validationController.addObject(this, rules);
     }
 }

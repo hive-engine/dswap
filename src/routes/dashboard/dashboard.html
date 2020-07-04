@@ -10,7 +10,7 @@
                                 <div class="form-group">
 
                                     <select
-                                        class="form-control"
+                                        class="form-control selectpicker tokenSelect"
                                         value.bind="buyTokenSymbol"
                                         change.delegate="buyTokenSelected()"
                                     >
@@ -20,7 +20,8 @@
                                         <option
                                             value.bind="t.symbol"
                                             repeat.for="t of buyTokens"
-                                            >${t.name & t} (${t.symbol})</option
+                                            data-content="${'<img src=\'' + t.metadata.icon + '\' class=\'tokenIcon\' />'} ${t.symbol & t} (${t.name})"
+                                            >${t.symbol & t} (${t.name})</option
                                         >
                     
                                     </select>
@@ -76,7 +77,7 @@
                             <div class="action-card-options">
                                 <div class="form-group">
                                     <select
-                                            class="form-control"
+                                            class="form-control selectpicker tokenSelect"
                                             value.bind="sellTokenSymbol"
                                             change.delegate="sellTokenSelected()"
                                         >
@@ -86,7 +87,8 @@
                                             <option
                                                 value.bind="t.symbol"
                                                 repeat.for="t of sellTokens"
-                                                >${t.name & t} (${t.symbol})</option
+                                                data-content="${'<img src=\'' + t.metadata.icon + '\' class=\'tokenIcon\' />'} ${t.symbol & t} (${t.name})"
+                                                >${t.symbol & t} (${t.name})</option
                                             >
                         
                                         </select>

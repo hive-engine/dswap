@@ -10,14 +10,16 @@
             </div>
             <div class="form-group">
                 <select
-                    class="form-control"
+                    class="form-control selectpicker tokenSelect"
                     value.bind="tokenSymbol"
                     change.delegate="tokenSelected()"
                 >
                     <option model.bind="null"
                         >${'Please select a token...' & t}</option
                     >
-                    <option value.bind="t.symbol" repeat.for="t of tokens"
+                    <option value.bind="t.symbol" 
+                            repeat.for="t of tokens"
+                            data-content="${'<img src=\'' + t.metadata.icon + '\' class=\'tokenIcon\' />'} ${t.symbol & t} (${t.name})"
                         >${t.name & t} (${t.symbol})</option
                     >
                 </select>
@@ -31,10 +33,22 @@
                 Only send <strong>${token ? token.symbol : '[TOKEN]'}</strong> to the following address. Kindly ensure that
                 you copied the receiver's address correctly from them.
             </p>
+            <p class="send-info">
+                Current balance: <strong>${token ? token.userBalance.balance : '[TOKEN]'}</strong>
+            </p>
             <input
                 type="text"
                 name="token-opion"
-                placeholder="Enter address here"
+                placeholder="Enter amount"
+                id="tokenAmount"
+                show.bind="token"
+                value.bind="sendTokenAmount"
+                class="token-option text-center col-sm-4"
+            />
+            <input
+                type="text"
+                name="token-opion"
+                placeholder="Enter address"
                 id="token"
                 value.bind="sendTokenAddress"
                 class="token-option text-center col-sm-4"
