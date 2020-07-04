@@ -19,31 +19,33 @@
         </div>
         <div class="wallets-info-wrapper">
             <div class="row">
-                <div class="col-md-6 pb-3" repeat.for="w of wallets">
-                    <a route-href="route:walletTokenDetail; params.bind: { symbol: w.symbol }">
+                <div class="col-md-6 pb-3">
+                    <a
+                        href=""
+                    >
                         <div class="wallet-card">
                             <div class="wallet-card-content">
                                 <div class="wallet-card-text">
-                                    <h4 class="token-name">${token.name}</h4>
+                                    <h4 class="token-name">${symbol}</h4>
                                     <div class="token-balance">
                                         <h6 class="value-title">balance</h6>
                                         <h4 class="value balance">
-                                            ${w.userBalance.balance} ${w.symbol}
+                                            ${token.userBalance.balance} ${token.symbol}
                                         </h4>
                                     </div>
                                     <div class="total-received">
                                         <h6 class="value-title">
                                             total received
                                         </h6>
-                                        <h4 class="value">0 ${w.symbol}</h4>
+                                        <h4 class="value">0 ${token.symbol}</h4>
                                     </div>
                                 </div>
                             </div>
                             <div class="wallet-card-icon">
                                 <img
-                                    src.bind="w.metadata.icon"
-                                    alt.bind="w.name + ' (' + w.symbol + ')'"
-                                    title.bind="w.name + ' (' + w.symbol + ')'"
+                                    src.bind="token.metadata.icon"
+                                    alt.bind="token.name + ' (' + token.symbol + ')'"
+                                    title.bind="token.name + ' (' + token.symbol + ')'"
                                 />
                             </div>
                         </div>
