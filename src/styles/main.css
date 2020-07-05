@@ -163,7 +163,7 @@ a.item:hover .item-icon {
 
 /* ==================Dashboard====================== */
 .dashboard-wrapper {
-    padding: 40px;
+    padding: 40px 10px 10px 0;
     overflow-x: hidden;
 }
 .action-title {
@@ -171,6 +171,7 @@ a.item:hover .item-icon {
     color: #22a275;
 }
 .action-card {
+    padding: 10px;
     border-width: 1px;
     border-style: solid;
     border-color: rgb(122, 197, 126);
