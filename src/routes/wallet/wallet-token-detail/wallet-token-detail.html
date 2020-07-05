@@ -1,55 +1,449 @@
 <template bindable="selected">
-    <div class="wallet-wrapper">
+    <div class="wallet-wrapper" `>
         <div class="row">
             <div class="col-md-12">
                 <div class="wallet-header">
-                    <h2 class="wallet-title">Wallets</h2>
+                    <h2 class="wallet-title text-center">
+                        ${token.name} Details
+                    </h2>
                 </div>
             </div>
         </div>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-12">
                 <div class="wallet-desc-wrapper">
                     <p class="wallet-desc">
-                        Organize your assets into various categories for easy
-                        trading on DSwap.
+                        View the details for ${token.name} including transaction
+                        history.
                     </p>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="wallets-info-wrapper">
             <div class="row">
-                <div class="col-md-6 pb-3">
-                    <a
-                        href=""
-                    >
-                        <div class="wallet-card">
-                            <div class="wallet-card-content">
-                                <div class="wallet-card-text">
-                                    <h4 class="token-name">${symbol}</h4>
-                                    <div class="token-balance">
-                                        <h6 class="value-title">balance</h6>
-                                        <h4 class="value balance">
-                                            ${token.userBalance.balance} ${token.symbol}
-                                        </h4>
+                <div class="col-md-10 offset-md-1 pb-3">
+                    <div class="wallet-detail-card">
+                        <div
+                            class="wallet-detail-card-content"
+                            style="width: 100%;"
+                        >
+                            <div class="wallet-detail-card-text">
+                                <div
+                                    class="wallet-detail-card-icon d-flex justify-content-center"
+                                >
+                                    <img
+                                        width="100px"
+                                        src.bind="token.metadata.icon"
+                                        alt.bind="token.name + ' (' + token.symbol + ')'"
+                                        title.bind="token.name + ' (' + token.symbol + ')'"
+                                    />
+                                </div>
+                                <div class="d-flex justify-content-center mb-5">
+                                    <h4 class="token-name">
+                                        ${token.name}
+                                    </h4>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div
+                                            class="token-balance wallet-detail-balance-card"
+                                        >
+                                            <div class="balance-wrapper">
+                                                <h6 class="detail-value-title">
+                                                    balance
+                                                    <i
+                                                        class="fa fa-book-open"
+                                                    ></i>
+                                                </h6>
+                                            </div>
+                                            <div class="total-received">
+                                                <h4
+                                                    class="detail-value balance mb-3 text-right"
+                                                >
+                                                    ${token.userBalance.balance
+                                                    | toFixed: 0}
+                                                    <span class="token-symbol"
+                                                        >${token.symbol}</span
+                                                    >
+                                                </h4>
+                                                <h6
+                                                    class="detail-value-title text-right"
+                                                >
+                                                    total received
+                                                </h6>
+                                                <h4
+                                                    class="detail-value-2 text-right"
+                                                >
+                                                    0.00
+                                                    <span class="token-symbol"
+                                                        >${token.symbol}</span
+                                                    >
+                                                </h4>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="total-received">
-                                        <h6 class="value-title">
-                                            total received
-                                        </h6>
-                                        <h4 class="value">0 ${token.symbol}</h4>
+                                    <div class="col-md-4">
+                                        <div class="action-button">
+                                            <a
+                                                href=""
+                                                class="wallet-btns wallet-btns-send"
+                                                >Send
+                                                <i
+                                                    class="fa fa-arrow-alt-circle-up"
+                                                ></i
+                                            ></a>
+
+                                            <a
+                                                href=""
+                                                class="wallet-btns wallet-btns-receive"
+                                                >Receive
+                                                <i
+                                                    class="fa fa-arrow-alt-circle-down"
+                                                ></i
+                                            ></a>
+                                        </div>
+                                        <div class="action-button">
+                                            <a
+                                                href=""
+                                                class="wallet-btns wallet-btns-swap"
+                                                >Swap
+                                                <i class="fa fa-list-ul"></i
+                                            ></a>
+
+                                            <a
+                                                href=""
+                                                class="wallet-btns wallet-btns-buy"
+                                                >Buy
+                                                <i class="fa fa-university"></i
+                                            ></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br /><br /><br />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="transaction-history-card">
+                                            <div class="wallet-header">
+                                                <h2
+                                                    class="wallet-title text-center"
+                                                >
+                                                    Transaction History
+                                                </h2>
+                                            </div>
+                                            <table class="table">
+                                                <thead class="table-head">
+                                                    <tr>
+                                                        <th
+                                                            class="icon-head head-item"
+                                                            scope="col"
+                                                        ></th>
+                                                        <th
+                                                            class="date-head head-item"
+                                                            scope="col"
+                                                        >
+                                                            Date
+                                                        </th>
+                                                        <th
+                                                            class="transaction-head head-item"
+                                                            scope="col"
+                                                        >
+                                                            Transaction Type
+                                                        </th>
+                                                        <th
+                                                            class="amount-head head-item"
+                                                            scope="col"
+                                                        >
+                                                            Amount
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th
+                                                            class="table-item"
+                                                            scope="row"
+                                                        >
+                                                            <div
+                                                                class="transaction-icon"
+                                                            >
+                                                                <font-awesome-icon
+                                                                    class="table-icon"
+                                                                    icon.bind="['fas', 'university']"
+                                                                ></font-awesome-icon>
+                                                            </div>
+                                                        </th>
+                                                        <td class="table-item">
+                                                            <h4
+                                                                class="text-center mb-0"
+                                                            >
+                                                                MAY
+                                                            </h4>
+                                                            <h6
+                                                                class="text-center mb-0"
+                                                            >
+                                                                12
+                                                            </h6>
+                                                        </td>
+                                                        <td
+                                                            class="table-item transaction-type"
+                                                        >
+                                                            BTC Withdrawal
+                                                            <br />
+                                                            <span
+                                                                class="transaction-type-info"
+                                                                >You withdrew
+                                                                0.04589 BTC
+                                                                worth $ 370.00
+                                                                of USDT</span
+                                                            >
+                                                        </td>
+                                                        <td class="table-item">
+                                                            0.04589 BTC
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th
+                                                            class="table-item"
+                                                            scope="row"
+                                                        >
+                                                            <div
+                                                                class="transaction-icon"
+                                                            >
+                                                                <font-awesome-icon
+                                                                    class="table-icon"
+                                                                    icon.bind="['fas', 'exchange']"
+                                                                ></font-awesome-icon>
+                                                            </div>
+                                                        </th>
+                                                        <td class="table-item">
+                                                            <h4
+                                                                class="text-center mb-0"
+                                                            >
+                                                                MAY
+                                                            </h4>
+                                                            <h6
+                                                                class="text-center mb-0"
+                                                            >
+                                                                12
+                                                            </h6>
+                                                        </td>
+                                                        <td
+                                                            class="table-item transaction-type"
+                                                        >
+                                                            BTC Bought
+                                                            <br />
+                                                            <span
+                                                                class="transaction-type-info"
+                                                                >Purchased
+                                                                0.04589 BTC with
+                                                                $ 370.00 worth
+                                                                of USDT</span
+                                                            >
+                                                        </td>
+                                                        <td class="table-item">
+                                                            0.04589 BTC
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th
+                                                            class="table-item"
+                                                            scope="row"
+                                                        >
+                                                            <div
+                                                                class="transaction-icon"
+                                                            >
+                                                                <font-awesome-icon
+                                                                    class="table-icon"
+                                                                    icon.bind="['fas', 'university']"
+                                                                ></font-awesome-icon>
+                                                            </div>
+                                                        </th>
+                                                        <td class="table-item">
+                                                            <h4
+                                                                class="text-center mb-0"
+                                                            >
+                                                                MAY
+                                                            </h4>
+                                                            <h6
+                                                                class="text-center mb-0"
+                                                            >
+                                                                12
+                                                            </h6>
+                                                        </td>
+                                                        <td
+                                                            class="table-item transaction-type"
+                                                        >
+                                                            BTC Withdrawal
+                                                            <br />
+                                                            <span
+                                                                class="transaction-type-info"
+                                                                >You withdrew
+                                                                0.04589 BTC
+                                                                worth $ 370.00
+                                                                of USDT</span
+                                                            >
+                                                        </td>
+                                                        <td class="table-item">
+                                                            0.04589 BTC
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th
+                                                            class="table-item"
+                                                            scope="row"
+                                                        >
+                                                            <div
+                                                                class="transaction-icon"
+                                                            >
+                                                                <font-awesome-icon
+                                                                    class="table-icon"
+                                                                    icon.bind="['fas', 'exchange']"
+                                                                ></font-awesome-icon>
+                                                            </div>
+                                                        </th>
+                                                        <td class="table-item">
+                                                            <h4
+                                                                class="text-center mb-0"
+                                                            >
+                                                                MAY
+                                                            </h4>
+                                                            <h6
+                                                                class="text-center mb-0"
+                                                            >
+                                                                12
+                                                            </h6>
+                                                        </td>
+                                                        <td
+                                                            class="table-item transaction-type"
+                                                        >
+                                                            BTC Bought
+                                                            <br />
+                                                            <span
+                                                                class="transaction-type-info"
+                                                                >Purchased
+                                                                0.04589 BTC with
+                                                                $ 370.00 worth
+                                                                of USDT</span
+                                                            >
+                                                        </td>
+                                                        <td class="table-item">
+                                                            0.04589 BTC
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th
+                                                            class="table-item"
+                                                            scope="row"
+                                                        >
+                                                            <div
+                                                                class="transaction-icon"
+                                                            >
+                                                                <font-awesome-icon
+                                                                    class="table-icon"
+                                                                    icon.bind="['fas', 'minus']"
+                                                                ></font-awesome-icon>
+                                                            </div>
+                                                        </th>
+                                                        <td class="table-item">
+                                                            <h4
+                                                                class="text-center mb-0"
+                                                            >
+                                                                MAY
+                                                            </h4>
+                                                            <h6
+                                                                class="text-center mb-0"
+                                                            >
+                                                                12
+                                                            </h6>
+                                                        </td>
+                                                        <td
+                                                            class="table-item transaction-type"
+                                                        >
+                                                            Fee Deducted
+                                                            <br />
+                                                            <span
+                                                                class="transaction-type-info"
+                                                                >Trading Fee of
+                                                                0.0003 BTC
+                                                                deducted from
+                                                                your trade</span
+                                                            >
+                                                        </td>
+                                                        <td class="table-item">
+                                                            0.04589 BTC
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <br />
+                                            <nav
+                                                class="text-right ml-auto"
+                                                aria-label="Page navigation example"
+                                            >
+                                                <ul class="pagination">
+                                                    <li
+                                                        class="page-item pagination-btn"
+                                                    >
+                                                        <a
+                                                            class="page-link pagination-link"
+                                                            href="#"
+                                                            aria-label="Previous"
+                                                        >
+                                                            <span
+                                                                aria-hidden="true"
+                                                                >&laquo;</span
+                                                            >
+                                                        </a>
+                                                    </li>
+                                                    <li
+                                                        class="page-item pagination-btn"
+                                                    >
+                                                        <a
+                                                            class="page-link pagination-link"
+                                                            href="#"
+                                                            >1</a
+                                                        >
+                                                    </li>
+                                                    <li
+                                                        class="page-item pagination-btn"
+                                                    >
+                                                        <a
+                                                            class="page-link pagination-link"
+                                                            href="#"
+                                                            >2</a
+                                                        >
+                                                    </li>
+                                                    <li
+                                                        class="page-item pagination-btn"
+                                                    >
+                                                        <a
+                                                            class="page-link pagination-link"
+                                                            href="#"
+                                                            >3</a
+                                                        >
+                                                    </li>
+                                                    <li
+                                                        class="page-item pagination-btn"
+                                                    >
+                                                        <a
+                                                            class="page-link pagination-link"
+                                                            href="#"
+                                                            aria-label="Next"
+                                                        >
+                                                            <span
+                                                                aria-hidden="true"
+                                                                >&raquo;</span
+                                                            >
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="wallet-card-icon">
-                                <img
-                                    src.bind="token.metadata.icon"
-                                    alt.bind="token.name + ' (' + token.symbol + ')'"
-                                    title.bind="token.name + ' (' + token.symbol + ')'"
-                                />
-                            </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>

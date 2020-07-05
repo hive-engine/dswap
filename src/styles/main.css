@@ -582,11 +582,30 @@ a.item:hover .item-icon {
     transform: translate3d(0, -7px, 0);
     box-shadow: 0 10px 55px 5px rgba(137, 172, 255, 0.637);
 }
+.wallet-detail-card {
+    /* border: 1px solid #22a275c5; */
+    border-radius: 5px;
+    padding: 20px 15px;
+    display: flex;
+    justify-content: space-between;
+    transition: 0.3s all ease-in-out;
+    -webkit-transition: 0.3s all ease-in-out;
+    -moz-transition: 0.3s all ease-in-out;
+    -o-transition: 0.3s all ease-in-out;
+}
+/* .wallet-detail-card:hover {
+    transform: translate3d(0, -7px, 0);
+    box-shadow: 0 10px 55px 5px rgba(137, 172, 255, 0.637);
+} */
 .wallet-card-content {
     width: 80%;
 }
 .wallet-card-icon {
     width: 20%;
+}
+.wallet-detail-card-icon {
+    width: 100%;
+    margin-bottom: 15px;
 }
 .wallet-card-icon img {
     width: 100%;
@@ -607,7 +626,87 @@ a.item:hover .item-icon {
 .value {
     color: #22a275c5;
 }
-
+.wallet-detail-balance-card {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: #22a2750c;
+    box-shadow: 0 10px 55px 5px rgba(137, 172, 255, 0.274);
+    border-radius: 10px;
+}
+.detail-value-title {
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #387973;
+    margin: 0 !important;
+}
+.detail-value {
+    font-size: 52px;
+    font-weight: 700;
+    color: #22a275;
+}
+.detail-value-2 {
+    font-size: 25px;
+    font-weight: 700;
+    color: #22a275;
+}
+.token-symbol {
+    color: #387973;
+    font-size: 25px;
+    font-weight: 600;
+    margin: 0 !important;
+}
+.action-button {
+    display: flex;
+    justify-content: safe;
+    margin-bottom: 15px;
+}
+.wallet-btns {
+    padding: 6px 10px;
+    margin: 0 8px 0 0;
+    width: 120px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.wallet-btns-send {
+    background-color: #e95d5d !important ;
+}
+.wallet-btns-send:hover {
+    background-color: #a55757 !important ;
+    color: #fff;
+}
+.wallet-btns-receive {
+    background-color: #22a275 !important ;
+}
+.wallet-btns-receive:hover {
+    background-color: #32a77e !important ;
+    color: #fff;
+}
+.wallet-btns-swap {
+    background-color: #697792 !important ;
+}
+.wallet-btns-swap:hover {
+    background-color: #8d939e !important ;
+    color: #fff;
+}
+.wallet-btns-buy {
+    background-color: #3522a2 !important ;
+}
+.wallet-btns-buy:hover {
+    background-color: #6e66a0 !important ;
+    color: #fff;
+}
+.transaction-history-card {
+    display: flex;
+    flex-direction: column;
+    padding: 15px 20px;
+    background-color: #22a2750c;
+    box-shadow: 0 10px 55px 5px rgba(137, 172, 255, 0.274);
+    border-radius: 10px;
+}
 /* ================ FAQ ==================== */
 .tribes-header {
     padding: 0;
@@ -870,5 +969,5 @@ input.tradeValueUsd {
 }
 
 .tokenSelect .tokenIcon {
-    width: 25px;    
+    width: 25px;
 }
