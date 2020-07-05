@@ -1,20 +1,19 @@
-import { Redirect } from 'aurelia-router';
-import { Subscription } from 'rxjs';
-import { customElement, autoinject, bindable } from 'aurelia-framework';
-import { DswapOrderModal } from 'modals/dswap-order';
-import { DialogService } from 'aurelia-dialog';
-import { AuthService } from 'services/auth-service';
-import { Store, dispatchify } from 'aurelia-store';
-import { getCurrentFirebaseUser, setTokens } from 'store/actions';
-import { TokenService } from 'services/token-service';
-
+import { Redirect } from "aurelia-router";
+import { Subscription } from "rxjs";
+import { customElement, autoinject, bindable } from "aurelia-framework";
+import { DswapOrderModal } from "modals/dswap-order";
+import { DialogService } from "aurelia-dialog";
+import { AuthService } from "services/auth-service";
+import { Store, dispatchify } from "aurelia-store";
+import { getCurrentFirebaseUser, setTokens } from "store/actions";
+import { TokenService } from "services/token-service";
 
 @autoinject()
-@customElement("walletTokenDetail")
+@customElement("walletdetail")
 export class WalletTokenDetail {
     public storeSubscription: Subscription;
     private state: IState;
-    private wallets: IToken[] = [];
+    private token: IToken[] = [];
     private user;
 
     constructor(
@@ -32,5 +31,9 @@ export class WalletTokenDetail {
         });
     }
 
-    
+    async activate({ symbol }) {
+        this.token = await (this.ts.getTokenDetails)(symbol);
+        console.log(this.ts.state.account.token)
+        console.log(symbol);
+    }
 }
