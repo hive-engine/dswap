@@ -139,6 +139,20 @@ bind() {
             nav: false,
             title: "Login",
         },
+        {
+            route: "market-maker",
+            name: "marketMaker",
+            moduleId: PLATFORM.moduleName("./routes/market-maker/market-maker-landing", "market-maker-landing"),
+            nav: false,
+            title: "Market Maker",
+        },
+        {
+            route: "register-market-maker",
+            name: "registerMarketMaker",
+            moduleId: PLATFORM.moduleName("./routes/market-maker/register/register", "register-market-maker"),
+            nav: false,
+            title: "Register Market Maker",
+        },
     ]);
 
     this.router = router;
