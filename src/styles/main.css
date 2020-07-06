@@ -78,7 +78,7 @@ a:hover {
 .small-wrap span,
 .small-wrap span {
     align-self: center;
-    color: #387973!important;
+    color: #387973 !important;
     font-weight: bold;
 }
 .dswap-nav-options ul {
@@ -980,4 +980,67 @@ input.tradeValueUsd {
 
 .tokenSelect .tokenIcon {
     width: 25px;
+}
+.market-maker-landing-wrapper {
+    display: block;
+    padding: 40px;
+    margin: 0 100px;
+    box-shadow: 2px 28px 41px -11px rgba(0, 0, 0, 0.34);
+}
+.market-maker-logo {
+    width: 250px;
+    margin: 30px auto;
+}
+.market-maker-header-text {
+    color: #142e2b;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+.header-desc {
+    font-size: 18px;
+    color: #142e2b;
+    line-height: 1.5em;
+    margin-bottom: 18px;
+}
+.get-started-btn {
+    width: max-content;
+    margin: auto;
+    border-radius: 8px;
+    border: 1px solid #05413c;
+    display: block;
+    font-size: 20px;
+    color: #fff!important;
+    background: #05413c;
+    padding: 8px 15px;
+    transition: 0.3s all ease-in-out;
+    -webkit-transition: 0.3s all ease-out;
+    -moz-transition: 0.3s all ease-out;
+    -o-transition: 0.3s all ease-out;
+}
+.get-started-btn:hover {
+    color: #05413c;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #05413c;
+}
+.register-market-maker-wrapper {
+  display: block;
+    padding: 40px 80px;
+    margin: 0 200px 20px;
+    box-shadow: 2px 28px 41px -11px rgba(0, 0, 0, 0.34);
+}
+.register-market-maker-header h2 {
+    color: #142e2b;
+    margin-bottom: 0!important;
+    text-transform: uppercase;
+}
+.divider {
+    background-color: #05413c;
+    border: 2px solid #05413c;
+}
+.register-market-maker-body .form-group label {
+    color: #05413c;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
 }
