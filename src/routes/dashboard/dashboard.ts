@@ -1,7 +1,7 @@
 import { Redirect } from 'aurelia-router';
 import { ToFixedValueConverter } from 'resources/value-converters/to-fixed';
 import { Subscription } from 'rxjs';
-import { customElement, autoinject, bindable } from 'aurelia-framework';
+import { customElement, autoinject, bindable, TaskQueue } from 'aurelia-framework';
 import { DswapOrderModal } from 'modals/dswap-order';
 import { DialogService } from 'aurelia-dialog';
 import { Store, dispatchify } from 'aurelia-store';
@@ -22,7 +22,7 @@ export class Dashboard {
     public storeSubscription: Subscription;
     public state: IState;
     public buyTokens: IToken[];
-    public sellTokens: IToken[];
+    @bindable() sellTokens: IToken[];
     public buyTokenSymbol;
     public sellTokenSymbol;
     private sellTokenAmount;
@@ -41,14 +41,15 @@ export class Dashboard {
     private chartDataSell: any = {};
     private user;
     private validationController;
-    private renderer;
+    private renderer;    
 
     constructor(private dialogService: DialogService, 
                 private ts: TokenService, 
                 private store: Store<IState>, 
                 private toast: ToastService, 
                 private controllerFactory: ValidationControllerFactory, 
-                private i18n: I18N) {
+                private i18n: I18N,
+                private taskQueue: TaskQueue) {
 
         this.validationController = controllerFactory.createForCurrentScope();
 
@@ -75,8 +76,14 @@ export class Dashboard {
         }
     }
 
+    async refreshSelectPicker() {
+        this.taskQueue.queueTask({
+            call: () => $('.selectpicker').selectpicker("refresh")
+        });        
+    }
+    
     async attached() {
-        $('.selectpicker').selectpicker("refresh");
+        this.refreshSelectPicker();
     }
 
     async startTrade() {
@@ -124,6 +131,8 @@ export class Dashboard {
 
         if (this.sellToken)
             this.buyTokens.splice(this.buyTokens.indexOf(this.buyTokens.find(x => x.symbol == this.sellToken.symbol)), 1);
+
+        await this.refreshSelectPicker();
     }
 
     async calcUnitEstimateRate() {
