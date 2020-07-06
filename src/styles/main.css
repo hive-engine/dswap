@@ -24,7 +24,7 @@ a:hover {
     margin-bottom: 20px;
 
     min-height: 60px;
-    box-shadow: 0 1px 9px rgba(0, 0, 0, 0.548);
+    box-shadow: 0 1px 9px rgba(0, 0, 0, 0.308);
     z-index: 980;
     padding: 10px 20px;
     margin: 0;
@@ -73,6 +73,8 @@ a:hover {
 .small-wrap span,
 .small-wrap span {
     align-self: center;
+    color: #387973!important;
+    font-weight: bold;
 }
 .dswap-nav-options ul {
     list-style-type: none;
@@ -183,6 +185,8 @@ a.item:hover .item-icon {
     order: 1;
     border-width: 1px;
     border-radius: 8px;
+    /* box-shadow: 0 10px 55px 5px rgba(137, 172, 255, 0.274); */
+    box-shadow: 0 1px 9px rgba(0, 0, 0, 0.308);
 }
 .sell.action-card {
     border-width: 1px;
