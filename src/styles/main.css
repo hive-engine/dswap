@@ -47,13 +47,18 @@ a:hover {
     font-size: 18px;
     margin-left: 10px;
     text-transform: uppercase;
+    transition: 0.3s all ease-in-out;
+    -webkit-transition: 0.3s all ease-in-out;
+    -moz-transition: 0.3s all ease-in-out;
+    -o-transition: 0.3s all ease-in-out;
     /* opacity: 0.5; */
 }
 .each-link span {
     opacity: 0.5;
 }
 .each-link:hover {
-    font-weight: bold;
+    font-weight: 500;
+    cursor: pointer;
 }
 .img-send,
 .img-receive {
