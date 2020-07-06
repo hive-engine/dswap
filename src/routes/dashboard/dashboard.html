@@ -23,8 +23,7 @@
                                             data-content="${'<img src=\'' + t.metadata.icon + '\' class=\'tokenIcon\' />'} ${t.symbol & t} (${t.name})"
                                             >${t.symbol & t} (${t.name})</option
                                         >
-                                            ${t.name & t} (${t.symbol})</option
-                                        >
+                                            
                                     </select>
                                 </div>
                                 <!-- <div class="token-info">
@@ -279,7 +278,7 @@
                         show.bind="buyToken && sellToken"
                     >
                         <p class="estimated-rate-info">
-                            1 ${buyToken.symbol} = ${unitEstimateRate}
+                            1 ${buyToken.symbol} = ${unitEstimateRate | toFixed: 3}
                             ${sellToken.symbol}
                         </p>
                     </div>
