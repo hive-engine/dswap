@@ -38,7 +38,7 @@ export class SwapNav {
         this.dialogService.open({ viewModel: SigninModal }).whenClosed(response => {            
             if (!response.wasCancelled) {
                 // redirect to home if login was successfull
-                this.router.navigateToRoute('home');
+                this.router.navigateToRoute('dashboard');
             }
         });
     }
