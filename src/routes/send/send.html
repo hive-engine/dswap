@@ -37,7 +37,7 @@
                 Current balance: <strong>${token ? token.userBalance.balance : '[TOKEN]'}</strong>
             </p>
             <input
-                type="text"
+                type="number"
                 name="token-opion"
                 placeholder="Enter amount"
                 id="tokenAmount"
@@ -45,6 +45,7 @@
                 value.bind="sendTokenAmount"
                 class="token-option text-center col-sm-4"
             />
+            <br>
             <input
                 type="text"
                 name="token-opion"
