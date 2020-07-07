@@ -3,24 +3,7 @@ body {
     padding: 0;
     overflow-x: hidden;
 }
-/* width */
-::-webkit-scrollbar {
-    width: 15px;
-    transition: 1s all ease-in;
-    -webkit-transition: 1s all ease-in;
-    -moz-transition: 1s all ease-in;
-    -o-transition: 1s all ease-in;
-}
 
-/* Track */
-::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px grey;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #22A275;
-}
 a {
     text-decoration: none;
 }
@@ -189,7 +172,8 @@ a.item:hover .item-icon {
 /* ==================Dashboard====================== */
 .dashboard-wrapper {
     padding: 40px 10px 10px 0;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
+    height: max-content;
 }
 .action-title {
     margin: 0 15px 20px;
@@ -210,6 +194,10 @@ a.item:hover .item-icon {
     border-radius: 8px;
     /* box-shadow: 0 10px 55px 5px rgba(137, 172, 255, 0.274); */
     box-shadow: 0 1px 9px rgba(0, 0, 0, 0.308);
+}
+.dropdown-menu.show {
+    width: 100%;
+    max-height: 450px!important;
 }
 .sell.action-card {
     border-width: 1px;
