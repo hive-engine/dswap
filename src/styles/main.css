@@ -33,6 +33,7 @@ a:hover {
     border: none;
     z-index: 9999;
 }
+
 .logo {
     padding: 5px;
 }
@@ -104,6 +105,14 @@ a:hover {
     color: #fff;
     opacity: 0.8;
     border-radius: 8px;
+}
+.dswap-nav-options ul li .add-padding {
+    padding: 5px;
+    
+}
+.dswap-nav-options ul li .add-padding .remove-border-margin {
+    margin: 0 !important;
+    border: none!important;
 }
 .swap-screen {
     background-color: #fff;
@@ -187,7 +196,7 @@ a.item:hover .item-icon {
 }
 .action-title {
     margin: 0 15px 20px;
-    color: #22a275;
+    color: #05413c;
 }
 .action-card {
     padding: 10px;
@@ -433,7 +442,7 @@ a.item:hover .item-icon {
 }
 .start-trade {
     width: 100%;
-    background-color: #22a275;
+    background-color: #05413c;
     color: #fff;
     border: 1px solid #05413c;
 }
@@ -462,12 +471,12 @@ a.item:hover .item-icon {
 .transaction-table {
     /* background-color: #05413c; */
     margin: 30px 50px;
-    border: 1px solid #22a275;
+    border: 1px solid #05413c;
     padding: 5px;
-    color: #22a275;
+    color: #05413c;
 }
 .transaction-table-header h4 {
-    color: #22a275;
+    color: #05413c;
     margin: 10px 0;
 }
 .table-head {
@@ -569,19 +578,19 @@ a.item:hover .item-icon {
 .wallet-wrapper {
     /* padding: 40px; */
     margin: 50px;
-    border: 1px solid #22a275c5;
+    border: 1px solid #05413c;
     background-color: #22a2750c;
     border-radius: 5px;
 }
 .wallet-header {
-    border-bottom: 1px solid #22a275c5;
+    border-bottom: 1px solid #05413c;
 }
 .wallet-title {
     font-size: 20px;
     padding: 15px;
     margin-bottom: 0;
     text-transform: uppercase;
-    color: #22a275;
+    color: #05413c;
     font-weight: 900;
 }
 .wallet-desc {
@@ -594,7 +603,7 @@ a.item:hover .item-icon {
     padding: 5px 15px 0;
 }
 .wallet-card {
-    border: 1px solid #22a275c5;
+    border: 1px solid #05413c;
     border-radius: 5px;
     padding: 20px 15px;
     display: flex;
@@ -637,12 +646,12 @@ a.item:hover .item-icon {
     width: 100%;
 }
 .token-name {
-    color: #22a275;
+    color: #05413c;
     font-weight: 900;
 }
 
 .value-title {
-    color: #22a275c5;
+    color: #05413c;
     text-transform: capitalize;
     margin-bottom: 2px;
 }
@@ -650,7 +659,7 @@ a.item:hover .item-icon {
     margin-bottom: 12px;
 }
 .value {
-    color: #22a275c5;
+    color: #05413c;
 }
 .wallet-detail-balance-card {
     display: flex;
@@ -663,21 +672,21 @@ a.item:hover .item-icon {
 .detail-value-title {
     text-transform: uppercase;
     font-weight: 600;
-    color: #387973;
+    color: #05413c;
     margin: 0 !important;
 }
 .detail-value {
     font-size: 52px;
     font-weight: 700;
-    color: #22a275;
+    color: #05413c;
 }
 .detail-value-2 {
     font-size: 25px;
     font-weight: 700;
-    color: #22a275;
+    color: #05413c;
 }
 .token-symbol {
-    color: #387973;
+    color: #05413c;
     font-size: 25px;
     font-weight: 600;
     margin: 0 !important;
