@@ -17,8 +17,7 @@
                     </div>
                     <hr class="divider" />
                     <div class="register-market-maker-body">
-                        
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label
                                 >${'What token do you want the market maker to
                                 trade?' & t}</label
@@ -37,162 +36,85 @@
                                     >${t.name & t} (${t.symbol})</option
                                 >
                             </select>
-                        </div>
-
-                        <div>
-                            <div class="form-group" if.bind="token">
-                                <h4>
-                                    ${`Current ${token.pegged_token_symbol}
-                                    Balance` & t}
-                                </h4>
-                                <h3
-                                    class="lblPointer"
-                                    click.delegate="balanceClicked()"
-                                >
-                                    ${tokenBalance | comma}
-                                </h3>
-                            </div>
-
-                            <div class="form-group">
-                                <label
-                                    >${'What is the maximum price you\'re
-                                    willing to buy the token for?' & t}</label
-                                >
-                                <div class="input-group">
-                                    <input
-                                        class="form-control"
-                                        type="text"
-                                        placeholder="0.000"
-                                        value.bind="amount"
-                                    />
-                                    <div class="input-group-append">
-                                        ${token.pegged_token_symbol & t}
-                                    </div>
-                                    <div class="invalid-tooltip">
-                                        ${'errors:Please enter an amount greater
-                                        than 0' & t}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label
-                                    >${'What is the minimum price you\'re
-                                    willing to sell the token for?' & t}</label
-                                >
-                                <div class="input-group">
-                                    <input
-                                        class="form-control"
-                                        type="text"
-                                        placeholder="0.000"
-                                        value.bind="amount"
-                                    />
-                                    <div class="input-group-append">
-                                        ${token.pegged_token_symbol & t}
-                                    </div>
-                                    <div class="invalid-tooltip">
-                                        ${'errors:Please enter an amount greater
-                                        than 0' & t}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label
-                                    >${'What is the maximum amount of STEEM/HIVE
-                                    you\'re willing to buy with in a single
-                                    order?' & t}</label
-                                >
-                                <div class="input-group">
-                                    <input
-                                        class="form-control"
-                                        type="text"
-                                        placeholder="0.000"
-                                        value.bind="amount"
-                                    />
-                                    <div class="input-group-append">
-                                        ${token.pegged_token_symbol & t}
-                                    </div>
-                                    <div class="invalid-tooltip">
-                                        ${'errors:Please enter an amount greater
-                                        than 0' & t}
+                        </div> -->
+                        <div class="disclaimer-wrapper">
+                            <h2 class="text-center">Disclaimer:</h2>
+                            <p class="disclaimer-text text-danger text-body">
+                                Lorem ipsum dolor sit amet consectetur
+                                adipisicing elit. Voluptate deleniti soluta
+                                debitis dicta.
+                            </p>
+                            <ol>
+                                <li>
+                                    Voluptate deleniti soluta debitis dicta.
+                                    Eveniet fuga cum praesentium quos tenetur
+                                    nostrum impedit,
+                                </li>
+                                <li>
+                                    Voluptate deleniti soluta debitis dicta.
+                                    Eveniet fuga cum praesentium quos tenetur
+                                    nostrum impedit,
+                                </li>
+                                <li>
+                                    Voluptate deleniti soluta debitis dicta.
+                                    Eveniet fuga cum praesentium quos tenetur
+                                    nostrum impedit,
+                                </li>
+                            </ol>
+                            <p>
+                                Eveniet fuga cum praesentium quos tenetur
+                                nostrum impedit, illo reiciendis voluptatum
+                                perspiciatis voluptatem enim saepe voluptatibus?
+                                Alias.
+                            </p>
+                            <fieldset class="form-group">
+                                <div class="row">
+                                    <legend
+                                        class="col-form-label col-sm-2 pt-0"
+                                    >
+                                        Radios
+                                    </legend>
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input"
+                                                type="radio"
+                                                name="gridRadios"
+                                                id="gridRadios1"
+                                                value="option1"
+                                                checked
+                                            />
+                                            <label
+                                                class="form-check-label"
+                                                for="gridRadios1"
+                                            >
+                                                First radio
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input
+                                                class="form-check-input"
+                                                type="radio"
+                                                name="gridRadios"
+                                                id="gridRadios2"
+                                                value="option2"
+                                            />
+                                            <label
+                                                class="form-check-label"
+                                                for="gridRadios2"
+                                            >
+                                                Second radio
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label
-                                    >${'What is the maximum amount of tokens
-                                    you\'re willing to sell in a single order?'
-                                    & t}</label
-                                >
-                                <div class="input-group">
-                                    <input
-                                        class="form-control"
-                                        type="text"
-                                        placeholder="0.000"
-                                        value.bind="amount"
-                                    />
-                                    <div class="input-group-append">
-                                        ${token.pegged_token_symbol & t}
-                                    </div>
-                                    <div class="invalid-tooltip">
-                                        ${'errors:Please enter an amount greater
-                                        than 0' & t}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label
-                                    >${'What is the minimum spread between bid
-                                    and asks before the bot won\'t place orders
-                                    any closer?' & t}</label
-                                >
-                                <div class="input-group">
-                                    <input
-                                        class="form-control"
-                                        type="text"
-                                        placeholder="0.000"
-                                        value.bind="amount"
-                                    />
-                                    <div class="input-group-append">
-                                        ${token.pegged_token_symbol & t}
-                                    </div>
-                                    <div class="invalid-tooltip">
-                                        ${'errors:Please enter an amount greater
-                                        than 0' & t}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label>${'Withdrawal Address' & t}</label>
-                                <input
-                                    class="form-control"
-                                    type="text"
-                                    id="withdraw_address"
-                                    value.bind="address"
-                                    disabled.bind="!token || token.symbol == 'STEEM'"
-                                />
-                                <div
-                                    class="invalid-tooltip"
-                                    id="error_response"
-                                ></div>
-                            </div>
-
-                            <div class="ssc-cost">
-                                You will receive:
-                                <span id="receive_amt"
-                                    >${amount * 0.99 | toFixed: 3}</span
-                                >
-                                ${token.symbol}
-                            </div>
+                            </fieldset>
                         </div>
                     </div>
 
-                    <div class="footer text-right">
-                        <button class="btn btn-lg redBtn">
-                            ${'Cancel' & t}
-                        </button>
+                    <div class="footer text-center">
                         <button class="btn btn-lg greenBtns trade-button">
-                            ${'Proceed' & t}
+                            ${'Register' & t}
                         </button>
                     </div>
                 </div>
