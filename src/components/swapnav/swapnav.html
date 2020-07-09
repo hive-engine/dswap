@@ -11,18 +11,16 @@
             <a class="each-link" route-href="send"
                 ><div class="small-wrap">
                     <span>Send</span
-                    ><img
-                        class="img-send"
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAADE0lEQVRYhe2VO2gUYRDHf7O3pxEUH5igjSa5gBaxEhtBg2+w0MIHKt5JYmElCMkFAxaHoMEkIlgoiFzibQRRsQiKokYQrezEIBZ5CRZqqoiiJLvfWGTviPfY7AWjCE61d3Pf/H87M9//4H/8jz8RitT0NG+uzSR356fsudStcVrXiOEwjh7FIqbGNMw5wKqbp5dGjTmgaALVjQjip96PjC56OScA1d2pCrG/7hGVOJ63SyHqp8YBD1gmSC+plPmtALGe5vXGiiSEb0dQWe5/7QFPRXCixn4wIe4ggOd5vcVqlA2Qm6voUYWYoNnUW0QyGrF7Ro6c/zT125aDorIEeDXaePHdrAEC5vpBkXuIpEfiF17nnxOVOICKOKVqlwSou3xyvrdk/k4Liavn7VWY56fGBe1TJTOc6OpnWgt+OZ9uqzS4uwCXiH0nHIAiNTeaN1lixY1wQGCxX30SuK+ijroL+0YbUz8AODaVjGVaqlRk33C882quVMQ9xNQy3s+OJBAg5iQT6nAWi9XTXumVKL3i2bcGm9rHihWIZVqqFOlHqa+90SrDxzquAKjgt19Ltv/XDqg+Akn6nyZU2D4S73wRdDgnDvXAgIi5C1Dd3bwW2ACMq7uwL6iGlX0YSnR9tlx7K/AGmCfKtdXOqZWlDtal2yoVeeqLvzMeO4YSXZ8BIpYVBxDlTm5cMwEADDa1j1muvc2HWBvR6LNiEHXptkpju/3AOl98y2hj50cAFFHhMIBRE9j+AoAwEIHiQLWT3AzUUMJ680NKJfKFPJncGp1c4AaJA9RmWq+DHhfk3FCi40zZHcjGYFP7mKDbgQGmOvHY2O4zX3xA0IZ88eruVAXofihtvaEBoGAx6ymycNND7K97gMUEWG9ZAFCwEwCoPVl0dGGst2yAIhBFb0dduq0SmNF6ZwUQBmKa9T4Mst5ZA8wEkbNeCN1+CLiGQZF/RdWYE2JZz4EvExXuig8HL30PW6usDmQj/4qKZT0BEOV2OeKzBoDC/w4IZ72/DQAKdiKU9c5JxDItVTEnmfgr4v98/ARbkItun4uisAAAAABJRU5ErkJggg=="
-                    /></div
+                    >
+                    <i class="fa fa-paper-plane img-send"></i>
+                    </div
             ></a>
             <a class="each-link" route-href="receive"
                 ><div class="small-wrap">
                     <span>Receive</span
-                    ><img
-                        class="img-send"
-                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAAxUlEQVRYhe2W2xGEIAxFw46VUJhdUIVdUJit4NfOZDPkYaLD6nD+RALXPAWYTAaTeou5liYZ7euW8D76rNlhPlald7FIL6li7gtzLQ3vtdoBGDyQa2maayN27hDgw3uxtSKGIHK41U4UILlwX7ck5YTlclWARsT1X8QDaJ3TdU0YZ48Z3ge60BLiSsq6LpXkcA+cSqKzvf4RORCahhzclHznNJS8dUkOeKehlVArxngqwCTgin7vFuD9EQH4Ff7XVTCZDOcA0DWJf80Cx4cAAAAASUVORK5CYII="
-                    /></div
+                    >
+                    <i class="fa fa-qrcode img-receive"></i>
+                    </div
             ></a>
         </div>
         <div class="dswap-nav-options ml-auto">
@@ -34,7 +32,7 @@
                 </li>
                 <li else class="nav-item dropdown active">
                     <a
-                        class="nav-link dropdown-toggle"
+                        class="nav-link dropdown-toggle nav-username"
                         href="javascript:void(0);"
                         id="userDropdown"
                         data-toggle="dropdown"
@@ -43,23 +41,23 @@
                     >
                         ${state.account.name}
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="userDropdown">
+                    <div class="dropdown-menu add-padding" aria-labelledby="userDropdown" style="min-width: 100% !important;">
                         <a
-                            class="dropdown-item"
+                            class="dropdown-item remove-border-margin"
                             href="javascript:void(0);"
                             click.delegate="logout()"
                             >${'Logout' & t}</a
                         >
                     </div>
                 </li>
-                <li>
+                <!-- <li>
                     <a
                         class="add-wallet-btn each-link"
                         route-href="route:marketMaker"
                     >
                         Market Maker
                     </a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>
