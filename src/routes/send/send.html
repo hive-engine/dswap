@@ -34,7 +34,7 @@
                 you copied the receiver's address correctly from them.
             </p>
             <p class="send-info">
-                Current balance: <strong>${token ? token.userBalance.balance : '[TOKEN]'}</strong>
+                Current balance: <strong click.delegate="setFullAmount()">${token ? token.userBalance.balance : '[TOKEN]'}</strong>
             </p>
             <input
                 type="number"
@@ -42,7 +42,7 @@
                 placeholder="Enter amount"
                 id="tokenAmount"
                 show.bind="token"
-                value.bind="sendTokenAmount"
+                value.bind="tokenAmount"
                 class="token-option text-center col-sm-4"
             />
             <br>
@@ -51,10 +51,10 @@
                 name="token-opion"
                 placeholder="Enter address"
                 id="token"
-                value.bind="sendTokenAddress"
+                value.bind="tokenAddress"
                 class="token-option text-center col-sm-4"
             />
-            <input type="button" value="Send" class="send-button mt-3" />
+            <input type="button" value="Send" click.delegate="sendTokens()" class="send-button mt-3" />
         </div>
     </div>
 </template>
