@@ -4,5 +4,11 @@
     "dashboardBuyTokenAmountRequired": "Please enter an amount to buy {{buyTokenSymbol}}",
     "dashboardSellTokenAmountRequired": "Please enter an amount to sell {{sellTokenSymbol}}",
     "dashboardAmountMustBeGreaterThanZero": "Please enter an amount greater than 0",
-    "dashboardInsufficientBalance": "Insufficient sell token balance entered. Current {{sellTokenSymbol}} balance: {{sellTokenBalance}}. Entered amount: {{sellTokenAmount}}"
+    "dashboardInsufficientBalance": "Insufficient sell token balance entered. Current {{sellTokenSymbol}} balance: {{sellTokenBalance}}. Entered amount: {{sellTokenAmount}}",
+    "sendTokenSymbolRequired": "Token is required",
+    "sendTokenAmountRequired": "Amount is required",
+    "sendTokenAmountMustBeGreaterThanZero": "Amount must be > 0",
+    "sendTokenInsufficientBalance": "Insufficient token balance.",
+    "sendTokenAddressRequired": "Destination address is required",
+    "receiveTokenNoAddressError": "Unable to generate address for {{tokenSymbol}}"
 }

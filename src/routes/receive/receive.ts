@@ -4,6 +4,10 @@ import { Subscription } from "rxjs";
 import { DialogService } from "aurelia-dialog";
 import { Store } from "aurelia-store";
 import { HiveEngineService } from "services/hive-engine-service";
+import { ToastService, ToastMessage } from "services/toast-service";
+import { ValidationControllerFactory } from "aurelia-validation";
+import { I18N } from "aurelia-i18n";
+import { BootstrapFormRenderer } from "resources/bootstrap-form-renderer";
 
 @autoinject()
 export class Receive {
@@ -14,14 +18,23 @@ export class Receive {
     public token;
     private receiveTokenInfo;
     private loading = false;
+    private validationController;
+    private renderer;
 
     constructor(
         private dialogService: DialogService,
         private ts: TokenService,
         private store: Store<IState>,
         private hes: HiveEngineService,
-        private taskQueue: TaskQueue
+        private taskQueue: TaskQueue,
+        private toast: ToastService, 
+        private controllerFactory: ValidationControllerFactory, 
+        private i18n: I18N
     ) {
+        this.validationController = controllerFactory.createForCurrentScope();
+
+        this.renderer = new BootstrapFormRenderer();
+        this.validationController.addRenderer(this.renderer);
         this.storeSubscription = this.store.state.subscribe((state) => {
             if (state) {
                 this.state = state;
@@ -50,7 +63,7 @@ export class Receive {
         this.tokens = [...this.state.tokens];
     }
 
-    async tokenSelected() {
+    async generateAddress() {
         this.taskQueue.queueMicroTask(async () => {
             this.loading = false;
 
@@ -61,17 +74,29 @@ export class Receive {
                     const result = await this.hes.getDepositAddress(
                         this.tokenSymbol
                     );
-
+                    console.log(result);
                     if (result) {
                         this.receiveTokenInfo = result;
+                    } else {
+                        const toast = new ToastMessage();
+
+                        toast.message = this.i18n.tr("receiveTokenNoAddressError", {
+                            tokenSymbol: this.tokenSymbol,
+                            ns: 'errors' 
+                        });
+                        
+                        this.toast.error(toast);
                     }
                 } finally {
                     this.loading = false;
                 }
             }
         });
+    }
 
+    async tokenSelected() {
         this.token = this.tokens.find((x) => x.symbol == this.tokenSymbol);
+        this.generateAddress();
     }
 
     // Copy Deposit Address
@@ -80,29 +105,52 @@ export class Receive {
         var copyBtn = document.getElementById("copyBtn") as HTMLInputElement;
         var addressValue = document.getElementById("token") as HTMLInputElement;
 
-        if (addressValue.value! != "" || null) {
-            var copyText = document.getElementById("token") as HTMLInputElement;
-            copyText.select();
-            document.execCommand("copy");
-            console.log("Copied the text: " + copyText.value);
-            copyBtn.value = "Text Copied!";
-            copyBtn.classList.add("copy-class");
+        var copyText = document.getElementById("token") as HTMLInputElement;
+        copyText.select();
+        document.execCommand("copy");
+        console.log("Copied the text: " + copyText.value);
+        copyBtn.value = "Text Copied!";
+        copyBtn.classList.add("copy-class");
 
-            // Remove Temporary Styling
+        // Remove Temporary Styling
+        setTimeout(() => {
+            copyBtn.classList.remove("copy-class");
+            copyBtn.value = "Copy Address";
+        }, 3000);
+
+        clearTimeout(
             setTimeout(() => {
                 copyBtn.classList.remove("copy-class");
-                copyBtn.value = "Copy Address";
-            }, 3000);
+            }, 3000)
+        );
 
-            clearTimeout(
-                setTimeout(() => {
-                    copyBtn.classList.remove("copy-class");
-                }, 3000)
-            );
-        } else {
-            copyBtn.value = "Generate Address";
-            // Generate New Address from username
-        }
+        console.log(addressValue.value);
+    }
+
+    // Copy Deposit Address
+    copyMemo() {
+        // Temporarily Change Styling
+        var copyBtn = document.getElementById("copyMemoBtn") as HTMLInputElement;
+        var addressValue = document.getElementById("memo") as HTMLInputElement;
+
+        var copyText = document.getElementById("memo") as HTMLInputElement;
+        copyText.select();
+        document.execCommand("copy");
+        console.log("Copied the text: " + copyText.value);
+        copyBtn.value = "Text Copied!";
+        copyBtn.classList.add("copy-class");
+
+        // Remove Temporary Styling
+        setTimeout(() => {
+            copyBtn.classList.remove("copy-class");
+            copyBtn.value = "Copy Memo";
+        }, 3000);
+
+        clearTimeout(
+            setTimeout(() => {
+                copyBtn.classList.remove("copy-class");
+            }, 3000)
+        );
 
         console.log(addressValue.value);
     }
