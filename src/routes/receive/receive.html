@@ -35,21 +35,53 @@
                 following address. Kindly ensure that you copied this address
                 correctly from below.
             </p>
+            <div show.bind="receiveTokenInfo.address" class="col-sm-6">
+                <strong>Address:</strong>
+                    <input
+                        type="text"
+                        name="token-opion"
+                        placeholder="Get address here by selecting the appropriate token"
+                        id="token"
+                        value.bind="receiveTokenInfo.address"
+                        class="token-option text-center col-sm-9"
+                        readonly
+                    />
+            </div>
+            <div show.bind="receiveTokenInfo.memo" class="col-sm-6">
+                <br />
+                <strong>Memo:</strong>
+                    <input
+                        type="text"
+                        name="token-opion"
+                        placeholder="Memo"
+                        id="memo"
+                        value.bind="receiveTokenInfo.memo"
+                        class="token-option text-center col-sm-9"
+                        readonly
+                    />
+            </div>
             <input
-                type="text"
-                name="token-opion"
-                placeholder="Get address here by selecting the appropriate token"
-                id="token"
-                value.bind="receiveTokenInfo.address"
-                class="token-option text-center col-sm-4"
-                readonly
+                type="button"
+                show.bind="tokenSymbol && (!receiveTokenInfo || !receiveTokenInfo.address)"
+                value="Generate Address"
+                class="send-button mt-3"
+                click.delegate="generateAddress()"
             />
             <input
                 type="button"
-                value.bind="receiveTokenInfo.address === undefined || '' || null ? 'Generate Address' : 'Copy Address'"
+                show.bind="receiveTokenInfo.address"
+                value="Copy Address"
                 class="send-button mt-3"
                 click.delegate="copyDepositAddress()"
                 id="copyBtn"
+            />
+            <input
+                type="button"
+                show.bind="receiveTokenInfo.memo"
+                value="Copy Memo"
+                class="send-button mt-3"
+                click.delegate="copyMemo()"
+                id="copyMemoBtn"
             />
         </div>
     </div>

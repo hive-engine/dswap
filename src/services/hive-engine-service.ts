@@ -51,7 +51,7 @@ export class HiveEngineService {
     async getDepositAddress(symbol) {
         const pairs = await this.getFormattedCoinPairs();   
         const peggedToken = pairs.find(p => p.pegged_token_symbol === symbol);
-        console.log(peggedToken);
+        
         if (!peggedToken) {
             return;
         }
@@ -69,8 +69,17 @@ export class HiveEngineService {
             });
 
             const response = await request.json();
+            
+            let result = { name: peggedToken.name, symbol: peggedToken.symbol, pegged_token_symbol: peggedToken.pegged_token_symbol, address: "", memo: "" };
+            
+            if (response.address) {
+                result.address = response.address;
+            } else if (response.account) {
+                result.address = response.account;
+                result.memo = response.memo;
+            }
 
-            return { ...response, ...peggedToken };
+            return result;
         } catch (e) {
             console.error(e);
             return null;
