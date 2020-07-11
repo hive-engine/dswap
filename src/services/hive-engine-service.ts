@@ -8,7 +8,10 @@ import { I18N } from 'aurelia-i18n';
 import { Store } from 'aurelia-store';
 import hivejs from '@hivechain/hivejs';
 import { hiveSignerJson, getAccount } from 'common/hive';
-import { loadCoins, loadCoinPairs } from 'common/hive-engine-api';
+import { loadCoins, loadCoinPairs, loadAccountHistory } from 'common/hive-engine-api';
+import { filterXSS } from 'xss';
+import { TokenService } from './token-service';
+import moment from 'moment';
 
 const http = new HttpClient();
 
@@ -118,5 +121,37 @@ export class HiveEngineService {
         tokenPairs = tokenPairs.sort((a, b) => a.name.localeCompare(b.name));
 
         return tokenPairs;
+    }
+
+    async loadAccountHistoryData(symbol = "", limit = 10, offset = 0) {
+        const userName = this.getUser();
+        const history = await loadAccountHistory(userName, symbol, null, null, limit, offset);
+
+        console.log(history);
+        if (history) {
+            for(let h of history) {
+                h.memo = h.memo ? filterXSS(h.memo) : null;
+                h.type = (h.to == userName) ? 'received' : 'sent';
+
+                var q = "";
+                if (h.quantity)
+                    q = h.quantity;
+                else if (h.quantityLocked)
+                    q = h.quantityLocked;
+                else if (h.quantityTokens)
+                    q = h.quantityTokens;
+                else if (h.quantityReturned)
+                    q = h.quantityReturned;
+                else if (h.quantityUnlocked)
+                    q = h.quantityUnlocked;
+
+                h.quantity = q;           
+                h.timestamp_string = moment.unix(h.timestamp).format('YYYY-MM-DD HH:mm:ss');
+                h.timestamp_month_name = moment.unix(h.timestamp).format('MMMM');
+                h.timestamp_day = moment.unix(h.timestamp).format('DD');
+            }
+        }
+
+        return history;
     }
 }

@@ -565,6 +565,11 @@ a.item:hover .item-icon {
     background: #22a275;
     border: 1px solid #05413cbd;
 }
+.pagination-link:hover,
+.pagination-link.active {
+    background-color: #e9ecef;
+}
+
 .transaction-type {
     font-weight: 900;
     font-size: 15px;
