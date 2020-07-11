@@ -127,7 +127,6 @@ export class HiveEngineService {
         const userName = this.getUser();
         const history = await loadAccountHistory(userName, symbol, null, null, limit, offset);
 
-        console.log(history);
         if (history) {
             for(let h of history) {
                 h.memo = h.memo ? filterXSS(h.memo) : null;

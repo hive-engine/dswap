@@ -9,12 +9,16 @@ import { DialogService } from 'aurelia-dialog';
 export class Trades {
     private limit = 5;
     private offset = 0;
-    private page = 1;
+    private page = 1;    
     private symbol;
     private tradesCompleted;
     private tradesPending;
     private tradesFailed;
     private loading = false;
+    // to retrieve later from an endpoint
+    private totalItems = 50;
+    // calculate later based on totalItems
+    private totalPages = 10;
 
     constructor(private dialogService: DialogService, private hes: HiveEngineService, private ts: TokenService) {}
 

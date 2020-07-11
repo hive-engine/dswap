@@ -124,6 +124,7 @@
                                 </div>
                                 <br /><br /><br />
                                 <div class="row">
+                                    <loader loading.bind="loading" mode="tiny"></loader>
                                     <div class="col-md-12">
                                         <div class="transaction-history-card">
                                             <div class="wallet-header">
@@ -160,7 +161,7 @@
                                                         </th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody repeat.for="trade of tradesCompleted">
                                                     <tr>
                                                         <th
                                                             class="table-item"
@@ -170,82 +171,32 @@
                                                                 class="transaction-icon"
                                                             >
                                                                 <font-awesome-icon
+                                                                    show.bind="trade.type == 'received'"
                                                                     class="table-icon"
                                                                     icon.bind="['fas', 'university']"
                                                                 ></font-awesome-icon>
-                                                            </div>
-                                                        </th>
-                                                        <td class="table-item">
-                                                            <h4
-                                                                class="text-center mb-0"
-                                                            >
-                                                                MAY
-                                                            </h4>
-                                                            <h6
-                                                                class="text-center mb-0"
-                                                            >
-                                                                12
-                                                            </h6>
-                                                        </td>
-                                                        <td
-                                                            class="table-item transaction-type"
-                                                        >
-                                                            BTC Withdrawal
-                                                            <br />
-                                                            <span
-                                                                class="transaction-type-info"
-                                                                >You withdrew
-                                                                0.04589 BTC
-                                                                worth $ 370.00
-                                                                of USDT</span
-                                                            >
-                                                        </td>
-                                                        <td class="table-item">
-                                                            0.04589 BTC
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th
-                                                            class="table-item"
-                                                            scope="row"
-                                                        >
-                                                            <div
-                                                                class="transaction-icon"
-                                                            >
                                                                 <font-awesome-icon
                                                                     class="table-icon"
+                                                                    show.bind="trade.type == 'sent'"
                                                                     icon.bind="['fas', 'exchange']"
                                                                 ></font-awesome-icon>
                                                             </div>
                                                         </th>
                                                         <td class="table-item">
-                                                            <h4
-                                                                class="text-center mb-0"
-                                                            >
-                                                                MAY
-                                                            </h4>
-                                                            <h6
-                                                                class="text-center mb-0"
-                                                            >
-                                                                12
-                                                            </h6>
+                                                            <h4 class="text-center mb-0">${trade.timestamp_month_name}</h4>
+                                                            <h6 class="text-center mb-0">${trade.timestamp_day}</h6>
                                                         </td>
-                                                        <td
-                                                            class="table-item transaction-type"
-                                                        >
-                                                            BTC Bought
+                                                        <td class="table-item transaction-type">
+                                                            ${trade.symbol} Trade
                                                             <br />
-                                                            <span
-                                                                class="transaction-type-info"
-                                                                >Purchased
-                                                                0.04589 BTC with
-                                                                $ 370.00 worth
-                                                                of USDT</span
+                                                            <span class="transaction-type-info" show.bind="trade.type == 'received'"
+                                                                >You received ${trade.quantity} ${trade.symbol} worth ${'$' + trade.usdValue}</span
+                                                            >
+                                                            <span class="transaction-type-info" show.bind="trade.type == 'sent'"
+                                                                >You sent ${trade.quantity} ${trade.symbol} worth ${'$' + trade.usdValue}</span
                                                             >
                                                         </td>
-                                                        <td class="table-item">
-                                                            0.04589 BTC
-                                                        </td>
+                                                        <td class="table-item text-right">${trade.quantity} ${trade.symbol}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -258,59 +209,17 @@
                                                     class="pagination"
                                                     style="margin-bottom: 0;"
                                                 >
-                                                    <li
-                                                        class="page-item pagination-btn"
-                                                    >
-                                                        <a
-                                                            class="page-link pagination-link"
-                                                            href="#"
-                                                            aria-label="Previous"
-                                                        >
-                                                            <span
-                                                                aria-hidden="true"
-                                                                >&laquo;</span
-                                                            >
+                                                    <li class="page-item pagination-btn">
+                                                        <a class="page-link pagination-link" click.delegate="pageClick('prev')" aria-label="Previous" show.bind="page > 1">
+                                                            <span aria-hidden="true">&laquo;</span>
                                                         </a>
                                                     </li>
-                                                    <li
-                                                        class="page-item pagination-btn"
-                                                    >
-                                                        <a
-                                                            class="page-link pagination-link"
-                                                            href="#"
-                                                            >1</a
-                                                        >
+                                                    <li class="page-item pagination-btn" repeat.for="p of totalPages">
+                                                        <a class="page-link pagination-link ${page == p+1 ? 'active' : ''}" click.delegate="pageClick(p+1)">${p+1}</a>
                                                     </li>
-                                                    <li
-                                                        class="page-item pagination-btn"
-                                                    >
-                                                        <a
-                                                            class="page-link pagination-link"
-                                                            href="#"
-                                                            >2</a
-                                                        >
-                                                    </li>
-                                                    <li
-                                                        class="page-item pagination-btn"
-                                                    >
-                                                        <a
-                                                            class="page-link pagination-link"
-                                                            href="#"
-                                                            >3</a
-                                                        >
-                                                    </li>
-                                                    <li
-                                                        class="page-item pagination-btn"
-                                                    >
-                                                        <a
-                                                            class="page-link pagination-link"
-                                                            href="#"
-                                                            aria-label="Next"
-                                                        >
-                                                            <span
-                                                                aria-hidden="true"
-                                                                >&raquo;</span
-                                                            >
+                                                    <li class="page-item pagination-btn">
+                                                        <a class="page-link pagination-link" click.delegate="pageClick('next')" aria-label="Next" show.bind="page < totalPages">
+                                                            <span aria-hidden="true">&raquo;</span>
                                                         </a>
                                                     </li>
                                                 </ul>
