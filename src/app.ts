@@ -98,7 +98,7 @@ bind() {
             title: "Wallet Detail",
         },
         {
-            route: "trades",
+            route: "trades/:symbol?/:page?",
             name: "trades",
             moduleId: PLATFORM.moduleName("./routes/trades/trades"),
             nav: false,

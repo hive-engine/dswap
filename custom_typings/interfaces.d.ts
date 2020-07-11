@@ -128,3 +128,29 @@ interface IBalance {
     stake: string;
     symbol: string;
 }
+
+interface IAccountHistoryItemResult {
+    _id: string;
+    account: string;
+    balance: string;
+    blockNumber: number;
+    from: string;
+    memo: string;
+    operation: string;
+    quantity: string;    
+    quantityHive: string;
+    quantityLocked: string;
+    quantityReturned: string;
+    quantityTokens: string;
+    quantityUnlocked: string;
+    symbol: string;    
+    timestamp: number;
+    timestamp_day: string;
+    timestamp_month_name: string;
+    timestamp_string: string;
+    to: string;       
+    transactionId: string;   
+    type: string; 
+    usdValue?: any;
+    
+}

@@ -132,76 +132,6 @@ export async function loadUserBalances(account: string, symbols = [], limit = 10
     return balances;
 }
 
-    // for (const res of results) {
-    //     let balance: IBalance;        
-    //     //balance.balance = parseFloat(res.balance);
-
-    //     const findToken = tokens.find(t => t.symbol === balance.symbol);
-    //     const metric = metrics.find(m => m.symbol === balance.symbol);
-
-        // if (res.token) {
-        //     token.metadata = JSON.parse(res.metadata);
-        // }
-
-        // if (metric) {
-        //     token.highestBid = parseFloat(metric.highestBid);
-        //     token.lastPrice = parseFloat(metric.lastPrice);
-        //     token.lowestAsk = parseFloat(metric.lowestAsk);
-        //     token.marketCap = token.lastPrice * token.circulatingSupply;
-
-        //     if (Date.now() / 1000 < metric.volumeExpiration) {
-        //         token.volume = parseFloat(metric.volume);
-        //     }
-
-        //     if (Date.now() / 1000 < metric.lastDayPriceExpiration) {
-        //         token.priceChangePercent = parseFloat(metric.priceChangePercent);
-        //         token.priceChangeHive = parseFloat(metric.priceChangeHive);
-        //     }
-        // }
-        
-        // token.highestBid = parseFloat(token.highestBid);
-        // token.lastPrice = parseFloat(token.lastPrice);
-        // token.lowestAsk = parseFloat(token.lowestAsk);
-        // token.marketCap = token.lastPrice * parseFloat(token.circulatingSupply);
-        // token.lastDayPrice = parseFloat(token.lastDayPrice);
-
-        // if (token?.lastPrice) {
-        //     token.usdValueFormatted = usdFormat(parseFloat(token.balance) * token.lastPrice, 3, prices.steem_price);
-        //     token.usdValue = usdFormat(parseFloat(token.balance) * token.lastPrice, 3, prices.steem_price, true);
-        // } else {
-        //     token.usdValueFormatted = usdFormat(parseFloat(token.balance) * 1, 3, prices.steem_price);
-        //     token.usdValue = usdFormat(parseFloat(token.balance) * 1, 3, prices.steem_price, true);
-        // }
-//     }
-
-//     const scotConfig = await getScotConfigForAccount(account);
-
-//     if (results && Object.keys(scotConfig).length) {
-//         for (const token of results) {
-//             const scotConfigToken = scotConfig[token.symbol];
-
-//             if (scotConfigToken) {
-//                 token.scotConfig = scotConfigToken;
-//             }
-//         }
-//     }
-
-//     if (results.length) {
-//         const balances = results.filter(b => environment.enabledTokens.includes(b.symbol));
-
-//         balances.sort(
-//             (a, b) =>
-//                 parseFloat(b.balance) * b?.lastPrice ??
-//                 0 * window.hive_price - parseFloat(b.balance) * a?.lastPrice ??
-//                 0 * window.hive_price,
-//         );
-
-//         return balances;
-//     } else {
-//         return [];
-//     }
-// }
-
 export async function loadTokens(symbols = [], limit = 50, offset = 0): Promise<IToken[]> {
     const queryConfig: any = {};
 
@@ -209,89 +139,12 @@ export async function loadTokens(symbols = [], limit = 50, offset = 0): Promise<
         queryConfig.symbol = { $in: symbols };
     }
 
-    // const results = [];
-
-    // const metrics = await ssc.find('market', 'metrics', queryConfig);
-    // metrics.sort((a, b) => {
-    //     return (
-    //         parseFloat(b.volume) - parseFloat(a.volume)
-    //     );
-    // });
-
-    // const limitedMetrics = metrics.slice(offset, limit);
-
-    // queryConfig.symbol = {
-    //     $in: limitedMetrics.map(m => m.symbol)
-    // }
-
     const results: any[] = await ssc.find('tokens', 'tokens', queryConfig, limit, offset, [{ index: 'symbol', descending: false }]);
     let tokens: IToken[] = [];
 
     for (const res of results) {
         tokens.push(mapTokenResultToIToken(res));
     }
-
-    //     if (!environment.enabledTokens.includes(token.symbol)) {
-    //         continue;
-    //     }
-
-    //     if (token?.metadata) {
-    //         token.metadata = JSON.parse(token.metadata);
-    //     }
-
-    //     token.highestBid = 0;
-    //     token.lastPrice = 0;
-    //     token.lowestAsk = 0;
-    //     token.marketCap = 0;
-    //     token.volume = 0;
-    //     token.priceChangePercent = 0;
-    //     token.priceChangeHive = 0;
-
-    //     const metric = limitedMetrics.find(m => token.symbol == m.symbol);
-
-    //     if (!metric) {
-    //         return;
-    //     }
-
-    //     if (metric) {
-    //         token.highestBid = parseFloat(metric.highestBid);
-    //         token.lastPrice = parseFloat(metric.lastPrice);
-    //         token.lowestAsk = parseFloat(metric.lowestAsk);
-    //         token.marketCap = token.lastPrice * token.circulatingSupply;
-
-    //         if (Date.now() / 1000 < metric.volumeExpiration) {
-    //             token.volume = parseFloat(metric.volume);
-    //         }
-
-    //         if (Date.now() / 1000 < metric.lastDayPriceExpiration) {
-    //             token.priceChangePercent = parseFloat(metric.priceChangePercent);
-    //             token.priceChangeHive = parseFloat(metric.priceChangeHive);
-    //         }
-    //     }
-
-    //     if (token.symbol === 'SWAP.HIVE') {
-    //         token.lastPrice = 1;
-    //     }
-
-    //     results.push(token);
-    // }
-
-    // results.sort((a, b) => {
-    //     return (b.volume > 0 ? b.volume : b.marketCap / 1000000000000) - (a.volume > 0 ? a.volume : a.marketCap / 1000000000000);
-    // });
-
-    // const hivepBalance = await loadHivepBalance();
-
-    // const finalTokens = results.filter(t => environment.enabledTokens.includes(t.symbol));
-
-    // if (hivepBalance && hivepBalance.balance) {
-    //     const token = finalTokens.find(t => t.symbol === 'SWAP.HIVE');
-
-    //     if (token) {
-    //         token.supply -= parseFloat(hivepBalance.balance);
-    //         (token as any).circulatingSupply -= parseFloat(hivepBalance.balance);
-    //     }
-    // }
 
     return tokens;
 }
@@ -314,4 +167,34 @@ export async function getScotConfigForAccount(account: string) {
     } catch (e) {
         return null;
     }
+}
+
+export async function loadAccountHistory(account: string, symbol?: string, timestampStart?: string, timestampEnd?: string, limit?: number, offset?: number): Promise<IAccountHistoryItemResult[]> {
+    let url = `${environment.HISTORY_API}accountHistory?account=${account}`;
+
+    if (symbol) {
+        url += `&symbol=${symbol.toUpperCase()}`;
+    }
+
+    if (timestampStart) {
+        url += `&timestampStart=${timestampStart}`;
+    }
+
+    if (timestampEnd) {
+        url += `&timestampEnd=${timestampEnd}`;
+    }
+
+    if (limit) {
+        url += `&limit=${limit}`;
+    }
+
+    if (offset) {
+        url += `&offset=${offset}`;
+    }
+
+    const response = await http.fetch(url, {
+        method: 'GET',
+    });
+
+    return response.json() as Promise<IAccountHistoryItemResult[]>;
 }

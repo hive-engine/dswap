@@ -107,17 +107,28 @@ export class TokenService {
         let dToken: any;
         if (this.state.tokens && this.state.tokens.length > 0) {            
             dToken = this.state.tokens.find(x => x.symbol == symbol);
+
+            if (!dToken)
+                dToken = await this.retrieveSingleToken(symbol);
         } else {
-            let tokenRes = await loadTokens([symbol])
-            if (tokenRes)
-                dToken = tokenRes[0];
+            dToken = await this.retrieveSingleToken(symbol);
         }
-        
+
         if (includeMetrics)
             await this.enrichTokensWithMetrics([dToken], [symbol]);
 
         if (includeBalance)
             dToken.userBalance = await this.getUserBalanceOfToken(symbol);
+
+        return dToken;
+    }
+
+    async retrieveSingleToken(symbol) {
+        let dToken: any;
+
+        let tokenRes = await loadTokens([symbol])
+        if (tokenRes)
+            dToken = tokenRes[0];
 
         return dToken;
     }

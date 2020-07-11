@@ -1,8 +1,10 @@
 <template bindable="selected">
+    <loader loading.bind="loading" mode="tiny"></loader>
+
     <div class="transaction-table">
         <div class="container-fluid">
             <div class="transaction-table-header">
-                <h4>Transactions</h4>
+                <h4>Trades</h4>
             </div>
             <ul class="nav nav-tabs table-tab" id="myTab" role="tablist">
                 <li class="nav-item table-head-links">
@@ -68,116 +70,37 @@
                                 <th class="amount-head head-item" scope="col">Amount</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody repeat.for="trade of tradesCompleted">
                             <tr>
                                 <th class="table-item" scope="row">
                                     <div class="transaction-icon">
                                         <font-awesome-icon
+                                            show.bind="trade.type == 'received'"
                                             class="table-icon"
                                             icon.bind="['fas', 'university']"
                                         ></font-awesome-icon>
-                                    </div>
-                                </th>
-                                <td class="table-item">
-                                    <h4 class="text-center mb-0">MAY</h4>
-                                    <h6 class="text-center mb-0">12</h6>
-                                </td>
-                                <td class="table-item transaction-type">
-                                    BTC Withdrawal
-                                    <br />
-                                    <span class="transaction-type-info"
-                                        >You withdrew 0.04589 BTC worth $ 370.00 of USDT</span
-                                    >
-                                </td>
-                                <td class="table-item">0.04589 BTC</td>
-                            </tr>
-                            <tr>
-                                <th class="table-item" scope="row">
-                                    <div class="transaction-icon">
                                         <font-awesome-icon
                                             class="table-icon"
+                                            show.bind="trade.type == 'sent'"
                                             icon.bind="['fas', 'exchange']"
                                         ></font-awesome-icon>
                                     </div>
                                 </th>
                                 <td class="table-item">
-                                    <h4 class="text-center mb-0">MAY</h4>
-                                    <h6 class="text-center mb-0">12</h6>
+                                    <h4 class="text-center mb-0">${trade.timestamp_month_name}</h4>
+                                    <h6 class="text-center mb-0">${trade.timestamp_day}</h6>
                                 </td>
                                 <td class="table-item transaction-type">
-                                    BTC Bought
+                                    ${trade.symbol} Trade
                                     <br />
-                                    <span class="transaction-type-info"
-                                        >Purchased 0.04589 BTC with $ 370.00 worth of USDT</span
+                                    <span class="transaction-type-info" show.bind="trade.type == 'received'"
+                                        >You received ${trade.quantity} ${trade.symbol} worth ${'$' + trade.usdValue}</span
+                                    >
+                                    <span class="transaction-type-info" show.bind="trade.type == 'sent'"
+                                        >You sent ${trade.quantity} ${trade.symbol} worth ${'$' + trade.usdValue}</span
                                     >
                                 </td>
-                                <td class="table-item">0.04589 BTC</td>
-                            </tr>
-                            <tr>
-                                <th class="table-item" scope="row">
-                                    <div class="transaction-icon">
-                                        <font-awesome-icon
-                                            class="table-icon"
-                                            icon.bind="['fas', 'university']"
-                                        ></font-awesome-icon>
-                                    </div>
-                                </th>
-                                <td class="table-item">
-                                    <h4 class="text-center mb-0">MAY</h4>
-                                    <h6 class="text-center mb-0">12</h6>
-                                </td>
-                                <td class="table-item transaction-type">
-                                    BTC Withdrawal
-                                    <br />
-                                    <span class="transaction-type-info"
-                                        >You withdrew 0.04589 BTC worth $ 370.00 of USDT</span
-                                    >
-                                </td>
-                                <td class="table-item">0.04589 BTC</td>
-                            </tr>
-                            <tr>
-                                <th class="table-item" scope="row">
-                                    <div class="transaction-icon">
-                                        <font-awesome-icon
-                                            class="table-icon"
-                                            icon.bind="['fas', 'exchange']"
-                                        ></font-awesome-icon>
-                                    </div>
-                                </th>
-                                <td class="table-item">
-                                    <h4 class="text-center mb-0">MAY</h4>
-                                    <h6 class="text-center mb-0">12</h6>
-                                </td>
-                                <td class="table-item transaction-type">
-                                    BTC Bought
-                                    <br />
-                                    <span class="transaction-type-info"
-                                        >Purchased 0.04589 BTC with $ 370.00 worth of USDT</span
-                                    >
-                                </td>
-                                <td class="table-item">0.04589 BTC</td>
-                            </tr>
-                            <tr>
-                                <th class="table-item" scope="row">
-                                    <div class="transaction-icon">
-                                        <font-awesome-icon
-                                            class="table-icon"
-                                            icon.bind="['fas', 'minus']"
-                                        ></font-awesome-icon>
-                                    </div>
-                                </th>
-                                <td class="table-item">
-                                    <h4 class="text-center mb-0">MAY</h4>
-                                    <h6 class="text-center mb-0">12</h6>
-                                </td>
-                                <td class="table-item transaction-type">
-                                    Fee Deducted
-                                    <br />
-                                    <span class="transaction-type-info"
-                                        >Trading Fee of 0.0003 BTC deducted from your trade</span
-                                    >
-                                </td>
-                                <td class="table-item">0.04589 BTC</td>
+                                <td class="table-item text-right">${trade.quantity} ${trade.symbol}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -185,21 +108,15 @@
                     <nav class="text-right ml-auto" aria-label="Page navigation example">
                         <ul class="pagination">
                             <li class="page-item pagination-btn">
-                                <a class="page-link pagination-link" href="#" aria-label="Previous">
+                                <a class="page-link pagination-link" click.delegate="pageClick('prev')" aria-label="Previous" show.bind="page > 1">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
-                            <li class="page-item pagination-btn">
-                                <a class="page-link pagination-link" href="#">1</a>
+                            <li class="page-item pagination-btn" repeat.for="p of totalPages">
+                                <a class="page-link pagination-link ${page == p+1 ? 'active' : ''}" click.delegate="pageClick(p+1)">${p+1}</a>
                             </li>
                             <li class="page-item pagination-btn">
-                                <a class="page-link pagination-link" href="#">2</a>
-                            </li>
-                            <li class="page-item pagination-btn">
-                                <a class="page-link pagination-link" href="#">3</a>
-                            </li>
-                            <li class="page-item pagination-btn">
-                                <a class="page-link pagination-link" href="#" aria-label="Next">
+                                <a class="page-link pagination-link" click.delegate="pageClick('next')" aria-label="Next" show.bind="page < totalPages">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
