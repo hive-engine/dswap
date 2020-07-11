@@ -480,7 +480,8 @@ a.item:hover .item-icon {
     margin: 10px 0;
 }
 .table-head {
-    background-color: #22a275c5;
+    background-color: #05413c;
+    color: #fff;
 }
 .table-tab {
     /* border-bottom: 1px solid #22a275c5; */
@@ -497,7 +498,7 @@ a.item:hover .item-icon {
     border-top-right-radius: 0.25rem;
 }
 .table-head-links:hover {
-    border-color: #22a275;
+    border-color: #05413c;
 }
 
 .head-item {
@@ -507,7 +508,7 @@ a.item:hover .item-icon {
 .table-item {
     /* border-bottom: 1px solid #22a275c5 !important;
   border-top: 1px solid #22a275c5 !important; */
-    color: #22a275;
+    color: #05413c;
     padding: 10px;
     /* display: flex;
   align-items: center; */
@@ -517,7 +518,7 @@ a.item:hover .item-icon {
     border-radius: 50%;
     width: 35px;
     height: 35px;
-    background: #22a275c5;
+    background: #05413c;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -528,7 +529,7 @@ a.item:hover .item-icon {
 }
 .table-item h4 {
     font-size: 15px;
-    color: #22a275;
+    color: #05413c;
     font-weight: 900;
     margin: 0;
 }
@@ -538,8 +539,8 @@ a.item:hover .item-icon {
     color: #22a275c5;
 }
 .table tr {
-    border-bottom: 1px solid #22a275c5 !important;
-    border-top: 1px solid #22a275c5 !important;
+    border-bottom: 1px solid #05413c !important;
+    border-top: 1px solid #05413c !important;
     padding: 0 10px;
 }
 .page-item {
@@ -561,8 +562,8 @@ a.item:hover .item-icon {
     padding: 0;
 }
 .pagination-link {
-    color: #05413c;
-    background: #22a275;
+    color: #fff;
+    background: #05413c;
     border: 1px solid #05413cbd;
 }
 .pagination-link:hover,
@@ -576,7 +577,7 @@ a.item:hover .item-icon {
 }
 .transaction-type-info {
     font-size: 12px;
-    color: #22a275c5;
+    color: #05413c;
 }
 
 /* ============= Wallet ================== */
@@ -602,7 +603,7 @@ a.item:hover .item-icon {
     margin-bottom: 0;
     font-size: 16px;
     padding: 15px;
-    color: #22a275c5;
+    color: #05413c;
 }
 .wallets-info-wrapper {
     padding: 5px 15px 0;
@@ -846,7 +847,7 @@ a.item:hover .item-icon {
 }
 .greenBtn {
     /*padding: .5rem 3rem;*/
-    background-color: #21be3d;
+    background-color: #05413c;
     color: #fff !important;
     font-weight: bold;
     font-family: main-font-bold !important;
@@ -981,7 +982,7 @@ a.item:hover .item-icon {
     display: none;
 }
 .deposit-address-btn {
-    background-color: #387973 !important;
+    background-color: #05413c !important;
     color: #fff !important;
 }
 .choose-token {
@@ -1000,12 +1001,13 @@ input.tradeValueUsd {
     background-color: #cdcdcd !important;
 }
 .copy-class {
-    background: #387973 !important;
+    background: #05413c !important;
     color: #fff !important;
+    border-radius: 8px;
 }
 .remove-copy-class {
     background: transparent;
-    color: #387973;
+    color: #05413c;
 }
 
 .tokenSelect .tokenIcon {
