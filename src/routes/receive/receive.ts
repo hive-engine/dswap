@@ -82,7 +82,7 @@ export class Receive {
                     const result = await this.hes.getDepositAddress(
                         this.tokenSymbol
                     );
-                    console.log(result);
+                    
                     if (result) {
                         this.receiveTokenInfo = result;
                     } else {
