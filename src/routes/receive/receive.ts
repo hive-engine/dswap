@@ -42,9 +42,17 @@ export class Receive {
         });
     }
 
-    async bind() {
+    async activate({ symbol }) {
         await this.refreshTokenLists();
         this.refreshSelectPicker();
+        if (symbol) {
+            this.tokenSymbol = symbol;
+            await this.tokenSelected();
+        }
+    }
+
+    async bind() {
+        
     }
     
     refreshSelectPicker() {
