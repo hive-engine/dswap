@@ -65,12 +65,25 @@ export class Dashboard {
           });       
     }
 
-    async canActivate() {
+    async canActivate({ symbol, transactionType }) {        
         try {
             if (!this.state.tokens) {
                 await this.ts.getDSwapTokens();
             }
             await dispatchify(getCurrentFirebaseUser)();            
+
+            this.refreshTokenLists();
+            this.createValidationRules();
+
+            if (symbol && transactionType) {
+                if (transactionType === "buy") {
+                    this.buyTokenSymbol = symbol;
+                    await this.buyTokenSelected();
+                } else if (transactionType === "sell") {
+                    this.sellTokenSymbol = symbol;
+                    await this.sellTokenSelected();
+                }
+            }
         } catch {
             return new Redirect('');
         }
@@ -113,11 +126,6 @@ export class Dashboard {
         }
     }
 
-    async bind() {
-        this.refreshTokenLists();
-        this.createValidationRules();
-    }
-
     async refreshTokenLists(){
         if (!this.state.tokens) {
             await this.ts.getDSwapTokens();
@@ -141,7 +149,9 @@ export class Dashboard {
     }
 
     async buyTokenSelected() {        
-        this.chartRefBuy.detached();
+        if (this.chartRefBuy)
+            this.chartRefBuy.detached();
+
         this.chartDataBuy = await this.loadTokenHistoryData(this.buyTokenSymbol);
 
         if (this.chartRefBuy)
@@ -172,7 +182,9 @@ export class Dashboard {
     }
 
     async sellTokenSelected() {
-        this.chartRefSell.detached();
+        if (this.chartRefSell)
+            this.chartRefSell.detached();
+
         this.chartDataSell = await this.loadTokenHistoryData(this.sellTokenSymbol);
 
         if (this.chartRefSell)

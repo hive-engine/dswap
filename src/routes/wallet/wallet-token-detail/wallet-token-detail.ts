@@ -32,7 +32,6 @@ export class WalletTokenDetail {
     }
 
     async activate({ symbol }) {
-        this.token = await this.ts.getTokenDetails(symbol);
-        console.log(symbol);
+        this.token = await this.ts.getTokenDetails(symbol);        
     }
 }

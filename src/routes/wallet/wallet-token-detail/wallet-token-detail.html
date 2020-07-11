@@ -88,7 +88,7 @@
                                     <div class="col-md-4">
                                         <div class="action-button">
                                             <a
-                                                href=""
+                                                route-href="route: send; params.bind: { symbol: token.symbol }"
                                                 class="wallet-btns wallet-btns-send"
                                                 >Send
                                                 <i
@@ -97,7 +97,7 @@
                                             ></a>
 
                                             <a
-                                                href=""
+                                                route-href="route: receive; params.bind: { symbol: token.symbol }"
                                                 class="wallet-btns wallet-btns-receive"
                                                 >Receive
                                                 <i
@@ -107,14 +107,14 @@
                                         </div>
                                         <div class="action-button">
                                             <a
-                                                href=""
+                                                route-href="route: dashboard; params.bind: { symbol: token.symbol, transactionType: 'sell' }"
                                                 class="wallet-btns wallet-btns-swap"
                                                 >Swap
                                                 <i class="fa fa-list-ul"></i
                                             ></a>
 
                                             <a
-                                                href=""
+                                                route-href="route: dashboard; params.bind: { symbol: token.symbol, transactionType: 'buy' }"
                                                 class="wallet-btns wallet-btns-buy"
                                                 >Buy
                                                 <i class="fa fa-university"></i

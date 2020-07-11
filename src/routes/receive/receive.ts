@@ -42,9 +42,17 @@ export class Receive {
         });
     }
 
-    async bind() {
+    async activate({ symbol }) {
         await this.refreshTokenLists();
         this.refreshSelectPicker();
+        if (symbol) {
+            this.tokenSymbol = symbol;
+            await this.tokenSelected();
+        }
+    }
+
+    async bind() {
+        
     }
     
     refreshSelectPicker() {
@@ -74,7 +82,7 @@ export class Receive {
                     const result = await this.hes.getDepositAddress(
                         this.tokenSymbol
                     );
-                    console.log(result);
+                    
                     if (result) {
                         this.receiveTokenInfo = result;
                     } else {

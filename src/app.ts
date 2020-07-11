@@ -75,7 +75,7 @@ bind() {
             title: "Home",
         },
         {
-            route: "dashboard",
+            route: "dashboard/:symbol?/:transactionType?",
             name: "dashboard",
             moduleId: PLATFORM.moduleName("./routes/dashboard/dashboard"),
             nav: false,
@@ -119,14 +119,14 @@ bind() {
             title: "Faq",
         },
         {
-            route: "send",
+            route: "send/:symbol?",
             name: "send",
             moduleId: PLATFORM.moduleName("./routes/send/send"),
             nav: false,
             title: "send",
         },
         {
-            route: "receive",
+            route: "receive/:symbol?",
             name: "receive",
             moduleId: PLATFORM.moduleName("./routes/receive/receive"),
             nav: false,

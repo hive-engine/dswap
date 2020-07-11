@@ -39,10 +39,15 @@ export class Send {
         });
     }
 
-    async bind() {
+    async activate({ symbol }) {
         await this.refreshTokenLists();        
         this.refreshSelectPicker();
         await this.createValidationRules();
+
+        if (symbol) {
+            this.tokenSymbol = symbol;            
+            await this.tokenSelected();
+        }
     }
 
     refreshSelectPicker() {

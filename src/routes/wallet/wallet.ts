@@ -39,8 +39,6 @@ export class Wallet {
 
     async loadWallets() {
         this.wallets = await this.tokenService.getDSwapTokenBalances();
-
-        console.log(this.wallets);
     }
 
     withdraw() {
