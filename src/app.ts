@@ -153,6 +153,13 @@ bind() {
             nav: false,
             title: "Register Market Maker",
         },
+        {
+            route: "set-market-maker",
+            name: "setMarketMaker",
+            moduleId: PLATFORM.moduleName("./routes/market-maker/settings/settings", "set-market-maker"),
+            nav: false,
+            title: "Settings - Market Maker",
+        },
     ]);
 
     this.router = router;

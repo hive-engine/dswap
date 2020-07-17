@@ -2,7 +2,7 @@
     <div class="flex-register">
         <div class="back-btn-container">
             <a
-                route-href="route: marketMaker"
+                route-href="route: registerMarketMaker"
                 class="back-btn"
                 style="margin-left: 200px; margin-bottom: 20px;"
                 >Go Back</a
@@ -162,21 +162,6 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label>${'Withdrawal Address' & t}</label>
-                                <input
-                                    class="form-control"
-                                    type="text"
-                                    id="withdraw_address"
-                                    value.bind="address"
-                                    disabled.bind="!token || token.symbol == 'STEEM'"
-                                />
-                                <div
-                                    class="invalid-tooltip"
-                                    id="error_response"
-                                ></div>
-                            </div>
-
                             <div class="ssc-cost">
                                 You will receive:
                                 <span id="receive_amt"
@@ -192,7 +177,7 @@
                             ${'Cancel' & t}
                         </button>
                         <button class="btn btn-lg greenBtns trade-button">
-                            ${'Proceed' & t}
+                            ${'Save' & t}
                         </button>
                     </div>
                 </div>

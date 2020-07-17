@@ -108,11 +108,10 @@ a:hover {
 }
 .dswap-nav-options ul li .add-padding {
     padding: 5px;
-    
 }
 .dswap-nav-options ul li .add-padding .remove-border-margin {
     margin: 0 !important;
-    border: none!important;
+    border: none !important;
 }
 .swap-screen {
     background-color: #fff;
@@ -747,6 +746,18 @@ a.item:hover .item-icon {
     background-color: #22a2750c;
     box-shadow: 0 10px 55px 5px rgba(137, 172, 255, 0.274);
     border-radius: 10px;
+}
+.text-white-custom {
+    color: #fff !important;
+}
+.text-white-custom:hover {
+    color: #05413c !important;
+    border: 1px solid #05413c;
+    cursor: pointer;
+}
+.pagination-link.text-white-custom.active {
+    background-color: #e9ecef;
+    color: #05413c !important;
 }
 /* ================ FAQ ==================== */
 .tribes-header {
