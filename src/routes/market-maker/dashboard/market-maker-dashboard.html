@@ -1,0 +1,430 @@
+<template>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="market-maker-dashboard-card">
+                <div class="token-balance account-status-card">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="balance-wrapper">
+                                <h6 class="detail-value-title">
+                                    Welcome to your ${user.name} Dashboard
+                                    <i class="fa fa-book-open"></i>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-9">
+                            <h6 class="text-right">
+                                Status
+                            </h6>
+                            <div class="">
+                                <div class="dashboard-status-wrapper">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="dashboard-status-title">
+                                            <h6
+                                                class="dashboard-status-title-text text-center"
+                                            >
+                                                age
+                                                <!-- <i class="fa fa-calendar"></i> -->
+                                            </h6>
+                                            <h4
+                                                class="dashboard-status text-center"
+                                            >
+                                                2 Months
+                                            </h4>
+                                        </div>
+                                        <div class="dashboard-status-title">
+                                            <h6
+                                                class="dashboard-status-title-text text-center"
+                                            >
+                                                active
+                                                <!-- <i class="fa fa-check"></i> -->
+                                            </h6>
+                                            <h4
+                                                class="dashboard-status text-center"
+                                            >
+                                                yes
+                                            </h4>
+                                        </div>
+                                        <div class="dashboard-status-title">
+                                            <h6
+                                                class="dashboard-status-title-text text-center"
+                                            >
+                                                premium
+                                                <!-- <i class="fa fa-times"></i> -->
+                                            </h6>
+                                            <h4
+                                                class="dashboard-status text-center"
+                                            >
+                                                no
+                                            </h4>
+                                        </div>
+                                        <div class="dashboard-status-title">
+                                            <h6
+                                                class="dashboard-status-title-text text-center"
+                                            >
+                                                cooldown
+                                                <!-- <i class="fa fa-times"></i> -->
+                                            </h6>
+                                            <h4
+                                                class="dashboard-status text-center"
+                                            >
+                                                no
+                                            </h4>
+                                        </div>
+                                        <div class="dashboard-status-title">
+                                            <h6
+                                                class="dashboard-status-title-text text-center"
+                                            >
+                                                market(s)
+                                                <!-- <i class="fa fa-robot"></i> -->
+                                            </h6>
+                                            <h4
+                                                class="dashboard-status text-center"
+                                            >
+                                                1
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="">
+                                <div
+                                    class="dashboard-status-wrapper"
+                                    style="border: none; margin-top: 0;"
+                                >
+                                    <div class="d-flex justify-content-between">
+                                        <div class="dashboard-status-title">
+                                            <h6
+                                                class="dashboard-status-title-text second-row-title text-center"
+                                            >
+                                                time limit
+                                                <!-- <i class="fa fa-check"></i> -->
+                                            </h6>
+                                            <h4
+                                                class="dashboard-status text-center"
+                                            >
+                                                500000m
+                                            </h4>
+                                        </div>
+                                        <div class="dashboard-status-title">
+                                            <h6
+                                                class="dashboard-status-title-text second-row-title text-center"
+                                            >
+                                                last tick
+                                                <!-- <i class="fa fa-check"></i> -->
+                                            </h6>
+                                            <h4
+                                                class="dashboard-status text-center"
+                                            >
+                                                12:48:56s
+                                            </h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="market-maker-history-card">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="wallet-header">
+                                <h2 class="wallet-title text-center">
+                                    Markets
+                                </h2>
+                            </div>
+                            <table class="table mb-0">
+                                <thead class="table-head">
+                                    <tr>
+                                        <th
+                                            class="icon-head head-item"
+                                            scope="col"
+                                        ></th>
+                                        <th
+                                            class="date-head head-item"
+                                            scope="col"
+                                        >
+                                            S/N
+                                        </th>
+                                        <th
+                                            class="market-head head-item"
+                                            scope="col"
+                                        >
+                                            Market
+                                        </th>
+                                        <th
+                                            class="amount-head head-item"
+                                            scope="col"
+                                        >
+                                            Activate
+                                        </th>
+                                        <th
+                                            class="delete-head head-item text-right"
+                                            scope="col"
+                                        >
+                                            Delete
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th class="table-item" scope="row">
+                                            <div class="transaction-icon">
+                                                <font-awesome-icon
+                                                    class="table-icon"
+                                                    icon.bind="['fas', 'check']"
+                                                ></font-awesome-icon>
+                                            </div>
+                                        </th>
+                                        <td class="table-item">
+                                            <h4 class="text-center mb-0">
+                                                1
+                                            </h4>
+                                            <!-- <h6 class="text-center mb-0">
+                                                5
+                                            </h6> -->
+                                        </td>
+                                        <td class="table-item transaction-type">
+                                            BEE Trade
+                                            <br />
+                                            <span class="transaction-type-info"
+                                                >Active since 6 Months Ago
+                                            </span>
+                                        </td>
+                                        <td class="table-item text-center">
+                                            Yes
+                                        </td>
+                                        <td class="table-item text-right">
+                                            <a href="" class="delete-btn">
+                                                <font-awesome-icon
+                                                    class="delete-icon"
+                                                    icon.bind="['fas', 'times']"
+                                                ></font-awesome-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-item" scope="row">
+                                            <div class="transaction-icon times">
+                                                <font-awesome-icon
+                                                    class="table-icon"
+                                                    icon.bind="['fas', 'times']"
+                                                ></font-awesome-icon>
+                                            </div>
+                                        </th>
+                                        <td class="table-item">
+                                            <h4 class="text-center mb-0">
+                                                2
+                                            </h4>
+                                            <!-- <h6 class="text-center mb-0">
+                                                5
+                                            </h6> -->
+                                        </td>
+                                        <td class="table-item transaction-type">
+                                            BTCP Trade
+                                            <br />
+                                            <span class="transaction-type-info"
+                                                >Active 4 Months Ago
+                                            </span>
+                                        </td>
+                                        <td class="table-item text-center">
+                                            No
+                                        </td>
+                                        <td class="table-item text-right">
+                                            <a href="" class="delete-btn">
+                                                <font-awesome-icon
+                                                    class="delete-icon"
+                                                    icon.bind="['fas', 'times']"
+                                                ></font-awesome-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-item" scope="row">
+                                            <div class="transaction-icon">
+                                                <font-awesome-icon
+                                                    class="table-icon"
+                                                    icon.bind="['fas', 'check']"
+                                                ></font-awesome-icon>
+                                            </div>
+                                        </th>
+                                        <td class="table-item">
+                                            <h4 class="text-center mb-0">
+                                                3
+                                            </h4>
+                                            <!-- <h6 class="text-center mb-0">
+                                                5
+                                            </h6> -->
+                                        </td>
+                                        <td class="table-item transaction-type">
+                                            HIVEP Trade
+                                            <br />
+                                            <span class="transaction-type-info"
+                                                >Active since 8 Months Ago
+                                            </span>
+                                        </td>
+                                        <td class="table-item text-center">
+                                            Yes
+                                        </td>
+                                        <td class="table-item text-right">
+                                            <a href="" class="delete-btn">
+                                                <font-awesome-icon
+                                                    class="delete-icon"
+                                                    icon.bind="['fas', 'times']"
+                                                ></font-awesome-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-item" scope="row">
+                                            <div class="transaction-icon times">
+                                                <font-awesome-icon
+                                                    class="table-icon"
+                                                    icon.bind="['fas', 'times']"
+                                                ></font-awesome-icon>
+                                            </div>
+                                        </th>
+                                        <td class="table-item">
+                                            <h4 class="text-center mb-0">
+                                                4
+                                            </h4>
+                                            <!-- <h6 class="text-center mb-0">
+                                                5
+                                            </h6> -->
+                                        </td>
+                                        <td class="table-item transaction-type">
+                                            GOLOS Trade
+                                            <br />
+                                            <span class="transaction-type-info"
+                                                >Active since 6 Months Ago
+                                            </span>
+                                        </td>
+                                        <td class="table-item text-center">
+                                            No
+                                        </td>
+                                        <td class="table-item text-right">
+                                            <a href="" class="delete-btn">
+                                                <font-awesome-icon
+                                                    class="delete-icon"
+                                                    icon.bind="['fas', 'times']"
+                                                ></font-awesome-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br />
+                            <nav
+                                class="text-right ml-auto"
+                                aria-label="Page navigation example"
+                            >
+                                <ul
+                                    class="pagination"
+                                    style="margin-bottom: 0;"
+                                >
+                                    <li class="page-item pagination-btn">
+                                        <a
+                                            class="page-link pagination-link text-white-custom"
+                                            aria-label="Previous"
+                                        >
+                                            <span aria-hidden="true"
+                                                >&laquo;</span
+                                            >
+                                        </a>
+                                    </li>
+                                    <li class="page-item pagination-btn">
+                                        <a
+                                            class="page-link pagination-link text-white-custom"
+                                            >1</a
+                                        >
+                                    </li>
+                                    <li class="page-item pagination-btn">
+                                        <a
+                                            class="page-link pagination-link text-white-custom"
+                                            >2</a
+                                        >
+                                    </li>
+                                    <li class="page-item pagination-btn">
+                                        <a
+                                            class="page-link pagination-link text-white-custom"
+                                            >3</a
+                                        >
+                                    </li>
+                                    <li class="page-item pagination-btn">
+                                        <a
+                                            class="page-link pagination-link text-white-custom"
+                                            aria-label="Next"
+                                        >
+                                            <span aria-hidden="true"
+                                                >&raquo;</span
+                                            >
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="market-maker-dashboard-card dashboard-action-main-card">
+                <div class="dashboard-actions-content">
+                    <div class="icon-and-text">
+                        <i class="fa fa-user"></i>
+                        <h2>Enable Account</h2>
+                    </div>
+                    <div class="auto"></div>
+                    <div class="dashboard-actions toggle-container">
+                        <div class="toggle" id="switch">
+                            <div class="toggle-text-off">OFF</div>
+                            <div class="glow-comp"></div>
+                            <div class="toggle-button"></div>
+                            <div class="toggle-text-on">ON</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard-actions-content">
+                    <div class="icon-and-text">
+                        <i class="fa fa-dollar-sign"></i>
+                        <h2>Premium</h2>
+                    </div>
+                    <div class="auto"></div>
+                    <div class="dashboard-actions">
+                        <a href="" class="btn upgrade-btn">Upgrade</a>
+                    </div>
+                </div>
+                <div class="advanced-settings text-right">
+                    <a href="">Advanced Settings</a>
+                </div>
+            </div>
+            <div class="market-maker-dashboard-card dashboard-action-main-card">
+                <div class="dashboard-actions-content">
+                    <div class="icon-and-text">
+                        <!-- <i class="fa fa-university"></i> -->
+                        <h1>Markets</h1>
+                    </div>
+                    <div class="auto">
+                    </div>
+                </div>
+                <div class="dashboard-actions-content">
+                    <div class="icon-and-text">
+                        
+                        <h2>BEE</h2>
+                    </div>
+                    <div class="auto"></div>
+                    <div class="dashboard-actions">
+                        <a href="" class="btn upgrade-btn">View Market</a>
+                    </div>
+                </div>
+                <div class="advanced-settings text-right">
+                    <a href="">Show all/ Market Control</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
