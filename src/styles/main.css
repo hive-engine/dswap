@@ -1175,7 +1175,7 @@ input.tradeValueUsd {
     /* padding-top: 10px; */
 }
 .dashboard-actions-content .icon-and-text h2 {
-    font-size: 14px !important;
+    font-size: 14px;
     align-self: flex-end;
     text-align: center;
     margin-top: 8px;
@@ -1191,6 +1191,11 @@ input.tradeValueUsd {
     padding-top: 8px;
 }
 .dashboard-actions-content .icon-and-text i {
+    text-align: center;
+    align-self: center;
+    font-size: 40px;
+}
+.dashboard-actions-content .icon-and-text img {
     text-align: center;
     align-self: center;
     font-size: 40px;
@@ -1216,6 +1221,31 @@ input.tradeValueUsd {
     color: #05413c !important;
     text-decoration: underline;
     font-weight: bold;
+}
+.font-28 {
+    font-size: 22px !important;
+}
+.margin-15 {
+    margin: 15px!important;
+}
+.align-self-center {
+    align-self: center;
+    margin: auto;
+}
+.markets-header {
+    font-size: 22px!important;
+}
+.market-list-symbol {
+    align-self: center;
+    font-weight: 500;
+}
+.view-market-btn {
+    color: #05413c;
+    font-weight: 500;
+    align-self: center;
+    margin-left: auto;
+    text-decoration: underline;
+    line-height: 5px;
 }
 .upgrade-btn {
     margin-left: auto;
@@ -1351,7 +1381,7 @@ input.tradeValueUsd {
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 6px;
+    /* right: 6px; */
     line-height: 36px;
     text-align: center;
     font-family: "Quicksand", sans-serif;
