@@ -14,7 +14,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3"></div>
+                        <div class="col-md-3 d-flex">
+                            <img
+                                class="align-self-center"
+                                src="../../../images/dswap-market-maker-logo.png"
+                                width="70%"
+                                alt=""
+                            />
+                        </div>
                         <div class="col-md-9">
                             <h6 class="text-right">
                                 Status
@@ -374,6 +381,9 @@
         <div class="col-md-4">
             <div class="market-maker-dashboard-card dashboard-action-main-card">
                 <div class="dashboard-actions-content">
+                    <h1 class="markets-header">Actions</h1>
+                </div>
+                <div class="dashboard-actions-content">
                     <div class="icon-and-text">
                         <i class="fa fa-user"></i>
                         <h2>Enable Account</h2>
@@ -381,7 +391,7 @@
                     <div class="auto"></div>
                     <div class="dashboard-actions toggle-container">
                         <div class="toggle" id="switch">
-                            <div class="toggle-text-off">OFF</div>
+                            <div if.bind="isClicked" class="toggle-text-off">OFF</div>
                             <div class="glow-comp"></div>
                             <div class="toggle-button"></div>
                             <div class="toggle-text-on">ON</div>
@@ -398,31 +408,45 @@
                         <a href="" class="btn upgrade-btn">Upgrade</a>
                     </div>
                 </div>
+                <div class="dashboard-actions-content">
+                    <div class="icon-and-text">
+                        <i class="fa fa-list-alt"></i>
+                        <h2>New Market</h2>
+                    </div>
+                    <div class="auto"></div>
+                    <div class="dashboard-actions">
+                        <a class="btn upgrade-btn" click.delegate="addMarket()">Add Market</a>
+                    </div>
+                </div>
                 <div class="advanced-settings text-right">
                     <a href="">Advanced Settings</a>
                 </div>
             </div>
             <div class="market-maker-dashboard-card dashboard-action-main-card">
                 <div class="dashboard-actions-content">
-                    <div class="icon-and-text">
-                        <!-- <i class="fa fa-university"></i> -->
-                        <h1>Markets</h1>
-                    </div>
-                    <div class="auto">
-                    </div>
+                    <h1 class="markets-header">Markets</h1>
                 </div>
                 <div class="dashboard-actions-content">
-                    <div class="icon-and-text">
-                        
-                        <h2>BEE</h2>
+                    <div class="icon-and-text d-flex p-0">
+                        <img
+                            src="../../../images/btc.png"
+                            class="margin-15"
+                            width="40px"
+                            alt=""
+                        />
+                        <h2
+                            class="align-self-center m-0 font-22 market-list-symbol"
+                        >
+                            BEE
+                        </h2>
                     </div>
                     <div class="auto"></div>
-                    <div class="dashboard-actions">
-                        <a href="" class="btn upgrade-btn">View Market</a>
+                    <div class="dashboard-actions d-flex p-0">
+                        <a href="" class="btn view-market-btn">View Market</a>
                     </div>
                 </div>
                 <div class="advanced-settings text-right">
-                    <a href="">Show all/ Market Control</a>
+                    <a click.delegate="signin()">Show all/ Market Control</a>
                 </div>
             </div>
         </div>
