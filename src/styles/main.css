@@ -707,7 +707,7 @@ a.item:hover .item-icon {
 }
 .action-button {
     display: flex;
-    justify-content: safe;
+    justify-content: center;
     margin-bottom: 15px;
 }
 .wallet-btns {
@@ -1420,4 +1420,14 @@ input.tradeValueUsd {
     opacity: 1;
     -webkit-transition: opacity 1s;
     transition: opacity 1s;
+}
+.market-symbol-link {
+    color: #05413c;
+}
+.config-market-actions {
+    margin-bottom: 0!important;
+    padding: 20px 30px;
+}
+.config-market-actions .wallet-btns {
+    padding: 5px 8px;
 }
