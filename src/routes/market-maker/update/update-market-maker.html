@@ -1,0 +1,332 @@
+<template>
+    <div class="flex-register">
+        <div class="back-btn-container">
+            <a
+                route-href="route: marketMakerDashboard"
+                class="back-btn"
+                style="margin-left: 200px; margin-bottom: 20px;"
+                >Go Back</a
+            >
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="register-market-maker-wrapper">
+                <div class="register-market-maker-header">
+                    <h2>${'Update Market Maker' & t}</h2>
+                </div>
+                <hr class="divider" />
+                <div class="register-market-maker-body">
+                    <div class="wallet-wrapper">
+                        <div class="wallet-detail-card">
+                            <div
+                                class="wallet-detail-card-content"
+                                style="width: 100%;"
+                            >
+                                <div class="wallet-detail-card-text">
+                                    <div
+                                        class="wallet-detail-card-icon d-flex justify-content-center"
+                                    >
+                                        <img
+                                            width="100px"
+                                            src="../../../images/btc.png"
+                                            alt="token.name + ' (' + token.symbol + ')'"
+                                            title="token.name + ' (' + token.symbol + ')'"
+                                        />
+                                    </div>
+                                    <div
+                                        class="d-flex justify-content-center mb-5"
+                                    >
+                                        <h4 class="token-name">
+                                            BTCP
+                                        </h4>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div
+                                                class="token-balance wallet-detail-balance-card justify-content-center"
+                                            >
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div
+                                                            class="action-button config-market-actions"
+                                                        >
+                                                            <a
+                                                                route-href="route: send; params.bind: { symbol: token.symbol }"
+                                                                class="wallet-btns wallet-btns-send"
+                                                                >Delete
+                                                                <i
+                                                                    class="fa fa-times"
+                                                                ></i
+                                                            ></a>
+
+                                                            <a
+                                                                route-href="route: receive; params.bind: { symbol: token.symbol }"
+                                                                class="wallet-btns wallet-btns-receive"
+                                                                >Upgrade
+                                                                <i
+                                                                    class="fa fa-arrow-alt-circle-up"
+                                                                ></i
+                                                            ></a>
+                                                            <a
+                                                                route-href="route: dashboard; params.bind: { symbol: token.symbol, transactionType: 'sell' }"
+                                                                class="wallet-btns wallet-btns-swap"
+                                                                >Turn On
+                                                                <i
+                                                                    class="fa fa-toggle-on"
+                                                                ></i
+                                                            ></a>
+
+                                                            <a
+                                                                route-href="route: dashboard; params.bind: { symbol: token.symbol, transactionType: 'buy' }"
+                                                                class="wallet-btns wallet-btns-buy"
+                                                                >Turn Off
+                                                                <i
+                                                                    class="fa fa-toggle-off"
+                                                                ></i
+                                                            ></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br /><br /><br />
+                                    <div class="row">
+                                        <loader
+                                            loading.bind="loading"
+                                            mode="tiny"
+                                        ></loader>
+                                        <div class="col-md-12">
+                                            <div
+                                                class="transaction-history-card"
+                                            >
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'What is the maximum
+                                                        price you\'re willing to
+                                                        buy the token for?' &
+                                                        t}</label
+                                                    >
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="0.000"
+                                                            value.bind="amount"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${token.pegged_token_symbol
+                                                            & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'What is the minimum
+                                                        price you\'re willing to
+                                                        sell the token for?' &
+                                                        t}</label
+                                                    >
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="0.000"
+                                                            value.bind="amount"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${token.pegged_token_symbol
+                                                            & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'What is the maximum
+                                                        amount of STEEM/HIVE
+                                                        you\'re willing to buy
+                                                        with in a single order?'
+                                                        & t}</label
+                                                    >
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="0.000"
+                                                            value.bind="amount"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${token.pegged_token_symbol
+                                                            & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'What is the maximum
+                                                        amount of tokens you\'re
+                                                        willing to sell in a
+                                                        single order?' &
+                                                        t}</label
+                                                    >
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="0.000"
+                                                            value.bind="amount"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${token.pegged_token_symbol
+                                                            & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'What is the minimum
+                                                        amount of tokens you\'re
+                                                        willing to sell in a
+                                                        single order?' &
+                                                        t}</label
+                                                    >
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="0.000"
+                                                            value.bind="amount"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${token.pegged_token_symbol
+                                                            & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'What is the minimum
+                                                        spread between bid and
+                                                        asks before the bot
+                                                        won\'t place orders any
+                                                        closer?' & t}</label
+                                                    >
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="0.000"
+                                                            value.bind="amount"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${token.pegged_token_symbol
+                                                            & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'What is the amount
+                                                        you want to
+                                                        increase/decrease the
+                                                        price by when placing
+                                                        new orders?' & t}</label
+                                                    >
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="0.000"
+                                                            value.bind="amount"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${token.pegged_token_symbol
+                                                            & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer text-center mb-3">
+                            <a
+                                route-href="route: marketMakerDashboard"
+                                class="btn btn-lg greenBtns trade-button"
+                            >
+                                ${'Update Market' & t}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
