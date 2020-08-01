@@ -183,15 +183,16 @@
                                             </div>
                                         </th>
                                         <td class="table-item">
-                                            <h4 class="text-center mb-0">
-                                                
-                                            </h4>
+                                            <h4 class="text-center mb-0"></h4>
                                             <!-- <h6 class="text-center mb-0">
                                                 5
                                             </h6> -->
                                         </td>
                                         <td class="table-item transaction-type">
-                                            BEE Trade
+                                            <a
+                                                route-href="route: updateMarketMaker" class='market-symbol-link'
+                                                >BEE</a
+                                            >
                                             <br />
                                             <span class="transaction-type-info"
                                                 >Active since 6 Months Ago
@@ -219,15 +220,16 @@
                                             </div>
                                         </th>
                                         <td class="table-item">
-                                            <h4 class="text-center mb-0">
-                                                
-                                            </h4>
+                                            <h4 class="text-center mb-0"></h4>
                                             <!-- <h6 class="text-center mb-0">
                                                 5
                                             </h6> -->
                                         </td>
                                         <td class="table-item transaction-type">
-                                            BTCP Trade
+                                            <a
+                                                route-href="route: updateMarketMaker" class='market-symbol-link'
+                                                >BTCP Trade</a
+                                            >
                                             <br />
                                             <span class="transaction-type-info"
                                                 >Active 4 Months Ago
@@ -255,15 +257,16 @@
                                             </div>
                                         </th>
                                         <td class="table-item">
-                                            <h4 class="text-center mb-0">
-                                                
-                                            </h4>
+                                            <h4 class="text-center mb-0"></h4>
                                             <!-- <h6 class="text-center mb-0">
                                                 5
                                             </h6> -->
                                         </td>
                                         <td class="table-item transaction-type">
-                                            HIVEP Trade
+                                            <a
+                                                route-href="route: updateMarketMaker" class='market-symbol-link'
+                                                >HIVEP</a
+                                            >
                                             <br />
                                             <span class="transaction-type-info"
                                                 >Active since 8 Months Ago
@@ -291,15 +294,16 @@
                                             </div>
                                         </th>
                                         <td class="table-item">
-                                            <h4 class="text-center mb-0">
-                                                
-                                            </h4>
+                                            <h4 class="text-center mb-0"></h4>
                                             <!-- <h6 class="text-center mb-0">
                                                 5
                                             </h6> -->
                                         </td>
                                         <td class="table-item transaction-type">
-                                            GOLOS Trade
+                                            <a
+                                                route-href="route: updateMarketMaker" class='market-symbol-link'
+                                                >GOLOS</a
+                                            >
                                             <br />
                                             <span class="transaction-type-info"
                                                 >Active since 6 Months Ago
@@ -386,7 +390,9 @@
                     <div class="auto"></div>
                     <div class="dashboard-actions toggle-container">
                         <div class="toggle" id="switch">
-                            <div if.bind="isClicked" class="toggle-text-off">OFF</div>
+                            <div if.bind="isClicked" class="toggle-text-off">
+                                OFF
+                            </div>
                             <div class="glow-comp"></div>
                             <div class="toggle-button"></div>
                             <div class="toggle-text-on">ON</div>
@@ -410,7 +416,9 @@
                     </div>
                     <div class="auto"></div>
                     <div class="dashboard-actions">
-                        <a class="btn upgrade-btn" click.delegate="addMarket()">Add Market</a>
+                        <a class="btn upgrade-btn" click.delegate="addMarket()"
+                            >Add Market</a
+                        >
                     </div>
                 </div>
                 <div class="advanced-settings text-right">
