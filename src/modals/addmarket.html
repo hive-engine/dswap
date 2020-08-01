@@ -24,7 +24,45 @@
                     >
                 </select>
             </div>
-
+            <hr />
+            <fieldset class="form-group">
+                <div class="row">
+                    <legend class="col-form-label col-sm-5 pt-0">
+                        Enable Market?
+                    </legend>
+                    <br />
+                    <div class="col-sm-7">
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="gridRadios"
+                                id="gridRadios1"
+                                value="option1"
+                                checked
+                            />
+                            <label class="form-check-label" for="gridRadios1">
+                                Yes
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="gridRadios"
+                                id="gridRadios2"
+                                value="option2"
+                            />
+                            <label class="form-check-label" for="gridRadios2">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <h4>Strategy</h4>
+            <p>Top-of-the-book</p>
+            <hr />
             <div class="form-group" if.bind="token">
                 <h4>
                     ${`Current ${token.pegged_token_symbol} Balance` & t}
@@ -116,6 +154,26 @@
             </div>
             <div class="form-group">
                 <label
+                    >${'What is the minimum amount of tokens you\'re willing to
+                    sell in a single order?' & t}</label
+                >
+                <div class="input-group">
+                    <input
+                        class="form-control"
+                        type="text"
+                        placeholder="0.000"
+                        value.bind="amount"
+                    />
+                    <div class="input-group-append">
+                        ${token.pegged_token_symbol & t}
+                    </div>
+                    <div class="invalid-tooltip">
+                        ${'errors:Please enter an amount greater than 0' & t}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label
                     >${'What is the minimum spread between bid and asks before
                     the bot won\'t place orders any closer?' & t}</label
                 >
@@ -136,7 +194,8 @@
             </div>
             <div class="form-group">
                 <label
-                    >${'What is the amount you want to increase/decrease the price by when placing new orders?' & t}</label
+                    >${'What is the amount you want to increase/decrease the
+                    price by when placing new orders?' & t}</label
                 >
                 <div class="input-group">
                     <input
