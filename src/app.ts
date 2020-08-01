@@ -154,6 +154,13 @@ bind() {
             title: "Register Market Maker",
         },
         {
+            route: "update-market-maker",
+            name: "updateMarketMaker",
+            moduleId: PLATFORM.moduleName("./routes/market-maker/update/update-market-maker", "update-market-maker"),
+            nav: false,
+            title: "Update Market Maker",
+        },
+        {
             route: "market-maker-dashboard",
             name: "marketMakerDashboard",
             moduleId: PLATFORM.moduleName("./routes/market-maker/dashboard/market-maker-dashboard", "market-maker-dashboard"),
