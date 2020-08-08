@@ -1,7 +1,7 @@
 import styles from "./market-maker-dashboard.module.css";
 import { autoinject, bindable } from "aurelia-framework";
 import { AddMarketModal } from "modals/addmarket";
-import { SigninModal } from "modals/signin";
+import { ConfirmationModal } from "modals/confirmation";
 import { DialogService, DialogCloseResult } from "aurelia-dialog";
 import { DialogController } from "aurelia-dialog";
 import { Store, dispatchify } from "aurelia-store";
@@ -27,6 +27,12 @@ export class MarketMakerDashboard {
     addMarket() {
         this.dialogService
             .open({ viewModel: AddMarketModal })
+            .whenClosed((x) => this.walletDialogCloseResponse(x));
+        console.log("market added");
+    }
+    confirmEnable() {
+        this.dialogService
+            .open({ viewModel: ConfirmationModal })
             .whenClosed((x) => this.walletDialogCloseResponse(x));
         console.log("market added");
     }
