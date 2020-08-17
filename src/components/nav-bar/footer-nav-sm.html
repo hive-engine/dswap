@@ -1,0 +1,76 @@
+<template>
+    <section class="swap-screen d-block d-md-none">
+        <div class="footer-nav-wrapper">
+            <ul class="footer-nav">
+                <li
+                    class="footer-nav-item dashboardActiveMobile removeActivateMobile"
+                    id="dashboard-mobile"
+                    click.delegate="addMobileActive('dashboard')"
+                >
+                    <font-awesome-icon
+                        class="sidenav-icon"
+                        icon.bind="['fas', 'chart-line']"
+                    ></font-awesome-icon
+                    ><a route-href="route: dashboard">Dashboard</a>
+                </li>
+                <li
+                    class="footer-nav-item removeActivateMobile"
+                    click.delegate="addMobileActive('wallet')"
+                    id="wallet-mobile"
+                >
+                    <font-awesome-icon
+                        class="sidenav-icon"
+                        icon.bind="['fas', 'wallet']"
+                    ></font-awesome-icon>
+                    <a route-href="route: wallet">Wallet</a>
+                </li>
+                <li
+                    class="footer-nav-item removeActivateMobile"
+                    click.delegate="addMobileActive('trades')"
+                    id="trades-mobile"
+                >
+                    <font-awesome-icon
+                        class="sidenav-icon"
+                        icon.bind="['fas', 'qrcode']"
+                    ></font-awesome-icon>
+                    <a route-href="route: trades">Trades</a>
+                </li>
+                <li
+                    class="footer-nav-item removeActivateMobile"
+                    click.delegate="addMobileActive('market-maker')"
+                    id="market-maker-mobile"
+                >
+                    <font-awesome-icon
+                        class="sidenav-icon"
+                        icon.bind="['fas', 'robot']"
+                    ></font-awesome-icon>
+                    <a route-href="route: marketMaker">Market Maker</a>
+                </li>
+                <li
+                    class="footer-nav-item removeActivateMobile"
+                    click.delegate="addMobileActive('faq')"
+                    id="faq-mobile"
+                >
+                    <font-awesome-icon
+                        class="sidenav-icon"
+                        icon.bind="['fas', 'comments']"
+                    ></font-awesome-icon>
+                    <a route-href="route: faq">FAQ</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <style>
+        .activateItMobile {
+            border-top: 2px solid #22A275 !important;
+            color: #22A275;
+            font-weight: bold;
+        }
+        .dashboardActiveMobile {
+            border-top: 2px solid #22A275 !important;
+            color: #22A275;
+            font-weight: bold;
+        }
+    </style>
+</template>

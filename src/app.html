@@ -1,14 +1,14 @@
 <template>
-    <!-- <require from = './components/footer/footer-component.html'></require> -->
-    <nav-header router.bind="router" logged-in.bind="loggedIn"></nav-header>
-    <div class="row">
-        <div class="col-md-2">
-            <nav-bar router.bind="router"></nav-bar>
-        </div>
-        <div class="col-md-10">
-            <router-view class="space-navbar"></router-view>
+    <div class="content" style="margin: 0; padding: 0;">
+        <nav-header router.bind="router" logged-in.bind="loggedIn"></nav-header>
+        <div class="row">
+            <div class="col-md-2">
+                <nav-bar router.bind="router"></nav-bar>
+            </div>
+            <div class="col-md-10 col-xs-12 col-sm-12">
+                <router-view class="space-navbar"></router-view>
+            </div>
         </div>
     </div>
-
-    <footer-component></footer-component>
+    <footer-nav-sm class="footer-nav-sm" router.bind="router"></footer-nav-sm>
 </template>

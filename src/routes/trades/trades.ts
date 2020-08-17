@@ -18,7 +18,7 @@ export class Trades {
     // to retrieve later from an endpoint
     private totalItems = 50;
     // calculate later based on totalItems
-    private totalPages = 10;
+    private totalPages = 9;
 
     constructor(private dialogService: DialogService, private hes: HiveEngineService, private ts: TokenService) {}
 
