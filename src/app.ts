@@ -153,6 +153,27 @@ bind() {
             nav: false,
             title: "Register Market Maker",
         },
+        {
+            route: "update-market-maker",
+            name: "updateMarketMaker",
+            moduleId: PLATFORM.moduleName("./routes/market-maker/update/update-market-maker", "update-market-maker"),
+            nav: false,
+            title: "Update Market Maker",
+        },
+        {
+            route: "market-maker-dashboard",
+            name: "marketMakerDashboard",
+            moduleId: PLATFORM.moduleName("./routes/market-maker/dashboard/market-maker-dashboard", "market-maker-dashboard"),
+            nav: false,
+            title: "Market Maker Dashboard",
+        },
+        {
+            route: "set-market-maker",
+            name: "setMarketMaker",
+            moduleId: PLATFORM.moduleName("./routes/market-maker/settings/settings", "set-market-maker"),
+            nav: false,
+            title: "Settings - Market Maker",
+        },
     ]);
 
     this.router = router;

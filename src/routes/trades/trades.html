@@ -94,10 +94,10 @@
                                     ${trade.symbol} Trade
                                     <br />
                                     <span class="transaction-type-info" show.bind="trade.type == 'received'"
-                                        >You received ${trade.quantity} ${trade.symbol} worth ${'$' + trade.usdValue}</span
+                                        >You received ${trade.quantity} ${trade.symbol} worth ${'$' + trade.usdValue} from ${trade.from}</span
                                     >
                                     <span class="transaction-type-info" show.bind="trade.type == 'sent'"
-                                        >You sent ${trade.quantity} ${trade.symbol} worth ${'$' + trade.usdValue}</span
+                                        >You sent ${trade.quantity} ${trade.symbol} worth ${'$' + trade.usdValue} to ${trade.to}</span
                                     >
                                 </td>
                                 <td class="table-item text-right">${trade.quantity} ${trade.symbol}</td>

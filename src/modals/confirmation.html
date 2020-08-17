@@ -1,0 +1,22 @@
+<template>
+    <ux-dialog>
+        <loader mode="tiny" loading.bind="loading"></loader>
+
+        <ux-dialog-header>
+            <h2>${'Confirm' & t}</h2>
+        </ux-dialog-header>
+        <ux-dialog-body>
+            <p class="signin-text text-center">
+                ${'Are you sure you want to enable this account?' & t}:
+            </p>
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <div class="d-flex justify-content-around">
+                        <a href="#!" class="btn btn-success">Yes</a>
+                        <a href="#!" class="btn btn-danger">No</a>
+                    </div>
+                </div>
+            </div>
+        </ux-dialog-body>
+    </ux-dialog>
+</template>
