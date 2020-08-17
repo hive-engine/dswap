@@ -1,9 +1,19 @@
 @import "../routes//market-maker/dashboard/market-maker-dashboard.module.css";
+html,
+body {
+    height: 100%;
+    overflow-x: hidden;
+}
 
 body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.content {
+    flex: 1 0 auto;
 }
 
 a {
@@ -115,7 +125,7 @@ a:hover {
     margin: 0 !important;
     border: none !important;
 }
-.swap-screen {
+.swap-screen-lg {
     background-color: #fff;
     padding: 10px 0;
     border-radius: 2px;
@@ -570,13 +580,14 @@ a.item:hover .item-icon {
     padding: 0;
 }
 .pagination-link {
-    color: #fff;
+    color: #fff!important;
     background: #05413c;
     border: 1px solid #05413cbd;
 }
 .pagination-link:hover,
 .pagination-link.active {
     background-color: #e9ecef;
+    color: #05413c!important;
 }
 
 .transaction-type {
@@ -1226,14 +1237,14 @@ input.tradeValueUsd {
     font-size: 22px !important;
 }
 .margin-15 {
-    margin: 15px!important;
+    margin: 15px !important;
 }
 .align-self-center {
     align-self: center;
     margin: auto;
 }
 .markets-header {
-    font-size: 22px!important;
+    font-size: 22px !important;
 }
 .market-list-symbol {
     align-self: center;
@@ -1425,9 +1436,172 @@ input.tradeValueUsd {
     color: #05413c;
 }
 .config-market-actions {
-    margin-bottom: 0!important;
+    margin-bottom: 0 !important;
     padding: 20px 30px;
 }
 .config-market-actions .wallet-btns {
     padding: 5px 8px;
+}
+
+/* Mobile Stuffs */
+.footer-nav-wrapper {
+    background: #f4f4f4;
+    color: #05413c;
+    padding: 0;
+    font-size: 14px;
+    margin-top: 10px;
+    flex-shrink: 0;
+}
+.footer-nav-sm {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+.footer-nav {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
+}
+.footer-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+}
+.footer-nav-item a {
+    color: #05413c;
+    font-size: 11px;
+}
+.swap-screen.swap-screen-mobile {
+    /* position: fixed; */
+    width: 100%;
+    z-index: 999;
+}
+
+.activateIt {
+    background-color: #05413c !important;
+    color: #fff;
+}
+.dashboardActive {
+    background-color: #05413c !important;
+    color: #fff;
+}
+@media (max-width: 700px) {
+    .dswap-nav {
+        position: fixed;
+        padding: 8px;
+        width: 100%;
+    }
+    .dswap-nav .logo {
+        width: 40px;
+    }
+    .dswap-nav-links {
+        margin-left: 4px;
+    }
+    .small-wrap span {
+        font-size: 12px;
+    }
+    .small-wrap i {
+        font-size: 11px !important;
+    }
+    .nav-username {
+        border: none !important;
+        width: 70px;
+    }
+    .nav-username:hover,
+    .nav-username:focus,
+    .nav-username:active,
+    .nav-username:visited {
+        background-color: transparent !important;
+        color: #05413c !important;
+    }
+
+    .action-title {
+        text-align: center;
+    }
+    .action-title.buy {
+        margin-top: 40px !important;
+    }
+    .action-title.sell {
+        color: red;
+    }
+    .chart {
+        display: none;
+    }
+    .estimate-wrapper {
+        text-align: center;
+        padding: 14px;
+    }
+    .estimated-trade-swap {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 2fr 1fr 2fr;
+    }
+    .start-trade {
+        margin-bottom: 46px;
+    }
+
+    /* Wallet */
+    .wallet-wrapper {
+        margin: 68px 0;
+        border-radius: 0;
+        border-top: none;
+        border-bottom: none;
+    }
+    /* Trades */
+    .transaction-table-mobile {
+        margin: 68px 0;
+        width: 100%;
+        font-size: 12px;
+    }
+    .icon-head {
+        width: 3%;
+    }
+
+    .date-head {
+        width: 5%;
+    }
+    .transaction-head {
+        width: 80%;
+    }
+    .market-head {
+        width: 56%;
+    }
+    .amount-head {
+        width: 12%;
+    }
+    .table-icon {
+        font-size: 14px;
+    }
+    .transaction-type-info {
+        display: none;
+    }
+    .numbering {
+        display: block;
+    }
+    /* Market Maker Landing */
+    .market-maker-landing-wrapper-content {
+        padding-top: 0;
+    }
+    .market-maker-landing-wrapper  {
+        margin: 68px 0;
+    }
+    .market-maker-logo {
+        width: 120px;
+        margin-top: 20px;
+    }
+    .market-maker-header-text {
+        font-size: 32px;
+    }
+    .register-market-maker-wrapper {
+        margin: 0;
+        padding: 20px;
+    }
+    .register-market-maker-header {
+        font-size: 28px;
+    }
 }
