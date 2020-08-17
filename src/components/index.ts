@@ -8,6 +8,7 @@ export function configure(config: FrameworkConfiguration) {
         PLATFORM.moduleName('./receive-address/receive-address'),
         PLATFORM.moduleName('./swapnav/swapnav'),
         PLATFORM.moduleName('./nav-bar/nav-bar'),
+        PLATFORM.moduleName('./nav-bar/footer-nav-sm'),
         PLATFORM.moduleName('./nav-header/nav-header')
     ]);
 }
