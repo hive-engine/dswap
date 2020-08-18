@@ -8,7 +8,7 @@ import { AuthorizeStep } from 'resources/pipeline-steps/authorize';
 import { PreRenderStep } from 'resources/pipeline-steps/prerender';
 import { PostRenderStep } from 'resources/pipeline-steps/postrender';
 
-import { getCurrentFirebaseUser } from 'store/actions';
+import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
 import { Store, CallingAction, MiddlewarePlacement, dispatchify } from 'aurelia-store';
 
 function lastCalledActionMiddleware(state: IState, originalState: IState, settings = {}, action: CallingAction) {
@@ -51,6 +51,7 @@ bind() {
 
     this.subscription = this.ea.subscribe(RouterEvent.Complete, () => {
         dispatchify(getCurrentFirebaseUser)();
+        dispatchify(getMarketMakerUser)();
     });
 }
 

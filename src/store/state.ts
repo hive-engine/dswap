@@ -13,7 +13,22 @@ export const initialState: IState = {
       notifications: [],
       nfts: []
   },
-  firebaseUser: {},
+    firebaseUser: {},
+    marketMakerUser: {
+        account: '',
+        creationBlock: 0,
+        creationTimestamp: 0,
+        enabledMarkets: 0,
+        isEnabled: false,
+        isOnCooldown: false,
+        isPremium: false,
+        isPremiumFeePaid: false,
+        lastTickBlock: 0,
+        lastTickTimestamp: 0,
+        markets: 0,
+        timeLimit: 0,
+        _id: 0
+    },
   loggedIn: false,
   loading: false,
   tokens: [],

@@ -21,27 +21,28 @@ interface IEnvironment {
 }
 
 interface IState {
-  $action: any;
-  account: AccountInterface;
-  firebaseUser: any;
-  loggedIn: boolean;
-  loading: boolean;
-  tokens: IToken[];
-  tokensLoaded: boolean;
-  buyBook: any[];
-  sellBook: any[];
-  tradeHistory: any[];
-  buyTotal?: number;
-  sellTotal?: number;
-  pendingWithdrawals: any[];
-  conversionHistory: any[];
-  nft: INft;
-  nfts: INft[];
-  instances: INftInstance[];
-  instance: INftInstance;
-  nftSellBook: INftSellBook[];
-  hivePriceUsd: string;
-  hivePriceUsdDate: string;
+    $action: any;
+    account: AccountInterface;
+    marketMakerUser: IMarketMakerUser;
+    firebaseUser: any;
+    loggedIn: boolean;
+    loading: boolean;
+    tokens: IToken[];
+    tokensLoaded: boolean;
+    buyBook: any[];
+    sellBook: any[];
+    tradeHistory: any[];
+    buyTotal?: number;
+    sellTotal?: number;
+    pendingWithdrawals: any[];
+    conversionHistory: any[];
+    nft: INft;
+    nfts: INft[];
+    instances: INftInstance[];
+    instance: INftInstance;
+    nftSellBook: INftSellBook[];
+    hivePriceUsd: string;
+    hivePriceUsdDate: string;
 }
 
 interface ICoinPair {
@@ -153,4 +154,53 @@ interface IAccountHistoryItemResult {
     type: string; 
     usdValue?: any;
     
+}
+
+interface IMarketMakerUser {
+    _id: number;
+    account: string;
+    isPremium: boolean;
+    isPremiumFeePaid: boolean;
+    isOnCooldown: boolean;
+    isEnabled: boolean;
+    markets: number;
+    enabledMarkets: number;
+    timeLimit: number;
+    lastTickTimestamp: number;
+    lastTickBlock: number;
+    creationTimestamp: number;
+    creationBlock: number;
+}
+
+interface IMarketMakerParams {
+    basicFee: number;
+    basicSettingsFee: number;
+    premiumFee: number;
+    premiumBaseStake: number;
+    stakePerMarket: number;
+    basicDurationBlocks: number;
+    basicCooldownBlocks: number;
+    basicMinTickIntervalBlocks: number;
+    premiumMinTickIntervalBlocks: number;
+    basicMaxTicksPerBlock: number;
+    premiumMaxTicksPerBlock: number;
+}
+
+interface IMarketMakerMarket {
+    _id: number;
+    account: string;
+    symbol: string;
+    precision: number;
+    strategy: string;
+    maxBidPrice: string;
+    minSellPrice: string;
+    maxBaseToSpend: number;
+    minBaseToSpend: number;
+    maxTokensToSell: number;
+    minTokensToSell: number;
+    priceIncrement: number;
+    minSpread: number;
+    isEnabled: boolean;
+    creationTimestamp: number;
+    creationBlock: string;
 }
