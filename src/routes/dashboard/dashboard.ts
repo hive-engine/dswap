@@ -9,7 +9,7 @@ import { ChartComponent } from 'components/chart/chart';
 import { loadTokenMarketHistory } from 'common/hive-engine-api';
 import moment from 'moment';
 import { getPrices, usdFormat } from 'common/functions';
-import { getCurrentFirebaseUser } from 'store/actions';
+import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
 import { ValidationControllerFactory, ControllerValidateResult, ValidationRules } from 'aurelia-validation';
 import { ToastService, ToastMessage } from 'services/toast-service';
@@ -70,7 +70,8 @@ export class Dashboard {
             if (!this.state.tokens) {
                 await this.ts.getDSwapTokens();
             }
-            await dispatchify(getCurrentFirebaseUser)();            
+            await dispatchify(getCurrentFirebaseUser)();
+            await dispatchify(getMarketMakerUser)();
 
             this.refreshTokenLists();
             this.createValidationRules();

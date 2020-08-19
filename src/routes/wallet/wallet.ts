@@ -5,7 +5,7 @@ import { DswapOrderModal } from 'modals/dswap-order';
 import { DialogService } from 'aurelia-dialog';
 import { AuthService } from 'services/auth-service';
 import { Store, dispatchify } from 'aurelia-store';
-import { getCurrentFirebaseUser } from 'store/actions';
+import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
 
 @autoinject()
@@ -29,6 +29,7 @@ export class Wallet {
     async canActivate() {
         try {            
             await dispatchify(getCurrentFirebaseUser)();
+            await dispatchify(getMarketMakerUser)();
 
             await this.loadWallets();
         } catch (e) {

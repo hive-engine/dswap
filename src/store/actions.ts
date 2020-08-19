@@ -8,6 +8,8 @@ import { log } from 'services/log';
 
 import moment from 'moment';
 import { loadUserBalances } from 'common/hive-engine-api';
+import { dispatchify } from 'aurelia-store';
+import { getUser } from 'common/market-maker-api';
 
 export function loading(state: IState, boolean: boolean) {
     const newState = { ...state };
@@ -102,6 +104,23 @@ export async function getCurrentFirebaseUser(state: IState): Promise<IState> {
     return newState;
 }
 
+export async function getMarketMakerUser(state: IState): Promise<IState> {
+    const newState = { ...state };
+
+    if (!newState.loggedIn) {
+        return newState;
+    }
+
+    try {
+        let mmUser = await getUser('enginemaker'); // only to see dashboard
+        newState.marketMakerUser = mmUser;
+    } catch (e) {
+        log.error(e);
+    }
+
+    return newState;
+}
+
 export function resetInstance(state: IState): IState {
     const newState = { ...state };
 
@@ -116,4 +135,5 @@ store.registerAction('logout', logout);
 store.registerAction('setAccount', setAccount);
 store.registerAction('setTokens', setTokens);
 store.registerAction('getCurrentFirebaseUser', getCurrentFirebaseUser);
+store.registerAction('getMarketMakerUser', getMarketMakerUser);
 store.registerAction('resetInstance', resetInstance);

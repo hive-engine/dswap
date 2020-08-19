@@ -6,7 +6,6 @@ import { DswapOrderModal } from "modals/dswap-order";
 import { DialogService } from "aurelia-dialog";
 import { AuthService } from "services/auth-service";
 import { Store, dispatchify } from "aurelia-store";
-import { getCurrentFirebaseUser, setTokens } from "store/actions";
 import { TokenService } from "services/token-service";
 
 @autoinject()
