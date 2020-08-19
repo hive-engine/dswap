@@ -10,5 +10,6 @@
     "sendTokenAmountMustBeGreaterThanZero": "Amount must be > 0",
     "sendTokenInsufficientBalance": "Insufficient token balance.",
     "sendTokenAddressRequired": "Destination address is required",
-    "receiveTokenNoAddressError": "Unable to generate address for {{tokenSymbol}}"
+    "receiveTokenNoAddressError": "Unable to generate address for {{tokenSymbol}}",
+    "errorSubmittedTransfer": "There is an error occured during execution of the transaction: {{error}}"
 }
