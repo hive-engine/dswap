@@ -112,7 +112,7 @@ export async function getMarketMakerUser(state: IState): Promise<IState> {
     }
 
     try {
-        let mmUser = await getUser('enginemaker');
+        let mmUser = await getUser('lion200');
         newState.marketMakerUser = mmUser;
     } catch (e) {
         log.error(e);

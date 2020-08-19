@@ -58,8 +58,9 @@ export async function getUser(account: string): Promise<IMarketMakerUser> {
         _id: 0
     };
 
-    const result = await ssc.find('botcontroller', 'users', queryConfig);
-    user = <IMarketMakerUser>result;
+    const results = await ssc.find('botcontroller', 'users', queryConfig);
+    if (results)
+        user = <IMarketMakerUser>results[0];
 
     return user;
 }

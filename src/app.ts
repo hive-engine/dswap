@@ -150,7 +150,7 @@ bind() {
         {
             route: "register-market-maker",
             name: "registerMarketMaker",
-            moduleId: PLATFORM.moduleName("./routes/market-maker/register/register", "register-market-maker"),
+            moduleId: PLATFORM.moduleName("./routes/market-maker/register/register-market-maker", "register-market-maker"),
             nav: false,
             title: "Register Market Maker",
         },
