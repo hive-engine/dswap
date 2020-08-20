@@ -10,17 +10,13 @@
         <div class="dswap-nav-links">
             <a class="each-link" route-href="send"
                 ><div class="small-wrap">
-                    <span>Send</span
-                    >
-                    <i class="fa fa-paper-plane img-send"></i>
-                    </div
+                    <span>Send</span>
+                    <i class="fa fa-paper-plane img-send"></i></div
             ></a>
             <a class="each-link" route-href="receive"
                 ><div class="small-wrap">
-                    <span>Receive</span
-                    >
-                    <i class="fa fa-qrcode img-receive"></i>
-                    </div
+                    <span>Receive</span>
+                    <i class="fa fa-qrcode img-receive"></i></div
             ></a>
         </div>
         <div class="dswap-nav-options ml-auto">
@@ -38,11 +34,18 @@
                         data-toggle="dropdown"
                         aria-haspopup="true"
                         aria-expanded="false"
+                        style="display: flex; align-items: center;"
                     >
-                        <i class="fa fa-user-alt"></i>
-                        <!-- ${state.account.name} -->
+                        <i class="fa fa-user-alt d-block d-md-none"></i>
+                        <span class="d-none d-md-block">
+                            ${state.account.name}
+                        </span>
                     </a>
-                    <div class="dropdown-menu add-padding" aria-labelledby="userDropdown" style="min-width: 100% !important;">
+                    <div
+                        class="dropdown-menu add-padding"
+                        aria-labelledby="userDropdown"
+                        style="min-width: 100% !important;"
+                    >
                         <a
                             class="dropdown-item remove-border-margin"
                             href="javascript:void(0);"
