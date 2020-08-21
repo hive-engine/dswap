@@ -375,17 +375,18 @@
                 <div class="dashboard-actions-content">
                     <div class="icon-and-text">
                         <i class="fa fa-user"></i>
-                        <h2 click.delegate="confirmEnable()">Enable Account</h2>
+                        <h2 if.bind="marketMakerUser.isEnabled">Disable Account</h2>
+                        <h2 if.bind="!marketMakerUser.isEnabled">Enable Account</h2>
                     </div>
                     <div class="auto"></div>
                     <div class="dashboard-actions toggle-container">
                         <div class="toggle" id="switch">
-                            <div if.bind="isClicked" class="toggle-text-off">
+                            <div if.bind="marketMakerUser.isEnabled" class="toggle-text-off">
                                 OFF
                             </div>
                             <div class="glow-comp"></div>
                             <div class="toggle-button"></div>
-                            <div class="toggle-text-on">ON</div>
+                            <div if.bind="!marketMakerUser.isEnabled" class="toggle-text-on">ON</div>
                         </div>
                     </div>
                 </div>

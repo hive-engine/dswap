@@ -8,10 +8,10 @@ import { Store, dispatchify } from "aurelia-store";
 import { Router } from 'aurelia-router';
 import { Subscription } from 'rxjs';
 
-@autoinject
+@autoinject()
 export class MarketMakerDashboard {
     private styles = styles;
-    private isClicked: false;
+    @bindable() isClicked = false;
     public subscription: Subscription;
     private marketMakerUser;
     private user;
