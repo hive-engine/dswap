@@ -23,7 +23,7 @@ export class MarketMakerDashboard {
                 this.state = state;
 
                 this.user = { ...state.firebaseUser };
-                this.marketMakerUser = { ...state.marketMakerUser };
+                this.marketMakerUser = { ...state.marketMakerUser };                
             }
         });
     }
@@ -38,6 +38,8 @@ export class MarketMakerDashboard {
             console.log('test');
             this.router.navigate('market-maker');
         }
+
+        console.log(this.marketMakerUser);
     }
 
     async activate() {

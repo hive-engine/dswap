@@ -9,6 +9,7 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     maintenanceMode: false,
     enabledTokens: ['BEE', 'DEC', 'KANDA', 'SAND', 'SWAP.BCH', 'SWAP.BTC', 'SWAP.BTS', 'SWAP.DOGE', 'SWAP.ENG', 'SWAP.EOS', 'SWAP.GOLOS', 'SWAP.HBD', 'SWAP.LTC', 'SWAP.SBD', 'SWAP.STEEM', 'SWAP.SWIFT', 'SWAP.TLOS', 'WEED', 'WORKERBEE'],
     peggedToken: 'SWAP.HIVE',
+    marketMakerRegistrationCost: 100,
     features: {
         nfts: {
             enabled: true

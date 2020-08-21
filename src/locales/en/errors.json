@@ -11,5 +11,8 @@
     "sendTokenInsufficientBalance": "Insufficient token balance.",
     "sendTokenAddressRequired": "Destination address is required",
     "receiveTokenNoAddressError": "Unable to generate address for {{tokenSymbol}}",
-    "errorSubmittedTransfer": "There is an error occured during execution of the transaction: {{error}}"
+    "errorSubmittedTransfer": "There is an error occured during execution of the transaction: {{error}}",
+    "marketMakerRegisterError": "Error occured while trying to register for Market Maker: {{error}}",
+    "marketMakerRegisterTokenUserBalanceRequired": "{{symbol}} Balance required to register for Market Maker",
+    "marketMakerRegisterInsufficientBalance": "Insufficient {{symbol}} balance ({{tokenUserBalance}} {{symbol}}) to register for Market Maker. Required token amount: {{tokenOperationCost}} {{symbol}}"
 }

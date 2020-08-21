@@ -1,3 +1,4 @@
 {
-    "marketMakerRegisterSuccessful": "Market Maker registration succesfully broadcasted"
+    "marketMakerRegisterSuccessful": "Account {{account}} is successfully registered to Market Maker",
+    "marketMakerRegisterWait": "Broadcasting Market Maker registration transaction. Please wait until the transaction is verified"
 }

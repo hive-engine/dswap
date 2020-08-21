@@ -33,13 +33,13 @@
                                             <h6
                                                 class="dashboard-status-title-text text-center"
                                             >
-                                                age
+                                                created
                                                 <!-- <i class="fa fa-calendar"></i> -->
                                             </h6>
                                             <h4
                                                 class="dashboard-status text-center"
                                             >
-                                                2 Months
+                                                ${marketMakerUser.creationTimestamp_string}
                                             </h4>
                                         </div>
                                         <div class="dashboard-status-title">
@@ -49,10 +49,8 @@
                                                 active
                                                 <!-- <i class="fa fa-check"></i> -->
                                             </h6>
-                                            <h4
-                                                class="dashboard-status text-center"
-                                            >
-                                                yes
+                                            <h4 class="dashboard-status text-center">
+                                                ${marketMakerUser.isEnabled ? 'Yes' : 'No'}
                                             </h4>
                                         </div>
                                         <div class="dashboard-status-title">
@@ -62,10 +60,8 @@
                                                 premium
                                                 <!-- <i class="fa fa-times"></i> -->
                                             </h6>
-                                            <h4
-                                                class="dashboard-status text-center"
-                                            >
-                                                no
+                                            <h4 class="dashboard-status text-center">
+                                                ${marketMakerUser.isPremium ? 'Yes' : 'No'}
                                             </h4>
                                         </div>
                                         <div class="dashboard-status-title">
@@ -75,10 +71,8 @@
                                                 cooldown
                                                 <!-- <i class="fa fa-times"></i> -->
                                             </h6>
-                                            <h4
-                                                class="dashboard-status text-center"
-                                            >
-                                                no
+                                            <h4 class="dashboard-status text-center">
+                                                ${marketMakerUser.isOnCooldown ? 'Yes' : 'No'}
                                             </h4>
                                         </div>
                                         <div class="dashboard-status-title">
@@ -88,10 +82,8 @@
                                                 market(s)
                                                 <!-- <i class="fa fa-robot"></i> -->
                                             </h6>
-                                            <h4
-                                                class="dashboard-status text-center"
-                                            >
-                                                1
+                                            <h4 class="dashboard-status text-center">
+                                                ${marketMakerUser.markets}
                                             </h4>
                                         </div>
                                     </div>
@@ -113,7 +105,7 @@
                                             <h4
                                                 class="dashboard-status text-center"
                                             >
-                                                4 hours
+                                                ${marketMakerUser.timeLimit_string}
                                             </h4>
                                         </div>
                                         <div class="dashboard-status-title">
@@ -123,10 +115,8 @@
                                                 last tick
                                                 <!-- <i class="fa fa-check"></i> -->
                                             </h6>
-                                            <h4
-                                                class="dashboard-status text-center"
-                                            >
-                                                3 days ago
+                                            <h4 class="dashboard-status text-center">
+                                                ${marketMakerUser.lastTickTimestamp_string}
                                             </h4>
                                         </div>
                                     </div>

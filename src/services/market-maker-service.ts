@@ -9,6 +9,7 @@ import moment from 'moment';
 import { loadMarkets } from 'common/market-maker-api';
 import { Chain } from 'common/enums';
 import { hiveSignerJson } from 'common/hive';
+import { checkTransaction } from 'common/hive-engine-api';
 
 const http = new HttpClient();
 
@@ -91,16 +92,46 @@ export class MarketMakerService {
         });
     }    
 
-    processResponseRegisterKeychain(response) {
+    async processResponseRegisterKeychain(response) {
+        console.log('process response');
+        console.log(response);        
+
         if (response.success && response.result) {
             try {
-                const toast = new ToastMessage();
+                let toast = new ToastMessage();
 
-                toast.message = this.i18n.tr('marketMakerRegisterSuccessful', {
+                toast.message = this.i18n.tr('marketMakerRegisterWait', {
                     ns: 'notifications'
                 });
 
                 this.toast.success(toast);
+
+                const transaction = await checkTransaction(response.result.id, 3);
+                console.log(transaction);
+
+                if (transaction.error) {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerRegisterError', {
+                        ns: 'errors',
+                        error: transaction.error
+                    });
+
+                    this.toast.error(toast);
+
+                    return false;
+                } else {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerRegisterSuccessful', {
+                        ns: 'notifications',
+                        account: transaction.sender
+                    });
+
+                    this.toast.success(toast);
+
+                    return true;
+                }
 
                 return true;
             } catch (e) {
