@@ -17,5 +17,6 @@
     "marketMakerRegisterInsufficientBalance": "Insufficient {{symbol}} balance ({{tokenUserBalance}} {{symbol}}) to register for Market Maker. Required token amount: {{tokenOperationCost}} {{symbol}}",
     "marketMakerTurnOffError": "Error occured while trying to disable account for Market Maker: {{error}}",
     "marketMakerEnableAccountAccountMustBeDisabled": "Account {{account}} is already enabled!",
-    "marketMakerTurnOnError": "Error occured while trying to enable account for Market Maker: {{error}}"
+    "marketMakerTurnOnError": "Error occured while trying to enable account for Market Maker: {{error}}",
+    "marketMakerAddMarketError": "Error occured while trying to add market for token {{tokenSymbol}} for account {{account}} on Market Maker: {{error}}"
 }

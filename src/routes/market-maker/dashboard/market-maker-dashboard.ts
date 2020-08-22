@@ -1,6 +1,6 @@
 import styles from "./market-maker-dashboard.module.css";
 import { autoinject, bindable } from "aurelia-framework";
-import { AddMarketModal } from "modals/addmarket";
+import { AddMarketModal } from "modals/market-maker/add-market";
 import { ConfirmationModal } from "modals/confirmation";
 import { DialogService, DialogCloseResult } from "aurelia-dialog";
 import { DialogController } from "aurelia-dialog";

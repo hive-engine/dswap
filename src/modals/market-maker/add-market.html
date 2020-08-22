@@ -52,6 +52,11 @@
                 </fieldset>
             </div>
             <hr />
+            <div class="form-group">
+                Required ${tokenSymbol} stake: ${tokenOperationCost} ${tokenSymbol}<br />
+                Your ${tokenSymbol} (stake) balance: ${tokenUserStake} ${tokenSymbol}
+            </div>
+            <hr />
 
             <div class="form-group">
                 <label
@@ -60,13 +65,13 @@
                 >
                 <select
                     class="form-control"
-                    value.bind="token"
+                    value.bind="selectedToken"
                     change.delegate="tokenSelected()"
                 >
                     <option model.bind="null"
                         >${'Please select a token...' & t}</option
                     >
-                    <option model.bind="t" repeat.for="t of tokenList"
+                    <option model.bind="t" repeat.for="t of mmTokens"
                         >${t.name & t} (${t.symbol})</option
                     >
                 </select>
@@ -253,7 +258,7 @@
             </button>
             <button
                 class="btn btn-lg greenBtns trade-button"
-                click.trigger="confirmSend()"
+                click.trigger="confirmAddMarket()"
             >
                 ${'Proceed' & t}
             </button>
