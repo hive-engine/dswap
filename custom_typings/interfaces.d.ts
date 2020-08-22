@@ -17,7 +17,11 @@ interface IEnvironment {
   nativeToken: string;
   enabledTokens: string[];
   peggedToken: string;
-  features: any;
+    features: any;
+    marketMakerRegistrationCost: number;
+    marketMakerStakeRequiredPerMarket: number;
+    marketMakerStakeRequiredBasic: number;
+    marketMakerStakeRequiredPremium: number;
 }
 
 interface IState {
@@ -166,9 +170,12 @@ interface IMarketMakerUser {
     markets: number;
     enabledMarkets: number;
     timeLimit: number;
+    timeLimit_string?: string;
     lastTickTimestamp: number;
+    lastTickTimestamp_string?: string;
     lastTickBlock: number;
     creationTimestamp: number;
+    creationTimestamp_string?: string;
     creationBlock: number;
 }
 

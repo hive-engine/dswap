@@ -1,0 +1,29 @@
+<template>
+    <ux-dialog>
+        <loader mode="tiny" loading.bind="loading"></loader>
+
+        <ux-dialog-header>
+            <h2>${'Market Maker - Disable account' & t}</h2>
+        </ux-dialog-header>
+        <ux-dialog-body>
+            <div>
+                Please note that while disabled, the market maker will not place any orders on behalf of this account. <br />
+                However, any existing orders will stay in place and need to be managed manually by the user.
+                <br /><br />
+                Also, time spent disabled does not count towards the usage time of a basic service account!
+                <br /><br />
+                Are you sure you want to disable your account? <br />                
+            </div>
+        </ux-dialog-body>
+
+        <ux-dialog-footer>
+            <button class="btn btn-lg redBtn"
+                    click.trigger="controller.cancel()">
+                ${'Cancel' & t}
+            </button>
+            <button class="btn btn-lg greenBtns" click.trigger="confirmDisable()">
+                ${'Disable' | capitalise & t}
+            </button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>
