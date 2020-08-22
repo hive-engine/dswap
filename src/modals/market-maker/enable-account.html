@@ -1,0 +1,24 @@
+<template>
+    <ux-dialog>
+        <loader mode="tiny" loading.bind="loading"></loader>
+
+        <ux-dialog-header>
+            <h2>${'Market Maker - Enable account' & t}</h2>
+        </ux-dialog-header>
+        <ux-dialog-body>
+            <div>
+                Are you sure you want to re-enable your account for Market Maker?
+            </div>
+        </ux-dialog-body>
+
+        <ux-dialog-footer>
+            <button class="btn btn-lg redBtn"
+                    click.trigger="controller.cancel()">
+                ${'Cancel' & t}
+            </button>
+            <button class="btn btn-lg greenBtns" click.trigger="confirmEnable()">
+                ${'Enable' | capitalise & t}
+            </button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

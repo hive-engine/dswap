@@ -7,11 +7,14 @@ import { DialogController } from "aurelia-dialog";
 import { Store, dispatchify } from "aurelia-store";
 import { Router } from 'aurelia-router';
 import { Subscription } from 'rxjs';
+import { DisableAccountModal } from "modals/market-maker/disable-account";
+import { getCurrentFirebaseUser } from "store/actions";
+import { EnableAccountModal } from "modals/market-maker/enable-account";
 
-@autoinject
+@autoinject()
 export class MarketMakerDashboard {
     private styles = styles;
-    private isClicked: false;
+    @bindable() isClicked = false;
     public subscription: Subscription;
     private marketMakerUser;
     private user;
@@ -23,7 +26,7 @@ export class MarketMakerDashboard {
                 this.state = state;
 
                 this.user = { ...state.firebaseUser };
-                this.marketMakerUser = { ...state.marketMakerUser };
+                this.marketMakerUser = { ...state.marketMakerUser };                
             }
         });
     }
@@ -38,6 +41,8 @@ export class MarketMakerDashboard {
             console.log('test');
             this.router.navigate('market-maker');
         }
+
+        console.log(this.marketMakerUser);
     }
 
     async activate() {
@@ -53,17 +58,31 @@ export class MarketMakerDashboard {
             .whenClosed((x) => this.walletDialogCloseResponse(x));
         console.log("market added");
     }
-    confirmEnable() {
-        this.dialogService
-            .open({ viewModel: ConfirmationModal })
-            .whenClosed((x) => this.walletDialogCloseResponse(x));
+
+    toggleAccountStatus() {
+        let currentStatus = this.marketMakerUser.isEnabled;
+        let toggledStatus = !currentStatus;
+        console.log(toggledStatus);
+        if (toggledStatus === true) {
+            this.dialogService
+                .open({ viewModel: EnableAccountModal })
+                .whenClosed((x) => this.walletDialogCloseResponse(x));
+        } else {
+            this.dialogService
+                .open({ viewModel: DisableAccountModal })
+                .whenClosed((x) => this.walletDialogCloseResponse(x));
+        }        
+
         console.log("market added");
     }
+
     walletDialogCloseResponse(response: DialogCloseResult) {
         console.log(response);
 
         // reload data if necessary
         if (!response.wasCancelled) {
+            let v = Math.floor((Math.random() * 1000000) + 1);
+            this.router.navigate('market-maker-dashboard?v=' + v, { replace: true, trigger: true });
         }
     }
 }

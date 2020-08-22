@@ -60,7 +60,7 @@ export class ChartComponent {
     private created = false;  
     private iteration = 1;  
 
-    @bindable loading = true;
+    @bindable loading = false;
     @bindable type = 'candlestick';
     @bindable options: any = {};
     @bindable data: any = {};
@@ -81,7 +81,7 @@ export class ChartComponent {
 
     dataChanged() {
         this.iteration += 1;
-        this.loading = (this.iteration === 2);
+        //this.loading = (this.iteration === 2);
     }
 
     detached() {

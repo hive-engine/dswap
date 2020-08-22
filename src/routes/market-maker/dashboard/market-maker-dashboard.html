@@ -33,13 +33,13 @@
                                             <h6
                                                 class="dashboard-status-title-text text-center"
                                             >
-                                                age
+                                                created
                                                 <!-- <i class="fa fa-calendar"></i> -->
                                             </h6>
                                             <h4
                                                 class="dashboard-status text-center"
                                             >
-                                                2 Months
+                                                ${marketMakerUser.creationTimestamp_string}
                                             </h4>
                                         </div>
                                         <div class="dashboard-status-title">
@@ -49,10 +49,8 @@
                                                 active
                                                 <!-- <i class="fa fa-check"></i> -->
                                             </h6>
-                                            <h4
-                                                class="dashboard-status text-center"
-                                            >
-                                                yes
+                                            <h4 class="dashboard-status text-center">
+                                                ${marketMakerUser.isEnabled ? 'Yes' : 'No'}
                                             </h4>
                                         </div>
                                         <div class="dashboard-status-title">
@@ -62,10 +60,8 @@
                                                 premium
                                                 <!-- <i class="fa fa-times"></i> -->
                                             </h6>
-                                            <h4
-                                                class="dashboard-status text-center"
-                                            >
-                                                no
+                                            <h4 class="dashboard-status text-center">
+                                                ${marketMakerUser.isPremium ? 'Yes' : 'No'}
                                             </h4>
                                         </div>
                                         <div class="dashboard-status-title">
@@ -75,10 +71,8 @@
                                                 cooldown
                                                 <!-- <i class="fa fa-times"></i> -->
                                             </h6>
-                                            <h4
-                                                class="dashboard-status text-center"
-                                            >
-                                                no
+                                            <h4 class="dashboard-status text-center">
+                                                ${marketMakerUser.isOnCooldown ? 'Yes' : 'No'}
                                             </h4>
                                         </div>
                                         <div class="dashboard-status-title">
@@ -88,10 +82,8 @@
                                                 market(s)
                                                 <!-- <i class="fa fa-robot"></i> -->
                                             </h6>
-                                            <h4
-                                                class="dashboard-status text-center"
-                                            >
-                                                1
+                                            <h4 class="dashboard-status text-center">
+                                                ${marketMakerUser.markets}
                                             </h4>
                                         </div>
                                     </div>
@@ -113,7 +105,7 @@
                                             <h4
                                                 class="dashboard-status text-center"
                                             >
-                                                4 hours
+                                                ${marketMakerUser.timeLimit_string}
                                             </h4>
                                         </div>
                                         <div class="dashboard-status-title">
@@ -123,10 +115,8 @@
                                                 last tick
                                                 <!-- <i class="fa fa-check"></i> -->
                                             </h6>
-                                            <h4
-                                                class="dashboard-status text-center"
-                                            >
-                                                3 days ago
+                                            <h4 class="dashboard-status text-center">
+                                                ${marketMakerUser.lastTickTimestamp_string}
                                             </h4>
                                         </div>
                                     </div>
@@ -385,17 +375,18 @@
                 <div class="dashboard-actions-content">
                     <div class="icon-and-text">
                         <i class="fa fa-user"></i>
-                        <h2 click.delegate="confirmEnable()">Enable Account</h2>
+                        <h2 if.bind="marketMakerUser.isEnabled">Account Enabled</h2>
+                        <h2 if.bind="!marketMakerUser.isEnabled">Account Disabled</h2>
                     </div>
                     <div class="auto"></div>
                     <div class="dashboard-actions toggle-container">
-                        <div class="toggle" id="switch">
-                            <div if.bind="isClicked" class="toggle-text-off">
+                        <div class="toggle" id="switch" click.delegate="toggleAccountStatus()">
+                            <div if.bind="marketMakerUser.isEnabled" class="toggle-text-off">
                                 OFF
                             </div>
                             <div class="glow-comp"></div>
                             <div class="toggle-button"></div>
-                            <div class="toggle-text-on">ON</div>
+                            <div if.bind="!marketMakerUser.isEnabled" class="toggle-text-on">ON</div>
                         </div>
                     </div>
                 </div>
