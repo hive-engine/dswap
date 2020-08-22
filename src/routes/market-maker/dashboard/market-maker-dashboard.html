@@ -375,12 +375,12 @@
                 <div class="dashboard-actions-content">
                     <div class="icon-and-text">
                         <i class="fa fa-user"></i>
-                        <h2 if.bind="marketMakerUser.isEnabled">Disable Account</h2>
-                        <h2 if.bind="!marketMakerUser.isEnabled">Enable Account</h2>
+                        <h2 if.bind="marketMakerUser.isEnabled">Account Enabled</h2>
+                        <h2 if.bind="!marketMakerUser.isEnabled">Account Disabled</h2>
                     </div>
                     <div class="auto"></div>
                     <div class="dashboard-actions toggle-container">
-                        <div class="toggle" id="switch">
+                        <div class="toggle" id="switch" click.delegate="toggleAccountStatus()">
                             <div if.bind="marketMakerUser.isEnabled" class="toggle-text-off">
                                 OFF
                             </div>

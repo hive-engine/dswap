@@ -19,6 +19,9 @@ interface IEnvironment {
   peggedToken: string;
     features: any;
     marketMakerRegistrationCost: number;
+    marketMakerStakeRequiredPerMarket: number;
+    marketMakerStakeRequiredBasic: number;
+    marketMakerStakeRequiredPremium: number;
 }
 
 interface IState {
