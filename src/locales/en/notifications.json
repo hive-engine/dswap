@@ -1,10 +1,16 @@
 {
     "marketMakerRegisterSuccessful": "Account {{account}} is successfully registered to Market Maker",
-    "marketMakerRegisterWait": "Broadcasting Market Maker registration transaction. Please wait until the transaction is verified",
-    "marketMakerTurnOffWait": "Broadcasting Market Maker account disable transaction. Please wait until the transaction is verified",
+    "marketMakerRegisterWait": "Broadcasting Market Maker registration transaction. Please wait until the transaction is verified.",
+    "marketMakerTurnOffWait": "Broadcasting Market Maker account disable transaction. Please wait until the transaction is verified.",
     "marketMakerTurnOffSuccessful": "Account {{account}} is successfully disabled on Market Maker",
-    "marketMakerTurnOnWait": "Broadcasting Market Maker account enable transaction. Please wait until the transaction is verified",
+    "marketMakerTurnOnWait": "Broadcasting Market Maker account enable transaction. Please wait until the transaction is verified.",
     "marketMakerTurnOnSuccessful": "Account {{account}} is successfully enabled on Market Maker",
-    "marketMakerAddMarketWait": "Broadcasting Market Maker add market transaction. Please wait until the transaction is verified",
-    "marketMakerAddMarketSuccessful": "Market settings for {{tokenSymbol}} is successfully configured for account {{account}} on Market Maker"
+    "marketMakerAddMarketWait": "Broadcasting Market Maker add market transaction. Please wait until the transaction is verified.",
+    "marketMakerAddMarketSuccessful": "Market settings for {{tokenSymbol}} is successfully configured for account {{account}} on Market Maker",
+    "marketMakerRemoveMarketWait": "Broadcasting Market Maker remove market transaction. Please wait until the transaction is verified.",
+    "marketMakerRemoveMarketSuccessful": "{{symbol}} market is removed from Market Maker for {{account}}",
+    "marketMakerDisableMarketWait": "Broadcasting Market Maker disable market transaction. Please wait until the transaction is verified.",
+    "marketMakerDisableMarketSuccessful": "{{symbol}} market is disabled from Market Maker for {{account}}",
+    "marketMakerEnableMarketWait": "Broadcasting Market Maker enable market transaction. Please wait until the transaction is verified.",
+    "marketMakerEnableMarketSuccessful": "{{symbol}} market is enabled from Market Maker for {{account}}"
 }

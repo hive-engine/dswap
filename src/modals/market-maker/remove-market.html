@@ -1,0 +1,27 @@
+<template>
+    <ux-dialog>
+        <loader mode="tiny" loading.bind="loading"></loader>
+
+        <ux-dialog-header class="modal-header">
+            <h2>${'Remove ' + symbol + ' Market' & t}</h2>
+        </ux-dialog-header>
+        <ux-dialog-body class="modal-body">
+            Completely removes all configuration for a market. The market maker bot will no longer place new orders <br />
+            on this market until you add it back using the addMarket action. However any existing orders will stay in <br />
+            place and need to be managed manually by the user.<br />
+            <br />
+            Are you sure you want to remove your configured ${market.symbol} market from Market Maker?
+        </ux-dialog-body>
+
+        <ux-dialog-footer>
+            <button class="btn btn-lg redBtn"
+                    click.trigger="controller.cancel()">
+                ${'Cancel' & t}
+            </button>
+            <button class="btn btn-lg greenBtns trade-button"
+                    click.trigger="confirmRemoveMarket()">
+                ${'Proceed' & t}
+            </button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

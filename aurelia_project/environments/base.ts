@@ -14,6 +14,7 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     marketMakerStakeRequiredPerMarket: 200,
     marketMakerStakeRequiredBasic: 200,
     marketMakerStakeRequiredPremium: 1000,
+    marketMakerMaxMarketsBasic: 1,
     features: {
         nfts: {
             enabled: true

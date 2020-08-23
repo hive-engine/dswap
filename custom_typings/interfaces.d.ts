@@ -23,6 +23,7 @@ interface IEnvironment {
     marketMakerStakeRequiredPerMarket: number;
     marketMakerStakeRequiredBasic: number;
     marketMakerStakeRequiredPremium: number;
+    marketMakerMaxMarketsBasic: number;
 }
 
 interface IState {
@@ -207,8 +208,11 @@ interface IMarketMakerMarket {
     maxTokensToSell?: number;
     minTokensToSell?: number;
     priceIncrement?: number;
+    maxDistFromNext?: number;
+    ignoreOrderQtyLt?: number;
     minSpread?: number;
     isEnabled?: boolean;
     creationTimestamp?: number;
+    creationTimestamp_string?: string;
     creationBlock?: string;
 }
