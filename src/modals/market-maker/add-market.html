@@ -1,0 +1,242 @@
+<template>
+    <ux-dialog>
+        <loader mode="tiny" loading.bind="loading"></loader>
+
+        <ux-dialog-header class="modal-header">
+            <h2>${'Initiate Market Maker' & t}</h2>
+        </ux-dialog-header>
+        <ux-dialog-body class="withdrawDialogBody modal-body">
+            <div show.bind="!allowedToAddMarket">
+                You already have the maximum allowed markets added to your account. <br />
+                Upgrade your account to add more markets.
+            </div>
+            <div show.bind="allowedToAddMarket">
+                <div class="form-group">
+                    <h4>Strategy</h4>
+                    <p>Top-of-the-book</p>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <fieldset class="form-group">
+                        <div class="row">
+                            <legend class="col-form-label col-sm-3 pt-0">
+                                Enable Market?
+                            </legend>
+                            <br />
+                            <div class="col-sm-9">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           type="radio"
+                                           name="inlineRadioOptions"
+                                           id="inlineRadio1"
+                                           model.bind="true"
+                                           checked.bind="isEnabled" />
+                                    <label class="form-check-label"
+                                           for="inlineRadio1">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           type="radio"
+                                           name="inlineRadioOptions"
+                                           id="inlineRadio2"
+                                           model.bind="false"
+                                           checked.bind="isEnabled" />
+                                    <label class="form-check-label"
+                                           for="inlineRadio2">No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <hr />
+                <div class="form-group">
+                    Required ${tokenSymbol} stake: ${tokenOperationCost} ${tokenSymbol}<br />
+                    Your ${tokenSymbol} (stake) balance: ${tokenUserStake} ${tokenSymbol}
+                </div>
+                <hr />
+
+                <div class="form-group">
+                    <label>
+                        ${'What token do you want the market maker to trade?' &
+                        t}
+                    </label>
+                    <select class="form-control"
+                            value.bind="selectedToken"
+                            change.delegate="tokenSelected()">
+                        <option model.bind="null">
+                            ${'Please select a token...' & t}
+                        </option>
+                        <option model.bind="t" repeat.for="t of mmTokens">
+                            ${t.name & t} (${t.symbol})
+                        </option>
+                    </select>
+                </div>
+                <hr />
+
+                <div class="form-group">
+                    <label>${'What is the maximum price you\'re willing to buy the token ' + selectedTokenSymbol + ' for?' & t}</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               type="text"
+                               placeholder="0.000"
+                               value.bind="maxBidPrice" />
+                        <div class="input-group-append">
+                            ${baseToken & t}
+                        </div>
+                        <div class="invalid-tooltip">
+                            ${'errors:Please enter an amount greater than 0' & t}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>${'What is the minimum price you\'re willing to sell the token ' + selectedTokenSymbol + ' for?' & t}</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               type="text"
+                               placeholder="0.000"
+                               value.bind="minSellPrice" />
+                        <div class="input-group-append">
+                            ${baseToken & t}
+                        </div>
+                        <div class="invalid-tooltip">
+                            ${'errors:Please enter an amount greater than 0' & t}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>${'What is the maximum amount of ' + baseToken + ' you\'re willing to buy with in a single order?' & t}</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               type="text"
+                               placeholder="0.000"
+                               value.bind="maxBaseToSpend" />
+                        <div class="input-group-append">
+                            ${baseToken & t}
+                        </div>
+                        <div class="invalid-tooltip">
+                            ${'errors:Please enter an amount greater than 0' & t}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>${'What is the minimum amount of ' + baseToken + ' you\'re willing to buy with in a single order?' & t}</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               type="text"
+                               placeholder="0.000"
+                               value.bind="minBaseToSpend" />
+                        <div class="input-group-append">
+                            ${baseToken & t}
+                        </div>
+                        <div class="invalid-tooltip">
+                            ${'errors:Please enter an amount greater than 0' & t}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>${'What is the maximum amount of ' + selectedTokenSymbol + ' tokens you\'re willing to sell in a single order?' & t}</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               type="text"
+                               placeholder="0.000"
+                               value.bind="maxTokensToSell" />
+                        <div class="input-group-append">
+                            ${selectedTokenSymbol & t}
+                        </div>
+                        <div class="invalid-tooltip">
+                            ${'errors:Please enter an amount greater than 0' & t}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>${'What is the minimum amount of ' + selectedTokenSymbol + ' tokens you\'re willing to sell in a single order?' & t}</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               type="text"
+                               placeholder="0.000"
+                               value.bind="minTokensToSell" />
+                        <div class="input-group-append">
+                            ${selectedTokenSymbol & t}
+                        </div>
+                        <div class="invalid-tooltip">
+                            ${'errors:Please enter an amount greater than 0' & t}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>${'What is the minimum spread between bid and asks before the bot won\'t place orders any closer?' & t}</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               type="text"
+                               placeholder="0.000"
+                               value.bind="minSpread" />
+                        <div class="input-group-append">
+                            ${baseToken & t}
+                        </div>
+                        <div class="invalid-tooltip">
+                            ${'errors:Please enter an amount greater than 0' & t}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>${'What is the amount you want to increase/decrease the price by when placing new orders?' & t}</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               type="text"
+                               placeholder="0.000"
+                               value.bind="priceIncrement" />
+                        <div class="input-group-append">
+                            ${baseToken & t}
+                        </div>
+                        <div class="invalid-tooltip">
+                            ${'errors:Please enter an amount greater than 0' & t}
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <h4>Advanced settings</h4>
+                <div class="form-group">
+                    <label>${'What is the maximum allowed price difference between top-of-the-book price and the next level of order depth?' & t}</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               type="text"
+                               placeholder="0.000"
+                               value.bind="maxDistFromNext" />
+                        <div class="invalid-tooltip">
+                            ${'errors:Please enter an amount greater than 0' & t}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>${'Ignore orders with token quantity less than or equal to this size, for the purpose of determining where to place new orders.?' & t}</label>
+                    <div class="input-group">
+                        <input class="form-control"
+                               type="text"
+                               placeholder="0.000"
+                               value.bind="ignoreOrderQtyLt" />
+                        <div class="invalid-tooltip">
+                            ${'errors:Please enter an amount greater than 0' & t}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ux-dialog-body>
+
+        <ux-dialog-footer>
+            <button class="btn btn-lg redBtn"
+                    click.trigger="controller.cancel()">
+                ${'Cancel' & t}
+            </button>
+            <button if.bind="allowedToAddMarket"
+                    class="btn btn-lg greenBtns trade-button"
+                    click.trigger="confirmAddMarket()">
+                ${'Proceed' & t}
+            </button>
+            <button if.bind="!allowedToAddMarket"
+                    class="btn btn-lg greenBtns trade-button"
+                    click.trigger="controller.ok()">
+                ${'OK' & t}
+            </button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

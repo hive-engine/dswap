@@ -1,7 +1,15 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\custom_typings",
+    "\\src",
+    "\\src\\modals",
+    "\\src\\modals\\market-maker",
+    "\\src\\routes",
+    "\\src\\routes\\market-maker",
+    "\\src\\routes\\market-maker\\dashboard",
+    "\\src\\routes\\market-maker\\register"
   ],
-  "SelectedNode": "\\package.json",
+  "SelectedNode": "\\src\\modals\\market-maker\\disable-account.ts",
   "PreviewInSolutionExplorer": false
 }

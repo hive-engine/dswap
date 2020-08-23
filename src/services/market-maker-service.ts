@@ -6,7 +6,7 @@ import { ToastMessage, ToastService } from './toast-service';
 import { I18N } from 'aurelia-i18n';
 import { Store } from 'aurelia-store';
 import moment from 'moment';
-import { loadMarkets } from 'common/market-maker-api';
+import { loadMarkets, loadMarketsByUser } from 'common/market-maker-api';
 import { Chain } from 'common/enums';
 import { hiveSignerJson } from 'common/hive';
 import { checkTransaction } from 'common/hive-engine-api';
@@ -52,6 +52,12 @@ export class MarketMakerService {
 
     async getMarkets() {
         let markets = await loadMarkets();
+
+        return markets;
+    }
+
+    async getUserMarkets() {
+        let markets = await loadMarketsByUser(this.getUser());
 
         return markets;
     }
@@ -305,6 +311,431 @@ export class MarketMakerService {
                     toast.message = this.i18n.tr('marketMakerTurnOnSuccessful', {
                         ns: 'notifications',
                         account: transaction.sender
+                    });
+
+                    this.toast.success(toast);
+
+                    return true;
+                }
+
+                return true;
+            } catch (e) {
+                // Show error toastr: 'An error occurred attempting to unstake tokens: ' + tx.error
+                const toast = new ToastMessage();
+
+                toast.message = this.i18n.tr('errorSubmittedTransfer', {
+                    ns: 'errors',
+                    error: e
+                });
+
+                this.toast.error(toast);
+
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return false;
+    }
+
+    async addMarket(chain: Chain, market: IMarketMakerMarket): Promise<unknown> {
+        const username = this.getUser();
+
+        if (!username) {
+            window.location.reload();
+            return;
+        }
+
+        let contractPayload = this.prepareAddMarketPayload(market);
+
+        const transaction_data = {
+            contractName: 'botcontroller',
+            contractAction: 'addMarket',
+            contractPayload: { ...contractPayload }
+        };
+        console.log(transaction_data);
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (chain == Chain.Hive) {
+                if (window.hive_keychain) {
+                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Add market for Market Maker', async (response) => {
+                        resolve(this.processResponseAddMarketKeychain(response, market.symbol));
+                    });
+                } else {
+                    hiveSignerJson(this.user.name, 'active', transaction_data, () => {
+                        resolve(true);
+                    });
+                }
+            } else {
+
+            }
+        });
+    }
+
+    prepareAddMarketPayload(market: IMarketMakerMarket) {
+        let contractPayload: any = {};
+
+        if (market.symbol)
+            contractPayload.symbol = market.symbol;
+
+        if (market.isEnabled != null)
+            contractPayload.isEnabled = market.isEnabled;
+
+        if (market.maxBidPrice != null)
+            contractPayload.maxBidPrice = market.maxBidPrice.toString();
+
+        if (market.minSellPrice != null)
+            contractPayload.minSellPrice = market.minSellPrice.toString();
+
+        if (market.maxBaseToSpend != null)
+            contractPayload.maxBaseToSpend = market.maxBaseToSpend.toString();
+
+        if (market.minBaseToSpend != null)
+            contractPayload.minBaseToSpend = market.minBaseToSpend.toString();
+
+        if (market.maxTokensToSell != null)
+            contractPayload.maxTokensToSell = market.maxTokensToSell.toString();
+
+        if (market.minTokensToSell != null)
+            contractPayload.minTokensToSell = market.minTokensToSell.toString();
+
+        if (market.priceIncrement != null)
+            contractPayload.priceIncrement = market.priceIncrement.toString();
+
+        if (market.minSpread != null)
+            contractPayload.minSpread = market.minSpread.toString();
+
+        if (market.maxDistFromNext != null)
+            contractPayload.maxDistFromNext = market.maxDistFromNext.toString();
+
+        if (market.ignoreOrderQtyLt != null)
+            contractPayload.ignoreOrderQtyLt = market.ignoreOrderQtyLt.toString();
+
+        return contractPayload;
+    }
+
+    async processResponseAddMarketKeychain(response, symbol) {
+        if (response.success && response.result) {
+            try {
+                let toast = new ToastMessage();
+
+                toast.message = this.i18n.tr('marketMakerAddMarketWait', {
+                    ns: 'notifications'
+                });
+
+                this.toast.success(toast);
+
+                const transaction = await checkTransaction(response.result.id, 3);
+                console.log(transaction);
+
+                if (transaction.error) {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerAddMarketError', {
+                        ns: 'errors',
+                        error: transaction.error,
+                        tokenSymbol: symbol,
+                        account: transaction.sender
+                    });
+
+                    this.toast.error(toast);
+
+                    return false;
+                } else {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerAddMarketSuccessful', {
+                        ns: 'notifications',
+                        account: transaction.sender
+                    });
+
+                    this.toast.success(toast);
+
+                    return true;
+                }
+
+                return true;
+            } catch (e) {
+                // Show error toastr: 'An error occurred attempting to unstake tokens: ' + tx.error
+                const toast = new ToastMessage();
+
+                toast.message = this.i18n.tr('errorSubmittedTransfer', {
+                    ns: 'errors',
+                    error: e
+                });
+
+                this.toast.error(toast);
+
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return false;
+    }
+
+    async removeMarket(chain: Chain, symbol: string): Promise<unknown> {
+        const username = this.getUser();
+
+        if (!username) {
+            window.location.reload();
+            return;
+        }
+
+        const transaction_data = {
+            contractName: 'botcontroller',
+            contractAction: 'removeMarket',
+            contractPayload: {
+                "symbol": symbol
+            }
+        };
+
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (chain == Chain.Hive) {
+                if (window.hive_keychain) {
+                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Remove market for Market Maker', async (response) => {
+                        resolve(this.processResponseRemoveMarketKeychain(response, symbol));
+                    });
+                } else {
+                    hiveSignerJson(this.user.name, 'active', transaction_data, () => {
+                        resolve(true);
+                    });
+                }
+            } else {
+
+            }
+        });
+    }
+
+    async processResponseRemoveMarketKeychain(response, symbol) {
+        if (response.success && response.result) {
+            try {
+                let toast = new ToastMessage();
+
+                toast.message = this.i18n.tr('marketMakerRemoveMarketWait', {
+                    ns: 'notifications'
+                });
+
+                this.toast.success(toast);
+
+                const transaction = await checkTransaction(response.result.id, 3);
+                console.log(transaction);
+
+                if (transaction.error) {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerRemoveMarketError', {
+                        ns: 'errors',
+                        error: transaction.error,
+                        account: this.getUser(),
+                        symbol: symbol
+                    });
+
+                    this.toast.error(toast);
+
+                    return false;
+                } else {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerRemoveMarketSuccessful', {
+                        ns: 'notifications',
+                        account: transaction.sender,
+                        symbol: symbol
+                    });
+
+                    this.toast.success(toast);
+
+                    return true;
+                }
+
+                return true;
+            } catch (e) {
+                // Show error toastr: 'An error occurred attempting to unstake tokens: ' + tx.error
+                const toast = new ToastMessage();
+
+                toast.message = this.i18n.tr('errorSubmittedTransfer', {
+                    ns: 'errors',
+                    error: e
+                });
+
+                this.toast.error(toast);
+
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return false;
+    }
+
+    async disableMarket(chain: Chain, symbol: string): Promise<unknown> {
+        const username = this.getUser();
+
+        if (!username) {
+            window.location.reload();
+            return;
+        }
+
+        const transaction_data = {
+            contractName: 'botcontroller',
+            contractAction: 'disableMarket',
+            contractPayload: {
+                "symbol": symbol
+            }
+        };
+
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (chain == Chain.Hive) {
+                if (window.hive_keychain) {
+                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Disable market for Market Maker', async (response) => {
+                        resolve(this.processResponseDisableMarketKeychain(response, symbol));
+                    });
+                } else {
+                    hiveSignerJson(this.user.name, 'active', transaction_data, () => {
+                        resolve(true);
+                    });
+                }
+            } else {
+
+            }
+        });
+    }
+
+    async processResponseDisableMarketKeychain(response, symbol) {
+        if (response.success && response.result) {
+            try {
+                let toast = new ToastMessage();
+
+                toast.message = this.i18n.tr('marketMakerDisableMarketWait', {
+                    ns: 'notifications'
+                });
+
+                this.toast.success(toast);
+
+                const transaction = await checkTransaction(response.result.id, 3);
+                console.log(transaction);
+
+                if (transaction.error) {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerDisableMarketError', {
+                        ns: 'errors',
+                        error: transaction.error,
+                        account: this.getUser(),
+                        symbol: symbol
+                    });
+
+                    this.toast.error(toast);
+
+                    return false;
+                } else {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerDisableMarketSuccessful', {
+                        ns: 'notifications',
+                        account: transaction.sender,
+                        symbol: symbol
+                    });
+
+                    this.toast.success(toast);
+
+                    return true;
+                }
+
+                return true;
+            } catch (e) {
+                // Show error toastr: 'An error occurred attempting to unstake tokens: ' + tx.error
+                const toast = new ToastMessage();
+
+                toast.message = this.i18n.tr('errorSubmittedTransfer', {
+                    ns: 'errors',
+                    error: e
+                });
+
+                this.toast.error(toast);
+
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return false;
+    }
+
+    async enableMarket(chain: Chain, symbol: string): Promise<unknown> {
+        const username = this.getUser();
+
+        if (!username) {
+            window.location.reload();
+            return;
+        }
+
+        const transaction_data = {
+            contractName: 'botcontroller',
+            contractAction: 'enableMarket',
+            contractPayload: {
+                "symbol": symbol
+            }
+        };
+
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (chain == Chain.Hive) {
+                if (window.hive_keychain) {
+                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Enable market for Market Maker', async (response) => {
+                        resolve(this.processResponseEnableMarketKeychain(response, symbol));
+                    });
+                } else {
+                    hiveSignerJson(this.user.name, 'active', transaction_data, () => {
+                        resolve(true);
+                    });
+                }
+            } else {
+
+            }
+        });
+    }
+
+    async processResponseEnableMarketKeychain(response, symbol) {
+        if (response.success && response.result) {
+            try {
+                let toast = new ToastMessage();
+
+                toast.message = this.i18n.tr('marketMakerEnableMarketWait', {
+                    ns: 'notifications'
+                });
+
+                this.toast.success(toast);
+
+                const transaction = await checkTransaction(response.result.id, 3);
+                console.log(transaction);
+
+                if (transaction.error) {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerEnableMarketError', {
+                        ns: 'errors',
+                        error: transaction.error,
+                        account: this.getUser(),
+                        symbol: symbol
+                    });
+
+                    this.toast.error(toast);
+
+                    return false;
+                } else {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerEnableMarketSuccessful', {
+                        ns: 'notifications',
+                        account: transaction.sender,
+                        symbol: symbol
                     });
 
                     this.toast.success(toast);

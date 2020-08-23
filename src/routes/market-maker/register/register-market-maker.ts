@@ -67,7 +67,6 @@ export class RegisterMarketMaker {
     }
 
     async registerClick() {
-        console.log('register');
         if (this.termsAccepted) {
             const validationResult: ControllerValidateResult = await this.validationController.validate();
 
@@ -90,10 +89,6 @@ export class RegisterMarketMaker {
                 this.loading = true;
                 await this.marketMakerService.register(Chain.Hive);
                 this.loading = false;
-
-                //this.dialogService.open({ viewModel: DswapOrderModal }).whenClosed(response => {
-                //    console.log(response);
-                //});
             }
 
             

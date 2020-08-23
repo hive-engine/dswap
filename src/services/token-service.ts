@@ -44,8 +44,8 @@ export class TokenService {
         });        
     }
 
-    async getDSwapTokens(includeMetrics = true) {        
-        const symbols = environment.enabledTokens;
+    async getDSwapTokens(includeMetrics = true) {
+        const symbols = environment.swapEnabledTokens;
         let dTokens = await loadTokens(symbols);
 
         if (includeMetrics)
@@ -144,5 +144,20 @@ export class TokenService {
         }        
         
         return this.state.tokens;
+    }
+
+    async getMarketMakerTokens() {
+        let allTokens = await loadTokens([], 1000);
+        let mmTokens = [];
+
+        for (const token of allTokens) {
+            if (environment.disabledTokens.includes(token.symbol)) {
+                continue;
+            }
+
+            mmTokens.push(token);
+        }
+
+        return mmTokens;
     }
 }

@@ -15,13 +15,15 @@ interface IEnvironment {
   SCOT_API: string;
   hivePegAccount: string;
   nativeToken: string;
-  enabledTokens: string[];
+    swapEnabledTokens: string[];
+    disabledTokens: string[];
   peggedToken: string;
     features: any;
     marketMakerRegistrationCost: number;
     marketMakerStakeRequiredPerMarket: number;
     marketMakerStakeRequiredBasic: number;
     marketMakerStakeRequiredPremium: number;
+    marketMakerMaxMarketsBasic: number;
 }
 
 interface IState {
@@ -194,20 +196,23 @@ interface IMarketMakerParams {
 }
 
 interface IMarketMakerMarket {
-    _id: number;
-    account: string;
+    _id?: number;
+    account?: string;
     symbol: string;
-    precision: number;
-    strategy: string;
-    maxBidPrice: string;
-    minSellPrice: string;
-    maxBaseToSpend: number;
-    minBaseToSpend: number;
-    maxTokensToSell: number;
-    minTokensToSell: number;
-    priceIncrement: number;
-    minSpread: number;
-    isEnabled: boolean;
-    creationTimestamp: number;
-    creationBlock: string;
+    precision?: number;
+    strategy?: string;
+    maxBidPrice?: number;
+    minSellPrice?: number;
+    maxBaseToSpend?: number;
+    minBaseToSpend?: number;
+    maxTokensToSell?: number;
+    minTokensToSell?: number;
+    priceIncrement?: number;
+    maxDistFromNext?: number;
+    ignoreOrderQtyLt?: number;
+    minSpread?: number;
+    isEnabled?: boolean;
+    creationTimestamp?: number;
+    creationTimestamp_string?: string;
+    creationBlock?: string;
 }

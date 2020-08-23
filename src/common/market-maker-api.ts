@@ -6,6 +6,7 @@ import { queryParam } from 'common/functions';
 import { environment } from 'environment';
 import { ssc } from './ssc';
 import { mapTokenResultToIToken, mapBalanceResultToIBalance, mapMetricsResultToTokenMetrics } from './mappers';
+import moment from 'moment';
 
 const http = new HttpClient();
 
@@ -34,6 +35,25 @@ export async function loadMarkets(symbols = [], limit = 1000, offset = 0): Promi
     
     for (const res of results) {
         markets.push(<IMarketMakerMarket>res);
+    }
+
+    return markets;
+}
+
+export async function loadMarketsByUser(account: any): Promise<IMarketMakerMarket[]> {
+    const queryConfig: any = {};
+
+    if (account) {
+        queryConfig.account = account;
+    }
+
+    let markets: IMarketMakerMarket[] = [];
+    const results = await ssc.find('botcontroller', 'markets', queryConfig);
+
+    for (const res of results) {
+        let arr = <IMarketMakerMarket>res;
+        arr.creationTimestamp_string = moment.unix(arr.creationTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
+        markets.push(res);
     }
 
     return markets;
