@@ -40,11 +40,15 @@ export async function loadMarkets(symbols = [], limit = 1000, offset = 0): Promi
     return markets;
 }
 
-export async function loadMarketsByUser(account: any): Promise<IMarketMakerMarket[]> {
+export async function loadMarketsByUser(account: any, symbols = []): Promise<IMarketMakerMarket[]> {
     const queryConfig: any = {};
 
     if (account) {
         queryConfig.account = account;
+    }
+
+    if (symbols.length) {
+        queryConfig.symbol = { $in: symbols };
     }
 
     let markets: IMarketMakerMarket[] = [];

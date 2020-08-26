@@ -6,7 +6,7 @@ import { DialogService } from 'aurelia-dialog';
 import { connectTo, Store } from 'aurelia-store';
 import { faWallet } from '@fortawesome/pro-duotone-svg-icons';
 import { AuthService } from 'services/auth-service';
-
+import { environment } from 'environment';
 
 @autoinject()
 @customElement('swapnav')
@@ -19,6 +19,8 @@ export class SwapNav {
 
     public storeSubscription: Subscription;
     private state: IState;
+    private dswapEnabled;
+    private marketMakerEnabled;
 
     constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<IState>) {        
         this.storeSubscription = this.store.state.subscribe(state => {
@@ -26,6 +28,11 @@ export class SwapNav {
                 this.state = state;                
             }
           });    
+    }
+
+    async bind() {
+        this.dswapEnabled = environment.dswapEnabled;
+        this.marketMakerEnabled = environment.marketMakerEnabled;
     }
 
     async logout() {

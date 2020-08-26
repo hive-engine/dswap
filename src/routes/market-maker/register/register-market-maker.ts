@@ -46,10 +46,6 @@ export class RegisterMarketMaker {
 
                 this.user = { ...state.firebaseUser };
                 this.marketMakerUser = { ...state.marketMakerUser };
-
-                if (this.marketMakerUser && this.marketMakerUser._id && this.marketMakerUser._id > 0) {
-                    this.router.navigate('market-maker-dashboard');
-                }
             }
         });
     }

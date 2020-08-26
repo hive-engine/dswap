@@ -14,6 +14,8 @@ import { MarketMakerService } from "services/market-maker-service";
 import { RemoveMarketModal } from "modals/market-maker/remove-market";
 import { DisableMarketModal } from "modals/market-maker/disable-market";
 import { EnableMarketModal } from "modals/market-maker/enable-market";
+import { TokenService } from "services/token-service";
+import { environment } from 'environment';
 
 @autoinject()
 export class MarketMakerDashboard {
@@ -23,9 +25,11 @@ export class MarketMakerDashboard {
     private marketMakerUser;
     private user;
     private state: IState;
-    private markets = [];
+    private markets : IMarketMakerMarket[] = [];
+    private marketTokens = [];
+    private exchangeMarketUrl;
 
-    constructor(private dialogService: DialogService, private store: Store<IState>, private router: Router, private mms: MarketMakerService) {
+    constructor(private dialogService: DialogService, private store: Store<IState>, private router: Router, private mms: MarketMakerService, private ts: TokenService) {
         this.subscription = this.store.state.subscribe(async (state: IState) => {
             if (state) {
                 this.state = state;
@@ -37,26 +41,25 @@ export class MarketMakerDashboard {
     }
 
     async bind() {
-        console.log('bind');
         this.loadMarkets();
-        console.log(this.marketMakerUser);
+        this.exchangeMarketUrl = environment.EXCHANGE_URL + "?p=market&t=";
     }
 
     async loadMarkets() {
-        this.markets = await this.mms.getUserMarkets();        
-    }
+        this.markets = await this.mms.getUserMarkets();  
+        if (this.markets) {
+            let tokenSymbols = this.markets.map(x => x.symbol);            
+            this.marketTokens = await this.ts.getMarketMakerTokens(tokenSymbols);
 
-    async canActivate() {
-        console.log('canActivate');
-        // return to landing page if user doesn't exist in market maker user table
-        if (!this.marketMakerUser || !this.marketMakerUser._id || this.marketMakerUser._id <= 0) {
-            console.log('test');
-            this.router.navigate('market-maker');
+            for (let m of this.markets) {
+                let token = this.marketTokens.find(x => x.symbol == m.symbol);
+                if (token)
+                    m.icon = token.metadata.icon;
+            }
         }
     }
 
-    async activate() {
-        console.log('activate');
+    async attached() {
         $(".toggle").click(function (e) {
             e.preventDefault();
             $(this).toggleClass("toggle-on").toggleClass("toggle-text-off");
