@@ -13,6 +13,9 @@ interface IEnvironment {
   GRAPHQL_API: string;
   HISTORY_API: string;
   SCOT_API: string;
+  EXCHANGE_URL: string;
+  dswapEnabled: boolean;
+  marketMakerEnabled: boolean;
   hivePegAccount: string;
   nativeToken: string;
     swapEnabledTokens: string[];
@@ -24,6 +27,7 @@ interface IEnvironment {
     marketMakerStakeRequiredBasic: number;
     marketMakerStakeRequiredPremium: number;
     marketMakerMaxMarketsBasic: number;
+    marketMakerUpdateMarketCostBasic: number;
 }
 
 interface IState {
@@ -215,4 +219,5 @@ interface IMarketMakerMarket {
     creationTimestamp?: number;
     creationTimestamp_string?: string;
     creationBlock?: string;
+    icon?: string;
 }

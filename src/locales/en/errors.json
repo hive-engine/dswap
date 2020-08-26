@@ -33,5 +33,8 @@
     "marketMakerAddMarketIgnoreOrderQtyLtNaN": "Please enter a valid number for ignoreQtyLt.",
     "marketMakerRemoveMarketError": "Error occured while trying to remove {{symbol}} market from Market Maker for {{account}}: {{error}}",
     "marketMakerDisableMarketError": "Error occured while trying to disable {{symbol}} market from Market Maker for {{account}}: {{error}}",
-    "marketMakerEnableMarketError": "Error occured while trying to enable {{symbol}} market from Market Maker for {{account}}: {{error}}"
+    "marketMakerEnableMarketError": "Error occured while trying to enable {{symbol}} market from Market Maker for {{account}}: {{error}}",
+    "marketMakerUpdateMarketMoreStakeRequired": "Your balance {{userBalance}} {{symbol}} is lower than the balance requirement of {{requiredBalance}} {{symbol}} to update a market for trading.",
+    "marketMakerUpdateMarketError": "Error occured while trying to update market for token {{tokenSymbol}} for account {{account}} on Market Maker: {{error}}",
+    "marketMakerUpdateMarketNoChanges": "No changes detected in your {{symbol}} market configuration."
 }

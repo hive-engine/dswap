@@ -1,21 +1,23 @@
 <template bindable="selected">
     <div class="dswap-nav">
         <div class="logo">
-            <img
-                src="../../images/dswap_standalone.png"
-                class="logo-image"
-                alt="brand_img"
-            />
+            <a route-href="route: home">
+                <img
+                    src="../../images/dswap_standalone.png"
+                    class="logo-image"
+                    alt="brand_img"
+                />
+            </a>
         </div>
         <div class="dswap-nav-links">
-            <a class="each-link" route-href="send"
+            <a class="each-link" route-href="send" show.bind="dswapEnabled"
                 ><div class="small-wrap">
                     <span>Send</span
                     >
                     <i class="fa fa-paper-plane img-send"></i>
                     </div
             ></a>
-            <a class="each-link" route-href="receive"
+            <a class="each-link" route-href="receive" show.bind="dswapEnabled"
                 ><div class="small-wrap">
                     <span>Receive</span
                     >

@@ -25,15 +25,7 @@ export class MarketMakerLanding {
 
                 this.user = { ...state.firebaseUser };
                 this.marketMakerUser = { ...state.marketMakerUser };
-
-                if (this.marketMakerUser && this.marketMakerUser._id && this.marketMakerUser._id > 0) {
-                    this.router.navigate('market-maker-dashboard');
-                }
             }
         });
-
-        let markets = await this.marketMakerService.getMarkets();
-        console.log('markets');
-        console.log(markets);
     }
 }

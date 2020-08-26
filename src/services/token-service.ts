@@ -146,8 +146,8 @@ export class TokenService {
         return this.state.tokens;
     }
 
-    async getMarketMakerTokens() {
-        let allTokens = await loadTokens([], 1000);
+    async getMarketMakerTokens(symbols = []) {
+        let allTokens = await loadTokens(symbols, 1000);
         let mmTokens = [];
 
         for (const token of allTokens) {
