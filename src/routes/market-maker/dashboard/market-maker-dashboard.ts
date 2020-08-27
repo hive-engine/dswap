@@ -53,12 +53,7 @@ export class MarketMakerDashboard {
         console.log(this.marketMakerUser);
     }
 
-    async activate() {
-        $(".toggle").click(function (e) {
-            e.preventDefault();
-            $(this).toggleClass("toggle-on").toggleClass("toggle-text-off");
-        });
-    }
+    
 
     addMarket() {
         this.dialogService
