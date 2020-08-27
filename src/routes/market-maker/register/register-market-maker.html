@@ -15,38 +15,16 @@
             <div class="col-md-10">
                 <div class="register-market-maker-wrapper">
                     <div class="register-market-maker-header">
-                        <h2>${'Initiate Market Maker' & t}</h2>
+                        <h2 style="font-size: 1.5rem; text-align: center;">${'Initiate Market Maker' & t}</h2>
                     </div>
                     <hr class="divider" />
                     <div class="register-market-maker-body">
-                        <!-- <div class="form-group">
-                            <label
-                                >${'What token do you want the market maker to
-                                trade?' & t}</label
-                            >
-                            <select
-                                class="form-control"
-                                value.bind="token"
-                                change.delegate="tokenSelected()"
-                            >
-                                <option model.bind="null"
-                                    >${'Please select a token...' & t}</option
-                                >
-                                <option
-                                    model.bind="t"
-                                    repeat.for="t of tokenList"
-                                    >${t.name & t} (${t.symbol})</option
-                                >
-                            </select>
-                        </div> -->
                         <div class="disclaimer-wrapper">
-                            <h2 class="text-center">Disclaimer:</h2>
+                            <h2 class="" style="font-size: 1.3rem;">Disclaimer:</h2>
                             <p class="disclaimer-text text-danger text-body">
-                                Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Voluptate deleniti soluta
-                                debitis dicta.
+                                The user knowingly engages with the Market Maker knowing there are <span class="text-danger">inherent risks to trading</span>.
                             </p>
-                            <ol>
+                            <!-- <ol>
                                 <li>
                                     Voluptate deleniti soluta debitis dicta.
                                     Eveniet fuga cum praesentium quos tenetur
@@ -62,21 +40,18 @@
                                     Eveniet fuga cum praesentium quos tenetur
                                     nostrum impedit,
                                 </li>
-                            </ol>
-                            <p>
-                                Eveniet fuga cum praesentium quos tenetur
-                                nostrum impedit, illo reiciendis voluptatum
-                                perspiciatis voluptatem enim saepe voluptatibus?
-                                Alias.
+                            </ol> -->
+                            <p class="">
+                               The user takes full responsibility for the trades and agrees to hold hive-engine harmless in the event of losses.
                             </p>
                             <fieldset class="form-group">
                                 <div class="row">
                                     <legend
-                                        class="col-form-label col-sm-5 pt-0"
+                                        class="col-form-label text-center col-sm-5 pt-0"
                                     >
                                         Do you wish to continue?
                                     </legend><br>
-                                    <div class="col-sm-7">
+                                    <div class="col-sm-7" style="display: grid; place-items: center; grid-template-columns: 1fr 1fr;">
                                         <div class="form-check">
                                             <input
                                                 class="form-check-input"
@@ -113,14 +88,14 @@
                                 </div>
                             </fieldset>
 
-                            <div>
+                            <div class="text-center p-2" style="display: grid; place-items: center;">
                                 <div class="row">Current ${tokenSymbol} balance: ${tokenUserBalance} ${tokenSymbol}</div>
                                 <div class="row">${tokenSymbol} balance required: ${tokenOperationCost} ${tokenSymbol}</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="footer text-center">
+                    <div class="footer text-center confirm-register-button">
                         <a click.delegate="registerClick()" class="btn btn-lg greenBtns trade-button">
                             ${termsAccepted ? 'Register' : 'Cancel' & t}
                         </a>

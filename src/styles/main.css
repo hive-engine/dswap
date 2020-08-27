@@ -1271,7 +1271,7 @@ input.tradeValueUsd {
 }
 .upgrade-btn:hover {
     background-color: #05413c;
-    color: #fff;
+    color: #fff!important;
 }
 .delete-btn {
     border-radius: 50%;
@@ -1602,5 +1602,8 @@ input.tradeValueUsd {
     }
     .register-market-maker-header {
         font-size: 28px;
+    }
+    .confirm-register-button {
+        margin-bottom: 55px;
     }
 }

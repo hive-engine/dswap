@@ -5,8 +5,8 @@ import { ConfirmationModal } from "modals/confirmation";
 import { DialogService, DialogCloseResult } from "aurelia-dialog";
 import { DialogController } from "aurelia-dialog";
 import { Store, dispatchify } from "aurelia-store";
-import { Router } from 'aurelia-router';
-import { Subscription } from 'rxjs';
+import { Router } from "aurelia-router";
+import { Subscription } from "rxjs";
 import { DisableAccountModal } from "modals/market-maker/disable-account";
 import { getCurrentFirebaseUser } from "store/actions";
 import { EnableAccountModal } from "modals/market-maker/enable-account";
@@ -34,10 +34,11 @@ export class MarketMakerDashboard {
             if (state) {
                 this.state = state;
 
-                this.user = { ...state.firebaseUser };
-                this.marketMakerUser = { ...state.marketMakerUser };                
+                    this.user = { ...state.firebaseUser };
+                    this.marketMakerUser = { ...state.marketMakerUser };
+                }
             }
-        });
+        );
     }
 
     async bind() {
