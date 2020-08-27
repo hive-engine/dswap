@@ -432,25 +432,26 @@
                             </h2>
                         </div>
                         <div class="auto"></div>
-                        <div class="dashboard-actions toggle-container">
+                        <div class="dashboard-actions d-flex align-items-center ml-auto">
                             <div
-                                class="toggle"
+                                class="d-flex align-items-center"
                                 id="switch"
                                 click.delegate="toggleAccountStatus()"
                             >
                                 <div
                                     if.bind="!marketMakerUser.isEnabled"
-                                    class="off toggle-text-off"
+                                    class="d-flex align-items-center ml-auto"
                                 >
-                                    OFF
+                                    <a class="wallet-btns wallet-btns-swap"
+                                        ><img src="../../../images/mm-off.png" width="60px" alt=""></a>
                                 </div>
-                                <div class="glow-comp"></div>
-                                <div class="toggle-button"></div>
+                                
                                 <div
                                     if.bind="marketMakerUser.isEnabled"
-                                    class="on toggle-text-on"
+                                    class="ml-auto"
                                 >
-                                    ON
+                                    <a class="mm-btns mm-btns-disable"
+                                        ><img src="../../../images/mm-on.png" width="60px" alt=""></a>
                                 </div>
                             </div>
                         </div>
