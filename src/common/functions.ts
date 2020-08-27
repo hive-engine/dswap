@@ -232,3 +232,37 @@ export async function getHivePrice() {
         return 0;
     }
 }
+
+export async function isAllowedToAddMarket(isPremium, userStake, userMarketCount) {
+    let isAllowed = false;
+
+    if (!isPremium) {
+        // basic
+        if (userMarketCount < environment.marketMakerMaxMarketsBasic &&
+            userStake >= environment.marketMakerStakeRequiredPerMarket) {
+            isAllowed = true;
+        }
+    } else {
+        // premium
+        isAllowed = true;
+    }
+
+    return isAllowed;
+}
+
+export async function isAllowedToEnableMarket(isPremium, userStake, userMarketCount) {
+    let isAllowed = false;
+
+    if (!isPremium) {
+        // basic
+        if (userMarketCount <= environment.marketMakerMaxMarketsBasic &&
+            userStake >= environment.marketMakerStakeRequiredPerMarket) {
+            isAllowed = true;
+        }
+    } else {
+        // premium
+        isAllowed = true;
+    }
+
+    return isAllowed;
+}

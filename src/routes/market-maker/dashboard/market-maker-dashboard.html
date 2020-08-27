@@ -538,388 +538,85 @@
                                     </h6>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h6 class="text-right">
-                                    Status
-                                </h6>
-                                <div class="">
-                                    <div class="dashboard-status-wrapper">
-                                        <div
-                                            class="d-flex justify-content-between"
+                            <table class="table mb-0">
+                                <thead class="table-head">
+                                    <tr>
+                                        <th class="icon-head head-item"
+                                            scope="col"></th>
+                                        <th
+                                            class="market-head head-item"
+                                            scope="col"
                                         >
-                                            <div class="dashboard-status-title">
-                                                <h6
-                                                    class="dashboard-status-title-text text-center"
-                                                >
-                                                    created
-                                                    <!-- <i class="fa fa-calendar"></i> -->
-                                                </h6>
-                                                <h4
-                                                    class="dashboard-status text-center"
-                                                >
-                                                    ${marketMakerUser.creationTimestamp_string}
-                                                </h4>
-                                            </div>
-                                            <div class="dashboard-status-title">
-                                                <h6
-                                                    class="dashboard-status-title-text text-center"
-                                                >
-                                                    market(s)
-                                                    <!-- <i class="fa fa-robot"></i> -->
-                                                </h6>
-                                                <h4
-                                                    class="dashboard-status text-center"
-                                                >
-                                                    ${marketMakerUser.markets}
-                                                </h4>
-                                            </div>
-                                            <div class="dashboard-status-title">
-                                                <h6
-                                                    class="dashboard-status-title-text text-center"
-                                                >
-                                                    active
-                                                    <!-- <i class="fa fa-check"></i> -->
-                                                </h6>
-                                                <h4
-                                                    class="dashboard-status text-center"
-                                                >
-                                                    ${marketMakerUser.isEnabled
-                                                    ? 'Yes' : 'No'}
-                                                </h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="">
-                                    <div class="dashboard-status-wrapper">
-                                        <div
-                                            class="d-flex justify-content-between"
+                                            Market
+                                        </th>
+                                        <th class="icon-head head-item"
+                                            scope="col">Status</th>
+                                        <th
+                                            class="delete-head head-item text-right"
+                                            scope="col"
                                         >
-                                            <div class="dashboard-status-title">
-                                                <h6
-                                                    class="dashboard-status-title-text text-center"
-                                                >
-                                                    premium
-                                                    <!-- <i class="fa fa-times"></i> -->
-                                                </h6>
-                                                <h4
-                                                    class="dashboard-status text-center"
-                                                >
-                                                    ${marketMakerUser.isPremium
-                                                    ? 'Yes' : 'No'}
-                                                </h4>
-                                            </div>
-                                            <div class="dashboard-status-title">
-                                                <h6
-                                                    class="dashboard-status-title-text text-center"
-                                                >
-                                                    cooldown
-                                                    <!-- <i class="fa fa-times"></i> -->
-                                                </h6>
-                                                <h4
-                                                    class="dashboard-status text-center"
-                                                >
-                                                    ${marketMakerUser.isOnCooldown
-                                                    ? 'Yes' : 'No'}
-                                                </h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="">
-                                    <div
-                                        class="dashboard-status-wrapper"
-                                        style="border: none; margin-top: 0;"
-                                    >
-                                        <div
-                                            class="d-flex justify-content-between"
-                                        >
-                                            <div class="dashboard-status-title">
-                                                <h6
-                                                    class="dashboard-status-title-text second-row-title text-center"
-                                                >
-                                                    time limit
-                                                    <!-- <i class="fa fa-check"></i> -->
-                                                </h6>
-                                                <h4
-                                                    class="dashboard-status text-center"
-                                                >
-                                                    ${marketMakerUser.timeLimit_string}
-                                                </h4>
-                                            </div>
-
-                                            <div class="dashboard-status-title">
-                                                <h6
-                                                    class="dashboard-status-title-text second-row-title text-center"
-                                                >
-                                                    last tick
-                                                    <!-- <i class="fa fa-check"></i> -->
-                                                </h6>
-                                                <h4
-                                                    class="dashboard-status text-center"
-                                                >
-                                                    ${marketMakerUser.lastTickTimestamp_string}
-                                                </h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="market-maker-history-card">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="wallet-header">
-                                    <h2 class="wallet-title text-center">
-                                        Markets
-                                    </h2>
-                                </div>
-                                <table class="table mb-0">
-                                    <thead class="table-head">
-                                        <tr>
-                                            <th
-                                                class="icon-head head-item"
-                                                scope="col"
-                                            ></th>
-                                            <th></th>
-                                            <th
-                                                class="market-head head-item"
-                                                scope="col"
-                                            >
-                                                Market
-                                            </th>
-                                            <th
-                                                class="amount-head head-item"
-                                                scope="col"
-                                            >
-                                                Active
-                                            </th>
-                                            <th
-                                                class="delete-head head-item text-right"
-                                                scope="col"
-                                            >
-                                                Delete
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th class="table-item" scope="row">
-                                                <div class="transaction-icon">
-                                                    <font-awesome-icon
-                                                        class="table-icon"
-                                                        icon.bind="['fas', 'check']"
-                                                    ></font-awesome-icon>
-                                                </div>
-                                            </th>
-                                            <td class="table-item">
-                                                <h4
-                                                    class="text-center mb-0"
-                                                ></h4>
-                                                <!-- <h6 class="text-center mb-0">
-                                                    5
-                                                </h6> -->
-                                            </td>
-                                            <td
-                                                class="table-item transaction-type"
-                                            >
-                                                <a
-                                                    route-href="route: updateMarketMaker"
-                                                    class="market-symbol-link"
-                                                    >BEE</a
-                                                >
-                                                <br />
-                                                <span
-                                                    class="transaction-type-info"
-                                                    >Active since 6 Months Ago
-                                                </span>
-                                            </td>
-                                            <td class="table-item text-center">
-                                                Yes
-                                            </td>
-                                            <td class="table-item text-right">
-                                                <a href="" class="delete-btn">
-                                                    <font-awesome-icon
-                                                        class="delete-icon"
-                                                        icon.bind="['fas', 'times']"
-                                                    ></font-awesome-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="table-item" scope="row">
-                                                <div
-                                                    class="transaction-icon times"
-                                                >
-                                                    <font-awesome-icon
-                                                        class="table-icon"
-                                                        icon.bind="['fas', 'times']"
-                                                    ></font-awesome-icon>
-                                                </div>
-                                            </th>
-                                            <td class="table-item">
-                                                <h4
-                                                    class="text-center mb-0"
-                                                ></h4>
-                                                <!-- <h6 class="text-center mb-0">
-                                                    5
-                                                </h6> -->
-                                            </td>
-                                            <td
-                                                class="table-item transaction-type"
-                                            >
-                                                <a
-                                                    route-href="route: updateMarketMaker"
-                                                    class="market-symbol-link"
-                                                    >BTCP Trade</a
-                                                >
-                                                <br />
-                                                <span
-                                                    class="transaction-type-info"
-                                                    >Active 4 Months Ago
-                                                </span>
-                                            </td>
-                                            <td class="table-item text-center">
-                                                No
-                                            </td>
-                                            <td class="table-item text-right">
-                                                <a href="" class="delete-btn">
-                                                    <font-awesome-icon
-                                                        class="delete-icon"
-                                                        icon.bind="['fas', 'times']"
-                                                    ></font-awesome-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="table-item" scope="row">
-                                                <div class="transaction-icon">
-                                                    <font-awesome-icon
-                                                        class="table-icon"
-                                                        icon.bind="['fas', 'check']"
-                                                    ></font-awesome-icon>
-                                                </div>
-                                            </th>
-                                            <td class="table-item">
-                                                <h4
-                                                    class="text-center mb-0"
-                                                ></h4>
-                                                <!-- <h6 class="text-center mb-0">
-                                                    5
-                                                </h6> -->
-                                            </td>
-                                            <td
-                                                class="table-item transaction-type"
-                                            >
-                                                <a
-                                                    route-href="route: updateMarketMaker"
-                                                    class="market-symbol-link"
-                                                    >HIVEP</a
-                                                >
-                                                <br />
-                                                <span
-                                                    class="transaction-type-info"
-                                                    >Active since 8 Months Ago
-                                                </span>
-                                            </td>
-                                            <td class="table-item text-center">
-                                                Yes
-                                            </td>
-                                            <td class="table-item text-right">
-                                                <a href="" class="delete-btn">
-                                                    <font-awesome-icon
-                                                        class="delete-icon"
-                                                        icon.bind="['fas', 'times']"
-                                                    ></font-awesome-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="table-item" scope="row">
-                                                <div
-                                                    class="transaction-icon times"
-                                                >
-                                                    <font-awesome-icon
-                                                        class="table-icon"
-                                                        icon.bind="['fas', 'times']"
-                                                    ></font-awesome-icon>
-                                                </div>
-                                            </th>
-                                            <td class="table-item">
-                                                <h4
-                                                    class="text-center mb-0"
-                                                ></h4>
-                                                <!-- <h6 class="text-center mb-0">
-                                                    5
-                                                </h6> -->
-                                            </td>
-                                            <td
-                                                class="table-item transaction-type"
-                                            >
-                                                <a
-                                                    route-href="route: updateMarketMaker"
-                                                    class="market-symbol-link"
-                                                    >GOLOS</a
-                                                >
-                                                <br />
-                                                <span
-                                                    class="transaction-type-info"
-                                                    >Active since 6 Months Ago
-                                                </span>
-                                            </td>
-                                            <td class="table-item text-center">
-                                                No
-                                            </td>
-                                            <td class="table-item text-right">
-                                                <a href="" class="delete-btn">
-                                                    <font-awesome-icon
-                                                        class="delete-icon"
-                                                        icon.bind="['fas', 'times']"
-                                                    ></font-awesome-icon>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <br />
-                                <nav
-                                    class="text-right ml-auto"
-                                    aria-label="Page navigation example"
-                                >
-                                    <ul
-                                        class="pagination"
-                                        style="margin-bottom: 0;"
-                                    >
-                                        <li class="page-item pagination-btn">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody repeat.for="m of markets">
+                                    <tr>
+                                        <th class="table-item" scope="row">
+                                            <img src="${m.icon}" width="40px" title="${m.symbol}" alt="${m.symbol}" />
+                                        </th>
+                                        <td class="table-item transaction-type">
                                             <a
-                                                class="page-link pagination-link text-white-custom"
-                                                aria-label="Previous"
+                                                route-href="route: updateMarketMaker" class='market-symbol-link'
+                                                >${m.symbol}</a
                                             >
-                                                <span aria-hidden="true"
-                                                    >&laquo;</span
-                                                >
+                                            <br />
+                                            <span class="transaction-type-info"
+                                                >Created: ${m.creationTimestamp_string}
+                                            </span>
+                                        </td>
+                                        <th class="table-item" scope="row">
+                                            <div class="transaction-icon ${m.isEnabled ? '' : 'times'}">
+                                                <font-awesome-icon
+                                                    class="table-icon"
+                                                    title.bind="m.isEnabled ? 'Active' : 'Disabled'"
+                                                    icon.bind="['fas', m.isEnabled ? 'check' : 'stop']"
+                                                ></font-awesome-icon>
+                                            </div>
+                                        </th>
+                                        <td class="table-item text-right">
+                                            <a class="btn btn-secondary" route-href="route: updateMarketMaker; params.bind: {symbol:m.symbol}" title="Edit market">
+                                                <font-awesome-icon icon.bind="['fas', 'pencil']"></font-awesome-icon>
                                             </a>
-                                        </li>
-                                        <li class="page-item pagination-btn">
-                                            <a
-                                                class="page-link pagination-link text-white-custom"
-                                                >1</a
-                                            >
-                                        </li>
-                                        <li class="page-item pagination-btn">
-                                            <a
-                                                class="page-link pagination-link text-white-custom"
-                                                >2</a
-                                            >
-                                        </li>
-                                        <li class="page-item pagination-btn">
-                                            <a
-                                                class="page-link pagination-link text-white-custom"
-                                                >3</a
+                                            <a if.bind="!m.isEnabled" class="btn btn-success" click.delegate="enableMarket(m)" href="javascript:void();" title="Enable market">
+                                                <font-awesome-icon icon.bind="['fas', 'play']"></font-awesome-icon>
+                                            </a>
+                                            <a if.bind="m.isEnabled" class="btn btn-warning" click.delegate="disableMarket(m)" href="javascript:void();" title="Disable market">
+                                                <font-awesome-icon icon.bind="['fas', 'stop']"></font-awesome-icon>
+                                            </a>
+                                            <a click.delegate="removeMarket(m)" class="btn btn-danger" href="javascript:void();" title="Delete market">
+                                                <font-awesome-icon class="delete-icon"
+                                                                   icon.bind="['fas', 'times']"></font-awesome-icon>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br />
+                            <!--<nav
+                                class="text-right ml-auto"
+                                aria-label="Page navigation example"
+                            >
+                                <ul
+                                    class="pagination"
+                                    style="margin-bottom: 0;"
+                                >
+                                    <li class="page-item pagination-btn">
+                                        <a
+                                            class="page-link pagination-link text-white-custom"
+                                            aria-label="Previous"
+                                        >
+                                            <span aria-hidden="true"
+                                                >&laquo;</span
                                             >
                                         </li>
                                         <li class="page-item pagination-btn">
@@ -927,14 +624,10 @@
                                                 class="page-link pagination-link text-white-custom"
                                                 aria-label="Next"
                                             >
-                                                <span aria-hidden="true"
-                                                    >&raquo;</span
-                                                >
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>-->
                         </div>
                     </div>
                 </div>
@@ -1039,12 +732,32 @@
                             >
                         </div>
                     </div>
-                    <div class="advanced-settings text-right">
-                        <a click.delegate="signin()"
-                            >Show all/ Market Control</a
-                        >
-                    </div>
                 </div>
+            </div>
+            <div class="market-maker-dashboard-card dashboard-action-main-card">
+                <div class="dashboard-actions-content">
+                    <h1 class="markets-header">Markets</h1>
+                </div>
+                <div class="dashboard-actions-content" repeat.for="m of markets">
+                    <div class="icon-and-text d-flex p-0">
+                        <img
+                            src="${m.icon}"
+                            class="margin-15"
+                            width="40px"
+                            alt="${m.symbol}"
+                            title="${m.symbol}"
+                        />
+                        <h2
+                            class="align-self-center m-0 font-22 market-list-symbol"
+                        >
+                            ${m.symbol}
+                        </h2>
+                    </div>
+                    <div class="auto"></div>
+                    <div class="dashboard-actions d-flex p-0">
+                        <a href="${exchangeMarketUrl + m.symbol}" target="_blank" class="btn view-market-btn">View Market</a>
+                    </div>
+                </div>                
             </div>
         </div>
     </div>

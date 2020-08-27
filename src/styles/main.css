@@ -568,13 +568,13 @@ a.item:hover .item-icon {
     width: 78%;
 }
 .market-head {
-    width: 56%;
+    width: 46%;
 }
 .amount-head {
     width: 12%;
 }
 .delete-head {
-    width: 12%;
+    width: 22%;
 }
 .pagination-btn {
     padding: 0;
@@ -1119,7 +1119,6 @@ input.tradeValueUsd {
     color: #05413c;
     font-size: 18px;
     font-weight: 600;
-    text-transform: uppercase;
 }
 
 .back-btn {

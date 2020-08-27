@@ -1,0 +1,38 @@
+<template>
+    <ux-dialog>
+        <loader mode="tiny" loading.bind="loading"></loader>
+
+        <ux-dialog-header class="modal-header">
+            <h2>${'Enable ' + symbol + ' Market' & t}</h2>
+        </ux-dialog-header>
+        <ux-dialog-body class="modal-body">
+            <div show.bind="!allowedToEnableMarket">
+                You are not allowed to enable this market. <br />
+                You might have reached the maximum allowed markets for your account type <br />
+                or your balance might not be sufficient to enable a market.<br />                
+            </div>
+            <div show.bind="allowedToEnableMarket">
+                Re-enables a previously disabled market, so that the market maker bot will begin placing orders for it again.
+                <br /><br />
+                Are you sure you want to re-enable ${symbol} market?
+            </div>
+        </ux-dialog-body>
+
+        <ux-dialog-footer>
+            <button class="btn btn-lg redBtn"
+                    click.trigger="controller.cancel()">
+                ${'Cancel' & t}
+            </button>
+            <button if.bind="allowedToEnableMarket"
+                    class="btn btn-lg greenBtns trade-button"
+                    click.trigger="confirmEnableMarket()">
+                ${'Proceed' & t}
+            </button>
+            <button if.bind="!allowedToEnableMarket"
+                    class="btn btn-lg greenBtns trade-button"
+                    click.trigger="controller.ok()">
+                ${'OK' & t}
+            </button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>
