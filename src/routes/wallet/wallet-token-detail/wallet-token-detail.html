@@ -2,7 +2,7 @@
     <div class="back-btn-container">
         <a route-href="route: home" class="back-btn">Go Back</a>
     </div>
-    <div class="wallet-wrapper">
+    <div class="wallet-wrapper mob-margin">
         <div class="row">
             <div class="col-md-12">
                 <div class="wallet-header">
@@ -83,10 +83,54 @@
                                                     >
                                                 </h4>
                                             </div>
+                                            <div class="row d-block d-md-none">
+                                                <div class="col-12 text-center">
+                                                    <div
+                                                        class="action-button d-block d-md-none mt-2"
+                                                    >
+                                                        <a
+                                                            route-href="route: send; params.bind: { symbol: token.symbol }"
+                                                            class="wallet-btns wallet-btns-send"
+                                                            >Send
+                                                            <i
+                                                                class="fa fa-arrow-alt-circle-up"
+                                                            ></i
+                                                        ></a>
+    
+                                                        <a
+                                                            route-href="route: receive; params.bind: { symbol: token.symbol }"
+                                                            class="wallet-btns wallet-btns-receive"
+                                                            >Receive
+                                                            <i
+                                                                class="fa fa-arrow-alt-circle-down"
+                                                            ></i
+                                                        ></a>
+                                                        <a
+                                                            route-href="route: dashboard; params.bind: { symbol: token.symbol, transactionType: 'sell' }"
+                                                            class="wallet-btns wallet-btns-swap"
+                                                            >Swap
+                                                            <i
+                                                                class="fa fa-list-ul"
+                                                            ></i
+                                                        ></a>
+    
+                                                        <a
+                                                            route-href="route: dashboard; params.bind: { symbol: token.symbol, transactionType: 'buy' }"
+                                                            class="wallet-btns wallet-btns-buy"
+                                                            >Buy
+                                                            <i
+                                                                class="fa fa-university"
+                                                            ></i
+                                                        ></a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="action-button">
+                                        <div
+                                            class="action-button d-none d-md-block"
+                                        >
                                             <a
                                                 route-href="route: send; params.bind: { symbol: token.symbol }"
                                                 class="wallet-btns wallet-btns-send"
@@ -105,7 +149,9 @@
                                                 ></i
                                             ></a>
                                         </div>
-                                        <div class="action-button">
+                                        <div
+                                            class="action-button d-none d-md-block"
+                                        >
                                             <a
                                                 route-href="route: dashboard; params.bind: { symbol: token.symbol, transactionType: 'sell' }"
                                                 class="wallet-btns wallet-btns-swap"
@@ -122,9 +168,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <br /><br /><br />
+                                <br class="d-block d-md-none" /><br class="d-block d-md-none" /><br class="d-block d-md-none"/>
                                 <div class="row">
-                                    <loader loading.bind="loading" mode="tiny"></loader>
+                                    <loader
+                                        loading.bind="loading"
+                                        mode="tiny"
+                                    ></loader>
                                     <div class="col-md-12">
                                         <div class="transaction-history-card">
                                             <div class="wallet-header">
@@ -161,7 +210,9 @@
                                                         </th>
                                                     </tr>
                                                 </thead>
-                                                <tbody repeat.for="trade of tradesCompleted">
+                                                <tbody
+                                                    repeat.for="trade of tradesCompleted"
+                                                >
                                                     <tr>
                                                         <th
                                                             class="table-item"
@@ -183,20 +234,48 @@
                                                             </div>
                                                         </th>
                                                         <td class="table-item">
-                                                            <h4 class="text-center mb-0">${trade.timestamp_month_name}</h4>
-                                                            <h6 class="text-center mb-0">${trade.timestamp_day}</h6>
+                                                            <h4
+                                                                class="text-center mb-0"
+                                                            >
+                                                                ${trade.timestamp_month_name}
+                                                            </h4>
+                                                            <h6
+                                                                class="text-center mb-0"
+                                                            >
+                                                                ${trade.timestamp_day}
+                                                            </h6>
                                                         </td>
-                                                        <td class="table-item transaction-type">
-                                                            ${trade.symbol} Trade
+                                                        <td
+                                                            class="table-item transaction-type"
+                                                        >
+                                                            ${trade.symbol}
+                                                            Trade
                                                             <br />
-                                                            <span class="transaction-type-info" show.bind="trade.type == 'received'"
-                                                                >You received ${trade.quantity} ${trade.symbol} worth ${'$' + trade.usdValue}</span
+                                                            <span
+                                                                class="transaction-type-info"
+                                                                show.bind="trade.type == 'received'"
+                                                                >You received
+                                                                ${trade.quantity}
+                                                                ${trade.symbol}
+                                                                worth ${'$' +
+                                                                trade.usdValue}</span
                                                             >
-                                                            <span class="transaction-type-info" show.bind="trade.type == 'sent'"
-                                                                >You sent ${trade.quantity} ${trade.symbol} worth ${'$' + trade.usdValue}</span
+                                                            <span
+                                                                class="transaction-type-info"
+                                                                show.bind="trade.type == 'sent'"
+                                                                >You sent
+                                                                ${trade.quantity}
+                                                                ${trade.symbol}
+                                                                worth ${'$' +
+                                                                trade.usdValue}</span
                                                             >
                                                         </td>
-                                                        <td class="table-item text-right">${trade.quantity} ${trade.symbol}</td>
+                                                        <td
+                                                            class="table-item text-right"
+                                                        >
+                                                            ${trade.quantity}
+                                                            ${trade.symbol}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -209,17 +288,44 @@
                                                     class="pagination"
                                                     style="margin-bottom: 0;"
                                                 >
-                                                    <li class="page-item pagination-btn">
-                                                        <a class="page-link pagination-link text-white-custom" click.delegate="pageClick('prev')" aria-label="Previous" show.bind="page > 1">
-                                                            <span aria-hidden="true">&laquo;</span>
+                                                    <li
+                                                        class="page-item pagination-btn"
+                                                    >
+                                                        <a
+                                                            class="page-link pagination-link text-white-custom"
+                                                            click.delegate="pageClick('prev')"
+                                                            aria-label="Previous"
+                                                            show.bind="page > 1"
+                                                        >
+                                                            <span
+                                                                aria-hidden="true"
+                                                                >&laquo;</span
+                                                            >
                                                         </a>
                                                     </li>
-                                                    <li class="page-item pagination-btn" repeat.for="p of totalPages">
-                                                        <a class="page-link pagination-link text-white-custom ${page == p+1 ? 'active' : ''}" click.delegate="pageClick(p+1)">${p+1}</a>
+                                                    <li
+                                                        class="page-item pagination-btn"
+                                                        repeat.for="p of totalPages"
+                                                    >
+                                                        <a
+                                                            class="page-link pagination-link text-white-custom ${page == p+1 ? 'active' : ''}"
+                                                            click.delegate="pageClick(p+1)"
+                                                            >${p+1}</a
+                                                        >
                                                     </li>
-                                                    <li class="page-item pagination-btn">
-                                                        <a class="page-link pagination-link text-white-custom" click.delegate="pageClick('next')" aria-label="Next" show.bind="page < totalPages">
-                                                            <span aria-hidden="true">&raquo;</span>
+                                                    <li
+                                                        class="page-item pagination-btn"
+                                                    >
+                                                        <a
+                                                            class="page-link pagination-link text-white-custom"
+                                                            click.delegate="pageClick('next')"
+                                                            aria-label="Next"
+                                                            show.bind="page < totalPages"
+                                                        >
+                                                            <span
+                                                                aria-hidden="true"
+                                                                >&raquo;</span
+                                                            >
                                                         </a>
                                                     </li>
                                                 </ul>

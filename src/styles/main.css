@@ -580,14 +580,14 @@ a.item:hover .item-icon {
     padding: 0;
 }
 .pagination-link {
-    color: #fff!important;
+    color: #fff !important;
     background: #05413c;
     border: 1px solid #05413cbd;
 }
 .pagination-link:hover,
 .pagination-link.active {
     background-color: #e9ecef;
-    color: #05413c!important;
+    color: #05413c !important;
 }
 
 .transaction-type {
@@ -1271,7 +1271,7 @@ input.tradeValueUsd {
 }
 .upgrade-btn:hover {
     background-color: #05413c;
-    color: #fff!important;
+    color: #fff !important;
 }
 .delete-btn {
     border-radius: 50%;
@@ -1586,7 +1586,7 @@ input.tradeValueUsd {
     .market-maker-landing-wrapper-content {
         padding-top: 0;
     }
-    .market-maker-landing-wrapper  {
+    .market-maker-landing-wrapper {
         margin: 68px 0;
     }
     .market-maker-logo {
@@ -1605,5 +1605,40 @@ input.tradeValueUsd {
     }
     .confirm-register-button {
         margin-bottom: 55px;
+    }
+    .mob-margin {
+        margin: 48px 0 !important;
+    }
+    .wallet-title {
+        text-align: left !important;
+    }
+    .wallet-btns {
+        font-size: 12px;
+        padding: 8px;
+        text-align: center;
+        margin: 0;
+        width: max-content;
+    }
+    .wallet-detail-balance-card {
+        flex-direction: column;
+    }
+    .action-button {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: 0px;
+        place-items: center center;
+    }
+    .head-item {
+        font-size: 12px;
+    }
+    .pagination-link.text-white-custom {
+        font-size: 11px;
+    }
+    nav.text-right.ml-auto {
+        margin: auto;
+        text-align: center;
+    }
+    .detail-value, .detail-value-2 {
+        font-size: 25px;
     }
 }
