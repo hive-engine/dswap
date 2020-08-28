@@ -465,9 +465,123 @@
             </div>
         </div>
     </div>
+    <!-- Mobile Stuffs -->
     <div class="d-block d-md-none">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-12">
+                <div
+                    class="market-maker-dashboard-card dashboard-action-main-card"
+                >
+                    <div class="dashboard-actions-content">
+                        <h1 class="markets-header">Activate</h1>
+                    </div>
+                    <div class="dashboard-actions-content">
+                        <div class="icon-and-text">
+                            <i class="fa fa-user"></i>
+                            <h2 if.bind="marketMakerUser.isEnabled">
+                                Account Enabled
+                            </h2>
+                            <h2 if.bind="!marketMakerUser.isEnabled">
+                                Account Disabled
+                            </h2>
+                        </div>
+                        <div class="auto"></div>
+                        <div class="dashboard-actions toggle-container">
+                            <div
+                                class="d-flex align-items-center"
+                                id="switch"
+                                click.delegate="toggleAccountStatus()"
+                            >
+                                <div
+                                    if.bind="!marketMakerUser.isEnabled"
+                                    class="d-flex align-items-center ml-auto"
+                                >
+                                    <a class="mm-btns mm-btns-swap"
+                                        ><img
+                                            src="../../../images/mm-off.png"
+                                            width="60px"
+                                            alt=""
+                                    /></a>
+                                </div>
+
+                                <div
+                                    if.bind="marketMakerUser.isEnabled"
+                                    class="ml-auto"
+                                >
+                                    <a class="mm-btns mm-btns-disable"
+                                        ><img
+                                            src="../../../images/mm-on.png"
+                                            width="60px"
+                                            alt=""
+                                    /></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-actions-content">
+                        <div class="icon-and-text">
+                            <i class="fa fa-dollar-sign"></i>
+                            <h2>Premium</h2>
+                        </div>
+                        <div class="auto"></div>
+                        <div class="dashboard-actions">
+                            <a
+                                click.delegate="confirmEnable()"
+                                class="btn upgrade-btn"
+                                >Upgrade</a
+                            >
+                        </div>
+                    </div>
+                    <div class="dashboard-actions-content">
+                        <div class="icon-and-text">
+                            <i class="fa fa-list-alt"></i>
+                            <h2>New Market</h2>
+                        </div>
+                        <div class="auto"></div>
+                        <div class="dashboard-actions">
+                            <a
+                                class="btn upgrade-btn"
+                                click.delegate="addMarket()"
+                                >Add Market</a
+                            >
+                        </div>
+                    </div>
+                    <div class="advanced-settings text-right">
+                        <a href="">Advanced Settings</a>
+                    </div>
+                </div>
+                <div
+                    class="market-maker-dashboard-card dashboard-action-main-card"
+                >
+                    <div class="dashboard-actions-content">
+                        <h1 class="markets-header">Markets</h1>
+                    </div>
+                    <div class="dashboard-actions-content">
+                        <div class="icon-and-text d-flex p-0">
+                            <img
+                                src="../../../images/btc.png"
+                                class="margin-15"
+                                width="40px"
+                                alt=""
+                            />
+                            <h2
+                                class="align-self-center m-0 font-22 market-list-symbol"
+                            >
+                                BEE
+                            </h2>
+                        </div>
+                        <div class="auto"></div>
+                        <div class="dashboard-actions d-flex p-0">
+                            <a href="" class="btn view-market-btn"
+                                >View Market</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
                 <div class="market-maker-dashboard-card">
                     <div class="token-balance account-status-card">
                         <div class="row">
@@ -617,147 +731,42 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div
-                    class="market-maker-dashboard-card dashboard-action-main-card"
-                >
-                    <div class="dashboard-actions-content">
-                        <h1 class="markets-header">Activate</h1>
-                    </div>
-                    <div class="dashboard-actions-content">
-                        <div class="icon-and-text">
-                            <i class="fa fa-user"></i>
-                            <h2 if.bind="marketMakerUser.isEnabled">
-                                Account Enabled
-                            </h2>
-                            <h2 if.bind="!marketMakerUser.isEnabled">
-                                Account Disabled
-                            </h2>
-                        </div>
-                        <div class="auto"></div>
-                        <div class="dashboard-actions toggle-container">
-                            <div
-                                class="d-flex align-items-center"
-                                id="switch"
-                                click.delegate="toggleAccountStatus()"
-                            >
-                                <div
-                                    if.bind="!marketMakerUser.isEnabled"
-                                    class="d-flex align-items-center ml-auto"
-                                >
-                                    <a class="mm-btns mm-btns-swap"
-                                        ><img
-                                            src="../../../images/mm-off.png"
-                                            width="60px"
-                                            alt=""
-                                    /></a>
-                                </div>
-
-                                <div
-                                    if.bind="marketMakerUser.isEnabled"
-                                    class="ml-auto"
-                                >
-                                    <a class="mm-btns mm-btns-disable"
-                                        ><img
-                                            src="../../../images/mm-on.png"
-                                            width="60px"
-                                            alt=""
-                                    /></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="dashboard-actions-content">
-                        <div class="icon-and-text">
-                            <i class="fa fa-dollar-sign"></i>
-                            <h2>Premium</h2>
-                        </div>
-                        <div class="auto"></div>
-                        <div class="dashboard-actions">
-                            <a
-                                click.delegate="confirmEnable()"
-                                class="btn upgrade-btn"
-                                >Upgrade</a
-                            >
-                        </div>
-                    </div>
-                    <div class="dashboard-actions-content">
-                        <div class="icon-and-text">
-                            <i class="fa fa-list-alt"></i>
-                            <h2>New Market</h2>
-                        </div>
-                        <div class="auto"></div>
-                        <div class="dashboard-actions">
-                            <a
-                                class="btn upgrade-btn"
-                                click.delegate="addMarket()"
-                                >Add Market</a
-                            >
-                        </div>
-                    </div>
-                    <div class="advanced-settings text-right">
-                        <a href="">Advanced Settings</a>
-                    </div>
-                </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
                 <div
                     class="market-maker-dashboard-card dashboard-action-main-card"
                 >
                     <div class="dashboard-actions-content">
                         <h1 class="markets-header">Markets</h1>
                     </div>
-                    <div class="dashboard-actions-content">
+                    <div
+                        class="dashboard-actions-content"
+                        repeat.for="m of markets"
+                    >
                         <div class="icon-and-text d-flex p-0">
                             <img
-                                src="../../../images/btc.png"
+                                src="${m.icon}"
                                 class="margin-15"
                                 width="40px"
-                                alt=""
+                                alt="${m.symbol}"
+                                title="${m.symbol}"
                             />
                             <h2
                                 class="align-self-center m-0 font-22 market-list-symbol"
                             >
-                                BEE
+                                ${m.symbol}
                             </h2>
                         </div>
                         <div class="auto"></div>
                         <div class="dashboard-actions d-flex p-0">
-                            <a href="" class="btn view-market-btn"
+                            <a
+                                href="${exchangeMarketUrl + m.symbol}"
+                                target="_blank"
+                                class="btn view-market-btn"
                                 >View Market</a
                             >
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="market-maker-dashboard-card dashboard-action-main-card">
-                <div class="dashboard-actions-content">
-                    <h1 class="markets-header">Markets</h1>
-                </div>
-                <div
-                    class="dashboard-actions-content"
-                    repeat.for="m of markets"
-                >
-                    <div class="icon-and-text d-flex p-0">
-                        <img
-                            src="${m.icon}"
-                            class="margin-15"
-                            width="40px"
-                            alt="${m.symbol}"
-                            title="${m.symbol}"
-                        />
-                        <h2
-                            class="align-self-center m-0 font-22 market-list-symbol"
-                        >
-                            ${m.symbol}
-                        </h2>
-                    </div>
-                    <div class="auto"></div>
-                    <div class="dashboard-actions d-flex p-0">
-                        <a
-                            href="${exchangeMarketUrl + m.symbol}"
-                            target="_blank"
-                            class="btn view-market-btn"
-                            >View Market</a
-                        >
                     </div>
                 </div>
             </div>
