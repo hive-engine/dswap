@@ -1,0 +1,40 @@
+<template>
+    <ux-dialog>
+        <loader mode="tiny" loading.bind="loading"></loader>
+
+        <ux-dialog-header class="modal-header">
+            <h2>${'Upgrade account' & t}</h2>
+        </ux-dialog-header>
+        <ux-dialog-body class="modal-body">
+            Upgrades a previously registered account to premium service.<br />
+            An upgrade fee of ${marketMakerUpgradeCost} ${marketMakerFeeToken} is required and the account must have at least ${marketMakerStakeRequiredPremium} ${marketMakerFeeToken} staked. <br />
+            <br />
+            Some things to note:<br />
+            <ol>
+                <li>${marketMakerFeeToken} that is in the process of being unstaked will not count toward the staking requirement of ${marketMakerStakeRequiredPremium} tokens.</li>
+                <li>If an account is on cooldown, upgrading it will remove the cooldown.</li>
+                <li>
+                    It is possible for an account to lose premium status later on, for example if the amount of staked ${marketMakerFeeToken} falls<br />
+                    below the minimumed required threshold of ${marketMakerStakeRequiredPremium} tokens.
+                </li>
+                <li>If an account previously had premium status (but lost it), the upgrade fee doesn't need to be paid again.<br />
+                    However the staking requirement must still be met.</li>
+            </ol>
+            If an account loses premium status later on, there may also be secondary side effects.<br /> 
+            For instance, premium users are allowed to have unlimited markets configured for bot trading, but basic <br />
+            service allows only one. So if you lose premium status but have multiple markets configured, they will all<br /> 
+            be disabled until you have removed the extra markets or upgraded to premium again.<br />
+        </ux-dialog-body>
+
+        <ux-dialog-footer>
+            <button class="btn btn-lg redBtn"
+                    click.trigger="controller.cancel()">
+                ${'Cancel' & t}
+            </button>
+            <button class="btn btn-lg greenBtns trade-button"
+                    click.trigger="confirmUpgradeAccount()">
+                ${'Proceed' & t}
+            </button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

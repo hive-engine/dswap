@@ -20,7 +20,7 @@ import { RemoveMarketModal } from "modals/market-maker/remove-market";
 export class UpdateMarketMaker {
     public subscription: Subscription;
     private state: IState;
-    private feeTokenSymbol = "BEE";
+    private feeTokenSymbol;
     private feeTokenUserBalance = 0;
     private tokenOperationCost;
     private validationController;
@@ -94,7 +94,7 @@ export class UpdateMarketMaker {
     async bind() {
         this.createValidationRules();
         this.loadMarketDetails();
-
+        this.feeTokenSymbol = environment.marketMakerFeeToken;
         this.baseToken = environment.peggedToken;        
         if (!this.marketMakerUser.isPremium)
             this.tokenOperationCost = environment.marketMakerUpdateMarketCostBasic;

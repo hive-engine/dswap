@@ -45,6 +45,8 @@ export async function loadMarketsByUser(account: any, symbols = []): Promise<IMa
 
     if (account) {
         queryConfig.account = account;
+    } else {
+        return null;
     }
 
     if (symbols.length) {

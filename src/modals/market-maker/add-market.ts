@@ -11,13 +11,13 @@ import { Router, Redirect } from 'aurelia-router';
 import { BootstrapFormRenderer } from "resources/bootstrap-form-renderer";
 import { environment } from 'environment';
 import { Chain } from "common/enums";
-import { isAllowedToAddMarket } from "../../common/functions";
+import { isAllowedToAddMarket } from "common/functions";
 
 @autoinject()
 export class AddMarketModal {
     public subscription: Subscription;
     private state: IState;
-    private tokenSymbol = "BEE";
+    private tokenSymbol;
     private tokenUserStake = 0;
     private tokenOperationCost;
     private validationController;
@@ -76,6 +76,7 @@ export class AddMarketModal {
     async bind() {
         this.createValidationRules();
 
+        this.tokenSymbol = environment.marketMakerFeeToken;
         this.baseToken = environment.peggedToken;
         this.mmTokens = await this.ts.getMarketMakerTokens();
         this.tokenOperationCost = environment.marketMakerStakeRequiredPerMarket;        

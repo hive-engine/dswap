@@ -339,7 +339,7 @@
                             class="dashboard-actions d-flex align-items-center ml-auto"
                         >
                             <div
-                                class="d-flex align-items-center"
+                                class="d-flex align-items-center toggleAccountStatus"
                                 id="switch"
                                 click.delegate="toggleAccountStatus()"
                             >
@@ -377,7 +377,7 @@
                         <div class="auto"></div>
                         <div class="dashboard-actions">
                             <a
-                                click.delegate="confirmEnable()"
+                                click.delegate="upgradeAccount()"
                                 class="btn upgrade-btn"
                                 >Upgrade</a
                             >
@@ -397,36 +397,12 @@
                             >
                         </div>
                     </div>
-                    <div class="advanced-settings text-right">
-                        <a href="">Advanced Settings</a>
-                    </div>
                 </div>
                 <div
                     class="market-maker-dashboard-card dashboard-action-main-card"
                 >
                     <div class="dashboard-actions-content">
                         <h1 class="markets-header">Markets</h1>
-                    </div>
-                    <div class="dashboard-actions-content">
-                        <div class="icon-and-text d-flex p-0">
-                            <img
-                                src="../../../images/btc.png"
-                                class="margin-15"
-                                width="40px"
-                                alt=""
-                            />
-                            <h2
-                                class="align-self-center m-0 font-22 market-list-symbol"
-                            >
-                                BEE
-                            </h2>
-                        </div>
-                        <div class="auto"></div>
-                        <div class="dashboard-actions d-flex p-0">
-                            <a href="" class="btn view-market-btn"
-                                >View Market</a
-                            >
-                        </div>
                     </div>
                     <div
                         class="dashboard-actions-content"
@@ -455,11 +431,6 @@
                                 >View Market</a
                             >
                         </div>
-                    </div>
-                    <div class="advanced-settings text-right">
-                        <a click.delegate="signin()"
-                            >Show all/ Market Control</a
-                        >
                     </div>
                 </div>
             </div>
@@ -526,7 +497,7 @@
                         <div class="auto"></div>
                         <div class="dashboard-actions">
                             <a
-                                click.delegate="confirmEnable()"
+                                click.delegate="upgradeAccount()"
                                 class="btn upgrade-btn"
                                 >Upgrade</a
                             >
@@ -546,38 +517,7 @@
                             >
                         </div>
                     </div>
-                    <div class="advanced-settings text-right">
-                        <a href="">Advanced Settings</a>
-                    </div>
-                </div>
-                <div
-                    class="market-maker-dashboard-card dashboard-action-main-card"
-                >
-                    <div class="dashboard-actions-content">
-                        <h1 class="markets-header">Markets</h1>
-                    </div>
-                    <div class="dashboard-actions-content">
-                        <div class="icon-and-text d-flex p-0">
-                            <img
-                                src="../../../images/btc.png"
-                                class="margin-15"
-                                width="40px"
-                                alt=""
-                            />
-                            <h2
-                                class="align-self-center m-0 font-22 market-list-symbol"
-                            >
-                                BEE
-                            </h2>
-                        </div>
-                        <div class="auto"></div>
-                        <div class="dashboard-actions d-flex p-0">
-                            <a href="" class="btn view-market-btn"
-                                >View Market</a
-                            >
-                        </div>
-                    </div>
-                </div>
+                </div>                
             </div>
         </div>
         <div class="row">
