@@ -112,7 +112,7 @@ export async function getMarketMakerUser(state: IState): Promise<IState> {
     }
 
     try {
-        let mmUser = await getUser('lion200'); // only to see dashboard
+        let mmUser = await getUser(newState.account.name); // only to see dashboard
         mmUser.creationTimestamp_string = moment.unix(mmUser.creationTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
         mmUser.lastTickTimestamp_string = moment.unix(mmUser.lastTickTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
 
