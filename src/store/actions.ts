@@ -52,6 +52,21 @@ export function logout(state: IState): IState {
     };
 
     newState.loggedIn = false;
+    newState.marketMakerUser = {
+        account: '',
+        creationBlock: 0,
+        creationTimestamp: 0,
+        enabledMarkets: 0,
+        isEnabled: false,
+        isOnCooldown: false,
+        isPremium: false,
+        isPremiumFeePaid: false,
+        lastTickBlock: 0,
+        lastTickTimestamp: 0,
+        markets: 0,
+        timeLimit: 0,
+        _id: 0
+    };
 
     return newState;
 }
@@ -105,6 +120,7 @@ export async function getCurrentFirebaseUser(state: IState): Promise<IState> {
 }
 
 export async function getMarketMakerUser(state: IState): Promise<IState> {
+    console.log('mmuser');
     const newState = { ...state };
 
     if (!newState.loggedIn) {
