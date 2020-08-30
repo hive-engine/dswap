@@ -6,11 +6,7 @@
             <h2>${'Initiate Market Maker' & t}</h2>
         </ux-dialog-header>
         <ux-dialog-body class="withdrawDialogBody modal-body">
-            <div show.bind="!allowedToAddMarket">
-                You already have the maximum allowed markets added to your account. <br />
-                Upgrade your account to add more markets.
-            </div>
-            <div show.bind="allowedToAddMarket">
+            <div>
                 <div class="form-group">
                     <h4>Strategy</h4>
                     <p>Top-of-the-book</p>
@@ -50,8 +46,9 @@
                 </div>
                 <hr />
                 <div class="form-group">
-                    Required ${tokenSymbol} stake: ${tokenOperationCost} ${tokenSymbol}<br />
-                    Your ${tokenSymbol} (stake) balance: ${tokenUserStake} ${tokenSymbol}
+                    ${tokenSymbol} stake required to add a market: ${tokenOperationCost} ${tokenSymbol}<br />
+                    Your current ${tokenSymbol} (stake) balance: ${tokenUserStake} ${tokenSymbol}<br />
+                    Total required ${tokenSymbol} (stake) balance: ${totalStakeRequired} ${tokenSymbol}<br />
                 </div>
                 <hr />
 
@@ -227,15 +224,9 @@
                     click.trigger="controller.cancel()">
                 ${'Cancel' & t}
             </button>
-            <button if.bind="allowedToAddMarket"
-                    class="btn btn-lg greenBtns trade-button"
+            <button class="btn btn-lg greenBtns trade-button"
                     click.trigger="confirmAddMarket()">
                 ${'Proceed' & t}
-            </button>
-            <button if.bind="!allowedToAddMarket"
-                    class="btn btn-lg greenBtns trade-button"
-                    click.trigger="controller.ok()">
-                ${'OK' & t}
             </button>
         </ux-dialog-footer>
     </ux-dialog>

@@ -6,7 +6,7 @@ import { ValidationControllerFactory, ControllerValidateResult, ValidationRules 
 import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
-import { trimUsername, isAllowedToEnableMarket } from 'common/functions';
+import { trimUsername, totalStakeRequiredToEnableMarket } from 'common/functions';
 import { MarketMakerService } from 'services/market-maker-service';
 import { Chain } from 'common/enums';
 import { environment } from 'environment';
@@ -27,6 +27,9 @@ export class EnableMarketModal {
     private user;
     private tokenUserStake;
     private allowedToEnableMarket = false;
+    private requiredStake;
+    private isPremium;
+    private totalStakeRequired;
 
     constructor(private controller: DialogController,
         private toast: ToastService,
@@ -53,7 +56,7 @@ export class EnableMarketModal {
         });
     }
 
-    async activate(market) {
+    async activate(market) {        
         this.market = market;
         this.tokenOperationCost = environment.marketMakerStakeRequiredPerMarket;     
         this.symbol = this.market.symbol;
@@ -64,22 +67,44 @@ export class EnableMarketModal {
                 this.tokenUserStake = parseFloat(balance.stake);
 
             if (this.marketMakerUser) {
-                const markets = await this.mms.getUserMarkets();
-                this.allowedToEnableMarket = await isAllowedToEnableMarket(this.marketMakerUser.isPremium, this.tokenUserStake, markets.length);
+                this.totalStakeRequired = await totalStakeRequiredToEnableMarket(this.marketMakerUser);
+                this.allowedToEnableMarket = this.tokenUserStake >= this.totalStakeRequired;
+                this.isPremium = this.marketMakerUser.isPremium;
             }
         }     
+
+        this.createValidationRules();
     }
 
     async confirmEnableMarket() {
+        const validationResult: ControllerValidateResult = await this.validationController.validate();
+
         this.loading = true;
 
-        const result = await this.mms.enableMarket(Chain.Hive, this.market.symbol);
+        for (const result of validationResult.results) {
+            if (!result.valid) {
+                const toast = new ToastMessage();               
 
-        if (result) {
-            this.controller.ok();
+                toast.message = this.i18n.tr(result.rule.messageKey, {
+                    symbol: this.market.symbol,
+                    requiredStake: this.requiredStake,
+                    userStake: this.tokenUserStake,
+                    ns: 'errors'
+                });
+
+                this.toast.error(toast);
+            }
         }
 
-        this.loading = false;
+        if (validationResult.valid) {
+            const result = await this.mms.enableMarket(Chain.Hive, this.market.symbol);
+
+            if (result) {
+                this.controller.ok();
+            }
+
+            this.loading = false;
+        }
     }
 
     private createValidationRules() {
@@ -87,8 +112,8 @@ export class EnableMarketModal {
             .ensure('symbol')
             .required()
             .withMessageKey('errors:marketMakerAddMarketTokenRequired')
-            .ensure('tokenUserStake')
-            .satisfies((value: any, object: any) => parseFloat(value) >= this.tokenOperationCost)
+            .ensure('allowedToEnableMarket')
+            .satisfies((value: any, object: any) => value === true)
             .withMessageKey('errors:marketMakerAddMarketMoreStakeRequired')
             .rules;
     }

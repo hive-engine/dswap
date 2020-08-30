@@ -16,6 +16,7 @@ import { DisableMarketModal } from "modals/market-maker/disable-market";
 import { EnableMarketModal } from "modals/market-maker/enable-market";
 import { TokenService } from "services/token-service";
 import { environment } from 'environment';
+import { UpgradeAccountModal } from "modals/market-maker/upgrade-account";
 
 @autoinject()
 export class MarketMakerDashboard {
@@ -33,12 +34,10 @@ export class MarketMakerDashboard {
         this.subscription = this.store.state.subscribe(async (state: IState) => {
             if (state) {
                 this.state = state;
-
-                    this.user = { ...state.firebaseUser };
-                    this.marketMakerUser = { ...state.marketMakerUser };
-                }
+                this.user = { ...state.firebaseUser };
+                this.marketMakerUser = { ...state.marketMakerUser };
             }
-        );
+        });
     }
 
     async bind() {
@@ -47,7 +46,7 @@ export class MarketMakerDashboard {
     }
 
     async loadMarkets() {
-        this.markets = await this.mms.getUserMarkets();  
+        this.markets = await this.mms.getUserMarkets();          
         if (this.markets) {
             let tokenSymbols = this.markets.map(x => x.symbol);            
             this.marketTokens = await this.ts.getMarketMakerTokens(tokenSymbols);
@@ -88,6 +87,12 @@ export class MarketMakerDashboard {
     enableMarket(market) {
         this.dialogService
             .open({ viewModel: EnableMarketModal, model: market })
+            .whenClosed((x) => this.walletDialogCloseResponse(x));
+    }
+
+    upgradeAccount() {
+        this.dialogService
+            .open({ viewModel: UpgradeAccountModal })
             .whenClosed((x) => this.walletDialogCloseResponse(x));
     }
 

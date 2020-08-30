@@ -22,7 +22,7 @@ export class RegisterMarketMaker {
     private marketMakerUser;
     private termsAccepted = true;
     private loading = false;
-    private tokenSymbol = "BEE";
+    private tokenSymbol;
     private tokenUserBalance = 0;
     private tokenOperationCost;
     private validationController;
@@ -52,7 +52,7 @@ export class RegisterMarketMaker {
 
     async bind() {
         this.createValidationRules();
-
+        this.tokenSymbol = environment.marketMakerFeeToken;
         this.tokenOperationCost = environment.marketMakerRegistrationCost;
 
         if (this.user) {

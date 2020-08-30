@@ -46,6 +46,9 @@ export class NavBar {
     }
     attached() {
         let idName = window.location.pathname.split("/")[1];
+        if (!idName)
+            idName = "home";
+
         if (window.location.pathname !== "dashboard") {
             $(".dashboardActive").removeClass("dashboardActive");
             
@@ -53,7 +56,6 @@ export class NavBar {
                 $("#" + idName).addClass("activateIt");
             window.location.pathname.includes("market-maker") &&
                 $("#market-maker").addClass("activateIt");
-            console.log(idName);
         }
     }
 
@@ -65,10 +67,14 @@ export class NavBar {
         // $("#" + e).addClass("activateIt");
         if (window.location.pathname === "/" + e) {
             $(".removeActivate").removeClass("activateIt");
-            $(".dashboardActive").toggleClass("dashboardActive");     
+            $(".dashboardActive").toggleClass("dashboardActive");
 
-            if (e)       
+            if (e)
                 $("#" + e).addClass("activateIt");
+        } else if (e == "home") {
+            $(".removeActivate").removeClass("activateIt");
+            $(".dashboardActive").toggleClass("dashboardActive");            
+            $("#" + e).addClass("activateIt");
         }
     }
 }

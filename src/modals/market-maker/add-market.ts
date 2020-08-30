@@ -11,13 +11,13 @@ import { Router, Redirect } from 'aurelia-router';
 import { BootstrapFormRenderer } from "resources/bootstrap-form-renderer";
 import { environment } from 'environment';
 import { Chain } from "common/enums";
-import { isAllowedToAddMarket } from "../../common/functions";
+import { totalStakeRequiredToAddMarket } from "common/functions";
 
 @autoinject()
 export class AddMarketModal {
     public subscription: Subscription;
     private state: IState;
-    private tokenSymbol = "BEE";
+    private tokenSymbol;
     private tokenUserStake = 0;
     private tokenOperationCost;
     private validationController;
@@ -41,8 +41,8 @@ export class AddMarketModal {
     private minSpread = "";
     private maxDistFromNext = "";
     private ignoreOrderQtyLt = "";
-    private allowedToAddMarket = false;
-    private userMarkets = [];
+    private allowedToAddMarket = false;    
+    private totalStakeRequired;
 
     constructor(private controller: DialogController,
         private mms: MarketMakerService,
@@ -67,7 +67,7 @@ export class AddMarketModal {
                 this.marketMakerUser = { ...state.marketMakerUser };
 
                 if (this.marketMakerUser && this.marketMakerUser._id && this.marketMakerUser._id > 0) {
-                    this.router.navigate('market-maker-dashboard');
+                    //this.router.navigate('market-maker-dashboard');
                 }
             }
         });
@@ -76,6 +76,7 @@ export class AddMarketModal {
     async bind() {
         this.createValidationRules();
 
+        this.tokenSymbol = environment.marketMakerFeeToken;
         this.baseToken = environment.peggedToken;
         this.mmTokens = await this.ts.getMarketMakerTokens();
         this.tokenOperationCost = environment.marketMakerStakeRequiredPerMarket;        
@@ -86,8 +87,8 @@ export class AddMarketModal {
                 this.tokenUserStake = parseFloat(balance.stake);
 
             if (this.marketMakerUser) {
-                const markets = await this.mms.getUserMarkets();
-                this.allowedToAddMarket = await isAllowedToAddMarket(this.marketMakerUser.isPremium, this.tokenUserStake, markets.length);
+                this.totalStakeRequired = await totalStakeRequiredToAddMarket(this.marketMakerUser);
+                this.allowedToAddMarket = this.tokenUserStake >= this.totalStakeRequired;
             }
         }        
     }
@@ -107,7 +108,8 @@ export class AddMarketModal {
 
                 toast.message = this.i18n.tr(result.rule.messageKey, {                    
                     symbol: this.selectedTokenSymbol,
-                    requiredStake: this.tokenOperationCost,
+                    feeTokenSymbol: this.tokenSymbol,
+                    requiredStake: this.totalStakeRequired,
                     userStake: this.tokenUserStake,
                     ns: 'errors'
                 });
@@ -154,7 +156,7 @@ export class AddMarketModal {
             .required()
             .withMessageKey('errors:marketMakerAddMarketTokenRequired')
             .ensure('tokenUserStake')
-            .satisfies((value: any, object: any) => parseFloat(value) >= this.tokenOperationCost)
+            .satisfies((value: any, object: any) => parseFloat(value) >= this.totalStakeRequired)
             .withMessageKey('errors:marketMakerAddMarketMoreStakeRequired')
             .ensure('maxBidPrice')
             .satisfies((value: any, object: any) => value.length == 0 || !isNaN(value))

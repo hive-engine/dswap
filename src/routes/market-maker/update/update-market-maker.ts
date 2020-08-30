@@ -10,7 +10,6 @@ import { I18N } from "aurelia-i18n";
 import { ValidationControllerFactory, ControllerValidateResult, ValidationRules } from "aurelia-validation";
 import { BootstrapFormRenderer } from "resources/bootstrap-form-renderer";
 import { Chain } from "common/enums";
-import { isAllowedToAddMarket } from "common/functions";
 import { DialogService, DialogCloseResult } from "aurelia-dialog";
 import { DisableMarketModal } from "modals/market-maker/disable-market";
 import { EnableMarketModal } from "modals/market-maker/enable-market";
@@ -20,7 +19,7 @@ import { RemoveMarketModal } from "modals/market-maker/remove-market";
 export class UpdateMarketMaker {
     public subscription: Subscription;
     private state: IState;
-    private feeTokenSymbol = "BEE";
+    private feeTokenSymbol;
     private feeTokenUserBalance = 0;
     private tokenOperationCost;
     private validationController;
@@ -94,7 +93,7 @@ export class UpdateMarketMaker {
     async bind() {
         this.createValidationRules();
         this.loadMarketDetails();
-
+        this.feeTokenSymbol = environment.marketMakerFeeToken;
         this.baseToken = environment.peggedToken;        
         if (!this.marketMakerUser.isPremium)
             this.tokenOperationCost = environment.marketMakerUpdateMarketCostBasic;

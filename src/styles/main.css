@@ -1642,3 +1642,7 @@ input.tradeValueUsd {
         font-size: 25px;
     }
 }
+
+.toggleAccountStatus {
+    cursor: pointer;
+}
