@@ -10,7 +10,6 @@ import { I18N } from "aurelia-i18n";
 import { ValidationControllerFactory, ControllerValidateResult, ValidationRules } from "aurelia-validation";
 import { BootstrapFormRenderer } from "resources/bootstrap-form-renderer";
 import { Chain } from "common/enums";
-import { isAllowedToAddMarket } from "common/functions";
 import { DialogService, DialogCloseResult } from "aurelia-dialog";
 import { DisableMarketModal } from "modals/market-maker/disable-market";
 import { EnableMarketModal } from "modals/market-maker/enable-market";

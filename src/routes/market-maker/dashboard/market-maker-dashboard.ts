@@ -16,7 +16,7 @@ import { DisableMarketModal } from "modals/market-maker/disable-market";
 import { EnableMarketModal } from "modals/market-maker/enable-market";
 import { TokenService } from "services/token-service";
 import { environment } from 'environment';
-import { UpgradeAccountModal } from "../../../modals/market-maker/upgrade-account";
+import { UpgradeAccountModal } from "modals/market-maker/upgrade-account";
 
 @autoinject()
 export class MarketMakerDashboard {
@@ -34,12 +34,10 @@ export class MarketMakerDashboard {
         this.subscription = this.store.state.subscribe(async (state: IState) => {
             if (state) {
                 this.state = state;
-
-                    this.user = { ...state.firebaseUser };
-                    this.marketMakerUser = { ...state.marketMakerUser };
-                }
+                this.user = { ...state.firebaseUser };
+                this.marketMakerUser = { ...state.marketMakerUser };
             }
-        );
+        });
     }
 
     async bind() {

@@ -17,13 +17,21 @@
                     It is possible for an account to lose premium status later on, for example if the amount of staked ${marketMakerFeeToken} falls<br />
                     below the minimumed required threshold of ${marketMakerStakeRequiredPremium} tokens.
                 </li>
-                <li>If an account previously had premium status (but lost it), the upgrade fee doesn't need to be paid again.<br />
-                    However the staking requirement must still be met.</li>
+                <li>
+                    If an account previously had premium status (but lost it), the upgrade fee doesn't need to be paid again.<br />
+                    However the staking requirement must still be met.
+                </li>
             </ol>
-            If an account loses premium status later on, there may also be secondary side effects.<br /> 
+            If an account loses premium status later on, there may also be secondary side effects.<br />
             For instance, premium users are allowed to have unlimited markets configured for bot trading, but basic <br />
-            service allows only one. So if you lose premium status but have multiple markets configured, they will all<br /> 
-            be disabled until you have removed the extra markets or upgraded to premium again.<br />
+            service allows only one. So if you lose premium status but have multiple markets configured, they will all<br />
+            be disabled until you have removed the extra markets or upgraded to premium again.<br /><br />
+            If you already have an active market configured in your basic account, <br />
+            please make sure your stake covers the upgrade fee (${marketMakerStakeRequiredPremium} ${marketMakerFeeToken}) + market creation fee (${marketMakerStakeRequiredPerMarket}  ${marketMakerFeeToken}).<br />
+            If you don't have enough stake, your active market will be disabled until you meet the staking requirement.<br />
+            <br />
+            Your ${marketMakerFeeToken} balance: ${userBalanceFeeToken} ${marketMakerFeeToken}<br />
+            Your ${marketMakerFeeToken} stake: ${userStakeFeeToken} ${marketMakerFeeToken}
         </ux-dialog-body>
 
         <ux-dialog-footer>

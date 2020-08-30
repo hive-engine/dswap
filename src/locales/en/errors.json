@@ -20,7 +20,7 @@
     "marketMakerTurnOnError": "Error occured while trying to enable account for Market Maker: {{error}}",
     "marketMakerAddMarketError": "Error occured while trying to add market for token {{tokenSymbol}} for account {{account}} on Market Maker: {{error}}",
     "marketMakerAddMarketTokenRequired": "Please select a token to trade with.",
-    "marketMakerAddMarketMoreStakeRequired": "Your stake {{userStake}} is lower than the stake requirement ({{requiredStake}}) to add a market for trading.",
+    "marketMakerAddMarketMoreStakeRequired": "Your stake {{userStake}} {{feeTokenSymbol}} is lower than the stake requirement of {{requiredStake}} {{feeTokenSymbol}} to add a market for trading.",
     "marketMakerAddMarketMaxBidPriceNaN": "Please enter a valid number for maxBidPrice.",
     "marketMakerAddMarketMinSellPriceNaN": "Please enter a valid number for minSellPrice.",
     "marketMakerAddMarketMaxBaseToSpendNaN": "Please enter a valid number for maxBaseToSpend.",
@@ -36,5 +36,9 @@
     "marketMakerEnableMarketError": "Error occured while trying to enable {{symbol}} market from Market Maker for {{account}}: {{error}}",
     "marketMakerUpdateMarketMoreStakeRequired": "Your balance {{userBalance}} {{symbol}} is lower than the balance requirement of {{requiredBalance}} {{symbol}} to update a market for trading.",
     "marketMakerUpdateMarketError": "Error occured while trying to update market for token {{tokenSymbol}} for account {{account}} on Market Maker: {{error}}",
-    "marketMakerUpdateMarketNoChanges": "No changes detected in your {{symbol}} market configuration."
+    "marketMakerUpdateMarketNoChanges": "No changes detected in your {{symbol}} market configuration.",
+    "marketMakerUpgradeAccountError": "Error occured while trying to upgrade account {{account}}: {{error}}",
+    "marketMakerUpgradeAccountInsufficientStake": "Insufficient stake amount. Your stake: {{userStake}} {{symbol}}. {{symbol}} stake required: {{requiredStake}} {{symbol}}.",
+    "marketMakerUpgradeAccountInsufficientBalance": "Insufficient balance. Your balance: {{userBalance}} {{symbol}}. {{symbol}} balance required: {{requiredBalance}} {{symbol}}.",
+    "marketMakerUpgradeAccountAlreadyPremium": "Your account is already upgraded to Premium."
 }
