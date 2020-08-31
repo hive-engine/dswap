@@ -7,35 +7,47 @@
                         <div class="dswap-card">
                             <div class="row">
                                 <div class="col-md-12" style="padding: 0;">
-                                    <div class="item-wrapper" show.bind="dswapEnabled">
-                                        <a
-                                            click.delegate="addActive('dashboard')"
-                                            route-href="route:dashboard"
-                                            class="item"
-                                        >
+                                    <div class="item-wrapper">
+                                        <a click.delegate="addActive('home')"
+                                           route-href="route:home"
+                                           class="item">
                                             <div class="row">
-                                                <div
-                                                    class="col-3"
-                                                    style="padding: 0;"
-                                                >
-                                                    <div
-                                                        class="item-icon dashboardActive removeActivate"
-                                                        id="dashboard"
-                                                    >
-                                                        <font-awesome-icon
-                                                            class="sidenav-icon"
-                                                            icon.bind="['fas', 'chart-line']"
-                                                        ></font-awesome-icon>
+                                                <div class="col-3"
+                                                     style="padding: 0;">
+                                                    <div class="item-icon homeActive removeActivate"
+                                                         id="home">
+                                                        <font-awesome-icon class="sidenav-icon"
+                                                                           icon.bind="['fas', 'home']"></font-awesome-icon>
                                                     </div>
                                                 </div>
-                                                <div
-                                                    class="col-9"
-                                                    style="display: flex;"
-                                                >
+                                                <div class="col-9"
+                                                     style="display: flex;">
                                                     <div class="item-title">
-                                                        <h4
-                                                            class="item-title-text"
-                                                        >
+                                                        <h4 class="item-title-text">
+                                                            Home
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item-wrapper" show.bind="dswapEnabled">
+                                        <a click.delegate="addActive('dashboard')"
+                                           route-href="route:dashboard"
+                                           class="item">
+                                            <div class="row">
+                                                <div class="col-3"
+                                                     style="padding: 0;">
+                                                    <div class="item-icon dashboardActive removeActivate"
+                                                         id="dashboard">
+                                                        <font-awesome-icon class="sidenav-icon"
+                                                                           icon.bind="['fas', 'chart-line']"></font-awesome-icon>
+                                                    </div>
+                                                </div>
+                                                <div class="col-9"
+                                                     style="display: flex;">
+                                                    <div class="item-title">
+                                                        <h4 class="item-title-text">
                                                             Dashboard
                                                         </h4>
                                                     </div>
@@ -44,34 +56,22 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper" show.bind="dswapEnabled">
-                                        <a
-                                            click.delegate="addActive('wallet')"
-                                            route-href="route:wallet"
-                                            class="item"
-                                        >
+                                        <a click.delegate="addActive('wallet')"
+                                           route-href="route:wallet"
+                                           class="item">
                                             <div class="row">
-                                                <div
-                                                    class="col-3"
-                                                    style="padding: 0;"
-                                                >
-                                                    <div
-                                                        class="item-icon removeActivate"
-                                                        id="wallet"
-                                                    >
-                                                        <font-awesome-icon
-                                                            class="sidenav-icon"
-                                                            icon.bind="['fas', 'wallet']"
-                                                        ></font-awesome-icon>
+                                                <div class="col-3"
+                                                     style="padding: 0;">
+                                                    <div class="item-icon removeActivate"
+                                                         id="wallet">
+                                                        <font-awesome-icon class="sidenav-icon"
+                                                                           icon.bind="['fas', 'wallet']"></font-awesome-icon>
                                                     </div>
                                                 </div>
-                                                <div
-                                                    class="col-9"
-                                                    style="display: flex;"
-                                                >
+                                                <div class="col-9"
+                                                     style="display: flex;">
                                                     <div class="item-title">
-                                                        <h4
-                                                            class="item-title-text"
-                                                        >
+                                                        <h4 class="item-title-text">
                                                             Wallet
                                                         </h4>
                                                     </div>
@@ -80,34 +80,22 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper" show.bind="dswapEnabled">
-                                        <a
-                                            click.delegate="addActive('trades')"
-                                            route-href="route:trades"
-                                            class="item"
-                                        >
+                                        <a click.delegate="addActive('trades')"
+                                           route-href="route:trades"
+                                           class="item">
                                             <div class="row">
-                                                <div
-                                                    class="col-3"
-                                                    style="padding: 0;"
-                                                >
-                                                    <div
-                                                        class="item-icon removeActivate"
-                                                        id="trades"
-                                                    >
-                                                        <font-awesome-icon
-                                                            class="sidenav-icon"
-                                                            icon.bind="['fas', 'qrcode']"
-                                                        ></font-awesome-icon>
+                                                <div class="col-3"
+                                                     style="padding: 0;">
+                                                    <div class="item-icon removeActivate"
+                                                         id="trades">
+                                                        <font-awesome-icon class="sidenav-icon"
+                                                                           icon.bind="['fas', 'qrcode']"></font-awesome-icon>
                                                     </div>
                                                 </div>
-                                                <div
-                                                    class="col-9"
-                                                    style="display: flex;"
-                                                >
+                                                <div class="col-9"
+                                                     style="display: flex;">
                                                     <div class="item-title">
-                                                        <h4
-                                                            class="item-title-text"
-                                                        >
+                                                        <h4 class="item-title-text">
                                                             Trades
                                                         </h4>
                                                     </div>
@@ -115,35 +103,23 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="item-wrapper" show.bind="marketMakerEnabled && marketMakerUser._id == 0">
-                                        <a
-                                            click.delegate="addActive('market-maker')"
-                                            route-href="route: marketMaker"
-                                            class="item"
-                                        >
+                                    <div class="item-wrapper" show.bind="marketMakerEnabled && (!marketMakerUser._id || marketMakerUser._id == 0)">
+                                        <a click.delegate="addActive('market-maker')"
+                                           route-href="route: marketMaker"
+                                           class="item">
                                             <div class="row">
-                                                <div
-                                                    class="col-3"
-                                                    style="padding: 0;"
-                                                >
-                                                    <div
-                                                        class="item-icon removeActivate"
-                                                        id="market-maker"
-                                                    >
-                                                        <font-awesome-icon
-                                                            class="sidenav-icon"
-                                                            icon.bind="['fas', 'qrcode']"
-                                                        ></font-awesome-icon>
+                                                <div class="col-3"
+                                                     style="padding: 0;">
+                                                    <div class="item-icon removeActivate"
+                                                         id="market-maker">
+                                                        <font-awesome-icon class="sidenav-icon"
+                                                                           icon.bind="['fas', 'qrcode']"></font-awesome-icon>
                                                     </div>
                                                 </div>
-                                                <div
-                                                    class="col-9"
-                                                    style="display: flex;"
-                                                >
+                                                <div class="col-9"
+                                                     style="display: flex;">
                                                     <div class="item-title">
-                                                        <h4
-                                                            class="item-title-text"
-                                                        >
+                                                        <h4 class="item-title-text">
                                                             Market Maker
                                                         </h4>
                                                     </div>
@@ -151,35 +127,23 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="item-wrapper" show.bind="marketMakerEnabled && marketMakerUser._id != 0">
-                                        <a
-                                            click.delegate="addActive('market-maker-dashboard')"
-                                            route-href="route: marketMakerDashboard"
-                                            class="item"
-                                        >
+                                    <div class="item-wrapper" show.bind="marketMakerEnabled && marketMakerUser._id && marketMakerUser._id != 0">
+                                        <a click.delegate="addActive('market-maker-dashboard')"
+                                           route-href="route: marketMakerDashboard"
+                                           class="item">
                                             <div class="row">
-                                                <div
-                                                    class="col-3"
-                                                    style="padding: 0;"
-                                                >
-                                                    <div
-                                                        class="item-icon removeActivate"
-                                                        id="market-maker-dashboard"
-                                                    >
-                                                        <font-awesome-icon
-                                                            class="sidenav-icon"
-                                                            icon.bind="['fas', 'qrcode']"
-                                                        ></font-awesome-icon>
+                                                <div class="col-3"
+                                                     style="padding: 0;">
+                                                    <div class="item-icon removeActivate"
+                                                         id="market-maker-dashboard">
+                                                        <font-awesome-icon class="sidenav-icon"
+                                                                           icon.bind="['fas', 'qrcode']"></font-awesome-icon>
                                                     </div>
                                                 </div>
-                                                <div
-                                                    class="col-9"
-                                                    style="display: flex;"
-                                                >
+                                                <div class="col-9"
+                                                     style="display: flex;">
                                                     <div class="item-title">
-                                                        <h4
-                                                            class="item-title-text"
-                                                        >
+                                                        <h4 class="item-title-text">
                                                             Market Maker
                                                         </h4>
                                                     </div>
@@ -188,35 +152,23 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper">
-                                        <a
-                                            click.delegate="addActive('faq')"
-                                            route-href="route:faq"
-                                            class="item"
-                                        >
+                                        <a click.delegate="addActive('faq')"
+                                           route-href="route:faq"
+                                           class="item">
                                             <div class="row">
-                                                <div
-                                                    class="col-3"
-                                                    style="padding: 0;"
-                                                >
-                                                    <div
-                                                        class="item-icon removeActivate"
-                                                        id="faq"
-                                                    >
-                                                        <font-awesome-icon
-                                                            class="sidenav-icon"
-                                                            icon.bind="['fas', 'comments']"
-                                                        ></font-awesome-icon>
+                                                <div class="col-3"
+                                                     style="padding: 0;">
+                                                    <div class="item-icon removeActivate"
+                                                         id="faq">
+                                                        <font-awesome-icon class="sidenav-icon"
+                                                                           icon.bind="['fas', 'comments']"></font-awesome-icon>
                                                     </div>
                                                 </div>
-                                                <div
-                                                    class="col-9"
-                                                    style="display: flex;"
-                                                >
+                                                <div class="col-9"
+                                                     style="display: flex;">
                                                     <div class="item-title">
-                                                        <h4
-                                                            class="item-title-text"
-                                                        >
-                                                            FAQ 
+                                                        <h4 class="item-title-text">
+                                                            FAQ
                                                         </h4>
                                                     </div>
                                                 </div>

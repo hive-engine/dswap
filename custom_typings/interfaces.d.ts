@@ -23,11 +23,13 @@ interface IEnvironment {
   peggedToken: string;
     features: any;
     marketMakerRegistrationCost: number;
+    marketMakerUpgradeCost: number;
     marketMakerStakeRequiredPerMarket: number;
     marketMakerStakeRequiredBasic: number;
     marketMakerStakeRequiredPremium: number;
     marketMakerMaxMarketsBasic: number;
     marketMakerUpdateMarketCostBasic: number;
+    marketMakerFeeToken: string;
 }
 
 interface IState {

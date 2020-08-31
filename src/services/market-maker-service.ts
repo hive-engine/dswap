@@ -858,4 +858,95 @@ export class MarketMakerService {
 
         return false;
     }
+
+    async upgradeAccount(chain: Chain): Promise<unknown> {
+        const username = this.getUser();
+
+        if (!username) {
+            window.location.reload();
+            return;
+        }
+
+        const transaction_data = {
+            contractName: 'botcontroller',
+            contractAction: 'upgrade',
+            contractPayload: {}
+        };
+
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (chain == Chain.Hive) {
+                if (window.hive_keychain) {
+                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Upgrade account for Market Maker', async (response) => {
+                        resolve(this.processResponseUpgradeAccountKeychain(response));
+                    });
+                } else {
+                    hiveSignerJson(this.user.name, 'active', transaction_data, () => {
+                        resolve(true);
+                    });
+                }
+            } else {
+
+            }
+        });
+    }
+
+    async processResponseUpgradeAccountKeychain(response) {
+        if (response.success && response.result) {
+            try {
+                let toast = new ToastMessage();
+
+                toast.message = this.i18n.tr('marketMakerUpgradeAccountWait', {
+                    ns: 'notifications'
+                });
+
+                this.toast.success(toast);
+
+                const transaction = await checkTransaction(response.result.id, 3);
+                console.log(transaction);
+
+                if (transaction.error) {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerUpgradeAccountError', {
+                        ns: 'errors',
+                        error: transaction.error
+                    });
+
+                    this.toast.error(toast);
+
+                    return false;
+                } else {
+                    toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr('marketMakerUpgradeAccountSuccessful', {
+                        ns: 'notifications',
+                        account: transaction.sender
+                    });
+
+                    this.toast.success(toast);
+
+                    return true;
+                }
+
+                return true;
+            } catch (e) {
+                // Show error toastr: 'An error occurred attempting to unstake tokens: ' + tx.error
+                const toast = new ToastMessage();
+
+                toast.message = this.i18n.tr('errorSubmittedTransfer', {
+                    ns: 'errors',
+                    error: e
+                });
+
+                this.toast.error(toast);
+
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return false;
+    }
 }

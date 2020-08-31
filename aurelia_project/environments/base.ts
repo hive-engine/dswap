@@ -12,11 +12,13 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     disabledTokens: ['BTC', 'LTC', 'HIVE', 'HBD', 'BCC', 'XAP', 'XRP', 'GOLOS', 'DISNEY', 'AMAZON', 'VOICE', 'ETH', 'EOS', 'LASSE', 'TIME', 'R', 'SCTR', 'ALLAH', 'BNB', 'DONE', 'ETHER', 'LTCPEG', 'SBC', 'BEEHIVE', 'BEECASH', 'BLURT'],
     peggedToken: 'SWAP.HIVE',
     marketMakerRegistrationCost: 100,
+    marketMakerUpgradeCost: 100,
     marketMakerStakeRequiredPerMarket: 200,
     marketMakerStakeRequiredBasic: 200,
     marketMakerStakeRequiredPremium: 1000,
     marketMakerMaxMarketsBasic: 1,
     marketMakerUpdateMarketCostBasic: 1,
+    marketMakerFeeToken: 'BEE',
     dswapEnabled: false,
     marketMakerEnabled: true,
     features: {

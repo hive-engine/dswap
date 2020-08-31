@@ -1645,3 +1645,7 @@ input.tradeValueUsd {
         margin-top: 0!important;
     }
 }
+
+.toggleAccountStatus {
+    cursor: pointer;
+}
