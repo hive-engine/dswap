@@ -29,7 +29,6 @@ export class AddMarketModal {
     private selectedToken;
     private loading = false;
     private market: IMarketMakerMarket;
-    private isEnabled = true;
     private baseToken;
     private maxBidPrice = "";
     private minSellPrice = "";
@@ -121,7 +120,6 @@ export class AddMarketModal {
         if (validationResult.valid) {
             this.market = {
                 symbol: this.selectedTokenSymbol,
-                isEnabled: this.isEnabled,
                 ignoreOrderQtyLt: this.parseAddMarketNumberFieldValue(this.ignoreOrderQtyLt),
                 maxBaseToSpend: this.parseAddMarketNumberFieldValue(this.maxBaseToSpend),
                 maxBidPrice: this.parseAddMarketNumberFieldValue(this.maxBidPrice),

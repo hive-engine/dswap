@@ -7,22 +7,29 @@
         </ux-dialog-header>
         <ux-dialog-body class="modal-body">
             <div show.bind="!allowedToEnableMarket && !isPremium">
-                You are not allowed to enable this market. <br />
-                You might have reached the maximum allowed markets for your account type <br />  
+                <p>
+                    You are not allowed to enable this market. <br />
+                    You might have reached the maximum allowed markets for your account type.
+                </p>
             </div>
             <div show.bind="!allowedToEnableMarket && isPremium">
-                You are not allowed to enable this market. <br />
-                You might have insufficient ${symbol} stake to enable this market. <br />
-                Please note that you need to stake ${tokenOperationCost} ${symbol} for each market on top of the required stake for your account type.<br />
-                <br />
-                ${symbol} stake required to add a market: ${tokenOperationCost} ${symbol}<br />
-                Your current ${symbol} (stake) balance: ${tokenUserStake} ${symbol}<br />
-                Total required ${symbol} (stake) balance: ${totalStakeRequired} ${symbol}<br />
+                <p>
+                You are not allowed to enable this market. You might have insufficient ${symbol} stake to enable this market. 
+                Please note that you need to stake ${tokenOperationCost} ${symbol} for each market on top of the required stake for your account type.
+                </p>
+                <p>
+                    ${symbol} stake required to add a market: ${tokenOperationCost} ${symbol}<br />
+                    Your current ${symbol} (stake) balance: ${tokenUserStake} ${symbol}<br />
+                    Total required ${symbol} (stake) balance: ${totalStakeRequired} ${symbol}
+                </p>
             </div>
             <div show.bind="allowedToEnableMarket">
-                Re-enables a previously disabled market, so that the market maker bot will begin placing orders for it again.
-                <br /><br />
-                Are you sure you want to re-enable ${symbol} market?
+                <p>
+                    Re-enables a previously disabled market, so that the market maker bot will begin placing orders for it again.
+                </p>
+                <p>
+                    Are you sure you want to re-enable ${symbol} market?
+                </p>
             </div>
         </ux-dialog-body>
 
