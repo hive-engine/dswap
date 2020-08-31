@@ -13,39 +13,6 @@
                 </div>
                 <hr />
                 <div class="form-group">
-                    <fieldset class="form-group">
-                        <div class="row">
-                            <legend class="col-form-label col-sm-3 pt-0">
-                                Enable Market?
-                            </legend>
-                            <br />
-                            <div class="col-sm-9">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input"
-                                           type="radio"
-                                           name="inlineRadioOptions"
-                                           id="inlineRadio1"
-                                           model.bind="true"
-                                           checked.bind="isEnabled" />
-                                    <label class="form-check-label"
-                                           for="inlineRadio1">Yes</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input"
-                                           type="radio"
-                                           name="inlineRadioOptions"
-                                           id="inlineRadio2"
-                                           model.bind="false"
-                                           checked.bind="isEnabled" />
-                                    <label class="form-check-label"
-                                           for="inlineRadio2">No</label>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <hr />
-                <div class="form-group">
                     ${tokenSymbol} stake required to add a market: ${tokenOperationCost} ${tokenSymbol}<br />
                     Your current ${tokenSymbol} (stake) balance: ${tokenUserStake} ${tokenSymbol}<br />
                     Total required ${tokenSymbol} (stake) balance: ${totalStakeRequired} ${tokenSymbol}<br />
@@ -75,7 +42,7 @@
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
-                               placeholder="0.000"
+                               placeholder="Default: 1000"
                                value.bind="maxBidPrice" />
                         <div class="input-group-append">
                             ${baseToken & t}
@@ -90,7 +57,7 @@
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
-                               placeholder="0.000"
+                               placeholder="Default: 0.00000001"
                                value.bind="minSellPrice" />
                         <div class="input-group-append">
                             ${baseToken & t}
@@ -105,7 +72,7 @@
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
-                               placeholder="0.000"
+                               placeholder="Default: 100"
                                value.bind="maxBaseToSpend" />
                         <div class="input-group-append">
                             ${baseToken & t}
@@ -120,7 +87,7 @@
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
-                               placeholder="0.000"
+                               placeholder="Default: 1"
                                value.bind="minBaseToSpend" />
                         <div class="input-group-append">
                             ${baseToken & t}
@@ -135,7 +102,7 @@
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
-                               placeholder="0.000"
+                               placeholder="Default: 100"
                                value.bind="maxTokensToSell" />
                         <div class="input-group-append">
                             ${selectedTokenSymbol & t}
@@ -150,7 +117,7 @@
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
-                               placeholder="0.000"
+                               placeholder="Default: 1"
                                value.bind="minTokensToSell" />
                         <div class="input-group-append">
                             ${selectedTokenSymbol & t}
@@ -165,7 +132,7 @@
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
-                               placeholder="0.000"
+                               placeholder="Default: 0.00000001"
                                value.bind="minSpread" />
                         <div class="input-group-append">
                             ${baseToken & t}
@@ -180,7 +147,7 @@
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
-                               placeholder="0.000"
+                               placeholder="Default: 0.00001"
                                value.bind="priceIncrement" />
                         <div class="input-group-append">
                             ${baseToken & t}
@@ -197,8 +164,11 @@
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
-                               placeholder="0.000"
+                               placeholder="Default: 0.0001"
                                value.bind="maxDistFromNext" />
+                        <div class="input-group-append">
+                            ${baseToken & t}
+                        </div>
                         <div class="invalid-tooltip">
                             ${'errors:Please enter an amount greater than 0' & t}
                         </div>
@@ -209,8 +179,11 @@
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
-                               placeholder="0.000"
+                               placeholder="Default: 50"
                                value.bind="ignoreOrderQtyLt" />
+                        <div class="input-group-append">
+                            ${selectedTokenSymbol & t}
+                        </div>
                         <div class="invalid-tooltip">
                             ${'errors:Please enter an amount greater than 0' & t}
                         </div>

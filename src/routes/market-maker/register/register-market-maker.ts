@@ -1,4 +1,4 @@
-import { Store } from "aurelia-store";
+import { Store, dispatchify } from "aurelia-store";
 import { Subscription } from 'rxjs';
 import { autoinject } from 'aurelia-framework';
 import { Router, Redirect } from 'aurelia-router';
@@ -11,6 +11,9 @@ import { ValidationControllerFactory, ValidationRules, ControllerValidateResult 
 import { BootstrapFormRenderer } from "resources/bootstrap-form-renderer";
 import { ToastMessage, ToastService } from "services/toast-service";
 import { I18N } from "aurelia-i18n";
+import { SigninModal } from "modals/signin";
+import { DialogService } from "aurelia-dialog";
+import { getMarketMakerUser } from "store/actions";
 
 @autoinject()
 export class RegisterMarketMaker {
@@ -27,8 +30,10 @@ export class RegisterMarketMaker {
     private tokenOperationCost;
     private validationController;
     private renderer;
+    private marketMakerUserId = 0;
 
-    constructor(private marketMakerService: MarketMakerService,
+    constructor(private dialogService: DialogService,
+        private marketMakerService: MarketMakerService,
         private store: Store<IState>,
         private router: Router,
         private ts: TokenService,
@@ -46,6 +51,9 @@ export class RegisterMarketMaker {
 
                 this.user = { ...state.firebaseUser };
                 this.marketMakerUser = { ...state.marketMakerUser };
+
+                if (this.marketMakerUser)
+                    this.marketMakerUserId = this.marketMakerUser._id;
             }
         });
     }
@@ -55,6 +63,11 @@ export class RegisterMarketMaker {
         this.tokenSymbol = environment.marketMakerFeeToken;
         this.tokenOperationCost = environment.marketMakerRegistrationCost;
 
+        await this.loadUserDetails();
+        
+    }
+
+    async loadUserDetails() {
         if (this.user) {
             let balance = await this.ts.getUserBalanceOfToken(this.tokenSymbol);
             if (balance)
@@ -63,33 +76,44 @@ export class RegisterMarketMaker {
     }
 
     async registerClick() {
-        if (this.termsAccepted) {
-            const validationResult: ControllerValidateResult = await this.validationController.validate();
-
-            for (const result of validationResult.results) {
-                if (!result.valid) {
-                    const toast = new ToastMessage();
-
-                    toast.message = this.i18n.tr(result.rule.messageKey, {
-                        symbol: this.tokenSymbol,
-                        tokenUserBalance: this.tokenUserBalance,
-                        tokenOperationCost: this.tokenOperationCost,
-                        ns: 'errors'
-                    });
-
-                    this.toast.error(toast);
+        if (!this.state.loggedIn) {
+            this.dialogService.open({ viewModel: SigninModal }).whenClosed(response => {
+                if (!response.wasCancelled) {
+                    dispatchify(getMarketMakerUser)();
+                    this.loadUserDetails();
                 }
-            }
-
-            if (validationResult.valid) {
-                this.loading = true;
-                await this.marketMakerService.register(Chain.Hive);
-                this.loading = false;
-            }
-
-            
+            });
+        } else if (this.marketMakerUserId && this.marketMakerUserId > 0) {
+            this.router.navigateToRoute("marketMakerDashboard");
         } else {
-            this.router.navigate("market-maker");
+            if (this.termsAccepted) {
+                const validationResult: ControllerValidateResult = await this.validationController.validate();
+
+                for (const result of validationResult.results) {
+                    if (!result.valid) {
+                        const toast = new ToastMessage();
+
+                        toast.message = this.i18n.tr(result.rule.messageKey, {
+                            symbol: this.tokenSymbol,
+                            tokenUserBalance: this.tokenUserBalance,
+                            tokenOperationCost: this.tokenOperationCost,
+                            ns: 'errors'
+                        });
+
+                        this.toast.error(toast);
+                    }
+                }
+
+                if (validationResult.valid) {
+                    this.loading = true;
+                    await this.marketMakerService.register(Chain.Hive);
+                    this.loading = false;
+                }
+
+
+            } else {
+                this.router.navigate("market-maker");
+            }
         }
     }
 

@@ -1682,3 +1682,15 @@ input.tradeValueUsd {
 .toggleAccountStatus {
     cursor: pointer;
 }
+
+
+.supportIcon {
+    color: rgb(22, 139, 104) !important;
+    width: 90px;
+    height: 90px;
+    padding: 20px 20px 0px 20px;
+}
+
+.item-wrapper-discord {
+    margin-top: 200px;
+}

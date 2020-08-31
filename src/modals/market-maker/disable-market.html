@@ -6,12 +6,15 @@
             <h2>${'Disable ' + symbol + ' Market' & t}</h2>
         </ux-dialog-header>
         <ux-dialog-body class="modal-body">
-            Disables a market without removing its configuration. <br />
-            The market maker bot will no longer place new orders on this market until you re-enable it via the enable action.<br />
-            However any existing orders will stay in place and need to be managed manually by the user. <br /><br />
-            
-            Note that disabled markets still count towards your maximum allowed number of markets <br />
-            (basic service accounts can have 1 market configured; premium service accounts can have unlimited markets).
+            <p>
+                Disables a market without removing its configuration.
+                The market maker bot will no longer place new orders on this market until you re-enable it via the enable action.
+                However any existing orders will stay in place and need to be managed manually by the user.
+            </p>
+            <p>
+                Note that disabled markets still count towards your maximum allowed number of markets 
+                (basic service accounts can have 1 market configured; premium service accounts can have unlimited markets).
+            </p>
         </ux-dialog-body>
 
         <ux-dialog-footer>

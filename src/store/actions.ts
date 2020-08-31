@@ -120,7 +120,6 @@ export async function getCurrentFirebaseUser(state: IState): Promise<IState> {
 }
 
 export async function getMarketMakerUser(state: IState): Promise<IState> {
-    console.log('mmuser');
     const newState = { ...state };
 
     if (!newState.loggedIn) {
@@ -133,7 +132,7 @@ export async function getMarketMakerUser(state: IState): Promise<IState> {
         mmUser.lastTickTimestamp_string = moment.unix(mmUser.lastTickTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
 
         let timeLimitTime = moment.duration(mmUser.timeLimit);
-        mmUser.timeLimit_string = timeLimitTime.days() + " days " + timeLimitTime.hours() + " hours " + timeLimitTime.minutes() + " minutes";
+        mmUser.timeLimit_string = timeLimitTime.days() + " days " + timeLimitTime.hours() + " hours " + timeLimitTime.minutes() + " minutes";        
         newState.marketMakerUser = mmUser;
     } catch (e) {
         log.error(e);
