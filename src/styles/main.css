@@ -1641,4 +1641,7 @@ input.tradeValueUsd {
     .detail-value, .detail-value-2 {
         font-size: 25px;
     }
+    .dashboard-status-wrapper {
+        margin-top: 0!important;
+    }
 }
