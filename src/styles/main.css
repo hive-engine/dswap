@@ -1638,11 +1638,44 @@ input.tradeValueUsd {
         margin: auto;
         text-align: center;
     }
-    .detail-value, .detail-value-2 {
+    .detail-value,
+    .detail-value-2 {
         font-size: 25px;
     }
     .dashboard-status-wrapper {
-        margin-top: 0!important;
+        margin-top: 0 !important;
+    }
+    .toggle-container {
+        margin-right: 0;
+        margin-left: auto;
+        place-items: center;
+    }
+    .dashboard-actions-content .icon-and-text i,
+    .dashboard-actions-content .icon-and-text img {
+        font-size: 30px;
+    }
+    .dashboard-actions-content-header {
+        border-bottom: 1px dashed rgba(5, 65, 60, 0.41176) !important;
+        text-align: center;
+    }
+    .markets-header-m {
+        text-align: center;
+        font-size: 22px !important;
+        margin-bottom: 20px;
+    }
+    .dashboard-action-main-card {
+        margin-top: 20px;
+    }
+    .status-icon {
+        width: 25px!important;
+        height: 25px!important;
+        margin: auto!important;
+    }
+    .actions a {
+        font-size: 11px!important;
+    }
+    .market-maker-dashboard-card {
+        box-shadow: 2px 28px 41px -11px rgba(0, 0, 0, 0.13)
     }
 }
 
