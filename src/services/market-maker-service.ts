@@ -4,10 +4,10 @@ import { HttpClient, json } from 'aurelia-fetch-client';
 import { environment } from 'environment';
 import { ToastMessage, ToastService } from './toast-service';
 import { I18N } from 'aurelia-i18n';
-import { Store } from 'aurelia-store';
+import { Store, dispatchify } from 'aurelia-store';
 import moment from 'moment';
 import { loadMarkets, loadMarketsByUser } from 'common/market-maker-api';
-import { Chain } from 'common/enums';
+import { Chain, OrderStrategy } from 'common/enums';
 import { hiveSignerJson } from 'common/hive';
 import { checkTransaction } from 'common/hive-engine-api';
 
@@ -382,6 +382,9 @@ export class MarketMakerService {
         if (market.isEnabled != null)
             contractPayload.isEnabled = market.isEnabled;
 
+        if (market.strategy != null)
+            contractPayload.strategy = market.strategy;
+
         if (market.maxBidPrice != null)
             contractPayload.maxBidPrice = market.maxBidPrice.toString();
 
@@ -411,6 +414,12 @@ export class MarketMakerService {
 
         if (market.ignoreOrderQtyLt != null)
             contractPayload.ignoreOrderQtyLt = market.ignoreOrderQtyLt.toString();
+
+        if (market.placeAtBidWall != null)
+            contractPayload.placeAtBidWall = market.placeAtBidWall.toString();
+
+        if (market.placeAtSellWall != null)
+            contractPayload.placeAtSellWall = market.placeAtSellWall.toString();
 
         return contractPayload;
     }
@@ -491,7 +500,7 @@ export class MarketMakerService {
             contractAction: 'updateMarket',
             contractPayload: { ...contractPayload }
         };
-        console.log(transaction_data);
+        
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {
             if (chain == Chain.Hive) {
@@ -521,8 +530,7 @@ export class MarketMakerService {
 
                 this.toast.success(toast);
 
-                const transaction = await checkTransaction(response.result.id, 3);
-                console.log(transaction);
+                const transaction = await checkTransaction(response.result.id, 3);                
 
                 if (transaction.error) {
                     toast = new ToastMessage();
@@ -948,5 +956,29 @@ export class MarketMakerService {
         }
 
         return false;
+    }
+
+    getMarketMakerOrderStrategiesByUser(mmUser: IMarketMakerUser) {
+        let strategies: IMarketMakerOrderStrategy[] = [];
+
+        if (mmUser && mmUser._id && mmUser._id > 0) {
+            let topOfTheBook: IMarketMakerOrderStrategy = {
+                _id: OrderStrategy.TopOfTheBook,
+                name: 'Top of the book strategy'
+            }
+
+            strategies.push(topOfTheBook);
+
+            if (mmUser.isPremium) {
+                let wallNestling: IMarketMakerOrderStrategy = {
+                    _id: OrderStrategy.WallNestling,
+                    name: 'Wall nestling'
+                };
+
+                strategies.push(wallNestling);
+            }
+        }
+
+        return strategies;
     }
 }

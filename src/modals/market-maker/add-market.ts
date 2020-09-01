@@ -1,6 +1,6 @@
 import { dispatchify, Store } from "aurelia-store";
 import { Subscription } from 'rxjs';
-import { DialogController } from "aurelia-dialog";
+import { DialogController, DialogService, DialogCloseResult } from "aurelia-dialog";
 import { autoinject, TaskQueue, bindable } from "aurelia-framework";
 import { MarketMakerService } from "services/market-maker-service";
 import { TokenService } from "services/token-service";
@@ -12,6 +12,7 @@ import { BootstrapFormRenderer } from "resources/bootstrap-form-renderer";
 import { environment } from 'environment';
 import { Chain } from "common/enums";
 import { totalStakeRequiredToAddMarket } from "common/functions";
+import { UpgradeAccountModal } from "./upgrade-account";
 
 @autoinject()
 export class AddMarketModal {
@@ -42,8 +43,13 @@ export class AddMarketModal {
     private ignoreOrderQtyLt = "";
     private allowedToAddMarket = false;    
     private totalStakeRequired;
+    private orderStrategies;
+    private selectedOrderStrategy;
+    private placeAtBidWall = "";
+    private placeAtSellWall = "";
 
     constructor(private controller: DialogController,
+        private dialogService: DialogService,
         private mms: MarketMakerService,
         private store: Store<IState>,
         private router: Router,
@@ -78,7 +84,7 @@ export class AddMarketModal {
         this.tokenSymbol = environment.marketMakerFeeToken;
         this.baseToken = environment.peggedToken;
         this.mmTokens = await this.ts.getMarketMakerTokens();
-        this.tokenOperationCost = environment.marketMakerStakeRequiredPerMarket;        
+        this.tokenOperationCost = environment.marketMakerStakeRequiredPerMarket;
 
         if (this.user) {
             let balance = await this.ts.getUserBalanceOfToken(this.tokenSymbol);
@@ -88,8 +94,20 @@ export class AddMarketModal {
             if (this.marketMakerUser) {
                 this.totalStakeRequired = await totalStakeRequiredToAddMarket(this.marketMakerUser);
                 this.allowedToAddMarket = this.tokenUserStake >= this.totalStakeRequired;
+                this.orderStrategies = this.mms.getMarketMakerOrderStrategiesByUser(this.marketMakerUser);
             }
         }        
+    }
+
+    upgradeAccount() {
+        this.controller.ok();
+
+        this.dialogService
+            .open({ viewModel: UpgradeAccountModal })
+            .whenClosed((x) => this.walletDialogCloseResponse(x));
+    }
+    walletDialogCloseResponse(x: DialogCloseResult): any {
+        
     }
 
     tokenSelected() {
@@ -120,6 +138,7 @@ export class AddMarketModal {
         if (validationResult.valid) {
             this.market = {
                 symbol: this.selectedTokenSymbol,
+                strategy: this.selectedOrderStrategy._id,
                 ignoreOrderQtyLt: this.parseAddMarketNumberFieldValue(this.ignoreOrderQtyLt),
                 maxBaseToSpend: this.parseAddMarketNumberFieldValue(this.maxBaseToSpend),
                 maxBidPrice: this.parseAddMarketNumberFieldValue(this.maxBidPrice),
@@ -129,7 +148,9 @@ export class AddMarketModal {
                 minSellPrice: this.parseAddMarketNumberFieldValue(this.minSellPrice),
                 minSpread: this.parseAddMarketNumberFieldValue(this.minSpread),
                 minTokensToSell: this.parseAddMarketNumberFieldValue(this.minTokensToSell),
-                priceIncrement: this.parseAddMarketNumberFieldValue(this.priceIncrement)
+                priceIncrement: this.parseAddMarketNumberFieldValue(this.priceIncrement),
+                placeAtBidWall: this.parseAddMarketNumberFieldValue(this.placeAtBidWall),
+                placeAtSellWall: this.parseAddMarketNumberFieldValue(this.placeAtSellWall)
             };
 
             const result = await this.mms.addMarket(Chain.Hive, this.market);
@@ -186,6 +207,12 @@ export class AddMarketModal {
             .ensure('ignoreOrderQtyLt')
             .satisfies((value: any, object: any) => value.length == 0 || !isNaN(value))
             .withMessageKey('errors:marketMakerAddMarketIgnoreOrderQtyLtNaN')
+            .ensure('placeAtBidWall')
+            .satisfies((value: any, object: any) => value.length == 0 || !isNaN(value))
+            .withMessageKey('errors:marketMakerAddMarketPlaceAtBidWallNaN')
+            .ensure('placeAtSellWall')
+            .satisfies((value: any, object: any) => value.length == 0 || !isNaN(value))
+            .withMessageKey('errors:marketMakerAddMarketPlaceAtSellWallNaN')
             .rules;
 
         this.validationController.addObject(this, rules);

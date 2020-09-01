@@ -31,6 +31,8 @@
     "marketMakerAddMarketMinSpreadNaN": "Please enter a valid number for minSpread.",
     "marketMakerAddMarketMaxDistFromNextNaN": "Please enter a valid number for maxDistFromNext.",
     "marketMakerAddMarketIgnoreOrderQtyLtNaN": "Please enter a valid number for ignoreQtyLt.",
+    "marketMakerAddMarketPlaceAtBidWallNaN": "Please enter a valid number for wall size threshold for buy orders.",
+    "marketMakerAddMarketPlaceAtSellWallNaN": "Please enter a valid number for wall size threshold for sell orders.",
     "marketMakerRemoveMarketError": "Error occured while trying to remove {{symbol}} market from Market Maker for {{account}}: {{error}}",
     "marketMakerDisableMarketError": "Error occured while trying to disable {{symbol}} market from Market Maker for {{account}}: {{error}}",
     "marketMakerEnableMarketError": "Error occured while trying to enable {{symbol}} market from Market Maker for {{account}}: {{error}}",
