@@ -222,4 +222,12 @@ interface IMarketMakerMarket {
     creationTimestamp_string?: string;
     creationBlock?: string;
     icon?: string;
+    placeAtBidWall?: number;
+    placeAtSellWall?: number;
+}
+
+interface IMarketMakerOrderStrategy {
+    _id: number;
+    name: string;
+    description?: string;
 }

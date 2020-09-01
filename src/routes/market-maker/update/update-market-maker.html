@@ -78,7 +78,7 @@
                                                             ></a>
                                                             
                                                             <a
-                                                                click.delegate="removeMarket()"
+                                                                click.delegate="removeMarket(market)"
                                                                 href="javascript:void()"
                                                                 class="wallet-btns wallet-btns-send"
                                                                 >Delete
@@ -103,7 +103,52 @@
                                             <div
                                                 class="transaction-history-card"
                                             >
-                            
+                                            <hr />
+                                            <div class="form-group">
+                                                <label>
+                                                    ${'What is your order strategy?' &
+                                                    t}
+                                                </label>
+                                                <select class="form-control"
+                                                        value.bind="selectedOrderStrategy">
+                                                    <option model.bind="o" repeat.for="o of orderStrategies">
+                                                        ${o.name & t}
+                                                    </option>
+                                                </select>
+                                                <small show.bind="orderStrategies.length == 1" id="emailHelp" class="form-text text-muted">
+                                                    <a href="javascript:void(0)" click.delegate="upgradeAccount()" class="text-success">Upgrade</a> your account to select other strategies
+                                                </small>
+                                            </div>
+                                            <div class="form-group" show.bind="selectedOrderStrategy && selectedOrderStrategy._id == 2">
+                                                <label>${'Set the wall size threshold that determines where buy orders will be placed' & t}</label>
+                                                <div class="input-group">
+                                                    <input class="form-control"
+                                                        type="text"
+                                                        placeholder="Default: 10000"
+                                                        value.bind="placeAtBidWall" />
+                                                    <div class="input-group-append">
+                                                        ${selectedTokenSymbol & t}
+                                                    </div>
+                                                    <div class="invalid-tooltip">
+                                                        ${'errors:Please enter an amount greater than 0' & t}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" show.bind="selectedOrderStrategy && selectedOrderStrategy._id == 2">
+                                                <label>${'Set the wall size threshold that determines where sell orders will be placed' & t}</label>
+                                                <div class="input-group">
+                                                    <input class="form-control"
+                                                        type="text"
+                                                        placeholder="Default: 10000"
+                                                        value.bind="placeAtSellWall" />
+                                                    <div class="input-group-append">
+                                                        ${selectedTokenSymbol & t}
+                                                    </div>
+                                                    <div class="invalid-tooltip">
+                                                        ${'errors:Please enter an amount greater than 0' & t}
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="form-group">
                                                 <label>${'What is the maximum price you\'re willing to buy the token ' + selectedTokenSymbol + ' for?' & t}</label>
                                                 <div class="input-group">
