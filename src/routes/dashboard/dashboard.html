@@ -1,5 +1,13 @@
 <template bindable="selected">
-    <div class="dashboard-wrapper d-none d-md-block">
+    <div class="dashboard-wrapper " show.bind="!dswapEnabled">
+        <div class="row">
+            <div class="col-sm-9">
+                <br /><br /><br />
+                <h2 style="padding-left: 20px;">Work in progress...</h2>    
+            </div>
+        </div>
+    </div>
+    <div class="dashboard-wrapper d-none d-md-block" show.bind="dswapEnabled">
         <div class="row">
             <div class="col-md-9">
                 <div class="row">
@@ -322,7 +330,7 @@
             </div>
         </div>
     </div>
-    <div class="dashboard-wrapper d-block d-md-none">
+    <div class="dashboard-wrapper d-block d-md-none" show.bind="dswapEnabled">
         <div class="row">
             <div class="col-md-9">
                 <div class="row">

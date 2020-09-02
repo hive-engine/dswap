@@ -15,6 +15,7 @@ import { ValidationControllerFactory, ControllerValidateResult, ValidationRules 
 import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
+import { environment } from 'environment';
 
 @autoinject()
 @customElement('dashboard')
@@ -42,6 +43,7 @@ export class Dashboard {
     private user;
     private validationController;
     private renderer;    
+    private dswapEnabled = false;
 
     constructor(private dialogService: DialogService, 
                 private ts: TokenService, 
@@ -98,6 +100,7 @@ export class Dashboard {
     
     async attached() {
         this.refreshSelectPicker();
+        this.dswapEnabled = environment.dswapEnabled;
     }
 
     async startTrade() {
