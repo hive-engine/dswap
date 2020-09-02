@@ -30,6 +30,7 @@ export class EnableMarketModal {
     private requiredStake;
     private isPremium;
     private totalStakeRequired;
+    private feeTokenSymbol;
 
     constructor(private controller: DialogController,
         private toast: ToastService,
@@ -60,9 +61,10 @@ export class EnableMarketModal {
         this.market = market;
         this.tokenOperationCost = environment.marketMakerStakeRequiredPerMarket;     
         this.symbol = this.market.symbol;
+        this.feeTokenSymbol = environment.marketMakerFeeToken;
 
         if (this.user) {
-            let balance = await this.ts.getUserBalanceOfToken(this.symbol);
+            let balance = await this.ts.getUserBalanceOfToken(this.feeTokenSymbol);
             if (balance)
                 this.tokenUserStake = parseFloat(balance.stake);
 
@@ -86,7 +88,7 @@ export class EnableMarketModal {
                 const toast = new ToastMessage();               
 
                 toast.message = this.i18n.tr(result.rule.messageKey, {
-                    symbol: this.market.symbol,
+                    symbol: this.feeTokenSymbol,
                     requiredStake: this.requiredStake,
                     userStake: this.tokenUserStake,
                     ns: 'errors'
