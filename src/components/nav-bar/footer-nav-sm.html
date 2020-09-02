@@ -35,7 +35,7 @@
                     ></font-awesome-icon>
                     <a route-href="route: trades">Trades</a>
                 </li>
-                <li
+                <li show.bind="marketMakerEnabled && (!marketMakerUser._id || marketMakerUser._id == 0)"
                     class="footer-nav-item removeActivateMobile"
                     click.delegate="addMobileActive('market-maker')"
                     id="market-maker-mobile"
@@ -45,6 +45,18 @@
                         icon.bind="['fas', 'robot']"
                     ></font-awesome-icon>
                     <a route-href="route: marketMaker">Market Maker</a>
+                </li>
+                <li
+                    show.bind="marketMakerEnabled && marketMakerUser._id && marketMakerUser._id != 0"
+                    class="footer-nav-item removeActivateMobile"
+                    click.delegate="addMobileActive('market-maker-dashboard')"
+                    id="market-maker-dashboard-mobile"
+                >
+                    <font-awesome-icon
+                        class="sidenav-icon"
+                        icon.bind="['fas', 'robot']"
+                    ></font-awesome-icon>
+                    <a route-href="route: marketMakerDashboard">Market Maker</a>
                 </li>
                 <li
                     class="footer-nav-item removeActivateMobile"
