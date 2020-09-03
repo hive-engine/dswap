@@ -1,0 +1,174 @@
+<template>
+  <div class="faq-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="section-title uk-scrollspy-init-inview">
+            <h1
+              style="
+                text-align: center;
+                font-size: 2.5rem;
+                margin-bottom: 25px;
+                margin-top: 25px;
+                color: rgb(22, 139, 104) !important;
+              "
+            >
+              FAQS
+            </h1>
+          </div>
+          <div class="faq-desc">
+            <h3 class="faq-desc-title text-center">
+              What would you like to know about DSWAP?
+            </h3>
+
+            <p class="desc-text text-center">
+              You can't find the solution to what you are looking for? Here's a
+              list of questions our users frequently ask us.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="hr-blue-style-faq" />
+  </div>
+
+  <section id="faq-section">
+    <div class="container">
+      <div class="row">
+        <div class="faq-tabs" style="width: 100%;">
+          <ul class="faq-tabs-btns">
+            <li style="padding: 0;">
+                <a href="#faq1"
+                   click.trigger="handleClick('1')"
+                   role="button"
+                   class="faq-item1 faq-items">
+                    What is Dswap?
+                </a>
+            </li>
+            <li style="padding: 0;">
+                <a href="#faq2"
+                   click.trigger="handleClick('2')"
+                   role="button"
+                   class="faq-item2 faq-items">
+                    What's a market maker?
+                </a>
+            </li>
+            <li style="padding: 0;">
+                <a href="#faq3"
+                   click.trigger="handleClick('3')"
+                   role="button"
+                   class="faq-item3 faq-items">
+                    How does this benefit me?
+                </a>
+            </li>
+            <li style="padding: 0;">
+                <a href="#faq4"
+                   click.trigger="handleClick('4')"
+                   role="button"
+                   class="faq-item4 faq-items">
+                    What are the risks?
+                </a>
+            </li>
+          </ul>
+
+          <div class="col-md-6">
+            <div
+              id="faq1Content"
+              class="faq-content faq-border hide-this"
+              style="display: none;"
+            >
+              <div class="content-desc">
+                <h3>What is Dswap?</h3>
+                <p style="color: #000; font-size: 16px; font-weight: 400;">
+                    Dswap is a trading platform built on the Hive blockchain that utilizes the Hive-engine layer 2 smart contract platform.  By using the trading service you're engaging a smart contract to trade on your behalf on the hive-engine exchange to convert from cryptocurrency to another (market taker).  If you're using the Market Maker smart contract you're using an automated smart contract service to provide trading options to those looking to swap so you can profit whenever they do.
+                    <br /><br />
+                    Simple English: <br />
+                    Buy/Sell cryptocurrencies for other cryptocurrencies <br />
+                    Offer automated trades to users of Dswap so when they switch between currencies you can skim a little.
+                </p>
+              </div>
+            </div>
+            <div
+              id="faq2Content"
+              class="faq-content faq-border hide-this"
+              style="display: none;"
+            >
+              <div class="content-desc">
+                  <h3>What's a market maker?</h3>
+                  <p style="color: #000; font-size: 16px; font-weight: 400;">
+                      A market maker is a piece of software that operates on exchanges that simultaneously offers to buy and sell the same cryptocurrency.  Why would you do this?  To make money.  How does it work?  You don't offer to buy and sell at the same price.  There's a small spread, so every time money sloshes back and forth you're able to skim a little.
+                  </p>
+              </div>
+            </div>
+            <div
+              id="faq3Content"
+              class="faq-content faq-border hide-this"
+              style="display: none;"
+            >
+              <div class="content-desc">
+                  <h3>How does this benefit me??</h3>
+                  <p style="color: #000; font-size: 16px; font-weight: 400;">
+                      There's many of these services out there.  Some charge as much as 10%.  As trading volume increases we expect the fee to be between 1-3%.  It's also especially convenient for Hive blockchain users as it's Hive Keychain compatible where possible.                      
+                  </p>
+                  <p style="color: #000; font-size: 16px; font-weight: 400;">
+                      Additionally, if you're not actively looking to get into specific cryptocurrencies but want to make money when others do you can use the smart contract market maker to offer trade pairs so that when others go chasing that Sweet Sweet Moon you're able to skim along the way.
+                  </p>
+              </div>
+            </div>
+            <div
+              id="faq4Content"
+              class="faq-content faq-border hide-this"
+              style="display: none;"
+            >
+                <div class="content-desc">
+                    <h3>
+                        What are the risks?
+                    </h3>
+                    <p style="color: #000; font-size: 16px; font-weight: 400;">
+                        Trading side: When volume is low and you're looking for a large deal you might not get the best rates.
+                    </p>
+                    <p style="color: #000; font-size: 16px; font-weight: 400;">
+                        Market Maker side:  When prices aren't moving too much and money is moving back and forth it's capable of generating profits.  If trading on the market is highly one sided you can run out of 1 of the side of the pair that you're trading.  So, you have to watch it and alter/cancel it when the spread is changing drastically (more than 5% in a day), be prepared to replinish one side of the bot manually on price swing days, or keep the volumes that you trade relatively small so that even on a big price swing day it would take many trades to exhaust one side of the pair.
+                    </p>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mail-us">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-10 offset-md-1"></div>
+      </div>
+    </div>
+
+    <div class="faq-wrapper text-center" style="margin-top: 30px;">
+      <div class="row">
+        <div class="col-md-10 offset-md-1">
+          <div class="faq-desc">
+            <h2 class="faq-desc-title">
+              What would you like to know about STEEM ENGINE?
+            </h2>
+            <hr class="hr-style-faq" />
+            <p class="desc-text">
+              You can't find the solution to what you are looking for? Contact us!
+            </p>
+          </div>
+          <div class="row">
+              <div class="col-md-6 offset-md-3">
+                  <a href="https://discord.gg/xWRYB9s" target="_blank">
+                      <img src="../../images/discord.png" alt="Discord" width="100px" />
+                  </a>
+              </div>
+              <div class="col-md-6 offset-md-3">
+                  <a href="https://support.privex.io/open.php" target="_blank"><i class="fas fa-tools supportIcon fa-3x"></i></a>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
