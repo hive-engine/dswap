@@ -695,7 +695,7 @@ export class MarketMakerService {
         return new Promise(async (resolve) => {
             if (chain == Chain.Hive) {
                 if (window.hive_keychain) {
-                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Disable market for Market Maker', async (response) => {
+                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Disable '+symbol+' market for Market Maker', async (response) => {
                         resolve(this.processResponseDisableMarketKeychain(response, symbol));
                     });
                 } else {
@@ -791,7 +791,7 @@ export class MarketMakerService {
         return new Promise(async (resolve) => {
             if (chain == Chain.Hive) {
                 if (window.hive_keychain) {
-                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Enable market for Market Maker', async (response) => {
+                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Enable ' +symbol+ ' market for Market Maker', async (response) => {
                         resolve(this.processResponseEnableMarketKeychain(response, symbol));
                     });
                 } else {
