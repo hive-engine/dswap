@@ -138,7 +138,6 @@ export class AddMarketModal {
         if (validationResult.valid) {
             this.market = {
                 symbol: this.selectedTokenSymbol,
-                strategy: this.selectedOrderStrategy._id,
                 ignoreOrderQtyLt: this.parseAddMarketNumberFieldValue(this.ignoreOrderQtyLt),
                 maxBaseToSpend: this.parseAddMarketNumberFieldValue(this.maxBaseToSpend),
                 maxBidPrice: this.parseAddMarketNumberFieldValue(this.maxBidPrice),
@@ -152,6 +151,9 @@ export class AddMarketModal {
                 placeAtBidWall: this.parseAddMarketNumberFieldValue(this.placeAtBidWall),
                 placeAtSellWall: this.parseAddMarketNumberFieldValue(this.placeAtSellWall)
             };
+
+            if (this.marketMakerUser.isPremium)
+                this.market.strategy = this.selectedOrderStrategy._id;
 
             const result = await this.mms.addMarket(Chain.Hive, this.market);
 

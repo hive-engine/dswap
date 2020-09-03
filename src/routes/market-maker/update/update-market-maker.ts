@@ -77,7 +77,7 @@ export class UpdateMarketMaker {
     }    
 
     async loadMarketDetails() {
-        if (this.selectedTokenSymbol) {            
+        if (this.selectedTokenSymbol) {       
             if (this.marketMakerUser) 
                 this.orderStrategies = this.mms.getMarketMakerOrderStrategiesByUser(this.marketMakerUser);  
 
@@ -162,8 +162,8 @@ export class UpdateMarketMaker {
         if (validationResult.valid) {
             let updatedFieldCount = 0;
             let updatedMarket = { 
-                symbol: this.selectedTokenSymbol,       
-                strategy: this.selectedOrderStrategy._id,         
+                symbol: this.selectedTokenSymbol,
+                strategy: null,
                 ignoreOrderQtyLt: null,
                 maxBaseToSpend: null,
                 maxBidPrice: null,
@@ -178,9 +178,11 @@ export class UpdateMarketMaker {
                 placeAtSellWall: null
             };
 
-            if (this.selectedOrderStrategy._id != this.market.strategy) {                
-                updatedMarket.strategy = this.selectedOrderStrategy._id;
-                updatedFieldCount++;
+            if (this.marketMakerUser.isPremium) {
+                if (this.selectedOrderStrategy._id != this.market.strategy) {                
+                    updatedMarket.strategy = this.selectedOrderStrategy._id;
+                    updatedFieldCount++;
+                }
             }
 
             if (this.placeAtBidWall != this.market.placeAtBidWall.toString()) {                
