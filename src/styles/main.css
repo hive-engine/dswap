@@ -129,9 +129,29 @@ a:hover {
     background-color: #fff;
     padding: 10px 0;
     border-radius: 2px;
-    height: 100vh;
+    height: 100%;
+    position: -webkit-sticky;
     box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.15),
         0 2px 10px 2px rgba(0, 0, 0, 0.2);
+}
+.support-bubble {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background-color: #05413c;
+    color: #fff;
+    border-radius: 25px;
+    position: fixed;
+    padding: 13px 22px;
+    align-self: center;
+}
+.support-bubble-text {
+    color: #fff!important;
+    font-weight: bold;
+    
+}
+.support-bubble i {
+    margin-left: 5px;
 }
 .item-header {
     padding: 5px 10px;
@@ -836,7 +856,7 @@ a.item:hover .item-icon {
     line-height: 1.18182;
     font-size: 44px;
     letter-spacing: -0.5px;
-    color: rgb(22, 139, 104);
+    color: #05413c;
 }
 
 .tribes-title {
@@ -910,7 +930,7 @@ a.item:hover .item-icon {
     transition: 0.1s all ease-out;
 }
 .start {
-    background: rgb(22, 139, 104);
+    background: #05413c;
     padding: 80px 20px;
     margin-bottom: -100px;
 }
@@ -968,16 +988,16 @@ a.item:hover .item-icon {
     -moz-border-radius: 6px;
     -o-border-radius: 6px;
     border-radius: 6px;
-    -webkit-border: 1px solid rgb(22, 139, 104);
-    -moz-border: 1px solid rgb(22, 139, 104);
-    -o-border: 1px solid rgb(22, 139, 104);
-    border: 1px solid rgb(22, 139, 104);
-    color: rgb(22, 139, 104);
+    -webkit-border: 1px solid #05413c;
+    -moz-border: 1px solid #05413c;
+    -o-border: 1px solid #05413c;
+    border: 1px solid #05413c;
+    color: #05413c;
 }
 .faq-tabs ul.faq-tabs-btns li a:active,
 .faq-tabs ul.faq-tabs-btns li a:focus,
 .faq-tabs ul.faq-tabs-btns li a:hover {
-    background-color: rgb(22, 139, 104) !important;
+    background-color: #05413c !important;
     color: #fff !important;
 }
 .faq-tabs .col-md-6 {
@@ -1001,10 +1021,10 @@ a.item:hover .item-icon {
     -moz-border-radius: 6px;
     -o-border-radius: 6px;
     border-radius: 6px;
-    -webkit-border: 1px solid rgb(22, 139, 104);
-    -moz-border: 1px solid rgb(22, 139, 104);
-    -o-border: 1px solid rgb(22, 139, 104);
-    border: 1px solid rgb(22, 139, 104);
+    -webkit-border: 1px solid #05413c;
+    -moz-border: 1px solid #05413c;
+    -o-border: 1px solid #05413c;
+    border: 1px solid #05413c;
 }
 .content-desc h3 {
     font-size: 20px;
@@ -1685,7 +1705,7 @@ input.tradeValueUsd {
 
 
 .supportIcon {
-    color: rgb(22, 139, 104) !important;
+    color: #05413c !important;
     width: 90px;
     height: 90px;
     padding: 20px 20px 0px 20px;
