@@ -113,6 +113,13 @@ bind() {
             title: "We will be right back...",
         },
         {
+            route: "pricing",
+            name: "pricing",
+            moduleId: PLATFORM.moduleName("./routes/pricing/pricing", "pricing"),
+            nav: false,
+            title: "Pricing",
+        },
+        {
             route: "faq",
             name: "faq",
             moduleId: PLATFORM.moduleName("./routes/faq/faq", "faq"),
