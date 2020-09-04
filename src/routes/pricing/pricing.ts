@@ -1,4 +1,4 @@
-import styles from "./faq.module.css";
+import styles from "./pricing.module.css";
 
 export class Faq {
   private styles = styles;
