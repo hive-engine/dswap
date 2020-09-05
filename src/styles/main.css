@@ -959,6 +959,9 @@ a.item:hover .item-icon {
     background-color: #d3d3d3;
     text-align: center;
 }
+.faq-desc-title {
+    font-size: 1.625rem;
+}
 .faq-tabs ul.faq-tabs-btns {
     width: 50%;
     float: left;
