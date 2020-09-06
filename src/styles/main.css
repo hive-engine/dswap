@@ -1523,6 +1523,12 @@ input.tradeValueUsd {
     .ipad-block {
         display: block!important;
     }
+    .register-market-maker-wrapper {
+        margin: 20px 100px!important;
+    }
+    a.back-btn {
+        margin-left: 100px!important;
+    }
     .market-maker-dashboard-card {
         padding: 40px!important;
     }
