@@ -1,5 +1,39 @@
 <template>
-    <div class="send-wrapper">
+     <div class="dashboard-wrapper " show.bind="!dswapEnabled">
+        <div class="market-maker-landing-wrapper">
+        <div class="market-maker-landing-wrapper-content">
+            <div class="d-flex justify-center">
+                <img
+                    class="market-maker-logo"
+                    src="../../images/dswap_standalone.png"
+                    alt="logo"
+                />
+            </div>
+            <div class="market-maker-landing-header">
+                <h1 class="market-maker-header-text text-center">
+                    Welcome to DSwap.Trade
+                </h1>
+                <h3 class="text-danger text-center">NOTICE!!!</h3>
+                <h4 class="header-desc text-center text-danger">
+                    The Taking Side of DSwap is still a work in progress
+                </h4>
+                <a
+                    route-href="route: registerMarketMaker"
+                    class="get-started-btn text-center m-auto"
+                    >Go To Market Maker</a
+                >
+            </div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path
+                fill="#142e2b"
+                fill-opacity="1"
+                d="M0,96L48,90.7C96,85,192,75,288,85.3C384,96,480,128,576,154.7C672,181,768,203,864,176C960,149,1056,75,1152,74.7C1248,75,1344,149,1392,186.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+            ></path>
+        </svg>
+    </div>
+    </div>
+    <div class="send-wrapper" show.bind="dswapEnabled">
         <div class="back-btn-container">
             <a route-href="route: home" class="back-btn">Go Back</a>
         </div>
