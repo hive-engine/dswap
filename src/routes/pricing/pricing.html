@@ -34,7 +34,7 @@
                 <div class="col-md-5">
                     <div class="pricing-table">
                         <h3 class="pricing-title">Basic</h3>
-                        <div class="price">100<sup>BEE/ENG</sup></div>
+                        <div class="price">100<sup>${feeToken}</sup></div>
 
                         <ul class="table-list">
                             <li>
@@ -57,13 +57,13 @@
                                     ><i class="fas fa-check"></i
                                 ></span>
                                 Update
-                                <span class="unlimited">1 ENG per Update</span>
+                                <span class="unlimited">1 ${feeToken} per Update</span>
                             </li>
                             <li>
                                 <span class="checkortimes"
                                     ><i class="fas fa-check"></i></span
                                 >Minimum Stake
-                                <span class="unlimited">200 BEE/ENG</span>
+                                <span class="unlimited">200 ${feeToken}</span>
                             </li>
                             <li>
                                 <span class="checkortimes"
@@ -80,15 +80,15 @@
                         </ul>
 
                         <div class="table-buy">
-                            <p>100<sup>BEE/ENG</sup></p>
-                            <a href="#" class="pricing-action">Select</a>
+                            <p>100<sup>${feeToken}</sup></p>
+                            <a click.delegate="selectBasic()" href="javascript:void(0)" class="pricing-action">Select</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-5">
                     <div class="pricing-table">
                         <h3 class="pricing-title">Premium</h3>
-                        <div class="price">+100<sup>ENG/BEE</sup></div>
+                        <div class="price">+100<sup>${feeToken}</sup></div>
 
                         <ul class="table-list">
                             <li>
@@ -117,7 +117,7 @@
                                 <span class="checkortimes"
                                     ><i class="fas fa-check"></i></span
                                 >Minimum Stake
-                                <span class="unlimited">1000 BEE/ENG</span>
+                                <span class="unlimited">1000 ${feeToken}</span>
                             </li>
                             <li>
                                 <span class="checkortimes"
@@ -134,8 +134,8 @@
                         </ul>
 
                         <div class="table-buy">
-                            <p>100<sup>BEE/ENG</sup></p>
-                            <a href="#" class="pricing-action">Select</a>
+                            <p>100<sup>${feeToken}</sup></p>
+                            <a click.delegate="selectUpgrade()" href="javascript:void(0)" class="pricing-action">Select</a>
                         </div>
                     </div>
                 </div>
