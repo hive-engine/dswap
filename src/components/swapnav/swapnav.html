@@ -22,6 +22,12 @@
             ></a>
         </div>
         <div class="dswap-nav-options ml-auto">
+            <select class="form-control"
+                    value.bind="selectedChainId">
+                <option value.bind="c.id" repeat.for="c of chains">
+                    ${c.name & t}
+                </option>
+            </select>
             <ul style="margin: 0;">
                 <li class="nav-item active" if.bind="!loggedIn">
                     <a class="btn nav-link" click.delegate="signin()"

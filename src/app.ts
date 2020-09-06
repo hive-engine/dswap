@@ -41,7 +41,8 @@ bind() {
     this.store.state.subscribe((s: IState) => {
         if (s) {
             this.state = s;
-
+            console.log('bind state');
+            console.log(s);
             this.loading = s.loading;
             this.loggedIn = s.loggedIn;
             this.claims = s?.account?.token?.claims;

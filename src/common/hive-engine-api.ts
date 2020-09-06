@@ -64,7 +64,7 @@ export async function checkTransaction(trxId: string, retries: number) {
 }
 
 export async function loadCoins(): Promise<ICoin[]> {
-    const url = `${environment.CONVERTER_API}coins/`;
+    const url = `${environment.CONVERTER_API_HE}coins/`;
 
     const response = await http.fetch(url, {
         method: 'GET',
@@ -74,7 +74,7 @@ export async function loadCoins(): Promise<ICoin[]> {
 }
 
 export async function loadCoinPairs(): Promise<ICoinPair[]> {
-    const url = `${environment.CONVERTER_API}pairs/`;
+    const url = `${environment.CONVERTER_API_HE}pairs/`;
 
     const response = await http.fetch(url, {
         method: 'GET',
@@ -101,7 +101,7 @@ export async function loadTokenMetrics(symbols = [], limit = 1000, offset = 0): 
 }
 
 export async function loadTokenMarketHistory(symbol: string, timestampStart?: string, timestampEnd?: string): Promise<IHistoryApiItem[]> {
-    let url = `${environment.HISTORY_API}marketHistory?symbol=${symbol.toUpperCase()}`;
+    let url = `${environment.HISTORY_API_HE}marketHistory?symbol=${symbol.toUpperCase()}`;
 
     if (timestampStart) {
         url += `&timestampStart=${timestampStart}`;
@@ -161,7 +161,7 @@ export async function loadHivepBalance() {
 
 export async function getScotConfigForAccount(account: string) {
     try {
-        const result = await http.fetch(`${environment.SCOT_API}@${account}`);
+        const result = await http.fetch(`${environment.SCOT_API_HE}@${account}`);
 
         return result.json();
     } catch (e) {
@@ -170,7 +170,7 @@ export async function getScotConfigForAccount(account: string) {
 }
 
 export async function loadAccountHistory(account: string, symbol?: string, timestampStart?: string, timestampEnd?: string, limit?: number, offset?: number): Promise<IAccountHistoryItemResult[]> {
-    let url = `${environment.HISTORY_API}accountHistory?account=${account}`;
+    let url = `${environment.HISTORY_API_HE}accountHistory?account=${account}`;
 
     if (symbol) {
         url += `&symbol=${symbol.toUpperCase()}`;

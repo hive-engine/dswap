@@ -46,5 +46,6 @@ export const initialState: IState = {
   nftSellBook: [],
   tokensLoaded: false,
   hivePriceUsd: '',
-  hivePriceUsdDate: null
+    hivePriceUsdDate: null,
+    dswapChainId: 1
 };

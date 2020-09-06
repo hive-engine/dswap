@@ -8,6 +8,11 @@ import { faWallet } from '@fortawesome/pro-duotone-svg-icons';
 import { AuthService } from 'services/auth-service';
 import { environment } from 'environment';
 import { getMarketMakerUser } from 'store/actions';
+import { getDswapChains } from 'common/functions';
+import { ConfirmChainModal } from 'modals/confirm-chain';
+import { observable } from 'aurelia-framework';
+import { Chain } from '../../common/enums';
+
 
 @autoinject()
 @customElement('swapnav')
@@ -18,27 +23,54 @@ export class SwapNav {
     @bindable claims;
     @bindable iconWallet = faWallet;
 
-    public storeSubscription: Subscription;
+    public subscription: Subscription;
     private state: IState;
     private dswapEnabled;
     private marketMakerEnabled;
+    private chains;
+    @observable() selectedChainId;
+    private marketMakerUser;
 
     constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<IState>) {        
-        this.storeSubscription = this.store.state.subscribe(state => {
+        this.subscription = this.store.state.subscribe((state: IState) => {
             if (state) {
-                this.state = state;                
+                this.state = state;
+                this.marketMakerUser = { ...this.state.marketMakerUser };
+
+                if (this.state.dswapChainId) {
+                    console.log('state value' + this.state.dswapChainId);
+                    this.selectedChainId = this.state.dswapChainId;
+                }
             }
-          });    
+        });  
     }
 
-    async bind() {
+    async bind() {        
         this.dswapEnabled = environment.dswapEnabled;
         this.marketMakerEnabled = environment.marketMakerEnabled;
+        this.chains = await getDswapChains();
+         
     }
 
     async logout() {
         await this.authService.logout();        
         this.router.navigateToRoute('home');
+    }
+
+    async selectedChainIdChanged(newValue, oldValue) {
+        if (oldValue && newValue != this.state.dswapChainId) {
+            let selectedChain = this.chains.find(x => x.id == this.selectedChainId);
+
+            this.dialogService.open({ viewModel: ConfirmChainModal, model: selectedChain }).whenClosed(response => {
+                if (!response.wasCancelled) {
+                    // redirect to home if login was successfull
+                    //this.router.navigateToRoute('home');
+                } else {
+                    console.log('cancel state:' + this.state.dswapChainId);
+                    this.selectedChainId = this.state.dswapChainId;       
+                }
+            });
+        } 
     }
 
     signin() {

@@ -30,7 +30,7 @@ export class AuthService {
         http.configure(config => {
             config
                 .useStandardConfiguration()
-                .withBaseUrl(environment.FIREBASE_API)
+                .withBaseUrl(environment.FIREBASE_API_HE)
         });
         
         this.storeSubscription = this.store.state.subscribe(state => {

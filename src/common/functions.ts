@@ -6,6 +6,7 @@ import { environment } from 'environment';
 import { hiveSignerJson } from 'common/hive';
 import { HttpClient } from 'aurelia-fetch-client';
 import trim from 'trim-character';
+import { Chain } from './enums';
 
 const http: HttpClient = new HttpClient();
 const toastService: ToastService = Container.instance.get(ToastService);
@@ -251,4 +252,12 @@ export async function totalStakeRequiredToEnableMarket(marketMakerUser: IMarketM
     }
 
     return stakeRequired;
+}
+
+export async function getDswapChains() {
+    let chains: IDSwapChain[] = [];
+    chains.push({ id: Chain.Hive, name: "Hive Engine" });
+    chains.push({ id: Chain.Steem, name: "Steem Engine" });
+
+    return chains;
 }

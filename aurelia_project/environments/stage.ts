@@ -9,7 +9,7 @@ export const environment: Partial<IEnvironment> = {
     GRAPHQL_API: 'https://graphql-qa.steem.services/',
     NODE_API_URL: 'https://node-api.steem-engine.com/v1/',
 	ACCOUNTS_API_URL: 'https://api.steem-engine.com/accounts',
-	CONVERTER_API: 'https://converter-api.hive-engine.com/api/',
+    CONVERTER_API_HE: 'https://converter-api.hive-engine.com/api/',
 	nativeToken: 'BEE',
     hivePegAccount: 'honey-swap'
 };
