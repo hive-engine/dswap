@@ -12,6 +12,7 @@ import { Chain } from 'common/enums';
 import { environment } from 'environment';
 import { TokenService } from 'services/token-service';
 import { Router, Redirect } from 'aurelia-router';
+import { DefaultPopupTimeOut } from "common/constants";
 
 @autoinject()
 export class UpgradeAccountModal {
@@ -102,9 +103,9 @@ export class UpgradeAccountModal {
 
         for (const result of validationResult.results) {
             if (!result.valid) {
-                const toast = new ToastMessage();
+                const toastMessage = new ToastMessage();
 
-                toast.message = this.i18n.tr(result.rule.messageKey, {
+                toastMessage.message = this.i18n.tr(result.rule.messageKey, {
                     symbol: this.marketMakerFeeToken,
                     requiredStake: this.marketMakerStakeRequiredPremium,
                     userStake: this.userStakeFeeToken,
@@ -112,8 +113,9 @@ export class UpgradeAccountModal {
                     userBalance: this.userBalanceFeeToken,
                     ns: 'errors'
                 });
+                toastMessage.overrideOptions.timeout = DefaultPopupTimeOut;
 
-                this.toast.error(toast);
+                this.toast.error(toastMessage);
             }
         }
 

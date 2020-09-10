@@ -1,5 +1,25 @@
 <template>
-    <div class="flex-register">
+    <div class="flex-register" show.bind="marketMakerUserId !== 0">
+         <div class="row">
+            <div class="col-xl-10 col-md-12">
+                <div class="register-market-maker-wrapper">
+                    <div class="register-market-maker-header">
+                        <h2 style="font-size: 1.5rem; text-align: center;">${'Thanks for registering' & t}</h2>
+                    </div>
+                    <hr class="divider" />
+                    <div class="register-market-maker-body">
+                        <div class="disclaimer-wrapper">
+                            <p>Thanks for your registration. Check your dashboard to see your market configurations.</p>
+                            <a click.delegate="dashboardClick()" class="btn btn-lg greenBtns trade-button">
+                                Market Maker Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex-register" show.bind="marketMakerUserId === 0">
         <loader loading.bind="loading" mode="tiny"></loader>
 
         <div class="back-btn-container">

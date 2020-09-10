@@ -9,7 +9,7 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     EXCHANGE_URL: 'https://hive-engine.com/',
     maintenanceMode: false,
     swapEnabledTokens: ['BEE', 'DEC', 'KANDA', 'SAND', 'SWAP.BCH', 'SWAP.BTC', 'SWAP.BTS', 'SWAP.DOGE', 'SWAP.ENG', 'SWAP.EOS', 'SWAP.GOLOS', 'SWAP.HBD', 'SWAP.LTC', 'SWAP.SBD', 'SWAP.STEEM', 'SWAP.SWIFT', 'SWAP.TLOS', 'WEED', 'WORKERBEE'],
-    disabledTokens: ['BTC', 'LTC', 'HIVE', 'HBD', 'BCC', 'XAP', 'XRP', 'GOLOS', 'DISNEY', 'AMAZON', 'VOICE', 'ETH', 'EOS', 'LASSE', 'TIME', 'R', 'SCTR', 'ALLAH', 'BNB', 'DONE', 'ETHER', 'LTCPEG', 'SBC', 'BEEHIVE', 'BEECASH', 'BLURT'],
+    disabledTokens: ['BTC', 'LTC', 'HIVE', 'HBD', 'BCC', 'XAP', 'XRP', 'GOLOS', 'DISNEY', 'AMAZON', 'VOICE', 'ETH', 'EOS', 'LASSE', 'TIME', 'R', 'SCTR', 'ALLAH', 'BNB', 'DONE', 'ETHER', 'LTCPEG', 'SBC', 'BEEHIVE', 'BEECASH'],
     peggedToken: 'SWAP.HIVE',
     marketMakerRegistrationCost: 100,
     marketMakerUpgradeCost: 100,
@@ -19,6 +19,8 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     marketMakerMaxMarketsBasic: 1,
     marketMakerUpdateMarketCostBasic: 1,
     marketMakerFeeToken: 'BEE',
+    isDebug: false,
+    debugAccount: '',
     dswapEnabled: false,
     marketMakerEnabled: true,
     features: {

@@ -20,7 +20,8 @@ export class ToastService implements Toast {
     timeout: 3000,
     overlay: false,
     transitionIn: 'fadeInUp',
-    transitionOut: 'fadeOutDown',
+      transitionOut: 'fadeOutDown',
+      progressBar: true
   };
 
   constructor() {

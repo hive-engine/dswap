@@ -33,6 +33,10 @@ export class Trades {
         this.tradesCompleted = await this.loadTradesCompleted(symbol, page);
     }
 
+    async bind() {
+        //this.state.activePageId = "trades";
+    }
+
     async pageClick(pageVal) {
         if (pageVal == 'prev')
             pageVal = this.page - 1;

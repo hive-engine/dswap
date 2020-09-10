@@ -7,8 +7,9 @@ import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
 import { trimUsername } from 'common/functions';
-import { MarketMakerService } from '../../services/market-maker-service';
-import { Chain } from '../../common/enums';
+import { MarketMakerService } from 'services/market-maker-service';
+import { Chain } from 'common/enums';
+import { DefaultPopupTimeOut } from "common/constants";
 
 @autoinject()
 export class EnableAccountModal {
@@ -66,14 +67,15 @@ export class EnableAccountModal {
 
         for (const result of validationResult.results) {
             if (!result.valid) {
-                const toast = new ToastMessage();
+                const toastMessage = new ToastMessage();
 
-                toast.message = this.i18n.tr(result.rule.messageKey, {
+                toastMessage.message = this.i18n.tr(result.rule.messageKey, {
                     account: this.marketMakerUser.account,
                     ns: 'errors'
                 });
+                toastMessage.overrideOptions.timeout = DefaultPopupTimeOut;
 
-                this.toast.error(toast);
+                this.toast.error(toastMessage);
             }
         }
 

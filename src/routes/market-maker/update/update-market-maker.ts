@@ -16,6 +16,7 @@ import { DisableMarketModal } from "modals/market-maker/disable-market";
 import { EnableMarketModal } from "modals/market-maker/enable-market";
 import { RemoveMarketModal } from "modals/market-maker/remove-market";
 import { UpgradeAccountModal } from "modals/market-maker/upgrade-account";
+import { DefaultPopupTimeOut } from '../../../common/constants';
 
 @autoinject()
 export class UpdateMarketMaker {
@@ -146,16 +147,18 @@ export class UpdateMarketMaker {
 
         for (const result of validationResult.results) {
             if (!result.valid) {
-                const toast = new ToastMessage();
+                const toastMessage = new ToastMessage();
 
-                toast.message = this.i18n.tr(result.rule.messageKey, {                    
+                toastMessage.message = this.i18n.tr(result.rule.messageKey, {
+                    feeTokenSymbol: this.feeTokenSymbol,
                     symbol: this.selectedTokenSymbol,
                     requiredBalance: this.tokenOperationCost,
                     userBalance: this.feeTokenUserBalance,
-                    ns: 'errors'
+                    ns: 'errors'                    
                 });
+                toastMessage.overrideOptions.timeout = DefaultPopupTimeOut;
 
-                this.toast.error(toast);
+                this.toast.error(toastMessage);
             }
         }
 
@@ -253,14 +256,14 @@ export class UpdateMarketMaker {
                     this.loadUserDetails();
                 }
             } else {
-                const toast = new ToastMessage();
+                const toastMessage = new ToastMessage();
 
-                toast.message = this.i18n.tr("marketMakerUpdateMarketNoChanges", {
+                toastMessage.message = this.i18n.tr("marketMakerUpdateMarketNoChanges", {
                     symbol: this.selectedTokenSymbol,
                     ns: 'errors'
                 });
-
-                this.toast.error(toast);
+                toastMessage.overrideOptions.timeout = DefaultPopupTimeOut;
+                this.toast.error(toastMessage);
             }
         }
         this.loading = false;
