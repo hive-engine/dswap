@@ -8,13 +8,12 @@
                             <div class="row">
                                 <div class="col-md-12" style="padding: 0;">
                                     <div class="item-wrapper">
-                                        <a click.delegate="addActive('home')"
-                                           route-href="route:home"
+                                        <a route-href="route:home"
                                            class="item">
                                             <div class="row">
                                                 <div class="col-3"
                                                      style="padding: 0;">
-                                                    <div class="item-icon homeActive removeActivate"
+                                                    <div class="item-icon ${activePageId == 'home' ? 'activateIt' : ''}"
                                                          id="home">
                                                         <font-awesome-icon class="sidenav-icon"
                                                                            icon.bind="['fas', 'home']"></font-awesome-icon>
@@ -32,13 +31,12 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper" show.bind="dswapEnabled">
-                                        <a click.delegate="addActive('dashboard')"
-                                           route-href="route:dashboard"
+                                        <a route-href="route:dashboard"
                                            class="item">
                                             <div class="row">
                                                 <div class="col-3"
                                                      style="padding: 0;">
-                                                    <div class="item-icon dashboardActive removeActivate"
+                                                    <div class="item-icon ${activePageId == 'dashboard' ? 'activateIt' : ''}"
                                                          id="dashboard">
                                                         <font-awesome-icon class="sidenav-icon"
                                                                            icon.bind="['fas', 'chart-line']"></font-awesome-icon>
@@ -56,13 +54,12 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper" show.bind="dswapEnabled">
-                                        <a click.delegate="addActive('wallet')"
-                                           route-href="route:wallet"
+                                        <a route-href="route:wallet"
                                            class="item">
                                             <div class="row">
                                                 <div class="col-3"
                                                      style="padding: 0;">
-                                                    <div class="item-icon removeActivate"
+                                                    <div class="item-icon ${activePageId == 'wallet' ? 'activateIt' : ''}"
                                                          id="wallet">
                                                         <font-awesome-icon class="sidenav-icon"
                                                                            icon.bind="['fas', 'wallet']"></font-awesome-icon>
@@ -80,13 +77,12 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper" show.bind="dswapEnabled">
-                                        <a click.delegate="addActive('trades')"
-                                           route-href="route:trades"
+                                        <a route-href="route:trades"
                                            class="item">
                                             <div class="row">
                                                 <div class="col-3"
                                                      style="padding: 0;">
-                                                    <div class="item-icon removeActivate"
+                                                    <div class="item-icon ${activePageId == 'trades' ? 'activateIt' : ''}"
                                                          id="trades">
                                                         <font-awesome-icon class="sidenav-icon"
                                                                            icon.bind="['fas', 'qrcode']"></font-awesome-icon>
@@ -104,13 +100,12 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper" show.bind="marketMakerEnabled && (!marketMakerUser._id || marketMakerUser._id == 0)">
-                                        <a click.delegate="addActive('market-maker')"
-                                           route-href="route: marketMaker"
+                                        <a route-href="route: marketMaker"
                                            class="item">
                                             <div class="row">
                                                 <div class="col-3"
                                                      style="padding: 0;">
-                                                    <div class="item-icon removeActivate"
+                                                    <div class="item-icon ${activePageId == 'market-maker' ? 'activateIt' : ''}"
                                                          id="market-maker">
                                                         <font-awesome-icon class="sidenav-icon"
                                                                            icon.bind="['fas', 'qrcode']"></font-awesome-icon>
@@ -128,13 +123,12 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper" show.bind="marketMakerEnabled && marketMakerUser._id && marketMakerUser._id != 0">
-                                        <a click.delegate="addActive('market-maker-dashboard')"
-                                           route-href="route: marketMakerDashboard"
+                                        <a route-href="route: marketMakerDashboard"
                                            class="item">
                                             <div class="row">
                                                 <div class="col-3"
                                                      style="padding: 0;">
-                                                    <div class="item-icon removeActivate"
+                                                    <div class="item-icon ${activePageId == 'market-maker-dashboard' ? 'activateIt' : ''}"
                                                          id="market-maker-dashboard">
                                                         <font-awesome-icon class="sidenav-icon"
                                                                            icon.bind="['fas', 'qrcode']"></font-awesome-icon>
@@ -152,13 +146,12 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper">
-                                        <a click.delegate="addActive('pricing')"
-                                           route-href="route:pricing"
+                                        <a route-href="route:pricing"
                                            class="item">
                                             <div class="row">
                                                 <div class="col-3"
                                                      style="padding: 0;">
-                                                    <div class="item-icon removeActivate"
+                                                    <div class="item-icon ${activePageId == 'pricing' ? 'activateIt' : ''}"
                                                          id="pricing">
                                                         <font-awesome-icon class="sidenav-icon"
                                                                            icon.bind="['fas', 'dollar-sign']"></font-awesome-icon>
@@ -176,13 +169,12 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper">
-                                        <a click.delegate="addActive('faq')"
-                                           route-href="route:faq"
+                                        <a route-href="route:faq"
                                            class="item">
                                             <div class="row">
                                                 <div class="col-3"
                                                      style="padding: 0;">
-                                                    <div class="item-icon removeActivate"
+                                                    <div class="item-icon ${activePageId == 'faq' ? 'activateIt' : ''}"
                                                          id="faq">
                                                         <font-awesome-icon class="sidenav-icon"
                                                                            icon.bind="['fas', 'comments']"></font-awesome-icon>

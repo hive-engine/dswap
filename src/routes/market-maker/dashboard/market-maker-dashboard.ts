@@ -43,6 +43,7 @@ export class MarketMakerDashboard {
     async bind() {
         this.loadMarkets();
         this.exchangeMarketUrl = environment.EXCHANGE_URL + "?p=market&t=";
+        this.state.activePageId = "market-maker-dashboard";
     }
 
     async loadMarkets() {

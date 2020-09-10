@@ -27,5 +27,7 @@ export class MarketMakerLanding {
                 this.marketMakerUser = { ...state.marketMakerUser };
             }
         });
+
+        this.state.activePageId = "market-maker";
     }
 }

@@ -34,6 +34,7 @@ export class Pricing {
 
     async bind() {
         this.feeToken = environment.marketMakerFeeToken;
+        this.state.activePageId = "pricing";
     }
 
     async selectBasic() {

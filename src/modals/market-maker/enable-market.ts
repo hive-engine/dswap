@@ -11,6 +11,7 @@ import { MarketMakerService } from 'services/market-maker-service';
 import { Chain } from 'common/enums';
 import { environment } from 'environment';
 import { TokenService } from 'services/token-service';
+import { DefaultPopupTimeOut } from "common/constants";
 
 @autoinject()
 export class EnableMarketModal {
@@ -85,16 +86,17 @@ export class EnableMarketModal {
 
         for (const result of validationResult.results) {
             if (!result.valid) {
-                const toast = new ToastMessage();               
+                const toastMessage = new ToastMessage();               
 
-                toast.message = this.i18n.tr(result.rule.messageKey, {
+                toastMessage.message = this.i18n.tr(result.rule.messageKey, {
                     symbol: this.feeTokenSymbol,
                     requiredStake: this.requiredStake,
                     userStake: this.tokenUserStake,
                     ns: 'errors'
                 });
+                toastMessage.overrideOptions.timeout = DefaultPopupTimeOut;
 
-                this.toast.error(toast);
+                this.toast.error(toastMessage);
             }
         }
 
@@ -118,5 +120,7 @@ export class EnableMarketModal {
             .satisfies((value: any, object: any) => value === true)
             .withMessageKey('errors:marketMakerAddMarketMoreStakeRequired')
             .rules;
+
+        this.validationController.addObject(this, rules);
     }
 }

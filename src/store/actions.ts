@@ -10,6 +10,7 @@ import moment from 'moment';
 import { loadUserBalances } from 'common/hive-engine-api';
 import { dispatchify } from 'aurelia-store';
 import { getUser } from 'common/market-maker-api';
+import { environment } from 'environment';
 
 export function loading(state: IState, boolean: boolean) {
     const newState = { ...state };
@@ -127,7 +128,8 @@ export async function getMarketMakerUser(state: IState): Promise<IState> {
     }
 
     try {
-        let mmUser = await getUser(newState.account.name); // only to see dashboard
+        let account = environment.isDebug && environment.debugAccount ? environment.debugAccount : newState.account.name;
+        let mmUser = await getUser(account);
         mmUser.creationTimestamp_string = moment.unix(mmUser.creationTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
         mmUser.lastTickTimestamp_string = moment.unix(mmUser.lastTickTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
 

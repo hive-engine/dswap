@@ -30,6 +30,8 @@ interface IEnvironment {
     marketMakerMaxMarketsBasic: number;
     marketMakerUpdateMarketCostBasic: number;
     marketMakerFeeToken: string;
+    isDebug: boolean;
+    debugAccount: string;
 }
 
 interface IState {
@@ -55,6 +57,7 @@ interface IState {
     nftSellBook: INftSellBook[];
     hivePriceUsd: string;
     hivePriceUsdDate: string;
+    activePageId: string;
 }
 
 interface ICoinPair {

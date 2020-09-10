@@ -21,6 +21,7 @@ export class FooterSm {
     private user;
     private dswapEnabled;
     private marketMakerEnabled;
+    private activePageId;
 
     constructor(private dialogService: DialogService, private store: Store<IState>) {
         this.subscription = this.store.state.subscribe(async (state: IState) => {
@@ -28,7 +29,9 @@ export class FooterSm {
                 this.state = state;
 
                 this.user = { ...state.firebaseUser };
-                this.marketMakerUser = { ...state.marketMakerUser };                
+                this.marketMakerUser = { ...state.marketMakerUser };          
+
+                this.activePageId = state.activePageId;
             }
         });
     }
@@ -39,31 +42,5 @@ export class FooterSm {
     }
 
     attached() {
-        let idName = window.location.pathname.split("/")[1];
-        if (!idName)
-            idName = "home";
-
-        if (window.location.pathname !== "dashboard") {
-            $(".dashboardActiveMobile").removeClass("dashboardActiveMobile");
-            if (idName)
-                $("#" + idName + "-mobile").addClass("activateItMobile");            
-            
-            window.location.pathname.includes("market-maker") &&
-                $("#market-maker-mobile").addClass("activateItMobile");
-            console.log(idName + "-mobile");
-        }
-    }
-
-    addMobileActive(e) {
-        if (window.location.pathname === "/" + e) {
-            $(".removeActivateMobile").removeClass("activateItMobile");
-            $(".dashboardActiveMobile").toggleClass("dashboardActiveMobile");
-            if (e)
-                $("#" + e + "-mobile").addClass("activateItMobile");
-        } else if (e == "home") {
-            $(".removeActivateMobile").removeClass("activateItMobile");
-            $(".dashboardActiveMobile").toggleClass("dashboardActiveMobile");            
-            $("#" + e + "-mobile").addClass("activateItMobile");
-        }
     }
 }

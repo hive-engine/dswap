@@ -38,6 +38,10 @@ export class Wallet {
         }
     }
 
+    async bind() {
+        this.state.activePageId = "wallet";
+    }
+
     async loadWallets() {
         this.wallets = await this.tokenService.getDSwapTokenBalances();
     }
