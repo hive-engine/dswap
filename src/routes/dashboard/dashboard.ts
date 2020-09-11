@@ -87,6 +87,8 @@ export class Dashboard {
                     await this.sellTokenSelected();
                 }
             }
+
+            this.state.activePageId = "dashboard";
         } catch {
             return new Redirect('');
         }

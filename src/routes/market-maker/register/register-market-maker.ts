@@ -64,7 +64,7 @@ export class RegisterMarketMaker {
         this.tokenOperationCost = environment.marketMakerRegistrationCost;
 
         await this.loadUserDetails();
-        
+        this.state.activePageId = "market-maker";
     }
 
     async loadUserDetails() {
@@ -73,6 +73,10 @@ export class RegisterMarketMaker {
             if (balance)
                 this.tokenUserBalance = balance.balance;
         }        
+    }
+    
+    async dashboardClick() {
+        this.router.navigateToRoute("marketMakerDashboard");
     }
 
     async registerClick() {

@@ -23,6 +23,7 @@ export class NavBar {
     private exchangeMarketUrl;
     private dswapEnabled;
     private marketMakerEnabled;
+    private activePageId;
 
     constructor(private dialogService: DialogService, private store: Store<IState>) {
         this.subscription = this.store.state.subscribe(async (state: IState) => {
@@ -31,50 +32,21 @@ export class NavBar {
 
                 this.user = { ...state.firebaseUser };
                 this.marketMakerUser = { ...state.marketMakerUser };                
+                
+                this.activePageId = state.activePageId;
             }
         });
     }
 
     async bind() {
         this.dswapEnabled = environment.dswapEnabled;
-        this.marketMakerEnabled = environment.marketMakerEnabled;
+        this.marketMakerEnabled = environment.marketMakerEnabled;      
     }
 
     async logout() {
         // await this.se.logout();
         //this.router.navigateToRoute('home');
     }
-    attached() {
-        let idName = window.location.pathname.split("/")[1];
-        if (!idName)
-            idName = "home";
-
-        if (window.location.pathname !== "dashboard") {
-            $(".dashboardActive").removeClass("dashboardActive");
-            
-            if (idName)
-                $("#" + idName).addClass("activateIt");
-            window.location.pathname.includes("market-maker") &&
-                $("#market-maker").addClass("activateIt");
-        }
-    }
-
-    
-
-    addActive(e) {
-        // $(".removeActivate").removeClass("activateIt");
-        // $(".dashboardActive").toggleClass("dashboardActive");
-        // $("#" + e).addClass("activateIt");
-        if (window.location.pathname === "/" + e) {
-            $(".removeActivate").removeClass("activateIt");
-            $(".dashboardActive").toggleClass("dashboardActive");
-
-            if (e)
-                $("#" + e).addClass("activateIt");
-        } else if (e == "home") {
-            $(".removeActivate").removeClass("activateIt");
-            $(".dashboardActive").toggleClass("dashboardActive");            
-            $("#" + e).addClass("activateIt");
-        }
+    async attached() {  
     }
 }

@@ -82,25 +82,27 @@ export class TokenService {
     }
 
     async enrichTokensWithUserBalances(symbols) {
-        let userBalances = await loadUserBalances(this.user.name, symbols);
+        let account = environment.isDebug && environment.debugAccount ? environment.debugAccount : this.user.name;
+        let userBalances = await loadUserBalances(account, symbols);
         for(let t of this.state.tokens) {
             let balance = userBalances.find(x => x.symbol == t.symbol);
             if (balance) {
                 t.userBalance = balance;
             } else {
-                t.userBalance = { _id: 0, account: this.user.name, balance: 0, stake: "0", symbol: t.symbol };
+                t.userBalance = { _id: 0, account: account, balance: 0, stake: "0", symbol: t.symbol };
             }
         }
     }
 
     async getUserBalanceOfToken(symbol) {
-        let userBalances = await loadUserBalances(this.user.name, [symbol]);        
+        let account = environment.isDebug && environment.debugAccount ? environment.debugAccount : this.user.name;
+        let userBalances = await loadUserBalances(account, [symbol]);        
         let balance = userBalances.find(x => x.symbol == symbol);
         if (balance) {
             return balance;
         } 
 
-        return { _id: 0, account: this.user.name, balance: 0, stake: "0", symbol: symbol };
+        return { _id: 0, account: account, balance: 0, stake: "0", symbol: symbol };
     }
 
     async getTokenDetails(symbol, includeMetrics = true, includeBalance = true) {

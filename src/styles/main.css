@@ -959,6 +959,9 @@ a.item:hover .item-icon {
     background-color: #d3d3d3;
     text-align: center;
 }
+.faq-desc-title {
+    font-size: 1.625rem;
+}
 .faq-tabs ul.faq-tabs-btns {
     width: 50%;
     float: left;
@@ -1508,6 +1511,39 @@ input.tradeValueUsd {
 .dashboardActive {
     background-color: #05413c !important;
     color: #fff;
+}
+/* Ipad && Ipad Pro */
+@media only screen and (max-width: 1024px) and (min-width: 768px) {
+    .ipad-padding {
+        padding: 60px!important;
+    }
+    .ipad-none {
+        display: none!important;
+    }
+    .ipad-block {
+        display: block!important;
+    }
+    .register-market-maker-wrapper {
+        margin: 20px 100px!important;
+    }
+    a.back-btn {
+        margin-left: 100px!important;
+    }
+    .market-maker-dashboard-card {
+        padding: 40px!important;
+    }
+    .dashboard-action-main-card {
+        padding: 40px!important;
+    }
+    .toggle-container {
+        margin-right: 0!important;
+    }
+    .icon-and-text {
+        text-align: left!important;
+    }
+    .icon-and-text h2 {
+        text-align: left!important;
+    }
 }
 @media (max-width: 700px) {
     .dswap-nav {

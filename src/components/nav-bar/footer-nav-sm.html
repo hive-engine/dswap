@@ -1,11 +1,10 @@
 <template>
-    <section class="swap-screen d-block d-md-none">
+    <section class="swap-screen d-block d-md-none ipad-block">
         <div class="footer-nav-wrapper">
             <ul class="footer-nav">
-                <li
-                    class="footer-nav-item dashboardActiveMobile removeActivateMobile"
+                <li                    
+                    class="footer-nav-item ${activePageId == 'dashboard' ? 'activateItMobile' : ''}"
                     id="dashboard-mobile"
-                    click.delegate="addMobileActive('dashboard')"
                 >
                     <font-awesome-icon
                         class="sidenav-icon"
@@ -14,8 +13,7 @@
                     ><a route-href="route: dashboard">Dashboard</a>
                 </li>
                 <li
-                    class="footer-nav-item removeActivateMobile"
-                    click.delegate="addMobileActive('wallet')"
+                    class="footer-nav-item ${activePageId == 'wallet' ? 'activateItMobile' : ''}"
                     id="wallet-mobile"
                 >
                     <font-awesome-icon
@@ -25,8 +23,7 @@
                     <a route-href="route: wallet">Wallet</a>
                 </li>
                 <li
-                    class="footer-nav-item removeActivateMobile"
-                    click.delegate="addMobileActive('trades')"
+                    class="footer-nav-item ${activePageId == 'trades' ? 'activateItMobile' : ''}"
                     id="trades-mobile"
                 >
                     <font-awesome-icon
@@ -36,8 +33,7 @@
                     <a route-href="route: trades">Trades</a>
                 </li>
                 <li show.bind="marketMakerEnabled && (!marketMakerUser._id || marketMakerUser._id == 0)"
-                    class="footer-nav-item removeActivateMobile"
-                    click.delegate="addMobileActive('market-maker')"
+                    class="footer-nav-item ${activePageId == 'market-maker' ? 'activateItMobile' : ''}"
                     id="market-maker-mobile"
                 >
                     <font-awesome-icon
@@ -48,8 +44,7 @@
                 </li>
                 <li
                     show.bind="marketMakerEnabled && marketMakerUser._id && marketMakerUser._id != 0"
-                    class="footer-nav-item removeActivateMobile"
-                    click.delegate="addMobileActive('market-maker-dashboard')"
+                    class="footer-nav-item ${activePageId == 'market-maker-dashboard' ? 'activateItMobile' : ''}"
                     id="market-maker-dashboard-mobile"
                 >
                     <font-awesome-icon
@@ -59,8 +54,7 @@
                     <a route-href="route: marketMakerDashboard">Market Maker</a>
                 </li>
                 <li
-                    class="footer-nav-item removeActivateMobile"
-                    click.delegate="addMobileActive('faq')"
+                    class="footer-nav-item ${activePageId == 'faq' ? 'activateItMobile' : ''}"                    
                     id="faq-mobile"
                 >
                     <font-awesome-icon

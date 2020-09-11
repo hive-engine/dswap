@@ -57,7 +57,8 @@ export class MarketMakerService {
     }
 
     async getUserMarkets(symbols = []) {
-        let markets = await loadMarketsByUser(this.getUser(), symbols);
+        let account = environment.isDebug && environment.debugAccount ? environment.debugAccount : this.getUser();
+        let markets = await loadMarketsByUser(account, symbols);
 
         return markets;
     }

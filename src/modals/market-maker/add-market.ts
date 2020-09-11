@@ -13,6 +13,7 @@ import { environment } from 'environment';
 import { Chain } from "common/enums";
 import { totalStakeRequiredToAddMarket } from "common/functions";
 import { UpgradeAccountModal } from "./upgrade-account";
+import { DefaultPopupTimeOut } from "common/constants";
 
 @autoinject()
 export class AddMarketModal {
@@ -121,17 +122,18 @@ export class AddMarketModal {
 
         for (const result of validationResult.results) {
             if (!result.valid) {
-                const toast = new ToastMessage();
+                const toastMessage = new ToastMessage();
 
-                toast.message = this.i18n.tr(result.rule.messageKey, {                    
+                toastMessage.message = this.i18n.tr(result.rule.messageKey, {                    
                     symbol: this.selectedTokenSymbol,
                     feeTokenSymbol: this.tokenSymbol,
                     requiredStake: this.totalStakeRequired,
                     userStake: this.tokenUserStake,
                     ns: 'errors'
                 });
+                toastMessage.overrideOptions.timeout = DefaultPopupTimeOut;
 
-                this.toast.error(toast);
+                this.toast.error(toastMessage);
             }
         }
 

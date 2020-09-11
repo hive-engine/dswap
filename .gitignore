@@ -67,6 +67,7 @@ deploy-key
 
 steem-engine-dex-firebase-adminsdk-qldnz-94f36e5f75.json
 
+.vs/ 
 test/coverage-jest/
 /.vs/dswap/config/applicationhost.config
 functions/src/dswap-2b352-firebase-adminsdk-ebt14-cb88dcd45b.json
@@ -74,3 +75,4 @@ functions/src/dswap-2b352-firebase-adminsdk-ebt14-cb88dcd45b.json
 .vs/slnx.sqlite
 .vs/dswap/v16/.suo
 functions/lib/dswap-2b352-firebase-adminsdk-ebt14-cb88dcd45b.json
+/.vs/slnx.sqlite-journal

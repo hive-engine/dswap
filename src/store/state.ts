@@ -47,5 +47,6 @@ export const initialState: IState = {
   tokensLoaded: false,
   hivePriceUsd: '',
     hivePriceUsdDate: null,
+    activePageId: 'home',
     dswapChainId: 1
 };
