@@ -6,7 +6,9 @@ import { Store } from 'aurelia-store';
 import { Router, Redirect } from 'aurelia-router';
 import { Subscription } from 'rxjs';
 import { DialogService, DialogCloseResult } from 'aurelia-dialog';
-import { UpgradeAccountModal } from '../../modals/market-maker/upgrade-account';
+import { UpgradeAccountModal } from 'modals/market-maker/upgrade-account';
+import { Chain } from 'common/enums';
+import { getFeeTokenSymbolByChain } from 'common/functions';
 
 @autoinject()
 export class Pricing {
@@ -16,6 +18,7 @@ export class Pricing {
     private state: IState;
     private user;
     private marketMakerUser;
+    private currentChainId = Chain.Hive;
 
     constructor(private dialogService: DialogService,
         private marketMakerService: MarketMakerService,
@@ -28,12 +31,16 @@ export class Pricing {
 
                 this.user = { ...state.firebaseUser };
                 this.marketMakerUser = { ...state.marketMakerUser };
+
+                if (this.state.account && this.state.account.dswapChainId) {
+                    this.currentChainId = this.state.account.dswapChainId;
+                }
             }
         });
     }
 
     async bind() {
-        this.feeToken = environment.marketMakerFeeToken;
+        this.feeToken = await getFeeTokenSymbolByChain(this.currentChainId);
         this.state.activePageId = "pricing";
     }
 

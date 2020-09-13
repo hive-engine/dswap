@@ -14,6 +14,7 @@ import { I18N } from "aurelia-i18n";
 import { SigninModal } from "modals/signin";
 import { DialogService } from "aurelia-dialog";
 import { getMarketMakerUser } from "store/actions";
+import { getFeeTokenSymbolByChain } from "common/functions";
 
 @autoinject()
 export class RegisterMarketMaker {
@@ -31,6 +32,7 @@ export class RegisterMarketMaker {
     private validationController;
     private renderer;
     private marketMakerUserId = 0;
+    private currentChainId = Chain.Hive;
 
     constructor(private dialogService: DialogService,
         private marketMakerService: MarketMakerService,
@@ -51,7 +53,7 @@ export class RegisterMarketMaker {
 
                 this.user = { ...state.firebaseUser };
                 this.marketMakerUser = { ...state.marketMakerUser };
-
+                
                 if (this.marketMakerUser)
                     this.marketMakerUserId = this.marketMakerUser._id;
             }
@@ -59,8 +61,10 @@ export class RegisterMarketMaker {
     }
 
     async bind() {
+        this.currentChainId = this.state.loggedIn && this.state.account.dswapChainId ? this.state.account.dswapChainId : this.state.dswapChainId;
         this.createValidationRules();
-        this.tokenSymbol = environment.marketMakerFeeToken;
+        this.tokenSymbol = await getFeeTokenSymbolByChain(this.currentChainId);
+
         this.tokenOperationCost = environment.marketMakerRegistrationCost;
 
         await this.loadUserDetails();

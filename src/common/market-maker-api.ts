@@ -5,8 +5,10 @@ import { HttpClient } from 'aurelia-fetch-client';
 import { queryParam } from 'common/functions';
 import { environment } from 'environment';
 import { ssc } from './ssc';
+import { sscse } from './ssc-se';
 import { mapTokenResultToIToken, mapBalanceResultToIBalance, mapMetricsResultToTokenMetrics } from './mappers';
 import moment from 'moment';
+import { Chain } from './enums';
 
 const http = new HttpClient();
 
@@ -65,7 +67,7 @@ export async function loadMarketsByUser(account: any, symbols = []): Promise<IMa
     return markets;
 }
 
-export async function getUser(account: string): Promise<IMarketMakerUser> {
+export async function getUser(account: string, chain: Chain): Promise<IMarketMakerUser> {
     const queryConfig: any = { account: account };
 
     let user: IMarketMakerUser = {
@@ -84,9 +86,15 @@ export async function getUser(account: string): Promise<IMarketMakerUser> {
         _id: 0
     };
 
-    const results = await ssc.find('botcontroller', 'users', queryConfig);
-    if (results)
+    let results: any;
+    if (chain == Chain.Hive) {
+        results = await ssc.find('botcontroller', 'users', queryConfig);
+    } else if (chain == Chain.Steem) {
+        results = await sscse.find('botcontroller', 'users', queryConfig);
+    }
+    if (results) {
         user = <IMarketMakerUser>results[0];
+    }
 
     return user;
 }

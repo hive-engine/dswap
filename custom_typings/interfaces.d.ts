@@ -7,7 +7,8 @@ interface IEnvironment {
   siteName: string;
   defaultLocale: string;
   maintenanceMode: boolean;
-  RPC_URL: string;
+    RPC_URL: string;
+    RPC_URL_SE: string;
   ACCOUNTS_API_URL: string;
     CONVERTER_API_HE: string;
     CONVERTER_API_SE: string;
@@ -35,6 +36,7 @@ interface IEnvironment {
     marketMakerMaxMarketsBasic: number;
     marketMakerUpdateMarketCostBasic: number;
     marketMakerFeeToken: string;
+    marketMakerFeeToken_SE: string;
     isDebug: boolean;
     debugAccount: string;
 }
@@ -245,4 +247,16 @@ interface IDSwapChain {
     id: number;
     name: string;
     name_short: string;
+}
+
+interface AccountInterface {
+    name: string;
+    account: any;
+    balances: any[];
+    scotTokens: any[];
+    pendingUnstakes: any[];
+    token: any;
+    notifications: any[];
+    nfts: INft[];
+    dswapChainId: number;
 }

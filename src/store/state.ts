@@ -1,3 +1,5 @@
+import { Chain } from "common/enums";
+
 export const initialState: IState = {
   $action: {
       name: '',
@@ -11,7 +13,8 @@ export const initialState: IState = {
       scotTokens: [],
       pendingUnstakes: [],
       notifications: [],
-      nfts: []
+      nfts: [],
+      dswapChainId: 0
   },
     firebaseUser: {},
     marketMakerUser: {
@@ -48,5 +51,5 @@ export const initialState: IState = {
   hivePriceUsd: '',
     hivePriceUsdDate: null,
     activePageId: 'home',
-    dswapChainId: 1
+    dswapChainId: Chain.Hive
 };

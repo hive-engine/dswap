@@ -261,3 +261,14 @@ export async function getDswapChains() {
 
     return chains;
 }
+
+export async function getFeeTokenSymbolByChain(chain: Chain) {
+    let symbol: string;
+    if (chain === Chain.Hive) {
+        symbol = environment.marketMakerFeeToken;
+    } else if (chain === Chain.Steem) {
+        symbol = environment.marketMakerFeeToken_SE;
+    }
+
+    return symbol;
+}

@@ -23,6 +23,7 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     marketMakerMaxMarketsBasic: 1,
     marketMakerUpdateMarketCostBasic: 1,
     marketMakerFeeToken: 'BEE',
+    marketMakerFeeToken_SE: 'ENG',
     isDebug: false,
     debugAccount: '',
     dswapEnabled: false,

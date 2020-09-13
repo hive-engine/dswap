@@ -11,7 +11,7 @@ export class AuthorizeStep {
 
     run(navigationInstruction, next) {
         return new Promise((resolve) => {
-            firebase.auth().onAuthStateChanged(async (user) => {        
+            firebase.auth().onAuthStateChanged(async (user) => {    
                 const currentRoute: RouteConfig = navigationInstruction.config;
                 
                 const loginRequired = currentRoute.auth === true;

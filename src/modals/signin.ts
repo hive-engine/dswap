@@ -61,11 +61,14 @@ export class SigninModal {
             this.loading = true;
 
             const { username } = (await this.authService.login(
-                this.username.trim().toLowerCase()
+                this.username.trim().toLowerCase(),
+                null,
+                this.currentChain.id
             )) as any;
 
-            console.log('afterloggedin');
-            await dispatchify(login)(username);
+            if (username) {
+                await dispatchify(login)(username, this.state.dswapChainId);
+            }
 
             this.controller.close(true);
 
@@ -81,10 +84,13 @@ export class SigninModal {
 
             const { username } = (await this.authService.login(
                 this.username.trim().toLowerCase(),
-                this.privateKey.trim()
+                this.privateKey.trim(),
+                this.currentChain.id
             )) as any;
 
-            await dispatchify(login)(username);
+            if (username) {
+                await dispatchify(login)(username, this.state.dswapChainId);
+            }
 
             this.controller.close(true);
 
