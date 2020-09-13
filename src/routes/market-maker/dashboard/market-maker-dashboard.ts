@@ -17,6 +17,7 @@ import { EnableMarketModal } from "modals/market-maker/enable-market";
 import { TokenService } from "services/token-service";
 import { environment } from 'environment';
 import { UpgradeAccountModal } from "modals/market-maker/upgrade-account";
+import { Chain } from "../../../common/enums";
 
 @autoinject()
 export class MarketMakerDashboard {
@@ -42,7 +43,8 @@ export class MarketMakerDashboard {
 
     async bind() {
         this.loadMarkets();
-        this.exchangeMarketUrl = environment.EXCHANGE_URL + "?p=market&t=";
+        let exchangeUrl = this.state.dswapChainId === Chain.Hive ? environment.EXCHANGE_URL_HE : environment.EXCHANGE_URL_SE;
+        this.exchangeMarketUrl = exchangeUrl + "?p=market&t=";
         this.state.activePageId = "market-maker-dashboard";
     }
 

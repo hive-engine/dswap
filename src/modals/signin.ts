@@ -1,7 +1,7 @@
 import { Router } from "aurelia-router";
 import { ToastMessage } from "services/toast-service";
 import { I18N } from "aurelia-i18n";
-import { dispatchify } from "aurelia-store";
+import { dispatchify, Store } from "aurelia-store";
 //import { HiveEngine } from 'services/hive-engine';
 import { DialogController } from "aurelia-dialog";
 import { autoinject } from "aurelia-framework";
@@ -12,6 +12,7 @@ import { login } from "store/actions";
 
 import styles from "./signin.module.css";
 import { AuthService } from "services/auth-service";
+import { getDswapChains } from "../common/functions";
 
 @autoinject()
 export class SigninModal {
@@ -23,24 +24,36 @@ export class SigninModal {
     private username;
     private privateKey;
     private useKeychain = false;
+    private state: IState;
+    private currentChain;
 
     constructor(
         private controller: DialogController,
         private authService: AuthService,
         private i18n: I18N,
         private router: Router,
-        private toast: ToastService
+        private toast: ToastService,
+        private store: Store<IState>
     ) {
         this.controller.settings.lock = false;
         this.controller.settings.centerHorizontalOnly = true;
+
+        this.subscription = this.store.state.subscribe(state => {
+            if (state) {
+                this.state = state;
+            }
+        });    
     }
 
-    attached() {
+    async attached() {
         if (window.hive_keychain) {
             window.hive_keychain.requestHandshake(() => {
                 this.useKeychain = true;
             });
         }
+
+        let chains = await getDswapChains();
+        this.currentChain = chains.find(x => x.id === this.state.dswapChainId);
     }
 
     async keychainSignIn() {
@@ -51,6 +64,7 @@ export class SigninModal {
                 this.username.trim().toLowerCase()
             )) as any;
 
+            console.log('afterloggedin');
             await dispatchify(login)(username);
 
             this.controller.close(true);

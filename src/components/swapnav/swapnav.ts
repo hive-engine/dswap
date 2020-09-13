@@ -12,6 +12,7 @@ import { getDswapChains } from 'common/functions';
 import { ConfirmChainModal } from 'modals/confirm-chain';
 import { observable } from 'aurelia-framework';
 import { Chain } from '../../common/enums';
+import { DefaultChainId } from '../../common/constants';
 
 
 @autoinject()
@@ -38,8 +39,9 @@ export class SwapNav {
                 this.marketMakerUser = { ...this.state.marketMakerUser };
 
                 if (this.state.dswapChainId) {
-                    console.log('state value' + this.state.dswapChainId);
                     this.selectedChainId = this.state.dswapChainId;
+                } else {
+                    this.state.dswapChainId = DefaultChainId;
                 }
             }
         });  
@@ -48,8 +50,7 @@ export class SwapNav {
     async bind() {        
         this.dswapEnabled = environment.dswapEnabled;
         this.marketMakerEnabled = environment.marketMakerEnabled;
-        this.chains = await getDswapChains();
-         
+        this.chains = await getDswapChains();        
     }
 
     async logout() {
@@ -62,11 +63,9 @@ export class SwapNav {
             let selectedChain = this.chains.find(x => x.id == this.selectedChainId);
 
             this.dialogService.open({ viewModel: ConfirmChainModal, model: selectedChain }).whenClosed(response => {
-                if (!response.wasCancelled) {
-                    // redirect to home if login was successfull
-                    //this.router.navigateToRoute('home');
-                } else {
-                    console.log('cancel state:' + this.state.dswapChainId);
+                if (!response.wasCancelled) {                    
+                    this.router.navigateToRoute('home');
+                } else {                    
                     this.selectedChainId = this.state.dswapChainId;       
                 }
             });

@@ -244,4 +244,5 @@ interface IMarketMakerOrderStrategy {
 interface IDSwapChain {
     id: number;
     name: string;
+    name_short: string;
 }

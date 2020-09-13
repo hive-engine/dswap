@@ -256,8 +256,8 @@ export async function totalStakeRequiredToEnableMarket(marketMakerUser: IMarketM
 
 export async function getDswapChains() {
     let chains: IDSwapChain[] = [];
-    chains.push({ id: Chain.Hive, name: "Hive Engine" });
-    chains.push({ id: Chain.Steem, name: "Steem Engine" });
+    chains.push({ id: Chain.Hive, name: "Hive Engine", name_short: "Hive" });
+    chains.push({ id: Chain.Steem, name: "Steem Engine", name_short: "Steem" });
 
     return chains;
 }

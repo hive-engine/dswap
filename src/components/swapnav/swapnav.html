@@ -24,7 +24,7 @@
         <div class="dswap-nav-options ml-auto">
             <select class="form-control"
                     value.bind="selectedChainId">
-                <option value.bind="c.id" repeat.for="c of chains">
+                <option model.bind="c.id" repeat.for="c of chains">
                     ${c.name & t}
                 </option>
             </select>
