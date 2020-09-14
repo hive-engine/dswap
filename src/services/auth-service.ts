@@ -5,11 +5,12 @@ import { environment } from 'environment';
 import firebase from 'firebase/app';
 import { ToastMessage, ToastService } from './toast-service';
 import { I18N } from 'aurelia-i18n';
-import { Store } from 'aurelia-store';
+import { Store, dispatchify } from 'aurelia-store';
 import hivejs from '@hivechain/hivejs';
 import { hiveSignerJson, getAccount } from 'common/hive';
-import { Chain } from '../common/enums';
-import { DefaultPopupTimeOut, firebaseSteemAppName, firebaseHiveAppName } from '../common/constants';
+import { Chain } from 'common/enums';
+import { DefaultPopupTimeOut, firebaseSteemAppName, firebaseHiveAppName } from 'common/constants';
+import { logout } from 'store/actions';
 
 const http = new HttpClient();
 const httpSe = new HttpClient();
@@ -55,6 +56,9 @@ export class AuthService {
         if (chain === Chain.Steem) {
             let firebaseSteem = firebase.apps.find(x => x.name === firebaseSteemAppName);
             return firebaseSteem.auth().currentUser.getIdToken();
+        } else if (chain === Chain.Hive) {
+            let firebaseHive = firebase.apps.find(x => x.name === firebaseHiveAppName);
+            return firebaseHive.auth().currentUser.getIdToken();
         }
 
         return firebase.auth().currentUser.getIdToken();
@@ -99,46 +103,44 @@ export class AuthService {
         return obj.token;
     }
 
-    async login(username: string, key?: string, chain?: Chain): Promise<unknown> {
-        // eslint-disable-next-line no-async-promise-executor
-        if (chain === Chain.Steem) {
-            return new Promise(async (resolve) => {
-                if (window.steem_keychain && !key) {
-                    // Get an encrypted memo only the user can decrypt with their private key
-                    const encryptedMemo = await this.getUserAuthMemo(username, chain) as string;
+    async loginSteem(username: string, key?: string, chain?: Chain): Promise<unknown> {
+        return new Promise(async (resolve) => {
+            if (window.steem_keychain && !key) {
+                // Get an encrypted memo only the user can decrypt with their private key
+                const encryptedMemo = await this.getUserAuthMemo(username, chain) as string;
 
-                    window.steem_keychain.requestVerifyKey(username, encryptedMemo, 'Posting', async response => {
-                        if (response.error) {
-                            const toast = new ToastMessage();
+                window.steem_keychain.requestVerifyKey(username, encryptedMemo, 'Posting', async response => {
+                    if (response.error) {
+                        const toast = new ToastMessage();
 
-                            toast.message = this.i18n.tr('errorLogin', {
-                                ns: 'errors'
-                            });
-                            toast.overrideOptions.timeout = DefaultPopupTimeOut;
+                        toast.message = this.i18n.tr('errorLogin', {
+                            ns: 'errors'
+                        });
+                        toast.overrideOptions.timeout = DefaultPopupTimeOut;
 
-                            this.toast.error(toast);
+                        this.toast.error(toast);
 
-                            resolve(false);
-                        } else {
-                            // Get the return memo and remove the '#' at the start of the private memo
-                            const signedKey = (response.result as unknown as string).substring(1);
+                        resolve(false);
+                    } else {
+                        // Get the return memo and remove the '#' at the start of the private memo
+                        const signedKey = (response.result as unknown as string).substring(1);
 
-                            // The decrypted memo is an encrypted string, so pass this to the server to get back refresh and access tokens
-                            const token = await this.verifyUserAuthMemo(response.data.username, signedKey, chain) as string;
+                        // The decrypted memo is an encrypted string, so pass this to the server to get back refresh and access tokens
+                        const token = await this.verifyUserAuthMemo(response.data.username, signedKey, chain) as string;
 
-                            let firebaseSteem = firebase.apps.find(x => x.name === firebaseSteemAppName);
-                            await firebaseSteem.auth().signInWithCustomToken(token);
+                        let firebaseSteem = firebase.apps.find(x => x.name === firebaseSteemAppName);
+                        await firebaseSteem.auth().signInWithCustomToken(token);
 
-                            resolve({ username, token });
-                        }
-                    });
-                } else {
+                        resolve({ username, token });
+                    }
+                });
+            } else {
 
-                }
-            });
-        }
+            }
+        });
+    };
 
-        // else
+    async loginHive(username: string, key?: string, chain?: Chain): Promise<unknown> {
         return new Promise(async (resolve) => {
             if (window.hive_keychain && !key) {
                 // Get an encrypted memo only the user can decrypt with their private key
@@ -247,7 +249,18 @@ export class AuthService {
         });
     }
 
+    async login(username: string, key?: string, chain?: Chain): Promise<unknown> {
+        // eslint-disable-next-line no-async-promise-executor
+        if (chain === Chain.Steem) {
+            return this.loginSteem(username, key, chain);
+        } else if (chain === Chain.Hive) {
+            return this.loginHive(username, key, chain);
+        }
+    }
+
     async logout() {        
+        dispatchify(logout)();
+
         let firebaseSteem = firebase.apps.find(x => x.name === firebaseSteemAppName);
         firebaseSteem.auth().signOut();
 

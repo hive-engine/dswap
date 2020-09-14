@@ -1,4 +1,4 @@
-import { Chain } from "common/enums";
+import { DefaultChainId } from "common/constants";
 
 export const initialState: IState = {
   $action: {
@@ -51,5 +51,5 @@ export const initialState: IState = {
   hivePriceUsd: '',
     hivePriceUsdDate: null,
     activePageId: 'home',
-    dswapChainId: Chain.Hive
+    dswapChainId: DefaultChainId
 };

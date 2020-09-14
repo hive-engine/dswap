@@ -42,7 +42,7 @@ export async function loadMarkets(symbols = [], limit = 1000, offset = 0): Promi
     return markets;
 }
 
-export async function loadMarketsByUser(account: any, symbols = []): Promise<IMarketMakerMarket[]> {
+export async function loadMarketsByUser(account: any, symbols = [], chain: Chain): Promise<IMarketMakerMarket[]> {
     const queryConfig: any = {};
 
     if (account) {
@@ -56,12 +56,19 @@ export async function loadMarketsByUser(account: any, symbols = []): Promise<IMa
     }
 
     let markets: IMarketMakerMarket[] = [];
-    const results = await ssc.find('botcontroller', 'markets', queryConfig);
+    let results: any;
+    if (chain == Chain.Hive) {
+        results = await ssc.find('botcontroller', 'markets', queryConfig);
+    } else if (chain == Chain.Steem) {
+        results = await sscse.find('botcontroller', 'markets', queryConfig);
+    }
 
-    for (const res of results) {
-        let arr = <IMarketMakerMarket>res;
-        arr.creationTimestamp_string = moment.unix(arr.creationTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
-        markets.push(res);
+    if (results) {
+        for (const res of results) {
+            let arr = <IMarketMakerMarket>res;
+            arr.creationTimestamp_string = moment.unix(arr.creationTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
+            markets.push(res);
+        }
     }
 
     return markets;

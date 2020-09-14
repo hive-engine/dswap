@@ -19,6 +19,7 @@ export class Trades {
     private totalItems = 50;
     // calculate later based on totalItems
     private totalPages = 9;
+    private currentChainId;
 
     constructor(private dialogService: DialogService, private hes: HiveEngineService, private ts: TokenService) {}
 
@@ -53,8 +54,8 @@ export class Trades {
         this.offset = (this.page - 1) * this.limit;
 
         let trades = await this.hes.loadAccountHistoryData(this.symbol, this.limit, this.offset);
-        for(let t of trades) {
-            let token = await this.ts.getTokenDetails(t.symbol, true, false);
+        for (let t of trades) {
+            let token = await this.ts.getTokenDetails(t.symbol, this.currentChainId, true, false);
             if (token && token.metrics) {
                 t.usdValue = (parseFloat(t.quantity) * parseFloat(token.metrics.lastPriceUsd)).toFixed(2);
             }

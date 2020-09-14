@@ -12,7 +12,7 @@ import { login } from "store/actions";
 
 import styles from "./signin.module.css";
 import { AuthService } from "services/auth-service";
-import { getDswapChains } from "../common/functions";
+import { getDswapChains, getChainByState } from "../common/functions";
 
 @autoinject()
 export class SigninModal {
@@ -25,6 +25,7 @@ export class SigninModal {
     private privateKey;
     private useKeychain = false;
     private state: IState;
+    private currentChainId;
     private currentChain;
 
     constructor(
@@ -40,20 +41,28 @@ export class SigninModal {
 
         this.subscription = this.store.state.subscribe(state => {
             if (state) {
-                this.state = state;
+                this.state = state;                
             }
         });    
     }
 
     async attached() {
+        this.currentChainId = await getChainByState(this.state);
+
         if (window.hive_keychain) {
             window.hive_keychain.requestHandshake(() => {
                 this.useKeychain = true;
             });
         }
 
+        if (window.steem_keychain) {
+            window.steem_keychain.requestHandshake(() => {
+                this.useKeychain = true;
+            });
+        }
+
         let chains = await getDswapChains();
-        this.currentChain = chains.find(x => x.id === this.state.dswapChainId);
+        this.currentChain = chains.find(x => x.id === this.currentChainId);
     }
 
     async keychainSignIn() {
@@ -67,7 +76,7 @@ export class SigninModal {
             )) as any;
 
             if (username) {
-                await dispatchify(login)(username, this.state.dswapChainId);
+                await dispatchify(login)(username, this.currentChain.id);
             }
 
             this.controller.close(true);
@@ -89,7 +98,7 @@ export class SigninModal {
             )) as any;
 
             if (username) {
-                await dispatchify(login)(username, this.state.dswapChainId);
+                await dispatchify(login)(username, this.currentChain.id);
             }
 
             this.controller.close(true);

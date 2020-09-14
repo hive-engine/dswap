@@ -7,6 +7,7 @@ import { ToastService, ToastMessage } from 'services/toast-service';
 import { ValidationControllerFactory, ValidationRules, ControllerValidateResult } from 'aurelia-validation';
 import { I18N } from 'aurelia-i18n';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
+import { getChainByState } from 'common/functions';
 
 @autoinject()
 export class Send {
@@ -19,6 +20,7 @@ export class Send {
     private tokenAmount;
     private validationController;
     private renderer;
+    private currentChainId;
 
     constructor(
         private dialogService: DialogService,
@@ -43,6 +45,7 @@ export class Send {
         await this.refreshTokenLists();        
         this.refreshSelectPicker();
         await this.createValidationRules();
+        this.currentChainId = await getChainByState(this.state);
 
         if (symbol) {
             this.tokenSymbol = symbol;            
@@ -74,7 +77,7 @@ export class Send {
         this.token = this.tokens.find(x => x.symbol == this.tokenSymbol);
         if (!this.token.userBalance)
         {
-            this.token.userBalance = await this.ts.getUserBalanceOfToken(this.token);
+            this.token.userBalance = await this.ts.getUserBalanceOfToken(this.token, this.currentChainId);
         }
     }
 

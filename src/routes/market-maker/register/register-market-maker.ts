@@ -14,7 +14,7 @@ import { I18N } from "aurelia-i18n";
 import { SigninModal } from "modals/signin";
 import { DialogService } from "aurelia-dialog";
 import { getMarketMakerUser } from "store/actions";
-import { getFeeTokenSymbolByChain } from "common/functions";
+import { getFeeTokenSymbolByChain, getChainByState } from "common/functions";
 
 @autoinject()
 export class RegisterMarketMaker {
@@ -32,7 +32,7 @@ export class RegisterMarketMaker {
     private validationController;
     private renderer;
     private marketMakerUserId = 0;
-    private currentChainId = Chain.Hive;
+    private currentChainId;    
 
     constructor(private dialogService: DialogService,
         private marketMakerService: MarketMakerService,
@@ -50,19 +50,19 @@ export class RegisterMarketMaker {
         this.subscription = this.store.state.subscribe(async (state: IState) => {
             if (state) {
                 this.state = state;
-
+                
                 this.user = { ...state.firebaseUser };
                 this.marketMakerUser = { ...state.marketMakerUser };
                 
                 if (this.marketMakerUser)
-                    this.marketMakerUserId = this.marketMakerUser._id;
+                    this.marketMakerUserId = this.marketMakerUser._id;                
             }
         });
     }
 
-    async bind() {
-        this.currentChainId = this.state.loggedIn && this.state.account.dswapChainId ? this.state.account.dswapChainId : this.state.dswapChainId;
+    async bind() {        
         this.createValidationRules();
+        this.currentChainId = await getChainByState(this.state);
         this.tokenSymbol = await getFeeTokenSymbolByChain(this.currentChainId);
 
         this.tokenOperationCost = environment.marketMakerRegistrationCost;
@@ -73,7 +73,7 @@ export class RegisterMarketMaker {
 
     async loadUserDetails() {
         if (this.user) {
-            let balance = await this.ts.getUserBalanceOfToken(this.tokenSymbol);
+            let balance = await this.ts.getUserBalanceOfToken(this.tokenSymbol, this.currentChainId);
             if (balance)
                 this.tokenUserBalance = balance.balance;
         }        
@@ -114,7 +114,12 @@ export class RegisterMarketMaker {
 
                 if (validationResult.valid) {
                     this.loading = true;
-                    await this.marketMakerService.register(Chain.Hive);
+                    let registerResponse = await this.marketMakerService.register(this.currentChainId);
+                    if (registerResponse) {
+                        let v = Math.floor((Math.random() * 1000000) + 1);
+                        this.router.navigate('register-market-maker?v=' + v, { replace: true, trigger: true });
+                        await this.loadUserDetails();
+                    }
                     this.loading = false;
                 }
 

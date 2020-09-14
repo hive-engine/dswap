@@ -3,7 +3,8 @@ interface IEnvironment {
   testing: boolean;
     FIREBASE_API_HE: string;
     FIREBASE_API_SE: string;
-  chainId: string;
+    chainId: string;
+    chainId_SE: string;
   siteName: string;
   defaultLocale: string;
   maintenanceMode: boolean;
@@ -26,6 +27,7 @@ interface IEnvironment {
   nativeToken: string;
     swapEnabledTokens: string[];
     disabledTokens: string[];
+    disabledTokens_SE: string[];
   peggedToken: string;
     features: any;
     marketMakerRegistrationCost: number;

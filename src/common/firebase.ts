@@ -36,7 +36,6 @@ export async function authStateChanged() {
     return new Promise(resolve => {
         let firebaseHive = firebase.apps.find(x => x.name === firebaseHiveAppName);
         firebaseHive.auth().onAuthStateChanged(async user => { 
-            console.log('auth state changed hive');
             // eslint-disable-next-line no-undef
             const token = await firebaseHive.auth()?.currentUser?.getIdTokenResult(true);
 
@@ -54,8 +53,6 @@ export async function authStateChanged() {
 
         let firebaseSteem = firebase.apps.find(x => x.name === firebaseSteemAppName);
         firebaseSteem.auth().onAuthStateChanged(async user => {
-            console.log('auth state changed steem');
-
             // eslint-disable-next-line no-undef
             const token = await firebaseSteem.auth()?.currentUser?.getIdTokenResult(true);
 

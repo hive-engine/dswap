@@ -13,6 +13,7 @@ import { getUser } from 'common/market-maker-api';
 import { environment } from 'environment';
 import { Chain } from 'common/enums';
 import { firebaseHiveAppName, firebaseSteemAppName } from 'common/constants';
+import { getChainByState } from '../common/functions';
 
 export function loading(state: IState, boolean: boolean) {
     const newState = { ...state };
@@ -24,7 +25,6 @@ export function loading(state: IState, boolean: boolean) {
 
 export function login(state: IState, username: string, dswapChainId: number): IState {
     const newState = { ...state };
-    console.log('login: ' + dswapChainId);
     if (newState?.account) {
         newState.account.name = username;
         newState.account.dswapChainId = dswapChainId;
@@ -94,8 +94,7 @@ export function setTokens(state: IState, tokens: any[]): IState {
     return newState;
 }
 
-export async function getCurrentFirebaseUser(state: IState): Promise<IState> {
-    console.log('current firebase user');
+export async function getCurrentFirebaseUser(state: IState): Promise<IState> {    
     const newState = { ...state };
 
     if (!newState.loggedIn) {
@@ -147,9 +146,9 @@ export async function getMarketMakerUser(state: IState): Promise<IState> {
 
     try {
         let account = environment.isDebug && environment.debugAccount ? environment.debugAccount : newState.account.name;
-        let dswapChainId = newState.account.dswapChainId ? newState.account.dswapChainId : newState.dswapChainId;
+        let currentChainId = await getChainByState(newState);
 
-        let mmUser = await getUser(account, dswapChainId);
+        let mmUser = await getUser(account, currentChainId);
 
         if (mmUser) {
             mmUser.creationTimestamp_string = moment.unix(mmUser.creationTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');

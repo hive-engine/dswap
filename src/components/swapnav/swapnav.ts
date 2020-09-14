@@ -8,7 +8,7 @@ import { faWallet } from '@fortawesome/pro-duotone-svg-icons';
 import { AuthService } from 'services/auth-service';
 import { environment } from 'environment';
 import { getMarketMakerUser } from 'store/actions';
-import { getDswapChains } from 'common/functions';
+import { getDswapChains, getChainByState } from 'common/functions';
 import { ConfirmChainModal } from 'modals/confirm-chain';
 import { observable } from 'aurelia-framework';
 import { Chain } from 'common/enums';
@@ -31,6 +31,7 @@ export class SwapNav {
     private chains;
     @observable() selectedChainId;
     private marketMakerUser;
+    private currentChainId;
 
     constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<IState>) {        
         this.subscription = this.store.state.subscribe((state: IState) => {
@@ -38,23 +39,24 @@ export class SwapNav {
                 this.state = state;
                 this.marketMakerUser = { ...this.state.marketMakerUser };
 
-                if (this.state.loggedIn) {
-                    this.selectedChainId = this.state.account.dswapChainId;
-                } else {
-                    if (this.state.dswapChainId) {
-                        this.selectedChainId = this.state.dswapChainId;
-                    } else {
-                        this.state.dswapChainId = DefaultChainId;
-                    }
-                }
+                this.setCurrentChain();
             }
         });  
+    }
+
+    async setCurrentChain() {
+        this.currentChainId = await getChainByState(this.state);
+
+        if (!this.state.dswapChainId && this.currentChainId)
+            this.state.dswapChainId = this.currentChainId;
+
+        this.selectedChainId = this.currentChainId;
     }
 
     async bind() {        
         this.dswapEnabled = environment.dswapEnabled;
         this.marketMakerEnabled = environment.marketMakerEnabled;
-        this.chains = await getDswapChains();        
+        this.chains = await getDswapChains();    
     }
 
     async logout() {
@@ -63,9 +65,7 @@ export class SwapNav {
     }
 
     async selectedChainIdChanged(newValue, oldValue) {
-        let stateChainId = this.state.loggedIn && this.state.account.dswapChainId ? this.state.account.dswapChainId : this.state.dswapChainId;
-
-        if (oldValue && newValue != stateChainId) {
+        if (oldValue && newValue != this.currentChainId) {
             let selectedChain = this.chains.find(x => x.id == this.selectedChainId);
 
             // show warning popup if logged in
@@ -74,7 +74,7 @@ export class SwapNav {
                     if (!response.wasCancelled) {
                         this.router.navigateToRoute('home');
                     } else {
-                        this.selectedChainId = this.state.dswapChainId;
+                        this.selectedChainId = this.currentChainId;
                     }
                 });
             } else {

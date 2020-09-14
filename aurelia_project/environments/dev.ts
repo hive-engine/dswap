@@ -5,6 +5,7 @@ export const environment: Partial<IEnvironment> = {
     debug: false,
     testing: false,
     chainId: 'ssc-mainnet-hive',
+    chainId_SE: 'ssc-mainnet1',
     RPC_URL: 'https://api.hive-engine.com/rpc',
     RPC_URL_SE: 'https://api.steem-engine.com/rpc2',
     NODE_API_URL: 'https://node-api.steem-engine.com/v1/',
