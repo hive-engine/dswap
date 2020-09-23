@@ -12,7 +12,7 @@ import { loadCoins, loadTokenMetrics, loadUserBalances, loadTokens } from 'commo
 import { HiveEngineService } from './hive-engine-service';
 import { getPrices, usdFormat } from 'common/functions';
 import { Chain } from '../common/enums';
-import { loadUserBalancesSE, loadTokensSE } from '../common/steem-engine-api';
+import { loadUserBalancesSE, loadTokensSE, loadTokenMetricsSE } from '../common/steem-engine-api';
 
 const http = new HttpClient();
 
@@ -46,20 +46,26 @@ export class TokenService {
         });        
     }
 
-    async getDSwapTokens(includeMetrics = true) {
+    async getDSwapTokens(includeMetrics = true, chain: Chain = Chain.Hive) {
         const symbols = environment.swapEnabledTokens;
         let dTokens = await loadTokens(symbols);
 
         if (includeMetrics)
-            await this.enrichTokensWithMetrics(dTokens, symbols);
+            await this.enrichTokensWithMetrics(dTokens, symbols, chain);
 
         this.state.tokens = dTokens;
 
         return dTokens;
     }    
 
-    async enrichTokensWithMetrics(dTokens: IToken[], symbols: string[]) {
-        let metrics = await loadTokenMetrics(symbols);
+    async enrichTokensWithMetrics(dTokens: IToken[], symbols: string[], chain: Chain) {
+        let metrics = [];
+
+        if (chain === Chain.Hive) {
+            metrics = await loadTokenMetrics(symbols);
+        } else if (chain === Chain.Steem) {
+            metrics = await loadTokenMetricsSE(symbols);
+        }
         
         for(const m of metrics) {
             let token = dTokens.find(x => x.symbol == m.symbol);
@@ -115,19 +121,19 @@ export class TokenService {
         }
     }
 
-    async getTokenDetails(symbol, chain: Chain, includeMetrics = true, includeBalance = true) {
+    async getTokenDetails(symbol, chain: Chain, includeMetrics = true, includeBalance = true) {        
         let dToken: any;
         if (this.state.tokens && this.state.tokens.length > 0) {            
             dToken = this.state.tokens.find(x => x.symbol == symbol);
 
             if (!dToken)
-                dToken = await this.retrieveSingleToken(symbol);
+                dToken = await this.retrieveSingleToken(symbol, chain);
         } else {
-            dToken = await this.retrieveSingleToken(symbol);
+            dToken = await this.retrieveSingleToken(symbol, chain);
         }
 
         if (includeMetrics)
-            await this.enrichTokensWithMetrics([dToken], [symbol]);
+            await this.enrichTokensWithMetrics([dToken], [symbol], chain);
 
         if (includeBalance)
             dToken.userBalance = await this.getUserBalanceOfToken(symbol, chain);
@@ -135,19 +141,23 @@ export class TokenService {
         return dToken;
     }
 
-    async retrieveSingleToken(symbol) {
+    async retrieveSingleToken(symbol, chain: Chain) {
         let dToken: any;
-
-        let tokenRes = await loadTokens([symbol])
-        if (tokenRes)
-            dToken = tokenRes[0];
-
+        if (chain === Chain.Hive) {
+            let tokenRes = await loadTokens([symbol])
+            if (tokenRes)
+                dToken = tokenRes[0];
+        } else if (chain === Chain.Steem) {
+            let tokenRes = await loadTokensSE([symbol])
+            if (tokenRes)
+                dToken = tokenRes[0];
+        }        
         return dToken;
     }
 
-    async getDSwapTokenBalances() {
+    async getDSwapTokenBalances(chain: Chain) {
         if (!this.state.tokens) {
-            await this.getDSwapTokens();
+            await this.getDSwapTokens(true, chain);
         }
 
         if (!this.state.tokens.find((x) => x.userBalance != null)) {

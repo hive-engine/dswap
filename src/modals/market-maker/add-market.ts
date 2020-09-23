@@ -11,7 +11,7 @@ import { Router, Redirect } from 'aurelia-router';
 import { BootstrapFormRenderer } from "resources/bootstrap-form-renderer";
 import { environment } from 'environment';
 import { Chain } from "common/enums";
-import { totalStakeRequiredToAddMarket, getChainByState, getFeeTokenSymbolByChain } from "common/functions";
+import { totalStakeRequiredToAddMarket, getChainByState, getFeeTokenSymbolByChain, getPeggedTokenSymbolByChain } from "common/functions";
 import { UpgradeAccountModal } from "./upgrade-account";
 import { DefaultPopupTimeOut } from "common/constants";
 
@@ -85,7 +85,7 @@ export class AddMarketModal {
 
         this.currentChainId = await getChainByState(this.state);
         this.tokenSymbol = await getFeeTokenSymbolByChain(this.currentChainId);
-        this.baseToken = environment.peggedToken;
+        this.baseToken = await getPeggedTokenSymbolByChain(this.currentChainId);
         this.mmTokens = await this.ts.getMarketMakerTokens([], this.currentChainId);
         this.tokenOperationCost = environment.marketMakerStakeRequiredPerMarket;
 
@@ -159,7 +159,7 @@ export class AddMarketModal {
             if (this.marketMakerUser.isPremium)
                 this.market.strategy = this.selectedOrderStrategy._id;
 
-            const result = await this.mms.addMarket(Chain.Hive, this.market);
+            const result = await this.mms.addMarket(this.currentChainId, this.market);
 
             if (result) {
                 this.controller.ok();

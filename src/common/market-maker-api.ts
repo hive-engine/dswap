@@ -42,7 +42,7 @@ export async function loadMarkets(symbols = [], limit = 1000, offset = 0): Promi
     return markets;
 }
 
-export async function loadMarketsByUser(account: any, symbols = [], chain: Chain): Promise<IMarketMakerMarket[]> {
+export async function loadMarketsByUser(account: any, symbols = [], chain: Chain): Promise<IMarketMakerMarket[]> {    
     const queryConfig: any = {};
 
     if (account) {
