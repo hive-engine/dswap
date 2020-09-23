@@ -6,7 +6,7 @@ import { ValidationControllerFactory, ControllerValidateResult, ValidationRules 
 import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
-import { trimUsername } from 'common/functions';
+import { trimUsername, getChainByState } from 'common/functions';
 import { MarketMakerService } from 'services/market-maker-service';
 import { Chain } from 'common/enums';
 
@@ -21,6 +21,7 @@ export class RemoveMarketModal {
     private marketMakerUser;
     private symbol;
     private market: IMarketMakerMarket;
+    private currentChainId;
 
     constructor(private controller: DialogController,
         private toast: ToastService,
@@ -47,12 +48,13 @@ export class RemoveMarketModal {
 
     async activate(market) {
         this.market = market;
+        this.currentChainId = await getChainByState(this.state);
     }
 
     async confirmRemoveMarket() {
         this.loading = true;
 
-        const result = await this.mms.removeMarket(Chain.Hive, this.market.symbol);
+        const result = await this.mms.removeMarket(this.currentChainId, this.market.symbol);
 
         if (result) {
             this.controller.ok();

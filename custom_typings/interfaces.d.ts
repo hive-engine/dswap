@@ -28,7 +28,8 @@ interface IEnvironment {
     swapEnabledTokens: string[];
     disabledTokens: string[];
     disabledTokens_SE: string[];
-  peggedToken: string;
+    peggedToken: string;
+    peggedToken_SE: string;
     features: any;
     marketMakerRegistrationCost: number;
     marketMakerUpgradeCost: number;

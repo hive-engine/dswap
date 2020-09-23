@@ -44,11 +44,11 @@ export class MarketMakerDashboard {
     }
 
     async bind() {
-        this.loadMarkets();
-        let exchangeUrl = this.state.dswapChainId === Chain.Hive ? environment.EXCHANGE_URL_HE : environment.EXCHANGE_URL_SE;
-        this.exchangeMarketUrl = exchangeUrl + "?p=market&t=";
-        this.state.activePageId = "market-maker-dashboard";
         this.currentChainId = await getChainByState(this.state);
+        this.loadMarkets();
+        let exchangeUrl = this.currentChainId === Chain.Hive ? environment.EXCHANGE_URL_HE : environment.EXCHANGE_URL_SE;
+        this.exchangeMarketUrl = exchangeUrl + "?p=market&t=";
+        this.state.activePageId = "market-maker-dashboard";        
     }
 
     async loadMarkets() {

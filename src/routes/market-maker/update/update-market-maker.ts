@@ -17,7 +17,7 @@ import { EnableMarketModal } from "modals/market-maker/enable-market";
 import { RemoveMarketModal } from "modals/market-maker/remove-market";
 import { UpgradeAccountModal } from "modals/market-maker/upgrade-account";
 import { DefaultPopupTimeOut } from 'common/constants';
-import { getChainByState } from 'common/functions';
+import { getChainByState, getPeggedTokenSymbolByChain, getFeeTokenSymbolByChain } from 'common/functions';
 
 @autoinject()
 export class UpdateMarketMaker {
@@ -76,6 +76,7 @@ export class UpdateMarketMaker {
 
     async canActivate({symbol}) {
         this.selectedTokenSymbol = symbol;
+        this.currentChainId = await getChainByState(this.state);
         this.selectedToken = await this.ts.getTokenDetails(this.selectedTokenSymbol, this.currentChainId);
     }    
 
@@ -115,11 +116,10 @@ export class UpdateMarketMaker {
     }
 
     async bind() {
-        this.createValidationRules();       
-        this.currentChainId = await getChainByState(this.state);
+        this.createValidationRules();               
         this.loadMarketDetails();
-        this.feeTokenSymbol = environment.marketMakerFeeToken;
-        this.baseToken = environment.peggedToken;        
+        this.feeTokenSymbol = await getFeeTokenSymbolByChain(this.currentChainId);
+        this.baseToken = await getPeggedTokenSymbolByChain(this.currentChainId);
 
         if (!this.marketMakerUser.isPremium)
             this.tokenOperationCost = environment.marketMakerUpdateMarketCostBasic;
@@ -252,7 +252,7 @@ export class UpdateMarketMaker {
             }
             
             if (updatedFieldCount > 0) {
-                const result = await this.mms.updateMarket(Chain.Hive, updatedMarket);
+                const result = await this.mms.updateMarket(this.currentChainId, updatedMarket);
 
                 if (result) {
                     this.loadMarketDetails();

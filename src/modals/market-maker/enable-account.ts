@@ -6,7 +6,7 @@ import { ValidationControllerFactory, ControllerValidateResult, ValidationRules 
 import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
-import { trimUsername } from 'common/functions';
+import { trimUsername, getChainByState } from 'common/functions';
 import { MarketMakerService } from 'services/market-maker-service';
 import { Chain } from 'common/enums';
 import { DefaultPopupTimeOut } from "common/constants";
@@ -21,6 +21,7 @@ export class EnableAccountModal {
     private renderer;
     private marketMakerUser;
     private accountIsEnabled;
+    private currentChainId;
 
     constructor(private controller: DialogController,
         private toast: ToastService,
@@ -45,9 +46,10 @@ export class EnableAccountModal {
         });
     }
 
-    bind() {
+    async bind() {
         this.accountIsEnabled = this.marketMakerUser.isEnabled;
         this.createValidationRules();
+        this.currentChainId = await getChainByState(this.state);
     }
 
     private createValidationRules() {
@@ -80,7 +82,7 @@ export class EnableAccountModal {
         }
 
         if (validationResult.valid) {
-            const result = await this.mms.enableAccount(Chain.Hive);
+            const result = await this.mms.enableAccount(this.currentChainId);
 
             if (result) {
                 this.controller.ok();

@@ -7,6 +7,7 @@ import { AuthService } from 'services/auth-service';
 import { Store, dispatchify } from 'aurelia-store';
 import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
+import { Chain } from '../../common/enums';
 
 @autoinject()
 @customElement('wallet')
@@ -43,7 +44,7 @@ export class Wallet {
     }
 
     async loadWallets() {
-        this.wallets = await this.tokenService.getDSwapTokenBalances();
+        this.wallets = await this.tokenService.getDSwapTokenBalances(Chain.Hive);
     }
 
     withdraw() {

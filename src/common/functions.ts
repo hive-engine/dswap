@@ -240,6 +240,8 @@ export async function totalStakeRequiredToAddMarket(marketMakerUser: IMarketMake
 
     if (marketMakerUser.isPremium) {
         stakeRequired += environment.marketMakerStakeRequiredPremium + (marketMakerUser.markets * environment.marketMakerStakeRequiredPerMarket)
+    } else {
+        stakeRequired += marketMakerUser.markets * environment.marketMakerStakeRequiredPerMarket
     }
 
     return stakeRequired;
@@ -250,6 +252,8 @@ export async function totalStakeRequiredToEnableMarket(marketMakerUser: IMarketM
 
     if (marketMakerUser.isPremium) {
         stakeRequired = environment.marketMakerStakeRequiredPremium + (marketMakerUser.markets * environment.marketMakerStakeRequiredPerMarket)
+    } else {
+        stakeRequired += marketMakerUser.markets * environment.marketMakerStakeRequiredPerMarket
     }
 
     return stakeRequired;
@@ -274,6 +278,17 @@ export async function getFeeTokenSymbolByChain(chain: Chain) {
     return symbol;
 }
 
+export async function getPeggedTokenSymbolByChain(chain: Chain) {
+    let symbol: string;
+    if (chain === Chain.Hive) {
+        symbol = environment.peggedToken;
+    } else if (chain === Chain.Steem) {
+        symbol = environment.peggedToken_SE;
+    }
+
+    return symbol;
+}
+
 export async function getChainByState(state: IState) {
     let chainId: any;
     if (state) {
@@ -286,7 +301,6 @@ export async function getChainByState(state: IState) {
         }
     } else {
         chainId = DefaultChainId;
-    }
-
+    }    
     return chainId;
 }
