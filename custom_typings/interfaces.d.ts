@@ -1,25 +1,33 @@
 interface IEnvironment {
   debug: boolean;
   testing: boolean;
-  FIREBASE_API: string;
-  chainId: string;
+    FIREBASE_API_HE: string;
+    FIREBASE_API_SE: string;
+    chainId: string;
+    chainId_SE: string;
   siteName: string;
   defaultLocale: string;
   maintenanceMode: boolean;
-  RPC_URL: string;
+    RPC_URL: string;
+    RPC_URL_SE: string;
   ACCOUNTS_API_URL: string;
-  CONVERTER_API: string;
+    CONVERTER_API_HE: string;
+    CONVERTER_API_SE: string;
   NODE_API_URL: string;
   GRAPHQL_API: string;
-  HISTORY_API: string;
-  SCOT_API: string;
-  EXCHANGE_URL: string;
+    HISTORY_API_HE: string;
+    HISTORY_API_SE: string;
+    SCOT_API_HE: string;
+    SCOT_API_SE: string;
+    EXCHANGE_URL_HE: string;
+    EXCHANGE_URL_SE: string;
   dswapEnabled: boolean;
   marketMakerEnabled: boolean;
   hivePegAccount: string;
   nativeToken: string;
     swapEnabledTokens: string[];
     disabledTokens: string[];
+    disabledTokens_SE: string[];
   peggedToken: string;
     features: any;
     marketMakerRegistrationCost: number;
@@ -30,6 +38,7 @@ interface IEnvironment {
     marketMakerMaxMarketsBasic: number;
     marketMakerUpdateMarketCostBasic: number;
     marketMakerFeeToken: string;
+    marketMakerFeeToken_SE: string;
     isDebug: boolean;
     debugAccount: string;
 }
@@ -58,6 +67,7 @@ interface IState {
     hivePriceUsd: string;
     hivePriceUsdDate: string;
     activePageId: string;
+    dswapChainId: number;
 }
 
 interface ICoinPair {
@@ -233,4 +243,22 @@ interface IMarketMakerOrderStrategy {
     _id: number;
     name: string;
     description?: string;
+}
+
+interface IDSwapChain {
+    id: number;
+    name: string;
+    name_short: string;
+}
+
+interface AccountInterface {
+    name: string;
+    account: any;
+    balances: any[];
+    scotTokens: any[];
+    pendingUnstakes: any[];
+    token: any;
+    notifications: any[];
+    nfts: INft[];
+    dswapChainId: number;
 }

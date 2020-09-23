@@ -11,6 +11,9 @@ import { loadUserBalances } from 'common/hive-engine-api';
 import { dispatchify } from 'aurelia-store';
 import { getUser } from 'common/market-maker-api';
 import { environment } from 'environment';
+import { Chain } from 'common/enums';
+import { firebaseHiveAppName, firebaseSteemAppName } from 'common/constants';
+import { getChainByState } from '../common/functions';
 
 export function loading(state: IState, boolean: boolean) {
     const newState = { ...state };
@@ -20,11 +23,11 @@ export function loading(state: IState, boolean: boolean) {
     return newState;
 }
 
-export function login(state: IState, username: string): IState {
+export function login(state: IState, username: string, dswapChainId: number): IState {
     const newState = { ...state };
-
     if (newState?.account) {
         newState.account.name = username;
+        newState.account.dswapChainId = dswapChainId;
 
         newState.loggedIn = true;
     } else {
@@ -32,6 +35,7 @@ export function login(state: IState, username: string): IState {
 
         newState.account = copiedInitialsTate.account;
         newState.account.name = username;
+        newState.account.dswapChainId = dswapChainId;
         newState.loggedIn = true;
     }
 
@@ -50,6 +54,7 @@ export function logout(state: IState): IState {
         pendingUnstakes: [],
         notifications: [],
         nfts: [],
+        dswapChainId: 0
     };
 
     newState.loggedIn = false;
@@ -66,15 +71,14 @@ export function logout(state: IState): IState {
         lastTickTimestamp: 0,
         markets: 0,
         timeLimit: 0,
-        _id: 0
+        _id: 0        
     };
 
     return newState;
 }
 
 export function setAccount(state: IState, account: Partial<IState['account']>): IState {
-    const newState = { ...state };
-
+    const newState = { ...state };    
     if (newState?.account) {
         newState.account = Object.assign(newState.account, account);
     }
@@ -90,7 +94,7 @@ export function setTokens(state: IState, tokens: any[]): IState {
     return newState;
 }
 
-export async function getCurrentFirebaseUser(state: IState): Promise<IState> {
+export async function getCurrentFirebaseUser(state: IState): Promise<IState> {    
     const newState = { ...state };
 
     if (!newState.loggedIn) {
@@ -98,11 +102,23 @@ export async function getCurrentFirebaseUser(state: IState): Promise<IState> {
     }
 
     try {
-        const doc = await firebase
-            .firestore()
-            .collection('users')
-            .doc(newState.account.name)
-            .get();
+        let doc: any;
+        let chainId = newState.account.dswapChainId;
+        if (chainId == Chain.Hive) {
+            let firebaseHive = firebase.apps.find(x => x.name === firebaseHiveAppName);
+            doc = await firebaseHive
+                .firestore()
+                .collection('users')
+                .doc(newState.account.name)
+                .get();
+        } else if (chainId === Chain.Steem) {
+            let firebaseSteem = firebase.apps.find(x => x.name === firebaseSteemAppName);
+            doc = await firebaseSteem
+                .firestore()
+                .collection('users')
+                .doc(newState.account.name)
+                .get();
+        }
 
         if (doc.exists) {
             newState.firebaseUser = doc.data();
@@ -114,6 +130,7 @@ export async function getCurrentFirebaseUser(state: IState): Promise<IState> {
             }
         }
     } catch (e) {
+        console.log('error firebase user');
         log.error(e);
     }
 
@@ -129,12 +146,17 @@ export async function getMarketMakerUser(state: IState): Promise<IState> {
 
     try {
         let account = environment.isDebug && environment.debugAccount ? environment.debugAccount : newState.account.name;
-        let mmUser = await getUser(account);
-        mmUser.creationTimestamp_string = moment.unix(mmUser.creationTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
-        mmUser.lastTickTimestamp_string = moment.unix(mmUser.lastTickTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
+        let currentChainId = await getChainByState(newState);
 
-        let timeLimitTime = moment.duration(mmUser.timeLimit);
-        mmUser.timeLimit_string = timeLimitTime.days() + " days " + timeLimitTime.hours() + " hours " + timeLimitTime.minutes() + " minutes";        
+        let mmUser = await getUser(account, currentChainId);
+
+        if (mmUser) {
+            mmUser.creationTimestamp_string = moment.unix(mmUser.creationTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
+            mmUser.lastTickTimestamp_string = moment.unix(mmUser.lastTickTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
+
+            let timeLimitTime = moment.duration(mmUser.timeLimit);
+            mmUser.timeLimit_string = timeLimitTime.days() + " days " + timeLimitTime.hours() + " hours " + timeLimitTime.minutes() + " minutes";
+        }
         newState.marketMakerUser = mmUser;
     } catch (e) {
         log.error(e);

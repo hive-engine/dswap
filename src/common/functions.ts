@@ -6,6 +6,8 @@ import { environment } from 'environment';
 import { hiveSignerJson } from 'common/hive';
 import { HttpClient } from 'aurelia-fetch-client';
 import trim from 'trim-character';
+import { Chain } from './enums';
+import { DefaultChainId } from './constants';
 
 const http: HttpClient = new HttpClient();
 const toastService: ToastService = Container.instance.get(ToastService);
@@ -251,4 +253,40 @@ export async function totalStakeRequiredToEnableMarket(marketMakerUser: IMarketM
     }
 
     return stakeRequired;
+}
+
+export async function getDswapChains() {
+    let chains: IDSwapChain[] = [];
+    chains.push({ id: Chain.Hive, name: "Hive Engine", name_short: "Hive" });
+    chains.push({ id: Chain.Steem, name: "Steem Engine", name_short: "Steem" });
+
+    return chains;
+}
+
+export async function getFeeTokenSymbolByChain(chain: Chain) {
+    let symbol: string;
+    if (chain === Chain.Hive) {
+        symbol = environment.marketMakerFeeToken;
+    } else if (chain === Chain.Steem) {
+        symbol = environment.marketMakerFeeToken_SE;
+    }
+
+    return symbol;
+}
+
+export async function getChainByState(state: IState) {
+    let chainId: any;
+    if (state) {
+        if (state.loggedIn && state.account.dswapChainId) {
+            chainId = state.account.dswapChainId;
+        } else if (state.dswapChainId) {
+            chainId = state.dswapChainId;
+        } else {
+            chainId = DefaultChainId;
+        }
+    } else {
+        chainId = DefaultChainId;
+    }
+
+    return chainId;
 }

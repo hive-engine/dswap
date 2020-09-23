@@ -11,6 +11,8 @@ import { hiveSignerJson, getAccount } from 'common/hive';
 import { loadCoins, loadTokenMetrics, loadUserBalances, loadTokens } from 'common/hive-engine-api';
 import { HiveEngineService } from './hive-engine-service';
 import { getPrices, usdFormat } from 'common/functions';
+import { Chain } from '../common/enums';
+import { loadUserBalancesSE, loadTokensSE } from '../common/steem-engine-api';
 
 const http = new HttpClient();
 
@@ -32,7 +34,7 @@ export class TokenService {
         http.configure(config => {
             config
                 .useStandardConfiguration()
-                .withBaseUrl(environment.FIREBASE_API)
+                .withBaseUrl(environment.FIREBASE_API_HE)
         });
         
         this.storeSubscription = this.store.state.subscribe(state => {
@@ -94,9 +96,9 @@ export class TokenService {
         }
     }
 
-    async getUserBalanceOfToken(symbol) {
+    async getUserBalanceOfToken(symbol, chain: Chain) {
         let account = environment.isDebug && environment.debugAccount ? environment.debugAccount : this.user.name;
-        let userBalances = await loadUserBalances(account, [symbol]);        
+        let userBalances = await this.getUserBalances(account, symbol, chain);
         let balance = userBalances.find(x => x.symbol == symbol);
         if (balance) {
             return balance;
@@ -105,7 +107,15 @@ export class TokenService {
         return { _id: 0, account: account, balance: 0, stake: "0", symbol: symbol };
     }
 
-    async getTokenDetails(symbol, includeMetrics = true, includeBalance = true) {
+    async getUserBalances(account, symbol, chain: Chain) {
+        if (chain === Chain.Hive) {
+            return loadUserBalances(account, [symbol]);
+        } else if (chain === Chain.Steem) {
+            return loadUserBalancesSE(account, [symbol]);
+        }
+    }
+
+    async getTokenDetails(symbol, chain: Chain, includeMetrics = true, includeBalance = true) {
         let dToken: any;
         if (this.state.tokens && this.state.tokens.length > 0) {            
             dToken = this.state.tokens.find(x => x.symbol == symbol);
@@ -120,7 +130,7 @@ export class TokenService {
             await this.enrichTokensWithMetrics([dToken], [symbol]);
 
         if (includeBalance)
-            dToken.userBalance = await this.getUserBalanceOfToken(symbol);
+            dToken.userBalance = await this.getUserBalanceOfToken(symbol, chain);
 
         return dToken;
     }
@@ -148,16 +158,28 @@ export class TokenService {
         return this.state.tokens;
     }
 
-    async getMarketMakerTokens(symbols = []) {
-        let allTokens = await loadTokens(symbols, 1000);
+    async getMarketMakerTokens(symbols = [], chain: Chain) {
+        let allTokens: any;
         let mmTokens = [];
 
-        for (const token of allTokens) {
-            if (environment.disabledTokens.includes(token.symbol)) {
-                continue;
-            }
+        if (chain === Chain.Hive) {
+            allTokens = await loadTokens(symbols, 1000);
+            for (const token of allTokens) {
+                if (environment.disabledTokens.includes(token.symbol)) {
+                    continue;
+                }
 
-            mmTokens.push(token);
+                mmTokens.push(token);
+            }
+        } else if (chain === Chain.Steem) {
+            allTokens = await loadTokensSE(symbols, 1000);
+            for (const token of allTokens) {
+                if (environment.disabledTokens_SE.includes(token.symbol)) {
+                    continue;
+                }
+
+                mmTokens.push(token);
+            }
         }
 
         return mmTokens;

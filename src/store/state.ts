@@ -1,3 +1,5 @@
+import { DefaultChainId } from "common/constants";
+
 export const initialState: IState = {
   $action: {
       name: '',
@@ -11,7 +13,8 @@ export const initialState: IState = {
       scotTokens: [],
       pendingUnstakes: [],
       notifications: [],
-      nfts: []
+      nfts: [],
+      dswapChainId: 0
   },
     firebaseUser: {},
     marketMakerUser: {
@@ -47,5 +50,6 @@ export const initialState: IState = {
   tokensLoaded: false,
   hivePriceUsd: '',
     hivePriceUsdDate: null,
-    activePageId: 'home'
+    activePageId: 'home',
+    dswapChainId: DefaultChainId
 };

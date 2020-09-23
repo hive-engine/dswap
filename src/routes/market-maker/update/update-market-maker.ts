@@ -1,4 +1,4 @@
-import { OrderStrategy } from './../../../common/enums';
+import { OrderStrategy } from 'common/enums';
 import { autoinject, bindable } from "aurelia-framework";
 import { Store, dispatchify } from "aurelia-store";
 import { Router } from 'aurelia-router';
@@ -16,7 +16,8 @@ import { DisableMarketModal } from "modals/market-maker/disable-market";
 import { EnableMarketModal } from "modals/market-maker/enable-market";
 import { RemoveMarketModal } from "modals/market-maker/remove-market";
 import { UpgradeAccountModal } from "modals/market-maker/upgrade-account";
-import { DefaultPopupTimeOut } from '../../../common/constants';
+import { DefaultPopupTimeOut } from 'common/constants';
+import { getChainByState } from 'common/functions';
 
 @autoinject()
 export class UpdateMarketMaker {
@@ -49,6 +50,7 @@ export class UpdateMarketMaker {
     private selectedOrderStrategy;
     private placeAtBidWall = "";
     private placeAtSellWall = "";
+    private currentChainId;
 
     constructor(private dialogService: DialogService, 
         private mms: MarketMakerService,
@@ -74,7 +76,7 @@ export class UpdateMarketMaker {
 
     async canActivate({symbol}) {
         this.selectedTokenSymbol = symbol;
-        this.selectedToken = await this.ts.getTokenDetails(this.selectedTokenSymbol);
+        this.selectedToken = await this.ts.getTokenDetails(this.selectedTokenSymbol, this.currentChainId);
     }    
 
     async loadMarketDetails() {
@@ -82,7 +84,7 @@ export class UpdateMarketMaker {
             if (this.marketMakerUser) 
                 this.orderStrategies = this.mms.getMarketMakerOrderStrategiesByUser(this.marketMakerUser);  
 
-            const getMarketsRes = await this.mms.getUserMarkets([this.selectedTokenSymbol]);
+            const getMarketsRes = await this.mms.getUserMarkets([this.selectedTokenSymbol], this.currentChainId);
             if (getMarketsRes)
                 this.market = getMarketsRes[0];
 
@@ -114,6 +116,7 @@ export class UpdateMarketMaker {
 
     async bind() {
         this.createValidationRules();       
+        this.currentChainId = await getChainByState(this.state);
         this.loadMarketDetails();
         this.feeTokenSymbol = environment.marketMakerFeeToken;
         this.baseToken = environment.peggedToken;        
@@ -134,7 +137,7 @@ export class UpdateMarketMaker {
 
     async loadUserDetails() {
         if (this.user) {
-            let balance = await this.ts.getUserBalanceOfToken(this.feeTokenSymbol);
+            let balance = await this.ts.getUserBalanceOfToken(this.feeTokenSymbol, this.currentChainId);
             if (balance)
                 this.feeTokenUserBalance = balance.balance;
         }        

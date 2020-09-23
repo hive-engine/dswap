@@ -5,8 +5,10 @@ import { HttpClient } from 'aurelia-fetch-client';
 import { queryParam } from 'common/functions';
 import { environment } from 'environment';
 import { ssc } from './ssc';
+import { sscse } from './ssc-se';
 import { mapTokenResultToIToken, mapBalanceResultToIBalance, mapMetricsResultToTokenMetrics } from './mappers';
 import moment from 'moment';
+import { Chain } from './enums';
 
 const http = new HttpClient();
 
@@ -40,7 +42,7 @@ export async function loadMarkets(symbols = [], limit = 1000, offset = 0): Promi
     return markets;
 }
 
-export async function loadMarketsByUser(account: any, symbols = []): Promise<IMarketMakerMarket[]> {
+export async function loadMarketsByUser(account: any, symbols = [], chain: Chain): Promise<IMarketMakerMarket[]> {
     const queryConfig: any = {};
 
     if (account) {
@@ -54,18 +56,25 @@ export async function loadMarketsByUser(account: any, symbols = []): Promise<IMa
     }
 
     let markets: IMarketMakerMarket[] = [];
-    const results = await ssc.find('botcontroller', 'markets', queryConfig);
+    let results: any;
+    if (chain == Chain.Hive) {
+        results = await ssc.find('botcontroller', 'markets', queryConfig);
+    } else if (chain == Chain.Steem) {
+        results = await sscse.find('botcontroller', 'markets', queryConfig);
+    }
 
-    for (const res of results) {
-        let arr = <IMarketMakerMarket>res;
-        arr.creationTimestamp_string = moment.unix(arr.creationTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
-        markets.push(res);
+    if (results) {
+        for (const res of results) {
+            let arr = <IMarketMakerMarket>res;
+            arr.creationTimestamp_string = moment.unix(arr.creationTimestamp / 1000).format('YYYY-MM-DD HH:mm:ss');
+            markets.push(res);
+        }
     }
 
     return markets;
 }
 
-export async function getUser(account: string): Promise<IMarketMakerUser> {
+export async function getUser(account: string, chain: Chain): Promise<IMarketMakerUser> {
     const queryConfig: any = { account: account };
 
     let user: IMarketMakerUser = {
@@ -84,9 +93,15 @@ export async function getUser(account: string): Promise<IMarketMakerUser> {
         _id: 0
     };
 
-    const results = await ssc.find('botcontroller', 'users', queryConfig);
-    if (results)
+    let results: any;
+    if (chain == Chain.Hive) {
+        results = await ssc.find('botcontroller', 'users', queryConfig);
+    } else if (chain == Chain.Steem) {
+        results = await sscse.find('botcontroller', 'users', queryConfig);
+    }
+    if (results) {
         user = <IMarketMakerUser>results[0];
+    }
 
     return user;
 }

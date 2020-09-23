@@ -17,6 +17,8 @@ import { EnableMarketModal } from "modals/market-maker/enable-market";
 import { TokenService } from "services/token-service";
 import { environment } from 'environment';
 import { UpgradeAccountModal } from "modals/market-maker/upgrade-account";
+import { Chain } from "common/enums";
+import { getChainByState } from "common/functions";
 
 @autoinject()
 export class MarketMakerDashboard {
@@ -29,6 +31,7 @@ export class MarketMakerDashboard {
     private markets : IMarketMakerMarket[] = [];
     private marketTokens = [];
     private exchangeMarketUrl;
+    private currentChainId;
 
     constructor(private dialogService: DialogService, private store: Store<IState>, private router: Router, private mms: MarketMakerService, private ts: TokenService) {
         this.subscription = this.store.state.subscribe(async (state: IState) => {
@@ -42,15 +45,17 @@ export class MarketMakerDashboard {
 
     async bind() {
         this.loadMarkets();
-        this.exchangeMarketUrl = environment.EXCHANGE_URL + "?p=market&t=";
+        let exchangeUrl = this.state.dswapChainId === Chain.Hive ? environment.EXCHANGE_URL_HE : environment.EXCHANGE_URL_SE;
+        this.exchangeMarketUrl = exchangeUrl + "?p=market&t=";
         this.state.activePageId = "market-maker-dashboard";
+        this.currentChainId = await getChainByState(this.state);
     }
 
     async loadMarkets() {
-        this.markets = await this.mms.getUserMarkets();          
+        this.markets = await this.mms.getUserMarkets([], this.currentChainId);
         if (this.markets) {
-            let tokenSymbols = this.markets.map(x => x.symbol);            
-            this.marketTokens = await this.ts.getMarketMakerTokens(tokenSymbols);
+            let tokenSymbols = this.markets.map(x => x.symbol);
+            this.marketTokens = await this.ts.getMarketMakerTokens(tokenSymbols, this.currentChainId);
 
             for (let m of this.markets) {
                 let token = this.marketTokens.find(x => x.symbol == m.symbol);

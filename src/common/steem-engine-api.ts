@@ -4,7 +4,7 @@ import { usdFormat, getPrices } from 'common/functions';
 import { HttpClient } from 'aurelia-fetch-client';
 import { queryParam } from 'common/functions';
 import { environment } from 'environment';
-import { ssc } from './ssc';
+import { sscse } from './ssc-se';
 import { mapTokenResultToIToken, mapBalanceResultToIBalance, mapMetricsResultToTokenMetrics } from './mappers';
 
 const http = new HttpClient();
@@ -24,7 +24,7 @@ const delay = t => new Promise(resolve => setTimeout(resolve, t));
 
 export const getTransactionInfo = (trxId: string) =>
     new Promise((resolve, reject) => {
-        ssc.getTransactionInfo(trxId, async (err, result) => {
+        sscse.getTransactionInfo(trxId, async (err, result) => {
             if (result) {
                 if (result.logs) {
                     const logs = JSON.parse(result.logs);
@@ -45,7 +45,7 @@ export const getTransactionInfo = (trxId: string) =>
         });
     });
 
-export async function checkTransaction(trxId: string, retries: number) {
+export async function checkTransactionSE(trxId: string, retries: number) {
     try {
         return await getTransactionInfo(trxId);
     } catch (e) {
@@ -53,9 +53,9 @@ export async function checkTransaction(trxId: string, retries: number) {
             await delay(5000);
 
             try {
-                return await checkTransaction(trxId, retries - 1);
+                return await checkTransactionSE(trxId, retries - 1);
             } catch (e) {
-                return await checkTransaction(trxId, retries - 1);
+                return await checkTransactionSE(trxId, retries - 1);
             }
         } else {
             throw new Error('Transaction not found.');
@@ -63,8 +63,8 @@ export async function checkTransaction(trxId: string, retries: number) {
     }
 }
 
-export async function loadCoins(): Promise<ICoin[]> {
-    const url = `${environment.CONVERTER_API_HE}coins/`;
+export async function loadCoinsSE(): Promise<ICoin[]> {
+    const url = `${environment.CONVERTER_API_SE}coins/`;
 
     const response = await http.fetch(url, {
         method: 'GET',
@@ -73,8 +73,8 @@ export async function loadCoins(): Promise<ICoin[]> {
     return response.json() as Promise<ICoin[]>;
 }
 
-export async function loadCoinPairs(): Promise<ICoinPair[]> {
-    const url = `${environment.CONVERTER_API_HE}pairs/`;
+export async function loadCoinPairsSE(): Promise<ICoinPair[]> {
+    const url = `${environment.CONVERTER_API_SE}pairs/`;
 
     const response = await http.fetch(url, {
         method: 'GET',
@@ -83,7 +83,7 @@ export async function loadCoinPairs(): Promise<ICoinPair[]> {
     return response.json() as Promise<ICoinPair[]>;
 }
 
-export async function loadTokenMetrics(symbols = [], limit = 1000, offset = 0): Promise<any[]> {
+export async function loadTokenMetricsSE(symbols = [], limit = 1000, offset = 0): Promise<any[]> {
     const queryConfig: any = {};
 
     if (symbols.length) {
@@ -91,7 +91,7 @@ export async function loadTokenMetrics(symbols = [], limit = 1000, offset = 0): 
     }
 
     let metrics = [];
-    const results = await ssc.find('market', 'metrics', queryConfig);        
+    const results = await sscse.find('market', 'metrics', queryConfig);        
     
     for (const res of results) {
         metrics.push(mapMetricsResultToTokenMetrics(res));
@@ -100,8 +100,8 @@ export async function loadTokenMetrics(symbols = [], limit = 1000, offset = 0): 
     return metrics;
 }
 
-export async function loadTokenMarketHistory(symbol: string, timestampStart?: string, timestampEnd?: string): Promise<IHistoryApiItem[]> {
-    let url = `${environment.HISTORY_API_HE}marketHistory?symbol=${symbol.toUpperCase()}`;
+export async function loadTokenMarketHistorySE(symbol: string, timestampStart?: string, timestampEnd?: string): Promise<IHistoryApiItem[]> {
+    let url = `${environment.HISTORY_API_SE}marketHistory?symbol=${symbol.toUpperCase()}`;
 
     if (timestampStart) {
         url += `&timestampStart=${timestampStart}`;
@@ -118,12 +118,12 @@ export async function loadTokenMarketHistory(symbol: string, timestampStart?: st
     return response.json() as Promise<IHistoryApiItem[]>;
 }
 
-export async function loadUserBalances(account: string, symbols = [], limit = 1000, offset = 0) : Promise<IBalance[]> {
+export async function loadUserBalancesSE(account: string, symbols = [], limit = 1000, offset = 0) : Promise<IBalance[]> {
     const queryConfig: any = {};
     queryConfig.symbol = { $in: symbols };
     queryConfig.account = account;
 
-    const results: any[] = await ssc.find('tokens', 'balances', queryConfig, limit, offset, '', false);    
+    const results: any[] = await sscse.find('tokens', 'balances', queryConfig, limit, offset, '', false);    
     let balances: IBalance[] = [];
     for (const res of results) {
         balances.push(mapBalanceResultToIBalance(res));
@@ -132,14 +132,14 @@ export async function loadUserBalances(account: string, symbols = [], limit = 10
     return balances;
 }
 
-export async function loadTokens(symbols = [], limit = 50, offset = 0): Promise<IToken[]> {
+export async function loadTokensSE(symbols = [], limit = 50, offset = 0): Promise<IToken[]> {
     const queryConfig: any = {};
 
     if (symbols.length) {
         queryConfig.symbol = { $in: symbols };
     }
 
-    const results: any[] = await ssc.find('tokens', 'tokens', queryConfig, limit, offset, [{ index: 'symbol', descending: false }]);
+    const results: any[] = await sscse.find('tokens', 'tokens', queryConfig, limit, offset, [{ index: 'symbol', descending: false }]);
     let tokens: IToken[] = [];
 
     for (const res of results) {
@@ -149,19 +149,9 @@ export async function loadTokens(symbols = [], limit = 50, offset = 0): Promise<
     return tokens;
 }
 
-export async function loadHivepBalance() {
+export async function getScotConfigForAccountSE(account: string) {
     try {
-        const result: any = await ssc.findOne('tokens', 'balances', { account: 'honey-swap', symbol: 'SWAP.HIVE' });
-
-        return result;
-    } catch (e) {
-        return null;
-    }
-}
-
-export async function getScotConfigForAccount(account: string) {
-    try {
-        const result = await http.fetch(`${environment.SCOT_API_HE}@${account}`);
+        const result = await http.fetch(`${environment.SCOT_API_SE}@${account}`);
 
         return result.json();
     } catch (e) {
@@ -169,8 +159,8 @@ export async function getScotConfigForAccount(account: string) {
     }
 }
 
-export async function loadAccountHistory(account: string, symbol?: string, timestampStart?: string, timestampEnd?: string, limit?: number, offset?: number): Promise<IAccountHistoryItemResult[]> {
-    let url = `${environment.HISTORY_API_HE}accountHistory?account=${account}`;
+export async function loadAccountHistorySE(account: string, symbol?: string, timestampStart?: string, timestampEnd?: string, limit?: number, offset?: number): Promise<IAccountHistoryItemResult[]> {
+    let url = `${environment.HISTORY_API_SE}accountHistory?account=${account}`;
 
     if (symbol) {
         url += `&symbol=${symbol.toUpperCase()}`;
