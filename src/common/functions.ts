@@ -252,9 +252,7 @@ export async function totalStakeRequiredToEnableMarket(marketMakerUser: IMarketM
 
     if (marketMakerUser.isPremium) {
         stakeRequired = environment.marketMakerStakeRequiredPremium + (marketMakerUser.markets * environment.marketMakerStakeRequiredPerMarket)
-    } else {
-        stakeRequired += marketMakerUser.markets * environment.marketMakerStakeRequiredPerMarket
-    }
+    } 
 
     return stakeRequired;
 }
