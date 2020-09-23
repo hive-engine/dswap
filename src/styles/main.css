@@ -105,13 +105,15 @@ a:hover {
 .dswap-nav-options ul li {
     display: inline-block;
 }
-.dswap-nav-options ul li a {
-    background-color: transparent;
-    border: 1px solid #387973;
-    border-radius: 8px;
-    padding: 10px 15px;
-    color: #22a275;
-}
+    .dswap-nav-options ul li a,
+    .chainselect,
+    .chainselect option {
+        background-color: transparent;
+        border: 1px solid #387973;
+        border-radius: 8px;
+        padding: 10px 15px;
+        color: #22a275;
+    }
 .dswap-nav-options ul li a:hover {
     background-color: #387973;
     color: #fff;
@@ -1959,4 +1961,4 @@ input.tradeValueUsd {
     .pricing-wrapper {
         width: 300px;
     }
-} 
+}

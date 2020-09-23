@@ -22,55 +22,48 @@
             ></a>
         </div>
         <div class="dswap-nav-options ml-auto">
-            <select class="form-control"
-                    value.bind="selectedChainId">
-                <option model.bind="c.id" repeat.for="c of chains">
-                    ${c.name & t}
-                </option>
-            </select>
-            <ul style="margin: 0;">
-                <li class="nav-item active" if.bind="!loggedIn">
-                    <a class="btn nav-link" click.delegate="signin()"
-                        >${'Sign In' & t}</a
-                    >
-                </li>
-                <li else class="nav-item dropdown active">
-                    <a
-                        class="nav-link dropdown-toggle nav-username"
-                        href="javascript:void(0);"
-                        id="userDropdown"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                        style="display: flex; align-items: center;"
-                    >
-                        <i class="fa fa-user-alt d-block d-md-none"></i>
-                        <span class="d-none d-md-block">
-                            ${state.account.name}
-                        </span>
-                    </a>
-                    <div
-                        class="dropdown-menu add-padding"
-                        aria-labelledby="userDropdown"
-                        style="min-width: 100% !important;"
-                    >
-                        <a
-                            class="dropdown-item remove-border-margin"
-                            href="javascript:void(0);"
-                            click.delegate="logout()"
-                            >${'Logout' & t}</a
-                        >
-                    </div>
-                </li>
-                <!-- <li>
-                    <a
-                        class="add-wallet-btn each-link"
-                        route-href="route:marketMaker"
-                    >
-                        Market Maker
-                    </a>
-                </li> -->
-            </ul>
+            <div class="row">
+                <select class="chainselect"
+                        value.bind="selectedChainId">
+                    <option model.bind="c.id" repeat.for="c of chains">
+                        ${c.name & t}
+                    </option>
+                </select>
+                <ul style="margin: 0;">
+                    <li class="nav-item active" if.bind="!loggedIn">
+                        <a class="btn nav-link" click.delegate="signin()">${'Sign In' & t}</a>
+                    </li>
+                    <li else class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle nav-username"
+                           href="javascript:void(0);"
+                           id="userDropdown"
+                           data-toggle="dropdown"
+                           aria-haspopup="true"
+                           aria-expanded="false"
+                           style="display: flex; align-items: center;">
+                            <i class="fa fa-user-alt d-block d-md-none"></i>
+                            <span class="d-none d-md-block">
+                                ${state.account.name}
+                            </span>
+                        </a>
+                        <div class="dropdown-menu add-padding"
+                             aria-labelledby="userDropdown"
+                             style="min-width: 100% !important;">
+                            <a class="dropdown-item remove-border-margin"
+                               href="javascript:void(0);"
+                               click.delegate="logout()">${'Logout' & t}</a>
+                        </div>
+                    </li>
+                    <!-- <li>
+            <a
+                class="add-wallet-btn each-link"
+                route-href="route:marketMaker"
+            >
+                Market Maker
+            </a>
+        </li> -->
+                </ul>
+            </div>
         </div>
     </div>
 </template>
