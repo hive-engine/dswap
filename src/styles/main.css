@@ -589,6 +589,9 @@ a.item:hover .item-icon {
 .transaction-head {
     width: 78%;
 }
+.cursor-pointer {
+    cursor: pointer;
+}
 .market-head {
     width: 46%;
 }
@@ -1646,6 +1649,9 @@ input.tradeValueUsd {
     }
     .market-maker-landing-wrapper {
         margin: 68px 0;
+    }
+    .market-maker-homepage-mobile {
+        margin: 97px 0 0;
     }
     .market-maker-logo {
         width: 120px;
