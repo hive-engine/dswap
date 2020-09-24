@@ -9,6 +9,7 @@ import { DialogService, DialogCloseResult } from 'aurelia-dialog';
 import { UpgradeAccountModal } from 'modals/market-maker/upgrade-account';
 import { Chain } from 'common/enums';
 import { getFeeTokenSymbolByChain } from 'common/functions';
+import { EventAggregator, Subscription as eaSubscription } from 'aurelia-event-aggregator'; 
 
 @autoinject()
 export class Pricing {
@@ -19,11 +20,13 @@ export class Pricing {
     private user;
     private marketMakerUser;
     private currentChainId = Chain.Hive;
+    private eaSubscriber: eaSubscription;
 
     constructor(private dialogService: DialogService,
         private marketMakerService: MarketMakerService,
         private store: Store<IState>,
-        private router: Router) {
+        private router: Router,
+        private ea: EventAggregator) {
 
         this.subscription = this.store.state.subscribe(async (state: IState) => {
             if (state) {
@@ -39,9 +42,15 @@ export class Pricing {
         });
     }
 
-    async bind() {
-        this.feeToken = await getFeeTokenSymbolByChain(this.currentChainId);
+    async attached() {
         this.state.activePageId = "pricing";
+        this.eaSubscriber = this.ea.subscribe('reloadData', response => {
+            this.bind();
+        });
+    }
+
+    async bind() {        
+        this.feeToken = await getFeeTokenSymbolByChain(this.currentChainId);        
     }
 
     async selectBasic() {

@@ -13,7 +13,7 @@ import { ConfirmChainModal } from 'modals/confirm-chain';
 import { observable } from 'aurelia-framework';
 import { Chain } from 'common/enums';
 import { DefaultChainId } from 'common/constants';
-
+import { EventAggregator } from 'aurelia-event-aggregator'; 
 
 @autoinject()
 @customElement('swapnav')
@@ -32,14 +32,18 @@ export class SwapNav {
     @observable() selectedChainId;
     private marketMakerUser;
     private currentChainId;
+    private username;
 
-    constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<IState>) {        
+    constructor(private dialogService: DialogService, private authService: AuthService, private store: Store<IState>, private ea: EventAggregator) {        
         this.subscription = this.store.state.subscribe((state: IState) => {
             if (state) {
                 this.state = state;
                 this.marketMakerUser = { ...this.state.marketMakerUser };
 
                 this.setCurrentChain();
+
+                if (this.state.loggedIn && this.state.account.name)
+                    this.username = this.state.account.name;
             }
         });  
     }
@@ -56,7 +60,7 @@ export class SwapNav {
     async bind() {        
         this.dswapEnabled = environment.dswapEnabled;
         this.marketMakerEnabled = environment.marketMakerEnabled;
-        this.chains = await getDswapChains();    
+        this.chains = await getDswapChains();            
     }
 
     async logout() {
@@ -67,28 +71,28 @@ export class SwapNav {
     async selectedChainIdChanged(newValue, oldValue) {
         if (oldValue && newValue != this.currentChainId) {
             let selectedChain = this.chains.find(x => x.id == this.selectedChainId);
-
+            
             // show warning popup if logged in
             if (this.state.loggedIn) {
                 this.dialogService.open({ viewModel: ConfirmChainModal, model: selectedChain }).whenClosed(response => {
                     if (!response.wasCancelled) {
-                        this.router.navigateToRoute('home');
+                        this.signin();
                     } else {
                         this.selectedChainId = this.currentChainId;
                     }
                 });
             } else {
-                this.state.dswapChainId = selectedChain.id;
+                this.currentChainId = selectedChain.id;
+                this.state.dswapChainId = this.currentChainId;
             }
         } 
     }
 
     signin() {
-        this.dialogService.open({ viewModel: SigninModal }).whenClosed(response => {            
+        this.dialogService.open({ viewModel: SigninModal, model: this.username }).whenClosed(response => {            
             if (!response.wasCancelled) {
                 dispatchify(getMarketMakerUser)();
-                // redirect to home if login was successfull
-                this.router.navigateToRoute('home');
+                this.ea.publish('reloadData');
                 
             }
         });

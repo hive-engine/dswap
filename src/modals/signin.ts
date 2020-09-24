@@ -46,6 +46,11 @@ export class SigninModal {
         });    
     }
 
+    async activate(username?: string) {
+        if (username)
+            this.username = username;
+    }
+
     async attached() {
         this.currentChainId = await getChainByState(this.state);
 
