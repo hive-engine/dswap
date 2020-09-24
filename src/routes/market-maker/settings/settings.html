@@ -4,7 +4,7 @@
             <a
                 route-href="route: registerMarketMaker"
                 class="back-btn"
-                style="margin-left: 200px; margin-bottom: 20px;"
+                style="margin-left: 200px; margin-bottom: 20px"
                 >Go Back</a
             >
         </div>
@@ -17,25 +17,28 @@
                     </div>
                     <hr class="divider" />
                     <div class="register-market-maker-body">
-                        
                         <div class="form-group">
                             <label
-                                >${'What token do you want the market maker to
-                                trade?' & t}</label
-                            >
+                                >${'Choose Token' & t}
+                                <tooltip
+                                    text="[REQUIRED] What token do you want the market maker to
+                                trade?"
+                                ></tooltip>
+                            </label>
                             <select
                                 class="form-control"
                                 value.bind="token"
                                 change.delegate="tokenSelected()"
                             >
-                                <option model.bind="null"
-                                    >${'Please select a token...' & t}</option
-                                >
+                                <option model.bind="null">
+                                    ${'Please select a token...' & t}
+                                </option>
                                 <option
                                     model.bind="t"
                                     repeat.for="t of tokenList"
-                                    >${t.name & t} (${t.symbol})</option
                                 >
+                                    ${t.name & t} (${t.symbol})
+                                </option>
                             </select>
                         </div>
 
@@ -55,8 +58,36 @@
 
                             <div class="form-group">
                                 <label
-                                    >${'What is the maximum price you\'re
-                                    willing to buy the token for?' & t}</label
+                                    >${'Maximum Price' & t}
+                                    <tooltip
+                                        text="[REQUIRED] What is the maximum price you\'re
+                                    willing to buy the token for?"
+                                    ></tooltip>
+                                </label>
+                                <div class="input-group">
+                                    <input
+                                        class="form-control"
+                                        type="text"
+                                        placeholder="0.000"
+                                        value.bind="amount"
+                                    />
+                                    <div class="input-group-append">
+                                        ${token.pegged_token_symbol & t}
+                                    </div>
+                                    <div class="invalid-tooltip">
+                                        ${'errors:Please enter an amount greater
+                                        than 0' & t}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label
+                                    >${'Minimum Price' & t}
+                                    <tooltip
+                                        text="[REQUIRED] What is the minimum price you\'re
+                                    willing to sell the token for?"
+                                    ></tooltip>
+                                    </label
                                 >
                                 <div class="input-group">
                                     <input
@@ -76,30 +107,13 @@
                             </div>
                             <div class="form-group">
                                 <label
-                                    >${'What is the minimum price you\'re
-                                    willing to sell the token for?' & t}</label
-                                >
-                                <div class="input-group">
-                                    <input
-                                        class="form-control"
-                                        type="text"
-                                        placeholder="0.000"
-                                        value.bind="amount"
-                                    />
-                                    <div class="input-group-append">
-                                        ${token.pegged_token_symbol & t}
-                                    </div>
-                                    <div class="invalid-tooltip">
-                                        ${'errors:Please enter an amount greater
-                                        than 0' & t}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label
-                                    >${'What is the maximum amount of HIVE
+                                    >${'Maximum Buy' & t}
+                                    <tooltip
+                                        text="[REQUIRED] What is the maximum amount of HIVE
                                     you\'re willing to buy with in a single
-                                    order?' & t}</label
+                                    order?"
+                                    ></tooltip>
+                                    </label
                                 >
                                 <div class="input-group">
                                     <input
@@ -119,9 +133,14 @@
                             </div>
                             <div class="form-group">
                                 <label
-                                    >${'What is the maximum amount of tokens
-                                    you\'re willing to sell in a single order?'
-                                    & t}</label
+                                    >${'Maximum Sell'
+                                    & t}
+                                    <tooltip
+                                        text="[REQUIRED] What is the maximum amount of HIVE
+                                    you\'re willing to Sell with in a single
+                                    order?"
+                                    ></tooltip>
+                                    </label
                                 >
                                 <div class="input-group">
                                     <input
@@ -141,9 +160,13 @@
                             </div>
                             <div class="form-group">
                                 <label
-                                    >${'What is the minimum spread between bid
+                                    >${'Minimum Spread' & t}
+                                    <tooltip
+                                        text="[REQUIRED] What is the minimum spread between bid
                                     and asks before the bot won\'t place orders
-                                    any closer?' & t}</label
+                                    any closer?"
+                                    ></tooltip>
+                                    </label
                                 >
                                 <div class="input-group">
                                     <input
@@ -161,8 +184,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            
                         </div>
                     </div>
 
