@@ -19,6 +19,7 @@ import { environment } from 'environment';
 import { UpgradeAccountModal } from "modals/market-maker/upgrade-account";
 import { Chain } from "common/enums";
 import { getChainByState } from "common/functions";
+import { EventAggregator, Subscription as eaSubscription } from 'aurelia-event-aggregator'; 
 
 @autoinject()
 export class MarketMakerDashboard {
@@ -32,8 +33,9 @@ export class MarketMakerDashboard {
     private marketTokens = [];
     private exchangeMarketUrl;
     private currentChainId;
+    private eaSubscriber: eaSubscription;
 
-    constructor(private dialogService: DialogService, private store: Store<IState>, private router: Router, private mms: MarketMakerService, private ts: TokenService) {
+    constructor(private dialogService: DialogService, private store: Store<IState>, private router: Router, private mms: MarketMakerService, private ts: TokenService, private ea: EventAggregator) {
         this.subscription = this.store.state.subscribe(async (state: IState) => {
             if (state) {
                 this.state = state;
@@ -43,12 +45,11 @@ export class MarketMakerDashboard {
         });
     }
 
-    async bind() {
+    async bind() {        
         this.currentChainId = await getChainByState(this.state);
-        this.loadMarkets();
+        await this.loadMarkets();
         let exchangeUrl = this.currentChainId === Chain.Hive ? environment.EXCHANGE_URL_HE : environment.EXCHANGE_URL_SE;
-        this.exchangeMarketUrl = exchangeUrl + "?p=market&t=";
-        this.state.activePageId = "market-maker-dashboard";        
+        this.exchangeMarketUrl = exchangeUrl + "?p=market&t=";        
     }
 
     async loadMarkets() {
@@ -66,9 +67,14 @@ export class MarketMakerDashboard {
     }
 
     async attached() {
+        this.state.activePageId = "market-maker-dashboard";
         $(".toggle").click(function (e) {
             e.preventDefault();
             $(this).toggleClass("toggle-on").toggleClass("toggle-text-off");
+        });
+
+        this.eaSubscriber = this.ea.subscribe('reloadData', response => {
+            this.bind();
         });
     }
 
