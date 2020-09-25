@@ -1653,6 +1653,7 @@ input.tradeValueUsd {
     }
     .market-maker-logo {
         width: 120px;
+        height: auto;
         margin-top: 20px;
     }
     .market-maker-header-text {
