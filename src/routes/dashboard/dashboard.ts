@@ -16,6 +16,7 @@ import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
 import { environment } from 'environment';
+import { Chain } from '../../common/enums';
 
 @autoinject()
 @customElement('dashboard')
@@ -70,7 +71,7 @@ export class Dashboard {
     async canActivate({ symbol, transactionType }) {        
         try {
             if (!this.state.tokens) {
-                await this.ts.getDSwapTokens();
+                await this.ts.getDSwapTokens(true, Chain.Hive);
             }
             await dispatchify(getCurrentFirebaseUser)();
             await dispatchify(getMarketMakerUser)();
@@ -134,7 +135,7 @@ export class Dashboard {
 
     async refreshTokenLists(){
         if (!this.state.tokens) {
-            await this.ts.getDSwapTokens();
+            await this.ts.getDSwapTokens(true, Chain.Hive);
         }
 
         this.buyTokens = [...this.state.tokens];
@@ -174,7 +175,7 @@ export class Dashboard {
 
     async getTokenBalance(token) {                
         if (!token || !token.loadUserBalances) {
-            await this.ts.getDSwapTokenBalances();
+            await this.ts.getDSwapTokenBalances(Chain.Hive);
         } 
     }
 

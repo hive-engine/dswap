@@ -6,7 +6,7 @@ import { ValidationControllerFactory, ControllerValidateResult, ValidationRules 
 import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
-import { trimUsername } from 'common/functions';
+import { trimUsername, getChainByState, getFeeTokenSymbolByChain } from 'common/functions';
 import { MarketMakerService } from 'services/market-maker-service';
 import { Chain } from 'common/enums';
 import { environment } from 'environment';
@@ -32,6 +32,7 @@ export class UpgradeAccountModal {
     private isPremium = false;
     private isPremiumFeePaid = false;
     private marketMakerStakeRequiredPerMarket;
+    private currentChainId;
 
     constructor(private controller: DialogController,
         private mms: MarketMakerService,
@@ -60,14 +61,15 @@ export class UpgradeAccountModal {
 
     async bind() {
         this.createValidationRules();
+        this.currentChainId = await getChainByState(this.state);
         this.marketMakerUpgradeCost = environment.marketMakerUpgradeCost;
-        this.marketMakerFeeToken = environment.marketMakerFeeToken;
+        this.marketMakerFeeToken = await getFeeTokenSymbolByChain(this.currentChainId);
         this.marketMakerStakeRequiredPremium = environment.marketMakerStakeRequiredPremium;
         this.marketMakerStakeRequiredPerMarket = environment.marketMakerStakeRequiredPerMarket;
 
         if (this.user) {
 
-            let balance = await this.ts.getUserBalanceOfToken(this.marketMakerFeeToken);
+            let balance = await this.ts.getUserBalanceOfToken(this.marketMakerFeeToken, this.currentChainId);
             if (balance) {
                 this.userBalanceFeeToken = balance.balance;
                 this.userStakeFeeToken = parseFloat(balance.stake);

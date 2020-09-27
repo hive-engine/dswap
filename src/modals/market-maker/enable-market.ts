@@ -6,7 +6,7 @@ import { ValidationControllerFactory, ControllerValidateResult, ValidationRules 
 import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
-import { trimUsername, totalStakeRequiredToEnableMarket } from 'common/functions';
+import { trimUsername, totalStakeRequiredToEnableMarket, getChainByState, getFeeTokenSymbolByChain } from 'common/functions';
 import { MarketMakerService } from 'services/market-maker-service';
 import { Chain } from 'common/enums';
 import { environment } from 'environment';
@@ -32,6 +32,7 @@ export class EnableMarketModal {
     private isPremium;
     private totalStakeRequired;
     private feeTokenSymbol;
+    private currentChainId;
 
     constructor(private controller: DialogController,
         private toast: ToastService,
@@ -60,12 +61,13 @@ export class EnableMarketModal {
 
     async activate(market) {        
         this.market = market;
+        this.currentChainId = await getChainByState(this.state);
         this.tokenOperationCost = environment.marketMakerStakeRequiredPerMarket;     
         this.symbol = this.market.symbol;
-        this.feeTokenSymbol = environment.marketMakerFeeToken;
+        this.feeTokenSymbol = await getFeeTokenSymbolByChain(this.currentChainId);
 
         if (this.user) {
-            let balance = await this.ts.getUserBalanceOfToken(this.feeTokenSymbol);
+            let balance = await this.ts.getUserBalanceOfToken(this.feeTokenSymbol, this.currentChainId);
             if (balance)
                 this.tokenUserStake = parseFloat(balance.stake);
 
@@ -101,7 +103,7 @@ export class EnableMarketModal {
         }
 
         if (validationResult.valid) {
-            const result = await this.mms.enableMarket(Chain.Hive, this.market.symbol);
+            const result = await this.mms.enableMarket(this.currentChainId, this.market.symbol);
 
             if (result) {
                 this.controller.ok();

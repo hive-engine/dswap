@@ -6,7 +6,7 @@ import { ValidationControllerFactory, ControllerValidateResult, ValidationRules 
 import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
-import { trimUsername } from 'common/functions';
+import { trimUsername, getChainByState } from 'common/functions';
 import { MarketMakerService } from 'services/market-maker-service';
 import { Chain } from 'common/enums';
 
@@ -19,6 +19,7 @@ export class DisableAccountModal {
     private validationController;
     private renderer;
     private marketMakerUser;
+    private currentChainId;
 
     constructor(private controller: DialogController,
         private toast: ToastService,
@@ -43,10 +44,14 @@ export class DisableAccountModal {
         });
     }
 
+    async bind() {
+        this.currentChainId = await getChainByState(this.state);
+    }
+
     async confirmDisable() {
         this.loading = true;
 
-        const result = await this.mms.disableAccount(Chain.Hive);
+        const result = await this.mms.disableAccount(this.currentChainId);
 
         if (result) {
             this.controller.ok();

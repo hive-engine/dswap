@@ -134,7 +134,9 @@ declare namespace HiveKeychain {
 }
 
 declare const hive_keychain: HiveKeychain.Keychain;
+declare const steem_keychain: HiveKeychain.Keychain;
 
 interface Window {
-  hive_keychain: HiveKeychain.Keychain;
+    hive_keychain: HiveKeychain.Keychain;
+    steem_keychain: SteemKeychain.Keychain;
 }

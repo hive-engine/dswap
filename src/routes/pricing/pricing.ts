@@ -6,7 +6,10 @@ import { Store } from 'aurelia-store';
 import { Router, Redirect } from 'aurelia-router';
 import { Subscription } from 'rxjs';
 import { DialogService, DialogCloseResult } from 'aurelia-dialog';
-import { UpgradeAccountModal } from '../../modals/market-maker/upgrade-account';
+import { UpgradeAccountModal } from 'modals/market-maker/upgrade-account';
+import { Chain } from 'common/enums';
+import { getFeeTokenSymbolByChain } from 'common/functions';
+import { EventAggregator, Subscription as eaSubscription } from 'aurelia-event-aggregator'; 
 
 @autoinject()
 export class Pricing {
@@ -16,11 +19,14 @@ export class Pricing {
     private state: IState;
     private user;
     private marketMakerUser;
+    private currentChainId = Chain.Hive;
+    private eaSubscriber: eaSubscription;
 
     constructor(private dialogService: DialogService,
         private marketMakerService: MarketMakerService,
         private store: Store<IState>,
-        private router: Router) {
+        private router: Router,
+        private ea: EventAggregator) {
 
         this.subscription = this.store.state.subscribe(async (state: IState) => {
             if (state) {
@@ -28,13 +34,23 @@ export class Pricing {
 
                 this.user = { ...state.firebaseUser };
                 this.marketMakerUser = { ...state.marketMakerUser };
+
+                if (this.state.account && this.state.account.dswapChainId) {
+                    this.currentChainId = this.state.account.dswapChainId;
+                }
             }
         });
     }
 
-    async bind() {
-        this.feeToken = environment.marketMakerFeeToken;
+    async attached() {
         this.state.activePageId = "pricing";
+        this.eaSubscriber = this.ea.subscribe('reloadData', response => {
+            this.bind();
+        });
+    }
+
+    async bind() {        
+        this.feeToken = await getFeeTokenSymbolByChain(this.currentChainId);        
     }
 
     async selectBasic() {

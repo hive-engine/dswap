@@ -11,7 +11,7 @@ import { Router, Redirect } from 'aurelia-router';
 import { BootstrapFormRenderer } from "resources/bootstrap-form-renderer";
 import { environment } from 'environment';
 import { Chain } from "common/enums";
-import { totalStakeRequiredToAddMarket } from "common/functions";
+import { totalStakeRequiredToAddMarket, getChainByState, getFeeTokenSymbolByChain, getPeggedTokenSymbolByChain } from "common/functions";
 import { UpgradeAccountModal } from "./upgrade-account";
 import { DefaultPopupTimeOut } from "common/constants";
 
@@ -48,6 +48,7 @@ export class AddMarketModal {
     private selectedOrderStrategy;
     private placeAtBidWall = "";
     private placeAtSellWall = "";
+    private currentChainId;
 
     constructor(private controller: DialogController,
         private dialogService: DialogService,
@@ -82,13 +83,14 @@ export class AddMarketModal {
     async bind() {
         this.createValidationRules();
 
-        this.tokenSymbol = environment.marketMakerFeeToken;
-        this.baseToken = environment.peggedToken;
-        this.mmTokens = await this.ts.getMarketMakerTokens();
+        this.currentChainId = await getChainByState(this.state);
+        this.tokenSymbol = await getFeeTokenSymbolByChain(this.currentChainId);
+        this.baseToken = await getPeggedTokenSymbolByChain(this.currentChainId);
+        this.mmTokens = await this.ts.getMarketMakerTokens([], this.currentChainId);
         this.tokenOperationCost = environment.marketMakerStakeRequiredPerMarket;
 
-        if (this.user) {
-            let balance = await this.ts.getUserBalanceOfToken(this.tokenSymbol);
+        if (this.user) {            
+            let balance = await this.ts.getUserBalanceOfToken(this.tokenSymbol, this.currentChainId);
             if (balance)
                 this.tokenUserStake = parseFloat(balance.stake);
 
@@ -157,7 +159,7 @@ export class AddMarketModal {
             if (this.marketMakerUser.isPremium)
                 this.market.strategy = this.selectedOrderStrategy._id;
 
-            const result = await this.mms.addMarket(Chain.Hive, this.market);
+            const result = await this.mms.addMarket(this.currentChainId, this.market);
 
             if (result) {
                 this.controller.ok();

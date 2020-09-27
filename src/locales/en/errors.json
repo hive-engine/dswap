@@ -42,5 +42,6 @@
     "marketMakerUpgradeAccountError": "Error occured while trying to upgrade account {{account}}: {{error}}",
     "marketMakerUpgradeAccountInsufficientStake": "Insufficient stake amount. Your stake: {{userStake}} {{symbol}}. {{symbol}} stake required: {{requiredStake}} {{symbol}}.",
     "marketMakerUpgradeAccountInsufficientBalance": "Insufficient balance. Your balance: {{userBalance}} {{symbol}}. {{symbol}} balance required: {{requiredBalance}} {{symbol}}.",
-    "marketMakerUpgradeAccountAlreadyPremium": "Your account is already upgraded to Premium."
+    "marketMakerUpgradeAccountAlreadyPremium": "Your account is already upgraded to Premium.",
+    "errorLogin": "An error occured while trying to login. Please try again."
 }

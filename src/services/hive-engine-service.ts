@@ -66,7 +66,7 @@ export class HiveEngineService {
                 throw new Error('User is unknown');
             }
 
-            const request = await this.http.fetch(`${environment.CONVERTER_API}convert/`, {
+            const request = await this.http.fetch(`${environment.CONVERTER_API_HE}convert/`, {
                 method: 'POST',
                 body: json({ from_coin: peggedToken.symbol, to_coin: peggedToken.pegged_token_symbol, destination: userName })
             });
