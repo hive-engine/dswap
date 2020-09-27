@@ -21,11 +21,13 @@
                                     src="../../../images/dswap-market-maker-logo.png"
                                     width="70%"
                                     alt=""
-                                    style="margin-top: 22px"
+                                    style="margin-top: 22px;"
                                 />
                             </div>
                             <div class="col-md-9">
-                                <h6 class="text-right">Status</h6>
+                                <h6 class="text-right">
+                                    Status
+                                </h6>
                                 <div class="">
                                     <div class="dashboard-status-wrapper">
                                         <div
@@ -105,7 +107,7 @@
                                 <div class="">
                                     <div
                                         class="dashboard-status-wrapper"
-                                        style="border: none; margin-top: 0"
+                                        style="border: none; margin-top: 0;"
                                     >
                                         <div
                                             class="d-flex justify-content-between"
@@ -120,9 +122,7 @@
                                                 <h4
                                                     class="dashboard-status text-center"
                                                 >
-                                                    ${marketMakerUser.isPremium
-                                                    ? 'No limits' :
-                                                    marketMakerUser.timeLimit_string}
+                                                    ${marketMakerUser.isPremium ? 'No limits' : marketMakerUser.timeLimit_string}
                                                 </h4>
                                             </div>
                                             <div class="dashboard-status-title">
@@ -417,11 +417,7 @@
                                 title="${m.symbol}"
                             />
                             <h2
-                                class="align-self-center m-0 font-22 market-list-symbol cursor-pointer"
-                                data-toggle="tooltip"
-                                title="AFIT"
-                                data-toggle="tooltip"
-                                data-placement="top"
+                                class="align-self-center m-0 font-22 market-list-symbol"
                             >
                                 ${m.symbol}
                             </h2>
@@ -463,11 +459,13 @@
                                     src="../../../images/dswap-market-maker-logo.png"
                                     width="30%"
                                     alt=""
-                                    style="margin-top: 22px"
+                                    style="margin-top: 22px;"
                                 />
                             </div>
                             <div class="col-12">
-                                <h6 class="text-right">Status</h6>
+                                <h6 class="text-right">
+                                    Status
+                                </h6>
                                 <div class="">
                                     <div class="dashboard-status-wrapper">
                                         <div
@@ -599,9 +597,7 @@
                     class="market-maker-dashboard-card dashboard-action-main-card"
                 >
                     <div class="dashboard-actions-content-header">
-                        <h1 class="markets-header markets-header-m">
-                            Activate
-                        </h1>
+                        <h1 class="markets-header markets-header-m">Activate</h1>
                     </div>
                     <div class="dashboard-actions-content">
                         <div class="icon-and-text">
@@ -674,12 +670,13 @@
                             >
                         </div>
                     </div>
-                </div>
+                </div>                
             </div>
         </div>
-
+       
         <div class="row">
             <div class="col-12">
+
                 <div
                     class="market-maker-dashboard-card dashboard-action-main-card"
                 >
@@ -749,7 +746,7 @@
                             </th>
                             <td class="table-item transaction-type">
                                 <a
-                                    route-href="route: updateMarketMaker; params.bind: {symbol:m.symbol}"
+                                    route-href="route: updateMarketMaker"
                                     class="market-symbol-link"
                                     >${m.symbol}</a
                                 >
