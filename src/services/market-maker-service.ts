@@ -10,6 +10,7 @@ import { loadMarkets, loadMarketsByUser } from 'common/market-maker-api';
 import { Chain, OrderStrategy } from 'common/enums';
 import { hiveSignerJson } from 'common/hive';
 import { checkTransaction } from 'common/hive-engine-api';
+import { checkTransactionSE } from '../common/steem-engine-api';
 
 const http = new HttpClient();
 
@@ -56,14 +57,14 @@ export class MarketMakerService {
         return markets;
     }
 
-    async getUserMarkets(symbols = []) {
+    async getUserMarkets(symbols = [], chain: Chain) {
         let account = environment.isDebug && environment.debugAccount ? environment.debugAccount : this.getUser();
-        let markets = await loadMarketsByUser(account, symbols);
+        let markets = await loadMarketsByUser(account, symbols, chain);
 
         return markets;
     }
 
-    getUser() {
+    getUser() {        
         return this.user?.name ?? null;
     }
 
@@ -81,25 +82,42 @@ export class MarketMakerService {
             contractPayload: {}
         };
 
-        // eslint-disable-next-line no-async-promise-executor
-        return new Promise(async (resolve) => {
-            if (chain == Chain.Hive) {
-                if (window.hive_keychain) {
-                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Register for Market Maker', async (response) => {
-                        resolve(this.processResponseRegisterKeychain(response));
-                    });
-                } else {
-                    hiveSignerJson(this.user.name, 'active', transaction_data, () => {
-                        resolve(true);
-                    });
-                }
-            } else {
-
-            }
-        });
+        if (chain === Chain.Hive) {
+            return this.registerHive(username, transaction_data);
+        } else if (chain === Chain.Steem) {
+            return this.registerSteem(username, transaction_data);
+        }
+        
     }    
 
-    async processResponseRegisterKeychain(response) {
+    async registerHive(username, transaction_data): Promise<unknown> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (window.hive_keychain) {
+                window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Register for Market Maker', async (response) => {
+                    resolve(this.processResponseRegisterKeychain(response, Chain.Hive));
+                });
+            } else {
+                hiveSignerJson(this.user.name, 'active', transaction_data, () => {
+                    resolve(true);
+                });
+            }
+        });
+    }
+
+    async registerSteem(username, transaction_data): Promise<unknown> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (window.steem_keychain) {
+                window.steem_keychain.requestCustomJson(username, environment.chainId_SE, 'Active', JSON.stringify(transaction_data), 'Register for Market Maker', async (response) => {
+                    resolve(this.processResponseRegisterKeychain(response, Chain.Steem));
+                });
+            } 
+        });
+    }
+
+
+    async processResponseRegisterKeychain(response, chain: Chain) {
         if (response.success && response.result) {
             try {
                 let toast = new ToastMessage();
@@ -110,7 +128,7 @@ export class MarketMakerService {
 
                 this.toast.success(toast);
 
-                const transaction = await checkTransaction(response.result.id, 3);
+                const transaction = await this.checkTransactionByChain(response, chain);
                 console.log(transaction);
 
                 if (transaction.error) {
@@ -172,25 +190,51 @@ export class MarketMakerService {
             contractPayload: {}
         };
 
+        if (chain === Chain.Hive) {
+            return this.disableAccountHive(username, transaction_data);
+        } else if (chain === Chain.Steem) {
+            return this.disableAccountSteem(username, transaction_data);
+        }
+    }
+
+    async disableAccountHive(username, transaction_data): Promise<unknown> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {
-            if (chain == Chain.Hive) {
-                if (window.hive_keychain) {
-                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Disable account for Market Maker', async (response) => {
-                        resolve(this.processResponseDisableAccountKeychain(response));
-                    });
-                } else {
-                    hiveSignerJson(this.user.name, 'active', transaction_data, () => {
-                        resolve(true);
-                    });
-                }
+            if (window.hive_keychain) {
+                window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Disable account for Market Maker', async (response) => {
+                    resolve(this.processResponseDisableAccountKeychain(response, Chain.Hive));
+                });
             } else {
-
+                hiveSignerJson(this.user.name, 'active', transaction_data, () => {
+                    resolve(true);
+                });
             }
         });
     }    
 
-    async processResponseDisableAccountKeychain(response) {
+    async disableAccountSteem(username, transaction_data): Promise<unknown> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (window.steem_keychain) {
+                window.steem_keychain.requestCustomJson(username, environment.chainId_SE, 'Active', JSON.stringify(transaction_data), 'Disable account for Market Maker', async (response) => {
+                    resolve(this.processResponseDisableAccountKeychain(response, Chain.Steem));
+                });
+            } 
+        });
+    }   
+
+    async checkTransactionByChain(response, chain: Chain) {
+        let transaction: any;
+        if (chain === Chain.Hive) {
+            transaction = await checkTransaction(response.result.id, 3);
+        } else if (chain === Chain.Steem) {
+            transaction = await checkTransactionSE(response.result.id, 3);
+        }
+
+        return transaction;
+    }
+
+    async processResponseDisableAccountKeychain(response, chain: Chain) {
         if (response.success && response.result) {
             try {
                 let toast = new ToastMessage();
@@ -201,7 +245,8 @@ export class MarketMakerService {
 
                 this.toast.success(toast);
 
-                const transaction = await checkTransaction(response.result.id, 3);
+                const transaction = await this.checkTransactionByChain(response, chain);
+
                 console.log(transaction);
 
                 if (transaction.error) {
@@ -263,25 +308,40 @@ export class MarketMakerService {
             contractPayload: {}
         };
 
+        if (chain === Chain.Hive) {
+            return this.enableAccountHive(username, transaction_data);
+        } else if (chain === Chain.Steem) {
+            return this.enableAccountSteem(username, transaction_data);
+        }
+    }
+
+    async enableAccountHive(username, transaction_data): Promise<unknown> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {
-            if (chain == Chain.Hive) {
                 if (window.hive_keychain) {
                     window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Enable account for Market Maker', async (response) => {
-                        resolve(this.processResponseEnableAccountKeychain(response));
+                        resolve(this.processResponseEnableAccountKeychain(response, Chain.Hive));
                     });
                 } else {
                     hiveSignerJson(this.user.name, 'active', transaction_data, () => {
                         resolve(true);
                     });
                 }
-            } else {
-
-            }
         });
     }
 
-    async processResponseEnableAccountKeychain(response) {
+    async enableAccountSteem(username, transaction_data): Promise<unknown> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (window.steem_keychain) {
+                window.steem_keychain.requestCustomJson(username, environment.chainId_SE, 'Active', JSON.stringify(transaction_data), 'Enable account for Market Maker', async (response) => {
+                    resolve(this.processResponseEnableAccountKeychain(response, Chain.Steem));
+                });
+            } 
+        });
+    }
+
+    async processResponseEnableAccountKeychain(response, chain: Chain) {
         if (response.success && response.result) {
             try {
                 let toast = new ToastMessage();
@@ -292,7 +352,7 @@ export class MarketMakerService {
 
                 this.toast.success(toast);
 
-                const transaction = await checkTransaction(response.result.id, 3);
+                const transaction = await this.checkTransactionByChain(response, chain);
                 console.log(transaction);
 
                 if (transaction.error) {
@@ -355,22 +415,37 @@ export class MarketMakerService {
             contractAction: 'addMarket',
             contractPayload: { ...contractPayload }
         };
-        console.log(transaction_data);
+
+        if (chain === Chain.Hive) {
+            return this.addMarketHive(username, market.symbol, transaction_data);
+        } else if (chain === Chain.Steem) {
+            return this.addMarketSteem(username, market.symbol,transaction_data);
+        }
+    }
+
+    async addMarketHive(username, symbol, transaction_data): Promise<unknown> {        
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {
-            if (chain == Chain.Hive) {
                 if (window.hive_keychain) {
                     window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Add market for Market Maker', async (response) => {
-                        resolve(this.processResponseAddMarketKeychain(response, market.symbol));
+                        resolve(this.processResponseAddMarketKeychain(response, symbol, Chain.Hive));
                     });
                 } else {
                     hiveSignerJson(this.user.name, 'active', transaction_data, () => {
                         resolve(true);
                     });
                 }
-            } else {
+        });
+    }
 
-            }
+    async addMarketSteem(username, symbol, transaction_data): Promise<unknown> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (window.steem_keychain) {
+                window.steem_keychain.requestCustomJson(username, environment.chainId_SE, 'Active', JSON.stringify(transaction_data), 'Add market for Market Maker', async (response) => {
+                    resolve(this.processResponseAddMarketKeychain(response, symbol, Chain.Steem));
+                });
+            } 
         });
     }
 
@@ -425,7 +500,7 @@ export class MarketMakerService {
         return contractPayload;
     }
 
-    async processResponseAddMarketKeychain(response, symbol) {
+    async processResponseAddMarketKeychain(response, symbol, chain: Chain) {
         if (response.success && response.result) {
             try {
                 let toast = new ToastMessage();
@@ -436,7 +511,7 @@ export class MarketMakerService {
 
                 this.toast.success(toast);
 
-                const transaction = await checkTransaction(response.result.id, 3);
+                const transaction = await this.checkTransactionByChain(response, chain);
                 console.log(transaction);
 
                 if (transaction.error) {
@@ -501,26 +576,41 @@ export class MarketMakerService {
             contractAction: 'updateMarket',
             contractPayload: { ...contractPayload }
         };
-        
+
+        if (chain === Chain.Hive) {
+            return this.updateMarketHive(username, market.symbol, transaction_data);
+        } else if (chain === Chain.Steem) {
+            return this.updateMarketSteem(username, market.symbol, transaction_data);
+        }
+    }
+
+    async updateMarketHive(username, symbol, transaction_data): Promise<unknown> {        
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {
-            if (chain == Chain.Hive) {
                 if (window.hive_keychain) {
                     window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Update market for Market Maker', async (response) => {
-                        resolve(this.processResponseUpdateMarketKeychain(response, market.symbol));
+                        resolve(this.processResponseUpdateMarketKeychain(response, symbol, Chain.Hive));
                     });
                 } else {
                     hiveSignerJson(this.user.name, 'active', transaction_data, () => {
                         resolve(true);
                     });
                 }
-            } else {
-
-            }
         });
     }
 
-    async processResponseUpdateMarketKeychain(response, symbol) {
+    async updateMarketSteem(username, symbol, transaction_data): Promise<unknown> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (window.steem_keychain) {
+                window.steem_keychain.requestCustomJson(username, environment.chainId_SE, 'Active', JSON.stringify(transaction_data), 'Update market for Market Maker', async (response) => {
+                    resolve(this.processResponseUpdateMarketKeychain(response, symbol, Chain.Steem));
+                });
+            } 
+        });
+    }
+
+    async processResponseUpdateMarketKeychain(response, symbol, chain: Chain) {
         if (response.success && response.result) {
             try {
                 let toast = new ToastMessage();
@@ -531,7 +621,7 @@ export class MarketMakerService {
 
                 this.toast.success(toast);
 
-                const transaction = await checkTransaction(response.result.id, 3);                
+                const transaction = await this.checkTransactionByChain(response, chain);
 
                 if (transaction.error) {
                     toast = new ToastMessage();
@@ -596,25 +686,40 @@ export class MarketMakerService {
             }
         };
 
+        if (chain === Chain.Hive) {
+            return this.removeMarketHive(username, symbol, transaction_data);
+        } else if (chain === Chain.Steem) {
+            return this.removeMarketSteem(username, symbol, transaction_data);
+        }
+    }
+
+    async removeMarketHive(username, symbol, transaction_data): Promise<unknown> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {
-            if (chain == Chain.Hive) {
                 if (window.hive_keychain) {
                     window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Remove market for Market Maker', async (response) => {
-                        resolve(this.processResponseRemoveMarketKeychain(response, symbol));
+                        resolve(this.processResponseRemoveMarketKeychain(response, symbol, Chain.Hive));
                     });
                 } else {
                     hiveSignerJson(this.user.name, 'active', transaction_data, () => {
                         resolve(true);
                     });
                 }
-            } else {
+        });
+    }
 
+    async removeMarketSteem(username, symbol, transaction_data): Promise<unknown> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (window.steem_keychain) {
+                window.steem_keychain.requestCustomJson(username, environment.chainId_SE, 'Active', JSON.stringify(transaction_data), 'Remove market for Market Maker', async (response) => {
+                    resolve(this.processResponseRemoveMarketKeychain(response, symbol, Chain.Steem));
+                });
             }
         });
     }
 
-    async processResponseRemoveMarketKeychain(response, symbol) {
+    async processResponseRemoveMarketKeychain(response, symbol, chain: Chain) {
         if (response.success && response.result) {
             try {
                 let toast = new ToastMessage();
@@ -625,7 +730,7 @@ export class MarketMakerService {
 
                 this.toast.success(toast);
 
-                const transaction = await checkTransaction(response.result.id, 3);
+                const transaction = await this.checkTransactionByChain(response, chain);
                 console.log(transaction);
 
                 if (transaction.error) {
@@ -692,25 +797,40 @@ export class MarketMakerService {
             }
         };
 
+        if (chain === Chain.Hive) {
+            return this.disableMarketHive(username, symbol, transaction_data);
+        } else if (chain === Chain.Steem) {
+            return this.disableMarketSteem(username, symbol, transaction_data);
+        }
+    }
+
+    async disableMarketHive(username, symbol, transaction_data): Promise<unknown> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {
-            if (chain == Chain.Hive) {
                 if (window.hive_keychain) {
-                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Disable '+symbol+' market for Market Maker', async (response) => {
-                        resolve(this.processResponseDisableMarketKeychain(response, symbol));
+                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Disable ' + symbol + ' market for Market Maker', async (response) => {
+                        resolve(this.processResponseDisableMarketKeychain(response, symbol, Chain.Hive));
                     });
                 } else {
                     hiveSignerJson(this.user.name, 'active', transaction_data, () => {
                         resolve(true);
                     });
                 }
-            } else {
-
-            }
         });
     }
 
-    async processResponseDisableMarketKeychain(response, symbol) {
+    async disableMarketSteem(username, symbol, transaction_data): Promise<unknown> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (window.steem_keychain) {
+                window.steem_keychain.requestCustomJson(username, environment.chainId_SE, 'Active', JSON.stringify(transaction_data), 'Disable ' + symbol + ' market for Market Maker', async (response) => {
+                    resolve(this.processResponseDisableMarketKeychain(response, symbol, Chain.Steem));
+                });
+            } 
+        });
+    }
+
+    async processResponseDisableMarketKeychain(response, symbol, chain: Chain) {
         if (response.success && response.result) {
             try {
                 let toast = new ToastMessage();
@@ -721,7 +841,7 @@ export class MarketMakerService {
 
                 this.toast.success(toast);
 
-                const transaction = await checkTransaction(response.result.id, 3);
+                const transaction = await this.checkTransactionByChain(response, chain);
                 console.log(transaction);
 
                 if (transaction.error) {
@@ -788,25 +908,40 @@ export class MarketMakerService {
             }
         };
 
+        if (chain === Chain.Hive) {
+            return this.enableMarketHive(username, symbol, transaction_data);
+        } else if (chain === Chain.Steem) {
+            return this.enableMarketSteem(username, symbol, transaction_data);
+        }
+    }
+
+    async enableMarketHive(username, symbol, transaction_data): Promise<unknown> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {
-            if (chain == Chain.Hive) {
                 if (window.hive_keychain) {
-                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Enable ' +symbol+ ' market for Market Maker', async (response) => {
-                        resolve(this.processResponseEnableMarketKeychain(response, symbol));
+                    window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Enable ' + symbol + ' market for Market Maker', async (response) => {
+                        resolve(this.processResponseEnableMarketKeychain(response, symbol, Chain.Hive));
                     });
                 } else {
                     hiveSignerJson(this.user.name, 'active', transaction_data, () => {
                         resolve(true);
                     });
                 }
-            } else {
-
-            }
         });
     }
 
-    async processResponseEnableMarketKeychain(response, symbol) {
+    async enableMarketSteem(username, symbol, transaction_data): Promise<unknown> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (window.steem_keychain) {
+                window.steem_keychain.requestCustomJson(username, environment.chainId_SE, 'Active', JSON.stringify(transaction_data), 'Enable ' + symbol + ' market for Market Maker', async (response) => {
+                    resolve(this.processResponseEnableMarketKeychain(response, symbol, Chain.Steem));
+                });
+            } 
+        });
+    }
+
+    async processResponseEnableMarketKeychain(response, symbol, chain: Chain) {
         if (response.success && response.result) {
             try {
                 let toast = new ToastMessage();
@@ -817,7 +952,7 @@ export class MarketMakerService {
 
                 this.toast.success(toast);
 
-                const transaction = await checkTransaction(response.result.id, 3);
+                const transaction = await this.checkTransactionByChain(response, chain);
                 console.log(transaction);
 
                 if (transaction.error) {
@@ -882,25 +1017,40 @@ export class MarketMakerService {
             contractPayload: {}
         };
 
+        if (chain === Chain.Hive) {
+            return this.upgradeAccountHive(username, transaction_data);
+        } else if (chain === Chain.Steem) {
+            return this.upgradeAccountSteem(username, transaction_data);
+        }
+    }
+
+    async upgradeAccountHive(username, transaction_data): Promise<unknown> {
         // eslint-disable-next-line no-async-promise-executor
         return new Promise(async (resolve) => {
-            if (chain == Chain.Hive) {
                 if (window.hive_keychain) {
                     window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Upgrade account for Market Maker', async (response) => {
-                        resolve(this.processResponseUpgradeAccountKeychain(response));
+                        resolve(this.processResponseUpgradeAccountKeychain(response, Chain.Hive));
                     });
                 } else {
                     hiveSignerJson(this.user.name, 'active', transaction_data, () => {
                         resolve(true);
                     });
                 }
-            } else {
-
-            }
         });
     }
 
-    async processResponseUpgradeAccountKeychain(response) {
+    async upgradeAccountSteem(username, transaction_data): Promise<unknown> {
+        // eslint-disable-next-line no-async-promise-executor
+        return new Promise(async (resolve) => {
+            if (window.steem_keychain) {
+                window.steem_keychain.requestCustomJson(username, environment.chainId_SE, 'Active', JSON.stringify(transaction_data), 'Upgrade account for Market Maker', async (response) => {
+                    resolve(this.processResponseUpgradeAccountKeychain(response, Chain.Steem));
+                });
+            } 
+        });
+    }
+
+    async processResponseUpgradeAccountKeychain(response, chain: Chain) {
         if (response.success && response.result) {
             try {
                 let toast = new ToastMessage();
@@ -911,7 +1061,7 @@ export class MarketMakerService {
 
                 this.toast.success(toast);
 
-                const transaction = await checkTransaction(response.result.id, 3);
+                const transaction = await this.checkTransactionByChain(response, chain);
                 console.log(transaction);
 
                 if (transaction.error) {

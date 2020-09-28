@@ -4,7 +4,7 @@
             <a
                 route-href="route: registerMarketMaker"
                 class="back-btn"
-                style="margin-left: 200px; margin-bottom: 20px"
+                style="margin-left: 200px; margin-bottom: 20px;"
                 >Go Back</a
             >
         </div>
@@ -17,28 +17,30 @@
                     </div>
                     <hr class="divider" />
                     <div class="register-market-maker-body">
+                        
                         <div class="form-group">
                             <label
+
                                 >${'Choose Token' & t}
                                 <tooltip
                                     text="What token do you want the market maker to
                                 trade?"
                                 ></tooltip>
                             </label>
+
                             <select
                                 class="form-control"
                                 value.bind="token"
                                 change.delegate="tokenSelected()"
                             >
-                                <option model.bind="null">
-                                    ${'Please select a token...' & t}
-                                </option>
+                                <option model.bind="null"
+                                    >${'Please select a token...' & t}</option
+                                >
                                 <option
                                     model.bind="t"
                                     repeat.for="t of tokenList"
+                                    >${t.name & t} (${t.symbol})</option
                                 >
-                                    ${t.name & t} (${t.symbol})
-                                </option>
                             </select>
                         </div>
 
@@ -58,12 +60,14 @@
 
                             <div class="form-group">
                                 <label
+
                                     >${'Maximum Price' & t}
                                     <tooltip
                                         text="What is the maximum price you\'re
                                     willing to buy the token for?"
                                     ></tooltip>
                                 </label>
+
                                 <div class="input-group">
                                     <input
                                         class="form-control"
@@ -82,12 +86,14 @@
                             </div>
                             <div class="form-group">
                                 <label
+
                                     >${'Minimum Price' & t}
                                     <tooltip
                                         text="What is the minimum price you\'re
                                     willing to sell the token for?"
                                     ></tooltip>
                                     </label
+
                                 >
                                 <div class="input-group">
                                     <input
@@ -107,13 +113,13 @@
                             </div>
                             <div class="form-group">
                                 <label
+
                                     >${'Maximum Buy' & t}
                                     <tooltip
                                         text="What is the maximum amount of HIVE
+
                                     you\'re willing to buy with in a single
-                                    order?"
-                                    ></tooltip>
-                                    </label
+                                    order?' & t}</label
                                 >
                                 <div class="input-group">
                                     <input
@@ -133,6 +139,7 @@
                             </div>
                             <div class="form-group">
                                 <label
+
                                     >${'Maximum Sell'
                                     & t}
                                     <tooltip
@@ -141,6 +148,7 @@
                                     order?"
                                     ></tooltip>
                                     </label
+
                                 >
                                 <div class="input-group">
                                     <input
@@ -160,13 +168,13 @@
                             </div>
                             <div class="form-group">
                                 <label
+
                                     >${'Minimum Spread' & t}
                                     <tooltip
                                         text="What is the minimum spread between bid
+
                                     and asks before the bot won\'t place orders
-                                    any closer?"
-                                    ></tooltip>
-                                    </label
+                                    any closer?' & t}</label
                                 >
                                 <div class="input-group">
                                     <input
@@ -184,6 +192,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            
                         </div>
                     </div>
 

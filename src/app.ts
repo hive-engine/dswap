@@ -41,11 +41,10 @@ bind() {
     this.store.state.subscribe((s: IState) => {
         if (s) {
             this.state = s;
-
             this.loading = s.loading;
             this.loggedIn = s.loggedIn;
             this.claims = s?.account?.token?.claims;
-            this.notifications = s?.firebaseUser?.notifications ?? [];
+            this.notifications = s?.firebaseUser?.notifications ?? [];            
         }
     });
 

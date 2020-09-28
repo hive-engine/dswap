@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-register" show.bind="marketMakerUserId !== 0">
+    <div class="flex-register" show.bind="marketMakerUserId && marketMakerUserId !== 0">
          <div class="row">
             <div class="col-xl-10 col-md-12">
                 <div class="register-market-maker-wrapper">
@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    <div class="flex-register" show.bind="marketMakerUserId === 0">
+    <div class="flex-register" show.bind="!marketMakerUserId || marketMakerUserId === 0">
         <loader loading.bind="loading" mode="tiny"></loader>
 
         <div class="back-btn-container">

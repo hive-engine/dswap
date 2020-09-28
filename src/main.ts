@@ -103,7 +103,6 @@ aurelia.use.plugin(PLATFORM.moduleName('aurelia-i18n'), (instance) => {
         });
     });
 });
-
     await authStateChanged();
     await aurelia.start()
         .then(x => x.setRoot(PLATFORM.moduleName('app')))

@@ -6,30 +6,27 @@ import { ValidationControllerFactory, ControllerValidateResult, ValidationRules 
 import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
-import { trimUsername, getChainByState } from 'common/functions';
-import { MarketMakerService } from 'services/market-maker-service';
-import { Chain } from 'common/enums';
+import { DefaultPopupTimeOut } from 'common/constants';
+import { AuthService } from '../services/auth-service';
 
 @autoinject()
-export class RemoveMarketModal {
+export class ConfirmChainModal {
     private loading = false;
-    private state: IState;
     private subscription: Subscription;
     private token: any;
     private validationController;
     private renderer;
-    private marketMakerUser;
-    private symbol;
-    private market: IMarketMakerMarket;
-    private currentChainId;
+    private selectedChain;
+    public storeSubscription: Subscription;
+    private state: IState;
 
     constructor(private controller: DialogController,
         private toast: ToastService,
         private taskQueue: TaskQueue,
-        private store: Store<IState>,
         private controllerFactory: ValidationControllerFactory,
         private i18n: I18N,
-        private mms: MarketMakerService) {
+        private store: Store<IState>,
+        private authService: AuthService) {
         this.validationController = controllerFactory.createForCurrentScope();
 
         this.renderer = new BootstrapFormRenderer();
@@ -37,29 +34,36 @@ export class RemoveMarketModal {
 
         this.controller.settings.lock = false;
         this.controller.settings.centerHorizontalOnly = true;
-        this.subscription = this.store.state.subscribe((state: IState) => {
+
+        this.storeSubscription = this.store.state.subscribe(state => {
             if (state) {
                 this.state = state;
-
-                this.marketMakerUser = { ...this.state.marketMakerUser };
             }
-        });
+        });    
     }
 
-    async activate(market) {
-        this.market = market;
-        this.currentChainId = await getChainByState(this.state);
+    async activate(selectedChain) {
+        this.selectedChain = selectedChain;
     }
 
-    async confirmRemoveMarket() {
+    async confirmSwitch() {
         this.loading = true;
 
-        const result = await this.mms.removeMarket(this.currentChainId, this.market.symbol);
+        this.state.dswapChainId = this.selectedChain.id;
 
-        if (result) {
-            this.controller.ok();
+        if (this.state.loggedIn) {
+            await this.authService.logout();
+
+            const toastMessage = new ToastMessage();
+            toastMessage.message = this.i18n.tr("marketMakerChainSwitchConfirm", {
+                ns: 'notifications'
+            });
+            toastMessage.overrideOptions.timeout = DefaultPopupTimeOut;
+            this.toast.warning(toastMessage);
         }
 
         this.loading = false;
+
+        this.controller.ok();
     }
 }

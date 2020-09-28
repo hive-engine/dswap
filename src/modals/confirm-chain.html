@@ -1,0 +1,24 @@
+<template>
+    <ux-dialog>
+        <loader mode="tiny" loading.bind="loading"></loader>
+
+        <ux-dialog-header class="modal-header">
+            <h2>${'Chain switch' & t}</h2>
+        </ux-dialog-header>
+        <ux-dialog-body class="withdrawDialogBody modal-body">
+            <p>You will be logged out and required to login again to ${selectedChain.name}.</p>
+            <p>Are you sure?</p>
+        </ux-dialog-body>
+
+        <ux-dialog-footer>
+            <button class="btn btn-lg redBtn"
+                    click.trigger="controller.cancel()">
+                ${'Cancel' & t}
+            </button>
+            <button class="btn btn-lg greenBtns trade-button"
+                    click.trigger="confirmSwitch()">
+                ${'Proceed' & t}
+            </button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

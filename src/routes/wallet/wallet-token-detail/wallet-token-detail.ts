@@ -7,6 +7,7 @@ import { DialogService } from "aurelia-dialog";
 import { AuthService } from "services/auth-service";
 import { Store, dispatchify } from "aurelia-store";
 import { TokenService } from "services/token-service";
+import { getChainByState } from 'common/functions';
 
 @autoinject()
 @customElement("walletdetail")
@@ -25,6 +26,7 @@ export class WalletTokenDetail {
     private totalItems = 50;
     // calculate later based on totalItems
     private totalPages = 7;
+    private currentChainId;
 
     constructor(
         private dialogService: DialogService,
@@ -44,7 +46,8 @@ export class WalletTokenDetail {
 
     async activate({ symbol }) {
         this.symbol = symbol;
-        this.token = await this.ts.getTokenDetails(symbol);
+        this.currentChainId = await getChainByState(this.state);
+        this.token = await this.ts.getTokenDetails(symbol, this.currentChainId);
         this.tradesCompleted = await this.loadTradesCompleted(this.symbol, this.page);
     }
 
@@ -65,8 +68,8 @@ export class WalletTokenDetail {
 
         let tradesCompleted = await this.hes.loadAccountHistoryData(this.symbol, this.limit, this.offset);
         
-        for(let t of tradesCompleted) {
-            let token = await this.ts.getTokenDetails(t.symbol, true, false);
+        for (let t of tradesCompleted) {
+            let token = await this.ts.getTokenDetails(t.symbol, this.currentChainId, true, false);
             if (token && token.metrics) {
                 t.usdValue = (parseFloat(t.quantity) * parseFloat(token.metrics.lastPriceUsd)).toFixed(2);
             }

@@ -17,6 +17,9 @@ import { EnableMarketModal } from "modals/market-maker/enable-market";
 import { TokenService } from "services/token-service";
 import { environment } from 'environment';
 import { UpgradeAccountModal } from "modals/market-maker/upgrade-account";
+import { Chain } from "common/enums";
+import { getChainByState } from "common/functions";
+import { EventAggregator, Subscription as eaSubscription } from 'aurelia-event-aggregator'; 
 
 @autoinject()
 export class MarketMakerDashboard {
@@ -29,8 +32,10 @@ export class MarketMakerDashboard {
     private markets : IMarketMakerMarket[] = [];
     private marketTokens = [];
     private exchangeMarketUrl;
+    private currentChainId;
+    private eaSubscriber: eaSubscription;
 
-    constructor(private dialogService: DialogService, private store: Store<IState>, private router: Router, private mms: MarketMakerService, private ts: TokenService) {
+    constructor(private dialogService: DialogService, private store: Store<IState>, private router: Router, private mms: MarketMakerService, private ts: TokenService, private ea: EventAggregator) {
         this.subscription = this.store.state.subscribe(async (state: IState) => {
             if (state) {
                 this.state = state;
@@ -40,17 +45,18 @@ export class MarketMakerDashboard {
         });
     }
 
-    async bind() {
-        this.loadMarkets();
-        this.exchangeMarketUrl = environment.EXCHANGE_URL + "?p=market&t=";
-        this.state.activePageId = "market-maker-dashboard";
+    async bind() {        
+        this.currentChainId = await getChainByState(this.state);
+        await this.loadMarkets();
+        let exchangeUrl = this.currentChainId === Chain.Hive ? environment.EXCHANGE_URL_HE : environment.EXCHANGE_URL_SE;
+        this.exchangeMarketUrl = exchangeUrl + "?p=market&t=";        
     }
 
     async loadMarkets() {
-        this.markets = await this.mms.getUserMarkets();          
+        this.markets = await this.mms.getUserMarkets([], this.currentChainId);
         if (this.markets) {
-            let tokenSymbols = this.markets.map(x => x.symbol);            
-            this.marketTokens = await this.ts.getMarketMakerTokens(tokenSymbols);
+            let tokenSymbols = this.markets.map(x => x.symbol);
+            this.marketTokens = await this.ts.getMarketMakerTokens(tokenSymbols, this.currentChainId);
 
             for (let m of this.markets) {
                 let token = this.marketTokens.find(x => x.symbol == m.symbol);
@@ -61,9 +67,14 @@ export class MarketMakerDashboard {
     }
 
     async attached() {
+        this.state.activePageId = "market-maker-dashboard";
         $(".toggle").click(function (e) {
             e.preventDefault();
             $(this).toggleClass("toggle-on").toggleClass("toggle-text-off");
+        });
+
+        this.eaSubscriber = this.ea.subscribe('reloadData', response => {
+            this.bind();
         });
     }
 

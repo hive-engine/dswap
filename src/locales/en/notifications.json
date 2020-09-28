@@ -16,5 +16,6 @@
     "marketMakerUpdateMarketWait": "Broadcasting Market Maker update market transaction. Please wait until the transaction is verified.",
     "marketMakerUpdateMarketSuccessful": "Market settings for {{tokenSymbol}} are successfully updated for account {{account}} on Market Maker",
     "marketMakerUpgradeAccountWait": "Broadcasting Market Maker upgrade account transaction. Please wait until the transaction is verified.",
-    "marketMakerUpgradeAccountSuccessful": "Your account {{account}} is successfully upgraded on Market Maker"
+    "marketMakerUpgradeAccountSuccessful": "Your account {{account}} is successfully upgraded on Market Maker",
+    "marketMakerChainSwitchConfirm": "You are logged out because you switched from chains. Please log in again."
 }

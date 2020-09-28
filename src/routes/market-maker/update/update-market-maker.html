@@ -4,7 +4,7 @@
             <a
                 route-href="route: marketMakerDashboard"
                 class="back-btn"
-                style="margin-left: 200px; margin-bottom: 20px"
+                style="margin-left: 200px; margin-bottom: 20px;"
                 >Go Back</a
             >
         </div>
@@ -17,19 +17,15 @@
                 </div>
                 <hr class="divider" />
                 <div class="register-market-maker-body">
-                    Updates the configuration for a previously added market.
+                    Updates the configuration for a previously added market. <br />
+                    If your account is not premium, a 1 ${feeTokenSymbol} service fee is required. Premium users can make unlimited updates for free.<br />
                     <br />
-                    If your account is not premium, a 1 ${feeTokenSymbol}
-                    service fee is required. Premium users can make unlimited
-                    updates for free.<br />
-                    <br />
-                    Current ${feeTokenSymbol} balance: ${feeTokenUserBalance}
-                    ${feeTokenSymbol}
-                    <div class="wallet-wrapper">
+                    Current ${feeTokenSymbol} balance: ${feeTokenUserBalance} ${feeTokenSymbol}
+                    <div class="wallet-wrapper">                        
                         <div class="wallet-detail-card">
                             <div
                                 class="wallet-detail-card-content"
-                                style="width: 100%"
+                                style="width: 100%;"
                             >
                                 <div class="wallet-detail-card-text">
                                     <div
@@ -80,7 +76,7 @@
                                                                     class="fa fa-toggle-off"
                                                                 ></i
                                                             ></a>
-
+                                                            
                                                             <a
                                                                 click.delegate="removeMarket(market)"
                                                                 href="javascript:void()"
@@ -107,6 +103,7 @@
                                             <div
                                                 class="transaction-history-card"
                                             >
+
                                                 <hr />
                                                 <div class="form-group">
                                                     <label>
@@ -173,41 +170,13 @@
                                                             enter an amount
                                                             greater than 0' & t}
                                                         </div>
+
+                                                    </div>
+                                                    <div class="invalid-tooltip">
+                                                        ${'errors:Please enter an amount greater than 0' & t}
                                                     </div>
                                                 </div>
-                                                <div
-                                                    class="form-group"
-                                                    show.bind="selectedOrderStrategy && selectedOrderStrategy._id == 2"
-                                                >
-                                                    <label
-                                                        >${'Set the wall size
-                                                        threshold that
-                                                        determines where sell
-                                                        orders will be placed' &
-                                                        t}</label
-                                                    >
-                                                    <div class="input-group">
-                                                        <input
-                                                            class="form-control"
-                                                            type="text"
-                                                            placeholder="Default: 10000"
-                                                            value.bind="placeAtSellWall"
-                                                        />
-                                                        <div
-                                                            class="input-group-append"
-                                                        >
-                                                            ${selectedTokenSymbol
-                                                            & t}
-                                                        </div>
-                                                        <div
-                                                            class="invalid-tooltip"
-                                                        >
-                                                            ${'errors:Please
-                                                            enter an amount
-                                                            greater than 0' & t}
-                                                        </div>
-                                                    </div>
-                                                </div>
+
                                                 <div class="form-group">
                                                     <label
                                                         >${'Maximum Bid Price' & t}
@@ -534,17 +503,16 @@
                                                             enter an amount
                                                             greater than 0' & t}
                                                         </div>
+
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                                <div class="form-group">
-                                                    <button
-                                                        class="btn btn-lg greenBtns trade-button float-right"
-                                                        click.trigger="updateMarket()"
-                                                    >
-                                                        ${'Update' & t}
-                                                    </button>
-                                                </div>
+                                            <div class="form-group">
+                                                <button class="btn btn-lg greenBtns trade-button float-right"
+                                                        click.trigger="updateMarket()">
+                                                    ${'Update' & t}
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
