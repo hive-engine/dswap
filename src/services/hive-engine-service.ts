@@ -6,8 +6,6 @@ import firebase from 'firebase/app';
 import { ToastMessage, ToastService } from './toast-service';
 import { I18N } from 'aurelia-i18n';
 import { Store } from 'aurelia-store';
-import hivejs from '@hivechain/hivejs';
-import { hiveSignerJson, getAccount } from 'common/hive';
 import { loadCoins, loadCoinPairs, loadAccountHistory } from 'common/hive-engine-api';
 import { filterXSS } from 'xss';
 import { TokenService } from './token-service';

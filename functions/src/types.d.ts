@@ -1,1 +1,1 @@
-declare module 'hivejs';
+declare module 'hive-js';

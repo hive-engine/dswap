@@ -1,5 +1,5 @@
 import * as Crypto from 'crypto-js';
-import * as hivejs from 'hivejs';
+import * as hive from 'hive-js';
 import * as uuidv4 from 'uuid/v4';
 
 import * as functions from 'firebase-functions';
@@ -9,9 +9,9 @@ export class Auth {
         const encryptedMessage = Crypto.AES.encrypt(`${username}::${uuidv4()}`, functions.config().keys.aes).toString();
 
         try {
-            const res = await hivejs.api.getAccountsAsync([username]);
+            const res = await hive.api.getAccountsAsync([username]);
 
-            const encryptedMemo = hivejs.memo.encode(functions.config().keys.steem, res[0].posting.key_auths[0][0], `#${encryptedMessage}`);
+            const encryptedMemo = hive.memo.encode(functions.config().keys.steem, res[0].posting.key_auths[0][0], `#${encryptedMessage}`);
 
             return encryptedMemo;
         } catch (e) {

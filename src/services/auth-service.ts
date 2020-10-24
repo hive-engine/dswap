@@ -6,7 +6,7 @@ import firebase from 'firebase/app';
 import { ToastMessage, ToastService } from './toast-service';
 import { I18N } from 'aurelia-i18n';
 import { Store, dispatchify } from 'aurelia-store';
-import hivejs from '@hivechain/hivejs';
+import hive from '@hiveio/hive-js';
 import { hiveSignerJson, getAccount } from 'common/hive';
 import { Chain } from 'common/enums';
 import { DefaultPopupTimeOut, firebaseSteemAppName, firebaseHiveAppName } from 'common/constants';
@@ -172,8 +172,8 @@ export class AuthService {
                 });
             } else {
                 try {
-                    if (key && !hivejs.auth.isWif(key)) {
-                        key = hivejs.auth.getPrivateKeys(username, key, ['posting']).posting;
+                    if (key && !hive.auth.isWif(key)) {
+                        key = hive.auth.getPrivateKeys(username, key, ['posting']).posting;
                     }
                 } catch (err) {
                     const toast = new ToastMessage();
@@ -193,12 +193,12 @@ export class AuthService {
 
                     if (user) {
                         try {
-                            if (hivejs.auth.wifToPublic(key) == user.memo_key || hivejs.auth.wifToPublic(key) === user.posting.key_auths[0][0]) {
+                            if (hive.auth.wifToPublic(key) == user.memo_key || hive.auth.wifToPublic(key) === user.posting.key_auths[0][0]) {
                                 // Get an encrypted memo only the user can decrypt with their private key
                                 const encryptedMemo = await this.getUserAuthMemo(username, chain);
 
                                 // Decrypt the private memo to get the encrypted string
-                                const signedKey = hivejs.memo.decode(key, encryptedMemo).substring(1);
+                                const signedKey = hive.memo.decode(key, encryptedMemo).substring(1);
 
                                 // The decrypted memo is an encrypted string, so pass this to the server to get back refresh and access tokens
                                 const token = await this.verifyUserAuthMemo(username, signedKey, chain) as string;
