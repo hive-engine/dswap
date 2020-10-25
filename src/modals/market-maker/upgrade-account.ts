@@ -122,7 +122,7 @@ export class UpgradeAccountModal {
         }
 
         if (validationResult.valid) {
-            const result = await this.mms.upgradeAccount(Chain.Hive);
+            const result = await this.mms.upgradeAccount(this.currentChainId);
 
             if (result) {
                 this.controller.ok();
