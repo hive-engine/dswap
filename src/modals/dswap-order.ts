@@ -7,6 +7,10 @@ import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
 import styles from './dswap-order.module.css';
+import { HiveEngineService } from '../services/hive-engine-service';
+import { environment } from '../environment';
+import { SwapService } from '../services/swap-service';
+import { swapRequest } from '../common/dswap-api';
 
 @autoinject()
 export class DswapOrderModal {
@@ -19,8 +23,10 @@ export class DswapOrderModal {
     private token: any;
     private validationController;
     private renderer;
+    private swapRequestModel: ISwapRequestModel;
 
-    constructor(private controller: DialogController, private toast: ToastService, private taskQueue: TaskQueue, private controllerFactory: ValidationControllerFactory, private i18n: I18N) {
+    constructor(private controller: DialogController, private toast: ToastService, private taskQueue: TaskQueue,
+        private controllerFactory: ValidationControllerFactory, private i18n: I18N, private hes: HiveEngineService, private ss: SwapService) {
         this.validationController = controllerFactory.createForCurrentScope();
 
         this.renderer = new BootstrapFormRenderer();
@@ -34,7 +40,8 @@ export class DswapOrderModal {
         this.createValidationRules();
     }
 
-    async activate(symbol) {        
+    async activate(swapRequestModel: ISwapRequestModel) {
+        this.swapRequestModel = swapRequestModel;
         //this.token = this.state.account.balances.find(x => x.symbol === symbol);        
     }
 
@@ -43,23 +50,23 @@ export class DswapOrderModal {
     }
 
     private createValidationRules() {
-        const rules = ValidationRules.ensure('amount')
-            .required()
-            .withMessageKey('errors:amountRequired')
-            .then()
-            .satisfies((value: any, object: any) => parseFloat(value) > 0)
-            .withMessageKey('errors:amountGreaterThanZero')
-            .satisfies((value: any, object: DswapOrderModal) => {
-                const amount = parseFloat(value);
+        //const rules = ValidationRules.ensure('amount')
+        //    .required()
+        //    .withMessageKey('errors:amountRequired')
+        //    .then()
+        //    .satisfies((value: any, object: any) => parseFloat(value) > 0)
+        //    .withMessageKey('errors:amountGreaterThanZero')
+        //    .satisfies((value: any, object: DswapOrderModal) => {
+        //        const amount = parseFloat(value);
 
-                return amount <= object.token.stake;
-            })
-            .withMessageKey('errors:insufficientBalanceForDelegate')
-            .ensure('username')
-            .required()
-            .withMessageKey('errors:usernameRequired').rules;
+        //        return amount <= object.token.stake;
+        //    })
+        //    .withMessageKey('errors:insufficientBalanceForDelegate')
+        //    .ensure('username')
+        //    .required()
+        //    .withMessageKey('errors:usernameRequired').rules;
 
-        this.validationController.addObject(this, rules);
+        //this.validationController.addObject(this, rules);
     }
 
     async confirmSend() {
@@ -81,11 +88,19 @@ export class DswapOrderModal {
             }
         }
 
-        if (validationResult.valid) {                       
+        if (validationResult.valid) {
+            var sendTx = await this.hes.sendToken(this.swapRequestModel.TokenInput, environment.DSWAP_ACCOUNT_HE, this.swapRequestModel.TokenInputAmount, "SwapRequest");
+            if (sendTx) {
+                if (sendTx.transactionId) {
+                    this.swapRequestModel.ChainTransactionId = sendTx.transactionId;
+                    let swapResponse = await this.ss.SwapRequest(this.swapRequestModel);   
 
-            //let username = trimUsername(this.username);
-            //const result = await this.se.delegate(this.token.symbol, this.amount, username);
-
+                    if (swapResponse && swapResponse.ok) {
+                        this.controller.ok();
+                    }
+                }
+            }
+            
             // if (result) {
             //     this.controller.ok();
             // }

@@ -77,13 +77,13 @@
                                     </div>
                                 </div> -->
                             </div>
-                            <div class="chart">
+                            <!--<div class="chart">
                                 <chart
                                     class="exchange-chart"
                                     data.bind="chartDataBuy"
                                     view-model.ref="chartRefBuy"
                                 ></chart>
-                            </div>
+                            </div>-->
                             <!-- <div class="blur"></div> -->
                             <div class="chart-data" show.bind="buyToken">
                                 <div class="price-data">
@@ -155,13 +155,13 @@
                                 </div> -->
                                 </div>
                             </div>
-                            <div class="chart">
+                            <!--<div class="chart">
                                 <chart
                                     class="exchange-chart"
                                     data.bind="chartDataSell"
                                     view-model.ref="chartRefSell"
                                 ></chart>
-                            </div>
+                            </div>-->
                             <!-- <div class="blur"></div> -->
                             <div class="chart-data" show.bind="sellToken">
                                 <div class="price-data">
@@ -333,13 +333,13 @@
                                 ${buyTokenAmount} ${buyToken.symbol}
                             </p>
                         </div>
-                        <div class="trade-fee">
+                        <!--<div class="trade-fee">
                             <p class="trade-fee-title">Miner Fee</p>
                             <p class="trade-fee-value">0.000ETHP</p>
-                        </div>
+                        </div>-->
                     </div>
                     <button class="start-trade" click.delegate="startTrade()">
-                        Start trade
+                        SWAP
                     </button>
                     <div class="warning" show.bind="!loggedIn">
                         <font-awesome-icon

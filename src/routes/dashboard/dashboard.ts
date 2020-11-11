@@ -8,7 +8,7 @@ import { Store, dispatchify } from 'aurelia-store';
 import { ChartComponent } from 'components/chart/chart';
 import { loadTokenMarketHistory } from 'common/hive-engine-api';
 import moment from 'moment';
-import { getPrices, usdFormat } from 'common/functions';
+import { getPrices, usdFormat, getChainByState } from 'common/functions';
 import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
 import { ValidationControllerFactory, ControllerValidateResult, ValidationRules } from 'aurelia-validation';
@@ -45,6 +45,7 @@ export class Dashboard {
     private validationController;
     private renderer;    
     private dswapEnabled = false;
+    private currentChainId;
 
     constructor(private dialogService: DialogService, 
                 private ts: TokenService, 
@@ -90,6 +91,7 @@ export class Dashboard {
             }
 
             this.state.activePageId = "dashboard";
+            this.currentChainId = await getChainByState(this.state);
         } catch {
             return new Redirect('');
         }
@@ -127,7 +129,18 @@ export class Dashboard {
         }
 
         if (validationResult.valid) {
-            this.dialogService.open({ viewModel: DswapOrderModal }).whenClosed(response => {
+            let swapRequestModel: ISwapRequestModel = {
+                Account: this.state.account.name,
+                Chain: this.currentChainId,
+                ChainTransactionId: "",
+                TokenOutput: this.buyTokenSymbol,
+                TokenOutputAmount: this.buyTokenAmount,
+                TokenInput: this.sellTokenSymbol,
+                TokenInputAmount: this.sellTokenAmount,
+                SwapSourceId: environment.DSWAP_SOURCE_ID
+            };
+
+            this.dialogService.open({ viewModel: DswapOrderModal, model: swapRequestModel }).whenClosed(response => {
                 console.log(response);
             });
         }
