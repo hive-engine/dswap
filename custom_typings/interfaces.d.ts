@@ -21,6 +21,9 @@ interface IEnvironment {
     SCOT_API_SE: string;
     EXCHANGE_URL_HE: string;
     EXCHANGE_URL_SE: string;
+    DSWAP_API_URL: string;
+    DSWAP_ACCOUNT_HE: string;
+    DSWAP_SOURCE_ID: string;
   dswapEnabled: boolean;
   marketMakerEnabled: boolean;
   hivePegAccount: string;
@@ -262,4 +265,15 @@ interface AccountInterface {
     notifications: any[];
     nfts: INft[];
     dswapChainId: number;
+}
+
+interface ISwapRequestModel {
+    Account: string;
+    TokenInput: string;
+    TokenInputAmount: number;
+    TokenOutput: string;
+    TokenOutputAmount: number;
+    Chain: number;
+    ChainTransactionId: string;
+    SwapSourceId: string;
 }

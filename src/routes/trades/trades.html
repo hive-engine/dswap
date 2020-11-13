@@ -12,11 +12,11 @@
                         class="nav-link table-link active"
                         id="pending-tab"
                         data-toggle="tab"
-                        href="#pending"
+                        href="#all"
                         role="tab"
                         aria-controls="pending"
                         aria-selected="true"
-                        >Pending</a
+                        >All</a
                     >
                 </li>
                 <li class="nav-item table-head-links" style="display: none;">
@@ -48,32 +48,48 @@
             <div class="tab-content" id="myTabContent">
                 <div
                     class="tab-pane fade show active"
-                    id="pending"
+                    id="all"
                     role="tabpanel"
-                    aria-labelledby="pending-tab"
+                    aria-labelledby="all-tab"
                 >
                     <table class="table">
                         <thead class="table-head">
                             <tr>
-                                <th
-                                    class="icon-head head-item"
-                                    scope="col"
-                                ></th>
+                                <th class="icon-head head-item"
+                                    scope="col"></th>
                                 <th class="date-head head-item" scope="col">
                                     Date
                                 </th>
-                                <th
-                                    class="transaction-head head-item"
-                                    scope="col"
-                                >
-                                    Transaction Type
+                                <th class="transaction-head head-item"
+                                    scope="col">
+                                    Transaction Details
                                 </th>
-                                <th class="amount-head head-item" scope="col">
-                                    Amount
-                                </th>
+                                <th scope="col">Status</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody repeat.for="trade of allTrades">
+                            <tr>
+                                <th class="table-item" scope="row">
+                                    <div class="transaction-icon">
+                                        <font-awesome-icon class="table-icon"
+                                                           title.bind="trade.SwapStatusId == 3 ? 'Completed' : ''"
+                                                           icon.bind="['fas', trade.SwapStatusId == 3 ? 'check' : '']"></font-awesome-icon>
+                                        <font-awesome-icon class="delete-icon"
+                                                           title.bind="trade.SwapStatusId == 4 ? 'Failed' : ''"
+                                                           icon.bind="['fas', trade.SwapStatusId == 4 ? 'times' : '']"></font-awesome-icon>
+                                    </div>
+                                </th>
+                                <td class="table-item">
+                                    ${trade.CreatedAt}
+                                </td>
+                                <td class="table-item transaction-type">
+                                    <span class="transaction-type-info">Swap requested ${trade.TokenInputAmount} ${trade.TokenInput} for ${trade.TokenOutputAmount} ${trade.TokenOutput} (estimated) ${trade.TokenOutputAmountActual} ${trade.TokenOutput} (realized)</span>
+                                </td>
+                                <td>
+                                    <span>${trade.SwapStatusId == 2 ? 'In progress' : trade.SwapStatusId == 3 ? 'Completed' : trade.SwapStatusId == 4 ? 'Failed' : 'Init'}</span>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
                 <div
@@ -96,14 +112,11 @@
                                     class="transaction-head head-item"
                                     scope="col"
                                 >
-                                    Transaction Type
-                                </th>
-                                <th class="amount-head head-item" scope="col">
-                                    Amount
+                                    Transaction Details
                                 </th>
                             </tr>
                         </thead>
-                        <tbody repeat.for="trade of tradesCompleted">
+                        <tbody repeat.for="trade of allTrades">
                             <tr>
                                 <th class="table-item" scope="row">
                                     <div class="transaction-icon">
@@ -120,34 +133,24 @@
                                     </div>
                                 </th>
                                 <td class="table-item">
-                                    <h4 class="text-center mb-0">
+                                    ${trade.CreatedAt}
+                                    <!--<h4 class="text-center mb-0">
                                         ${trade.timestamp_month_name}
                                     </h4>
                                     <h6 class="text-center mb-0">
                                         ${trade.timestamp_day}
-                                    </h6>
+                                    </h6>-->
                                 </td>
                                 <td class="table-item transaction-type">
-                                    ${trade.symbol} ${trade.type == 'received' ?
-                                    'Received' : 'Sent'}
+                                    <!--${trade.symbol} ${trade.type == 'received' ?
+                                    'Received' : 'Sent'}-->
                                     <br />
                                     <span
                                         class="transaction-type-info"
                                         show.bind="trade.type == 'received'"
-                                        >You received ${trade.quantity}
-                                        ${trade.symbol} worth ${'$' +
-                                        trade.usdValue} from ${trade.from}</span
+                                        >Swap ${trade.TokenInputAmount} ${trade.TokenInput} for ${trade.TokenOutputAmount} ${trade.TokenOutput}</span
                                     >
-                                    <span
-                                        class="transaction-type-info"
-                                        show.bind="trade.type == 'sent'"
-                                        >You sent ${trade.quantity}
-                                        ${trade.symbol} worth ${'$' +
-                                        trade.usdValue} to ${trade.to}</span
                                     >
-                                </td>
-                                <td class="table-item text-right">
-                                    ${trade.quantity} ${trade.symbol}
                                 </td>
                             </tr>
                         </tbody>
@@ -212,10 +215,7 @@
                                     class="transaction-head head-item"
                                     scope="col"
                                 >
-                                    Transaction Type
-                                </th>
-                                <th class="amount-head head-item" scope="col">
-                                    Amount
+                                    Transaction Details
                                 </th>
                             </tr>
                         </thead>
