@@ -89,7 +89,11 @@ export class DswapOrderModal {
         }
 
         if (validationResult.valid) {
-            var sendTx = await this.hes.sendToken(this.swapRequestModel.TokenInput, environment.DSWAP_ACCOUNT_HE, this.swapRequestModel.TokenInputAmount, "SwapRequest");
+            let waitMsg = this.i18n.tr('swapRequestWait', {
+                ns: 'notifications'
+            });
+
+            var sendTx = await this.hes.sendToken(this.swapRequestModel.TokenInput, environment.DSWAP_ACCOUNT_HE, this.swapRequestModel.TokenInputAmount, "SwapRequest", waitMsg);
             if (sendTx) {
                 if (sendTx.transactionId) {
                     this.swapRequestModel.ChainTransactionId = sendTx.transactionId;

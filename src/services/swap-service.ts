@@ -46,11 +46,7 @@ export class SwapService {
     }
 
     async SwapRequest(swapRequestModel: ISwapRequestModel) {
-        let toast = new ToastMessage();
-
-        toast.message = this.i18n.tr('swapRequestWait', {
-            ns: 'notifications'
-        });
+        let toast = new ToastMessage();        
 
         let response = await swapRequest(swapRequestModel);
 

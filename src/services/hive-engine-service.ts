@@ -153,7 +153,7 @@ export class HiveEngineService {
         return history;
     }
 
-    async sendToken(symbol: string, to: string, quantity: number, memo: string): Promise<any> {
+    async sendToken(symbol: string, to: string, quantity: number, memo: string, waitMsg?: string): Promise<any> {
         return new Promise((resolve) => {
             const username = this.getUser();
 
@@ -181,9 +181,13 @@ export class HiveEngineService {
                         try {
                             let toast = new ToastMessage();
 
-                            toast.message = this.i18n.tr('sendTokensWait', {
-                                ns: 'notifications'
-                            });
+                            if (waitMsg) {
+                                toast.message = waitMsg;
+                            } else {
+                                toast.message = this.i18n.tr('sendTokensWait', {
+                                    ns: 'notifications'
+                                });
+                            }
 
                             this.toast.success(toast);
 

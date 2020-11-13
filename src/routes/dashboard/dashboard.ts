@@ -6,7 +6,7 @@ import { DswapOrderModal } from 'modals/dswap-order';
 import { DialogService } from 'aurelia-dialog';
 import { Store, dispatchify } from 'aurelia-store';
 import { ChartComponent } from 'components/chart/chart';
-import { loadTokenMarketHistory } from 'common/hive-engine-api';
+import { loadTokenMarketHistory, loadBuyBook, loadSellBook } from 'common/hive-engine-api';
 import moment from 'moment';
 import { getPrices, usdFormat, getChainByState } from 'common/functions';
 import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
@@ -27,8 +27,8 @@ export class Dashboard {
     @bindable() sellTokens: IToken[];
     public buyTokenSymbol;
     public sellTokenSymbol;
-    private sellTokenAmount;
-    private buyTokenAmount;
+    public sellTokenAmount;
+    public buyTokenAmount;
     public buyToken : IToken;
     public sellToken : IToken;
     private unitEstimateRate;
@@ -131,7 +131,7 @@ export class Dashboard {
         if (validationResult.valid) {
             let swapRequestModel: ISwapRequestModel = {
                 Account: this.state.account.name,
-                Chain: this.currentChainId,
+                Chain: Chain.Hive,
                 ChainTransactionId: "",
                 TokenOutput: this.buyTokenSymbol,
                 TokenOutputAmount: this.buyTokenAmount,
@@ -238,6 +238,113 @@ export class Dashboard {
         });
 
         return { ohlcData: candleStickData };
+    }
+
+    public async sellTokenAmountInViewChanged() {
+        if (this.sellToken) {
+            let baseTokenEarnedSell = 0;
+
+            // first get price for the amount of sell tokens you want to sell in SWAP.HIVE
+            if (this.sellTokenAmount > 0) {
+                baseTokenEarnedSell = await this.getEstimatedBaseTokenEarnedSell(this.sellTokenAmount, this.sellTokenSymbol);
+            }
+
+            // second get amount of buy tokens you would get for the price earned from selling your token
+            if (baseTokenEarnedSell > 0) {
+                let amount = await this.getEstimatedTokenAmountByBaseToken(baseTokenEarnedSell, this.buyTokenSymbol);
+                console.log(this.buyToken);
+                this.buyTokenAmount = amount.toFixed(this.buyToken.precision);
+            }
+        }
+    }
+
+    public async buyTokenAmountInViewChanged() {
+        if (this.buyToken) {
+            let baseTokenNeeded = 0;
+
+            // first get price needed to buy this buy token amount
+            if (this.buyTokenAmount > 0) {
+                baseTokenNeeded = await this.getEstimatedBaseTokenEarnedSell(this.buyTokenAmount, this.buyTokenSymbol);
+            }
+
+            // second get amount of buy tokens you would get for the price earned from selling your token
+            if (baseTokenNeeded > 0) {
+                let amount = await this.getEstimatedTokenAmountByBaseToken(baseTokenNeeded, this.sellTokenSymbol);
+                console.log(this.sellToken);
+                this.sellTokenAmount = amount.toFixed(this.sellToken.precision);
+            }
+        }
+    }
+
+    async getEstimatedTokenAmountByBaseToken(baseTokenAmount, tokenSymbol) {
+        // get next x buy orders until you reach the amount you want to sell
+        let buyTokenAmount = 0;
+        let tokensLeft = baseTokenAmount;
+        let limit = 10;
+        let offset = 0;
+        while (tokensLeft > 0 && offset < 100) {
+            let orders = await loadSellBook(tokenSymbol, limit, offset);
+            if (orders) {
+                for (let i = 0; i < orders.length; i++) {
+                    let order = orders[i];
+                    let orderQuantity = parseFloat(order.quantity);
+                    let orderPrice = parseFloat(order.price);
+
+                    let orderCost = orderQuantity * orderPrice;
+
+                    if (tokensLeft <= orderCost) {
+                        buyTokenAmount += tokensLeft / orderPrice;
+                        tokensLeft = 0;
+                    } else {
+                        buyTokenAmount += orderQuantity;
+                        tokensLeft -= orderCost;
+                    }
+
+                    if (tokensLeft == 0) {
+                        break;
+                    }
+                }
+            }
+
+            offset += limit;
+        }
+
+        return buyTokenAmount;
+    }
+
+    async getEstimatedBaseTokenEarnedSell(tokenAmount, tokenSymbol) {
+        // get next x buy orders until you reach the amount you want to sell
+        let earnedPriceTotal = 0;
+        let soldAmount = 0;
+        let limit = 10;
+        let offset = 0;
+        while (soldAmount < tokenAmount && offset < 100) {
+            let sellTokenBuyOrders = await loadBuyBook(tokenSymbol, limit, offset);
+            if (sellTokenBuyOrders) {
+                for (let i = 0; i < sellTokenBuyOrders.length; i++) {
+                    let buyOrder = sellTokenBuyOrders[i];                    
+                    let buyOrderQuantity = parseFloat(buyOrder.quantity);
+                    let buyOrderPrice = parseFloat(buyOrder.price);
+                    let diff = tokenAmount - soldAmount;
+
+                    if (buyOrderQuantity <= diff) {
+                        soldAmount += buyOrderQuantity;
+                        earnedPriceTotal += buyOrderQuantity * buyOrderPrice;
+                    } else {                        
+                        soldAmount += diff;
+                        earnedPriceTotal += diff * buyOrderPrice;
+                    }
+
+                    if (soldAmount == tokenAmount) {
+                        break;
+                    }
+                }
+            }
+
+            offset += limit;            
+        }
+
+        return earnedPriceTotal;
     }
 
     private createValidationRules() {
