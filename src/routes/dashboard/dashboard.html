@@ -33,13 +33,13 @@
         </svg>
     </div>
     </div>
-    <div class="dashboard-wrapper d-none d-md-block" show.bind="dswapEnabled">
+    <div class="dashboard-wrapper d-none d-md-block text-center" show.bind="dswapEnabled">
         <div class="row">
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-md-5">
-                        <h4 class="action-title">Sell</h4>
                         <div class="sell action-card">
+                            <span><strong>From:</strong></span>
                             <div class="action-card-options">
                                 <div class="form-group">
                                     <select id="selectpicker-sell"
@@ -57,30 +57,30 @@
                                         </option>
                                     </select>
                                     <!-- <div class="token-info">
-                        <div class="token-info-data">
-                            <div class="token-icon">
-                                <img src="../../images/dswap_standalone.png" width="20" alt="" />
+                            <div class="token-info-data">
+                                <div class="token-icon">
+                                    <img src="../../images/dswap_standalone.png" width="20" alt="" />
+                                </div>
+                                <div class="token-name">
+                                    <h4>DSwapToken</h4>
+                                </div>
                             </div>
                             <div class="token-name">
-                                <h4>DSwapToken</h4>
+                                <font-awesome-icon
+                                    class="chart-icon"
+                                    icon.bind="['fas', 'caret-down']"
+                                ></font-awesome-icon>
                             </div>
-                        </div>
-                        <div class="token-name">
-                            <font-awesome-icon
-                                class="chart-icon"
-                                icon.bind="['fas', 'caret-down']"
-                            ></font-awesome-icon>
-                        </div>
-                    </div> -->
+                        </div> -->
                                 </div>
                             </div>
                             <!--<div class="chart">
-                <chart
-                    class="exchange-chart"
-                    data.bind="chartDataSell"
-                    view-model.ref="chartRefSell"
-                ></chart>
-            </div>-->
+                    <chart
+                        class="exchange-chart"
+                        data.bind="chartDataSell"
+                        view-model.ref="chartRefSell"
+                    ></chart>
+                </div>-->
                             <!-- <div class="blur"></div> -->
                             <div class="chart-data" show.bind="sellToken">
                                 <div class="price-data">
@@ -100,78 +100,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="trade-arrow">
-                            <font-awesome-icon class="chart-icon"
-                                               icon.bind="['fas', 'caret-right']"></font-awesome-icon>
-                            <font-awesome-icon class="chart-icon"
-                                               icon.bind="['fas', 'caret-right']"></font-awesome-icon>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <h4 class="action-title">Buy</h4>
-                        <div class="action-card">
-                            <div class="action-card-options">
-                                <div class="form-group">
-                                    <select id="selectpicker-buy"
-                                            class="form-control selectpicker tokenSelect"
-                                            value.bind="buyTokenSymbol"
-                                            change.delegate="buyTokenSelected()">
-                                        <option model.bind="null">
-                                            ${'Please select a token...' &
-                                            t}
-                                        </option>
-                                        <option value.bind="t.symbol"
-                                                repeat.for="t of buyTokens"
-                                                data-content="${'<img src=\'' + t.metadata.icon + '\' class=\'tokenIcon\' />'} ${t.symbol & t} (${t.name})">
-                                            ${t.symbol & t} (${t.name})
-                                        </option>
-                                    </select>
-                                </div>
-                                <!-- <div class="token-info">
-                    <div class="token-info-data">
-                        <div class="token-icon">
-                            <img src="../../images/dswap_standalone.png" width="20" alt="" />
-                        </div>
-                        <div class="token-name">
-                            <h4>DSwapToken</h4>
-                        </div>
-                    </div>
-                    <div class="token-name">
-                        <font-awesome-icon
-                            class="chart-icon"
-                            icon.bind="['fas', 'caret-down']"
-                        ></font-awesome-icon>
-                    </div>
-                </div> -->
-                            </div>
-                            <!--<div class="chart">
-                <chart
-                    class="exchange-chart"
-                    data.bind="chartDataBuy"
-                    view-model.ref="chartRefBuy"
-                ></chart>
-            </div>-->
-                            <!-- <div class="blur"></div> -->
-                            <div class="chart-data" show.bind="buyToken">
-                                <div class="price-data">
-                                    <p class="price-title">Current Price</p>
-                                    <span>
-                                        ${'$' +
-                                        buyToken.metrics.lastPriceUsd}
-                                    </span>
-                                </div>
-                                <div class="change-data">
-                                    <p class="change-title">24hrs Change</p>
-                                    <span>
-                                        ${buyToken.metrics.priceChangePercent +
-                                        '%'}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
                 <div class="row">
                     <div class="col-md-5">
@@ -203,49 +131,107 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="action-quantity-slider">
-                                <input type="range"
-                                       value.bind="tradePercentage"
-                                       min="1"
-                                       max="100"
-                                       value="50"
-                                       class="slider"
-                                       id="myRange" />
-                                <div class="quantity-unit-options">
-                                    <p class="quantity-unit"
-                                       click.delegate="slideTo(1)">
-                                        min
-                                    </p>
-                                    <p class="quantity-unit"
-                                       click.delegate="slideTo(50)">
-                                        half
-                                    </p>
-                                    <p class="quantity-unit"
-                                       click.delegate="slideTo(100)">
-                                        max
-                                    </p>
+                            <!--<div class="action-quantity-slider">
+                    <input type="range"
+                           value.bind="tradePercentage"
+                           min="1"
+                           max="100"
+                           value="50"
+                           class="slider"
+                           id="myRange" />
+                    <div class="quantity-unit-options">
+                        <p class="quantity-unit"
+                           click.delegate="slideTo(1)">
+                            min
+                        </p>
+                        <p class="quantity-unit"
+                           click.delegate="slideTo(50)">
+                            half
+                        </p>
+                        <p class="quantity-unit"
+                           click.delegate="slideTo(100)">
+                            max
+                        </p>
+                    </div>
+                </div>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="trade-arrow">
+                            <font-awesome-icon class="chart-icon"
+                                               icon.bind="['fas', 'caret-down']"></font-awesome-icon>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="action-card">
+                            <span><strong>To:</strong></span>
+                            <div class="action-card-options">
+                                <div class="form-group">
+                                    <select id="selectpicker-buy"
+                                            class="form-control selectpicker tokenSelect"
+                                            value.bind="buyTokenSymbol"
+                                            change.delegate="buyTokenSelected()">
+                                        <option model.bind="null">
+                                            ${'Please select a token...' &
+                                            t}
+                                        </option>
+                                        <option value.bind="t.symbol"
+                                                repeat.for="t of buyTokens"
+                                                data-content="${'<img src=\'' + t.metadata.icon + '\' class=\'tokenIcon\' />'} ${t.symbol & t} (${t.name})">
+                                            ${t.symbol & t} (${t.name})
+                                        </option>
+                                    </select>
+                                </div>
+                                <!-- <div class="token-info">
+                        <div class="token-info-data">
+                            <div class="token-icon">
+                                <img src="../../images/dswap_standalone.png" width="20" alt="" />
+                            </div>
+                            <div class="token-name">
+                                <h4>DSwapToken</h4>
+                            </div>
+                        </div>
+                        <div class="token-name">
+                            <font-awesome-icon
+                                class="chart-icon"
+                                icon.bind="['fas', 'caret-down']"
+                            ></font-awesome-icon>
+                        </div>
+                    </div> -->
+                            </div>
+                            <!--<div class="chart">
+                    <chart
+                        class="exchange-chart"
+                        data.bind="chartDataBuy"
+                        view-model.ref="chartRefBuy"
+                    ></chart>
+                </div>-->
+                            <!-- <div class="blur"></div> -->
+                            <div class="chart-data" show.bind="buyToken">
+                                <div class="price-data">
+                                    <p class="price-title">Current Price</p>
+                                    <span>
+                                        ${'$' +
+                                        buyToken.metrics.lastPriceUsd}
+                                    </span>
+                                </div>
+                                <div class="change-data">
+                                    <p class="change-title">24hrs Change</p>
+                                    <span>
+                                        ${buyToken.metrics.priceChangePercent +
+                                        '%'}
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-
-                    <div class="col-md-2">
-                        <div class="action-input">
-                            <div class="token-sym">
-                                <div class="input-group-text token-sym-text h-100 input-group-text-dark">
-                                    $
-                                </div>
-                            </div>
-                            <input class="form-control transparent-bgn add-border-right action-input-box text-right tradeValueUsd"
-                                   type="text"
-                                   readonly="readonly"
-                                   value.bind="tradeValueUsd"
-                                   placeholder="0.00" />
-                        </div>
-                        <p class="balance-title">EST. USD Value</p>
-                    </div>
-
+                </div>
+                <div class="row">
                     <div class="col-md-5">
                         <div class="action-input-wrapper">
                             <div class="action-input">
@@ -267,62 +253,59 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="estimate-wrapper">
-                    <h4
-                        style="margin-left: 0; margin-bottom: 7px;"
-                        class="action-title"
-                    >
-                        Your Estimated Rate
-                        <font-awesome-icon
-                            class="chart-icon"
-                            icon.bind="['fas', 'info-circle']"
-                        ></font-awesome-icon>
-                    </h4>
-                    <!--<div
-                        class="estimated-rate-info-wrapper"
-                        show.bind="buyToken && sellToken"
-                    >
-                        <p class="estimated-rate-info">
-                            1 ${buyToken.symbol} = ${unitEstimateRate | toFixed:
-                            3} ${sellToken.symbol}
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="estimate-wrapper">
+                            <h4 style="margin-left: 0; margin-bottom: 7px;"
+                                class="action-title">
+                                Your Estimated Rate
+                                <font-awesome-icon class="chart-icon"
+                                                   icon.bind="['fas', 'info-circle']"></font-awesome-icon>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <p class="estimated-tokens token-one">
+                            ${sellTokenAmount} ${sellToken.symbol}
+                            <font-awesome-icon class="chart-icon"
+                                                icon.bind="['fas', 'arrow-right']"></font-awesome-icon>
+                            ${buyTokenAmount} ${buyToken.symbol}
                         </p>
-                    </div>-->
-                    <div class="estimated-trade-info-wrapper">
-                        <!--<p class="estimated-trade-info-title">
-                            Estimated Trade Details
-                        </p>-->
-                        <div class="estimated-trade-swap">
-                            <p class="estimated-tokens token-one">
-                                ${sellTokenAmount} ${sellToken.symbol}
-                            </p>
-                            <font-awesome-icon
-                                class="chart-icon"
-                                icon.bind="['fas', 'arrow-right']"
-                            ></font-awesome-icon>
-                            <p class="estimated-tokens token-two">
-                                ${buyTokenAmount} ${buyToken.symbol}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="action-input text-center col-sm-4">
+                            <div class="token-sym">
+                                <div class="input-group-text token-sym-text h-100 input-group-text-dark">
+                                    $
+                                </div>
+                            </div>
+                            <input class="form-control transparent-bgn add-border-right action-input-box text-right tradeValueUsd"
+                                    type="text"
+                                    readonly="readonly"
+                                    value.bind="tradeValueUsd"
+                                    placeholder="0.00" />
+                        </div>
+                        <p class="balance-title">EST. USD Value</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <button class="start-trade" click.delegate="startTrade()">
+                            SWAP
+                        </button>
+                        <div class="warning" show.bind="!loggedIn">
+                            <font-awesome-icon class="warning-icon"
+                                               icon.bind="['fas', 'engine-warning']"></font-awesome-icon>
+                            <p class="login-required">Login Required</p>
+                            <p class="warning-info">
+                                Please <a href="">Signup</a> or
+                                <a href="">Login</a> to continue
                             </p>
                         </div>
-                        <!--<div class="trade-fee">
-                            <p class="trade-fee-title">Miner Fee</p>
-                            <p class="trade-fee-value">0.000ETHP</p>
-                        </div>-->
-                    </div>
-                    <button class="start-trade" click.delegate="startTrade()">
-                        SWAP
-                    </button>
-                    <div class="warning" show.bind="!loggedIn">
-                        <font-awesome-icon
-                            class="warning-icon"
-                            icon.bind="['fas', 'engine-warning']"
-                        ></font-awesome-icon>
-                        <p class="login-required">Login Required</p>
-                        <p class="warning-info">
-                            Please <a href="">Signup</a> or
-                            <a href="">Login</a> to continue
-                        </p>
                     </div>
                 </div>
             </div>

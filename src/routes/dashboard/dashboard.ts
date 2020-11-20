@@ -164,8 +164,11 @@ export class Dashboard {
     }
 
     async calcUnitEstimateRate() {
-        if (this.buyToken && this.sellToken)
+        if (this.buyToken && this.sellToken) {
             this.unitEstimateRate = (this.buyToken.metrics.lastPrice / this.sellToken.metrics.lastPrice).toFixed(8);
+
+            await this.updateTradeValueUsd();            
+        }
     }
 
     async buyTokenSelected() {        
@@ -182,6 +185,9 @@ export class Dashboard {
 
         if (!this.buyToken.userBalance)
             await this.getTokenBalance(this.buyToken);
+
+        if (this.buyTokenAmount && this.buyTokenAmount > 0)
+            this.buyTokenAmount = 0;
         
         await this.calcUnitEstimateRate();  
     }
@@ -196,9 +202,13 @@ export class Dashboard {
         if (this.buyToken && this.sellToken) {
             this.sellTokenAmount = (this.tradePercentage / 100) * this.sellToken.userBalance.balance;
             this.buyTokenAmount = (this.sellTokenAmount / this.unitEstimateRate).toFixed(8);
-            
-            this.tradeValueUsd = (this.sellTokenAmount * parseFloat(this.sellToken.metrics.lastPriceUsd)).toFixed(2);
+
+            await this.updateTradeValueUsd();
         }
+    }
+
+    async updateTradeValueUsd() {
+        this.tradeValueUsd = (this.sellTokenAmount * parseFloat(this.sellToken.metrics.lastPriceUsd)).toFixed(4);
     }
 
     async sellTokenSelected() {
@@ -215,6 +225,9 @@ export class Dashboard {
 
         if (!this.sellToken.userBalance)
             await this.getTokenBalance(this.sellToken);
+
+        if (this.sellTokenAmount && this.sellTokenAmount > 0)
+            this.sellTokenAmount = 0;
 
         await this.calcUnitEstimateRate();      
     }
@@ -251,10 +264,11 @@ export class Dashboard {
 
             // second get amount of buy tokens you would get for the price earned from selling your token
             if (baseTokenEarnedSell > 0) {
-                let amount = await this.getEstimatedTokenAmountByBaseToken(baseTokenEarnedSell, this.buyTokenSymbol);
-                console.log(this.buyToken);
+                let amount = await this.getEstimatedTokenAmountByBaseToken(baseTokenEarnedSell, this.buyTokenSymbol);                
                 this.buyTokenAmount = amount.toFixed(this.buyToken.precision);
             }
+
+            await this.updateTradeValueUsd();
         }
     }
 
@@ -270,9 +284,10 @@ export class Dashboard {
             // second get amount of buy tokens you would get for the price earned from selling your token
             if (baseTokenNeeded > 0) {
                 let amount = await this.getEstimatedTokenAmountByBaseToken(baseTokenNeeded, this.sellTokenSymbol);
-                console.log(this.sellToken);
                 this.sellTokenAmount = amount.toFixed(this.sellToken.precision);
             }
+
+            await this.updateTradeValueUsd();
         }
     }
 

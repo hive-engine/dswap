@@ -200,7 +200,7 @@ export class HiveEngineService {
                                 ns: 'notifications'
                             });
 
-                            this.toast.success(toast);
+                            //this.toast.success(toast);
 
                             resolve(tx);
                         } catch (e) {

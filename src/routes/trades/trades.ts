@@ -3,14 +3,17 @@ import { HiveEngineService } from 'services/hive-engine-service';
 import { customElement, autoinject, bindable } from 'aurelia-framework';
 import { DswapOrderModal } from 'modals/dswap-order';
 import { DialogService } from 'aurelia-dialog';
-import { getSwapRequests } from 'common/dswap-api';
+import { getSwapRequests, getSwapRequestsCount, getSwapRequestById } from 'common/dswap-api';
 import { Subscription } from "rxjs";
-import { Store } from 'aurelia-store';
+import { Store, dispatchify } from 'aurelia-store';
+import { SwapStatus } from 'common/enums';
+import { getCurrentFirebaseUser } from 'store/actions';
+import moment from 'moment';
 
 @autoinject()
 @customElement('trades')
 export class Trades {
-    private limit = 50;
+    private limit = 5;
     private offset = 0;
     private page = 1;    
     private symbol;
@@ -26,13 +29,10 @@ export class Trades {
     private currentChainId;
     public subscription: Subscription;
     private state: IState;
+    @bindable() swapStatus?: SwapStatus;
 
     constructor(private dialogService: DialogService, private hes: HiveEngineService, private ts: TokenService, private store: Store<IState>) {
-        this.subscription = this.store.state.subscribe(async (state: IState) => {
-            if (state) {
-                this.state = state;
-            }
-        });
+        
     }
 
     withdraw() {
@@ -41,11 +41,31 @@ export class Trades {
         });
     }
 
+    async swapStatusChanged() {
+        this.totalItems = await getSwapRequestsCount(this.state.account.name, this.swapStatus);
+        await this.calcTotals();
+        this.allTrades = await this.loadTradesCompleted(1, this.swapStatus);
+    }
+
+    async calcTotals() {
+        this.totalPages = this.totalItems / this.limit;
+        if (this.totalItems % this.limit > 0)
+            this.totalPages += 1;
+    }
+
     async canActivate({ symbol, page = 1 })
     {
-        this.allTrades = await getSwapRequests(this.state.account.name, this.limit, this.offset);
-        console.log(this.allTrades);
-        this.tradesCompleted = await this.loadTradesCompleted(symbol, page);
+        this.subscription = this.store.state.subscribe(async (state: IState) => {
+            if (state) {
+                this.state = state;
+
+                if (this.state.account.name) {
+                    this.allTrades = await this.loadTradesCompleted(page, this.swapStatus);                    
+                    this.totalItems = await getSwapRequestsCount(this.state.account.name, this.swapStatus);
+                    await this.calcTotals();
+                }
+            }
+        });
 
         this.state.activePageId = "trades";
     }
@@ -60,22 +80,26 @@ export class Trades {
         else if (pageVal == 'next') 
             pageVal = this.page + 1;
 
-        this.tradesCompleted = await this.loadTradesCompleted(this.symbol, pageVal);
+        this.allTrades = await this.loadTradesCompleted(pageVal, this.swapStatus);        
     }
 
-    async loadTradesCompleted(symbol, page) {
+    async getTransactionInfo(trade) {
+        let tx = await getSwapRequestById(trade.Id);
+        console.log(tx);
+        trade.SwapStatusId = tx.SwapStatusId;
+    }
+
+    async loadTradesCompleted(page, status) {
         this.loading = true;
-        this.symbol = symbol;
         this.page = page;
         this.offset = (this.page - 1) * this.limit;
 
-        let trades = [];
-        //for (let t of trades) {
-        //    let token = await this.ts.getTokenDetails(t.symbol, this.currentChainId, true, false);
-        //    if (token && token.metrics) {
-        //        t.usdValue = (parseFloat(t.quantity) * parseFloat(token.metrics.lastPriceUsd)).toFixed(2);
-        //    }
-        //}
+        let trades = await getSwapRequests(this.state.account.name, this.limit, this.offset, status);
+        for (let t of trades) {
+            t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
+            t.timestamp_day = moment(t.CreatedAt).format('DD');
+            t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
+        }
 
         this.loading = false;
 

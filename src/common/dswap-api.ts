@@ -1,5 +1,6 @@
 import { HttpClient } from "aurelia-fetch-client";
 import { environment } from "../environment";
+import { SwapStatus } from "./enums";
 
 const http = new HttpClient();
 
@@ -17,7 +18,7 @@ export async function swapRequest(swapRequest: ISwapRequestModel) {
     });
 }
 
-export async function getSwapRequests(account: string, limit = 20, offset = 0, status?: number): Promise<ISwapRequestModel[]> {
+export async function getSwapRequests(account: string, limit = 20, offset = 0, status?: SwapStatus): Promise<ISwapRequestViewModel[]> {
     let url = `${environment.DSWAP_API_URL}SwapRequest?account=${account}`;
 
     if (limit) {
@@ -36,5 +37,29 @@ export async function getSwapRequests(account: string, limit = 20, offset = 0, s
         method: 'GET',
     });
 
-    return response.json() as Promise<ISwapRequestModel[]>;
+    return response.json() as Promise<ISwapRequestViewModel[]>;
+}
+
+export async function getSwapRequestById(txId: string): Promise<ISwapRequestViewModel> {
+    let url = `${environment.DSWAP_API_URL}SwapRequest/${txId}`;
+
+    const response = await http.fetch(url, {
+        method: 'GET',
+    });
+
+    return response.json() as Promise<ISwapRequestViewModel>;
+}
+
+export async function getSwapRequestsCount(account: string, status?: SwapStatus): Promise<number> {
+    let url = `${environment.DSWAP_API_URL}SwapRequest/SwapRequestCount/${account}`;
+
+    if (status) {
+        url += `/${status}`;
+    }
+
+    const response = await http.fetch(url, {
+        method: 'GET',
+    });
+
+    return response.json() as Promise<number>;
 }

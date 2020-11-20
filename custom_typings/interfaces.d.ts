@@ -277,3 +277,19 @@ interface ISwapRequestModel {
     ChainTransactionId: string;
     SwapSourceId: string;
 }
+
+interface ISwapRequestViewModel {
+    Account: string;
+    TokenInput: string;
+    TokenInputAmount: number;
+    TokenOutput: string;
+    TokenOutputAmount: number;
+    Chain: number;
+    ChainTransactionId: string;
+    SwapSourceId: string;
+    timestamp_month_name: string;
+    timestamp_day: string;
+    timestamp_time: string;
+    CreatedAt: string;
+    SwapStatusId: number;
+}
