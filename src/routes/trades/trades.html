@@ -75,7 +75,7 @@
                                         <font-awesome-icon show.bind="trade.SwapStatusId == 3"
                                                            class="table-icon"
                                                            icon.bind="['fas', 'check']"></font-awesome-icon>
-                                        <font-awesome-icon show.bind="trade.SwapStatusId == 4"
+                                        <font-awesome-icon show.bind="trade.SwapStatusId == 4" title.bind="trade.Message"
                                                            class="delete-icon"
                                                            icon.bind="['fas', 'times']"></font-awesome-icon>
                                         <font-awesome-icon show.bind="trade.SwapStatusId == 1 || trade.SwapStatusId == 2"
@@ -99,12 +99,17 @@
                                 </td>
                                 <td>
                                     <div class="text-center">
-                                        <span><strong>${trade.SwapStatusId == 2 ? 'In progress' : trade.SwapStatusId == 3 ? 'Completed' : trade.SwapStatusId == 4 ? 'Failed' : 'Init'}</strong></span>
-                                        <button alt="Reload" title="Reload" show.bind="trade.SwapStatusId != 3 && trade.SwapStatusId != 4"
+                                        <span>
+                                            <strong>${trade.SwapStatusId == 2 ? 'In progress' : trade.SwapStatusId == 3 ? 'Completed' : trade.SwapStatusId == 4 ? 'Failed' : 'Init'}</strong>
+                                        </span>
+                                        <font-awesome-icon show.bind="trade.SwapStatusId == 4"
+                                                           title.bind="trade.Message"
+                                                            class="chart-icon"
+                                                            icon.bind="['fas', 'info-circle']"></font-awesome-icon>
+                                        <button alt="Reload" title="Refresh" show.bind="trade.SwapStatusId != 3 && trade.SwapStatusId != 4"                                                
                                                 class="btn btn-warning text-center" 
                                                 click.delegate="getTransactionInfo(trade)">
-                                            <font-awesome-icon class="table-icon"
-                                                                icon.bind="['fas', 'spinner']"></font-awesome-icon>
+                                            Refresh
                                         </button>
                                     </div>
                                 </td>

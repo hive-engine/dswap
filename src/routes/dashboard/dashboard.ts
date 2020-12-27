@@ -8,7 +8,7 @@ import { Store, dispatchify } from 'aurelia-store';
 import { ChartComponent } from 'components/chart/chart';
 import { loadTokenMarketHistory, loadBuyBook, loadSellBook } from 'common/hive-engine-api';
 import moment from 'moment';
-import { getPrices, usdFormat, getChainByState } from 'common/functions';
+import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain } from 'common/functions';
 import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
 import { ValidationControllerFactory, ControllerValidateResult, ValidationRules } from 'aurelia-validation';
@@ -16,7 +16,7 @@ import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
 import { environment } from 'environment';
-import { Chain } from '../../common/enums';
+import { Chain } from 'common/enums';
 
 @autoinject()
 @customElement('dashboard')
@@ -46,6 +46,10 @@ export class Dashboard {
     private renderer;    
     private dswapEnabled = false;
     private currentChainId;
+    private baseTokenSymbol;
+    private baseTokenAmount;
+    private maxSlippageInputToken = 0.00;
+    private maxSlippageOutputToken = 0.00;
 
     constructor(private dialogService: DialogService, 
                 private ts: TokenService, 
@@ -92,6 +96,7 @@ export class Dashboard {
 
             this.state.activePageId = "dashboard";
             this.currentChainId = await getChainByState(this.state);
+            this.baseTokenSymbol = await getPeggedTokenSymbolByChain(this.currentChainId);
         } catch {
             return new Redirect('');
         }
@@ -137,7 +142,10 @@ export class Dashboard {
                 TokenOutputAmount: this.buyTokenAmount,
                 TokenInput: this.sellTokenSymbol,
                 TokenInputAmount: this.sellTokenAmount,
-                SwapSourceId: environment.DSWAP_SOURCE_ID
+                SwapSourceId: environment.DSWAP_SOURCE_ID,
+                BaseTokenAmount: this.baseTokenAmount,
+                MaxSlippageInputToken: this.maxSlippageInputToken,
+                MaxSlippageOutputToken: this.maxSlippageOutputToken
             };
 
             this.dialogService.open({ viewModel: DswapOrderModal, model: swapRequestModel }).whenClosed(response => {
@@ -260,6 +268,7 @@ export class Dashboard {
             // first get price for the amount of sell tokens you want to sell in SWAP.HIVE
             if (this.sellTokenAmount > 0) {
                 baseTokenEarnedSell = await this.getEstimatedBaseTokenEarnedSell(this.sellTokenAmount, this.sellTokenSymbol);
+                this.baseTokenAmount = baseTokenEarnedSell;
             }
 
             // second get amount of buy tokens you would get for the price earned from selling your token
@@ -279,6 +288,7 @@ export class Dashboard {
             // first get price needed to buy this buy token amount
             if (this.buyTokenAmount > 0) {
                 baseTokenNeeded = await this.getEstimatedBaseTokenEarnedSell(this.buyTokenAmount, this.buyTokenSymbol);
+                this.baseTokenAmount = baseTokenNeeded;
             }
 
             // second get amount of buy tokens you would get for the price earned from selling your token

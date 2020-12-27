@@ -84,9 +84,11 @@ export class Trades {
     }
 
     async getTransactionInfo(trade) {
-        let tx = await getSwapRequestById(trade.Id);
-        console.log(tx);
+        this.loading = true;
+        let tx = await getSwapRequestById(trade.Id);        
         trade.SwapStatusId = tx.SwapStatusId;
+        trade.TokenOutputAmountActual = tx.TokenOutputAmountActual;
+        this.loading = false;
     }
 
     async loadTradesCompleted(page, status) {

@@ -276,6 +276,9 @@ interface ISwapRequestModel {
     Chain: number;
     ChainTransactionId: string;
     SwapSourceId: string;
+    MaxSlippageInputToken: number;
+    MaxSlippageOutputToken: number;
+    BaseTokenAmount: number;    
 }
 
 interface ISwapRequestViewModel {
@@ -284,6 +287,7 @@ interface ISwapRequestViewModel {
     TokenInputAmount: number;
     TokenOutput: string;
     TokenOutputAmount: number;
+    TokenOutputAmountActual: number;
     Chain: number;
     ChainTransactionId: string;
     SwapSourceId: string;

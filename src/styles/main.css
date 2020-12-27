@@ -1962,3 +1962,9 @@ input.tradeValueUsd {
         width: 300px;
     }
 }
+
+.swapSetting {
+    margin: 15px auto 5px;
+    width: 90%;
+    display: flex;
+}

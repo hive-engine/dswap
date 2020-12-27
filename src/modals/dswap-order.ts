@@ -7,10 +7,11 @@ import { ToastService, ToastMessage } from 'services/toast-service';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
 import styles from './dswap-order.module.css';
-import { HiveEngineService } from '../services/hive-engine-service';
-import { environment } from '../environment';
-import { SwapService } from '../services/swap-service';
-import { swapRequest } from '../common/dswap-api';
+import { HiveEngineService } from 'services/hive-engine-service';
+import { environment } from 'environment';
+import { SwapService } from 'services/swap-service';
+import { swapRequest } from 'common/dswap-api';
+import { getPeggedTokenSymbolByChain } from 'common/functions';
 
 @autoinject()
 export class DswapOrderModal {
@@ -24,6 +25,7 @@ export class DswapOrderModal {
     private validationController;
     private renderer;
     private swapRequestModel: ISwapRequestModel;
+    private baseTokenSymbol;
 
     constructor(private controller: DialogController, private toast: ToastService, private taskQueue: TaskQueue,
         private controllerFactory: ValidationControllerFactory, private i18n: I18N, private hes: HiveEngineService, private ss: SwapService) {
@@ -42,6 +44,7 @@ export class DswapOrderModal {
 
     async activate(swapRequestModel: ISwapRequestModel) {
         this.swapRequestModel = swapRequestModel;
+        this.baseTokenSymbol = await getPeggedTokenSymbolByChain(swapRequestModel.Chain);
         //this.token = this.state.account.balances.find(x => x.symbol === symbol);        
     }
 

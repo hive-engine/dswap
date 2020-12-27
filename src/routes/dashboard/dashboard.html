@@ -107,6 +107,7 @@
                             <div class="action-input">
                                 <input class="form-control transparent-bgn action-input-box text-right"
                                        type="text"
+                                       readonly.bind="!sellToken || !buyToken"
                                        value.bind="sellTokenAmount"
                                        change.delegate="sellTokenAmountInViewChanged()"
                                        placeholder="0.000" />
@@ -237,6 +238,7 @@
                             <div class="action-input">
                                 <input class="form-control transparent-bgn action-input-box text-right"
                                        type="text"
+                                       readonly.bind="!sellToken || !buyToken"
                                        value.bind="buyTokenAmount"
                                        change.delegate="buyTokenAmountInViewChanged()"
                                        placeholder="0.000" />
@@ -259,8 +261,6 @@
                             <h4 style="margin-left: 0; margin-bottom: 7px;"
                                 class="action-title">
                                 Your Estimated Rate
-                                <font-awesome-icon class="chart-icon"
-                                                   icon.bind="['fas', 'info-circle']"></font-awesome-icon>
                             </h4>
                         </div>
                     </div>
@@ -270,9 +270,60 @@
                         <p class="estimated-tokens token-one">
                             ${sellTokenAmount} ${sellToken.symbol}
                             <font-awesome-icon class="chart-icon"
-                                                icon.bind="['fas', 'arrow-right']"></font-awesome-icon>
+                                               icon.bind="['fas', 'arrow-right']"></font-awesome-icon>
                             ${buyTokenAmount} ${buyToken.symbol}
                         </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="estimate-wrapper">
+                            <h4 style="margin-left: 0; margin-bottom: 7px;"
+                                class="action-title">
+                                Swap settings
+                                <font-awesome-icon class="chart-icon" title="Your transaction will not be processed if the amount to be received will be lower than given amount - slippage percentage."
+                                                   icon.bind="['fas', 'info-circle']"></font-awesome-icon>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col-sm-8 text-left swapSetting">Max slippage ${sellToken.symbol} -> ${baseTokenSymbol}:</div>
+                            <div class="col-sm-4">
+                                <div class="action-input-wrapper">
+                                    <div class="action-input">
+                                        <input class="form-control transparent-bgn action-input-box text-right"
+                                               type="text"
+                                               readonly.bind="!sellToken || !buyToken"
+                                               value.bind="maxSlippageInputToken"
+                                               placeholder="0.000" />
+                                        <div class="token-sym">
+                                            <div class="input-group-text token-sym-text h-100 input-group-text-dark">%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-8 text-left swapSetting"><p>Max slippage ${baseTokenSymbol} -> ${buyToken.symbol}:</p></div>
+                            <div class="col-sm-4">
+                                <div class="action-input-wrapper">
+                                    <div class="action-input">
+                                        <input class="form-control transparent-bgn action-input-box text-right"
+                                               type="text"
+                                               readonly.bind="!sellToken || !buyToken"
+                                               value.bind="maxSlippageOutputToken"
+                                               placeholder="0.000" />
+                                        <div class="token-sym">
+                                            <div class="input-group-text token-sym-text h-100 input-group-text-dark">%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -284,17 +335,17 @@
                                 </div>
                             </div>
                             <input class="form-control transparent-bgn add-border-right action-input-box text-right tradeValueUsd"
-                                    type="text"
-                                    readonly="readonly"
-                                    value.bind="tradeValueUsd"
-                                    placeholder="0.00" />
+                                   type="text"
+                                   readonly="readonly"
+                                   value.bind="tradeValueUsd"
+                                   placeholder="0.00" />
                         </div>
                         <p class="balance-title">EST. USD Value</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-5">
-                        <button class="start-trade" click.delegate="startTrade()">
+                        <button class="start-trade" click.delegate="startTrade()" show.bind="loggedIn">
                             SWAP
                         </button>
                         <div class="warning" show.bind="!loggedIn">
@@ -618,7 +669,7 @@
                             <p class="trade-fee-value">0.000ETHP</p>
                         </div>
                     </div>
-                    <button class="start-trade" click.delegate="startTrade()">
+                    <button class="start-trade" click.delegate="startTrade()" show.bind="!loggedIn">
                         Start trade
                     </button>
                     <div class="warning" show.bind="!loggedIn">

@@ -188,6 +188,7 @@ export class HiveEngineService {
                                     ns: 'notifications'
                                 });
                             }
+                            toast.overrideOptions.timeout = 10000;
 
                             this.toast.success(toast);
 

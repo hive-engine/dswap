@@ -23,6 +23,13 @@
                             ${swapRequestModel.TokenOutputAmount} ${swapRequestModel.TokenOutput}
                         </p>
                     </div>
+                    <h4>Swap settings</h4>
+                    <p>
+                        Max slippage ${swapRequestModel.TokenInput} -> ${baseTokenSymbol}: ${swapRequestModel.MaxSlippageInputToken}
+                    </p>
+                    <p>
+                        Max slippage ${baseTokenSymbol} -> ${swapRequestModel.TokenOutput}: ${swapRequestModel.MaxSlippageOutputToken}
+                    </p>
                 </div>
             </div>
         </ux-dialog-body>
