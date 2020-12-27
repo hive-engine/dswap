@@ -24,6 +24,8 @@ interface IEnvironment {
     DSWAP_API_URL: string;
     DSWAP_ACCOUNT_HE: string;
     DSWAP_SOURCE_ID: string;
+    BLOCK_EXPLORER_HE: string;
+    BLOCK_EXPLORER_SE: string;
   dswapEnabled: boolean;
   marketMakerEnabled: boolean;
   hivePegAccount: string;
@@ -177,6 +179,7 @@ interface IAccountHistoryItemResult {
     timestamp: number;
     timestamp_day: string;
     timestamp_month_name: string;
+    timestamp_year: string;
     timestamp_string: string;
     to: string;       
     transactionId: string;   
@@ -282,6 +285,7 @@ interface ISwapRequestModel {
 }
 
 interface ISwapRequestViewModel {
+    Id: string;
     Account: string;
     TokenInput: string;
     TokenInputAmount: number;
@@ -294,6 +298,27 @@ interface ISwapRequestViewModel {
     timestamp_month_name: string;
     timestamp_day: string;
     timestamp_time: string;
+    timestamp_year: string;
     CreatedAt: string;
     SwapStatusId: number;
+}
+
+interface ISwapRequestTransactionViewModel {
+    Id: string;
+    Account: string;
+    SwapRequestId: string;
+    TokenInput: string;
+    TokenInputAmount: number;
+    TokenOutput: string;
+    TokenOutputAmount: number;
+    ChainTransactionId: string;
+    timestamp_month_name: string;
+    timestamp_day: string;
+    timestamp_time: string;
+    timestamp_year: string;
+    CreatedAt: string;
+    SwapStepId: number;
+    SwapStatusId: number;
+    SwapStatusName: string;
+    SwapStepName: string;
 }

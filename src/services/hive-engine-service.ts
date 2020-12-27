@@ -147,6 +147,7 @@ export class HiveEngineService {
                 h.timestamp_string = moment.unix(h.timestamp).format('YYYY-MM-DD HH:mm:ss');
                 h.timestamp_month_name = moment.unix(h.timestamp).format('MMMM');
                 h.timestamp_day = moment.unix(h.timestamp).format('DD');
+                h.timestamp_year = moment.unix(h.timestamp).format('YYYY');
             }
         }
 

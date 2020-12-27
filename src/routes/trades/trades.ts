@@ -9,6 +9,7 @@ import { Store, dispatchify } from 'aurelia-store';
 import { SwapStatus } from 'common/enums';
 import { getCurrentFirebaseUser } from 'store/actions';
 import moment from 'moment';
+import { DswapSwapdetailsModal } from 'modals/dswap-swapdetails';
 
 @autoinject()
 @customElement('trades')
@@ -37,6 +38,12 @@ export class Trades {
 
     withdraw() {
         this.dialogService.open({ viewModel: DswapOrderModal }).whenClosed(response => {
+            console.log(response);
+        });
+    }
+
+    viewSwapDetails(trade) {
+        this.dialogService.open({ viewModel: DswapSwapdetailsModal, model: trade }).whenClosed(response => {
             console.log(response);
         });
     }
@@ -101,6 +108,7 @@ export class Trades {
             t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
             t.timestamp_day = moment(t.CreatedAt).format('DD');
             t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
+            t.timestamp_year = moment(t.CreatedAt).format('YYYY');
         }
 
         this.loading = false;

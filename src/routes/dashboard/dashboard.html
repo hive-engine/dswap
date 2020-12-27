@@ -290,7 +290,7 @@
                 <div class="row">
                     <div class="col-md-5">
                         <div class="row">
-                            <div class="col-sm-8 text-left swapSetting">Max slippage ${sellToken.symbol} -> ${baseTokenSymbol}:</div>
+                            <div class="col-sm-8 text-left swapSetting"><p>Max slippage <b>${sellToken ? sellToken.symbol : '[TOKEN]'}</b> -> <b>${baseTokenSymbol}</b>:</p></div>
                             <div class="col-sm-4">
                                 <div class="action-input-wrapper">
                                     <div class="action-input">
@@ -308,7 +308,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-8 text-left swapSetting"><p>Max slippage ${baseTokenSymbol} -> ${buyToken.symbol}:</p></div>
+                            <div class="col-sm-8 text-left swapSetting"><p>Max slippage <b>${baseTokenSymbol}</b> -> <b>${buyToken ? buyToken.symbol : '[TOKEN]'}</b>:</p></div>
                             <div class="col-sm-4">
                                 <div class="action-input-wrapper">
                                     <div class="action-input">

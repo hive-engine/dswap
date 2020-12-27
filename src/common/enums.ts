@@ -14,3 +14,11 @@ export enum SwapStatus {
     Success = 3,
     Failure = 4
 }
+
+export enum SwapStep {
+    ValidateSwapRequest = 5,
+    ConvertToSwapToken = 10,
+    ConvertToSwapBaseToken = 20,
+    ConvertToSwapOutput = 30,
+    TransferToDestionationAccount = 40
+}

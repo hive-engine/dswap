@@ -63,3 +63,13 @@ export async function getSwapRequestsCount(account: string, status?: SwapStatus)
 
     return response.json() as Promise<number>;
 }
+
+export async function getSwapRequestTransactions(id: string): Promise<any> {
+    let url = `${environment.DSWAP_API_URL}SwapRequest/SwapRequestTransactions/${id}`;
+
+    const response = await http.fetch(url, {
+        method: 'GET',
+    });
+
+    return response.json() as Promise<ISwapRequestTransactionViewModel[]>;
+}

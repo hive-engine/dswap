@@ -1,0 +1,106 @@
+<template>
+    <ux-dialog>
+        <loader mode="tiny" loading.bind="loading"></loader>
+
+        <ux-dialog-header class="modal-header">
+            <h2>${'Swap details' & t}</h2>
+        </ux-dialog-header>
+        <ux-dialog-body class="withdrawDialogBody modal-body">
+            <div class="form-group">
+                <h4>
+                    Swap details
+                </h4>
+                <div class="row">
+                    <div class="col-sm-6">Swap request date:</div>
+                    <div class="col-sm-6">
+                        ${swapRequestModel.timestamp_day}-${swapRequestModel.timestamp_month_name}-${swapRequestModel.timestamp_year} ${swapRequestModel.timestamp_time}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">Account:</div>
+                    <div class="col-sm-6">${swapRequestModel.Account}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">Initial transaction id:</div>
+                    <div class="col-sm-6"><a target="_blank" href="${blockExplorerUrl + '/tx/' + swapRequestModel.ChainTransactionId}">${swapRequestModel.ChainTransactionId}<i class="fas fa-external-link-alt"></i></a></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">Token to sell:</div>
+                    <div class="col-sm-6">${swapRequestModel.TokenInputAmount} ${swapRequestModel.TokenInput}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">Token to buy:</div>
+                    <div class="col-sm-6">${swapRequestModel.TokenOutputAmount} ${swapRequestModel.TokenOutput}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">Max slippage ${swapRequestModel.TokenInput} -> ${baseTokenSymbol}:</div>
+                    <div class="col-sm-6">${swapRequestModel.MaxSlippageInputToken} %</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">Max slippage ${baseTokenSymbol} -> ${swapRequestModel.TokenOutput}:</div>
+                    <div class="col-sm-6">${swapRequestModel.MaxSlippageOutputToken} %</div>
+                </div>
+            </div>
+            <div class="form-group swapDetailsAccordion" id="accordion">
+                <h4>
+                    Swap transactions
+                </h4>
+                <div repeat.for="tx of swapTransactions">
+                    <div class="card">
+                        <div class="card-header" id="heading${tx.Id}">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse${tx.Id}" aria-expanded="true" aria-controls="collapse${tx.Id}">
+                                    Transaction ${$index+1}
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapse${tx.Id}" class="collapse" aria-labelledby="heading${tx.Id}" data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6">Transaction type:</div>
+                                    <div class="col-sm-6">${tx.SwapStepName}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">Transaction create date:</div>
+                                    <div class="col-sm-6">
+                                        ${tx.timestamp_day}-${tx.timestamp_month_name}-${tx.timestamp_year} ${tx.timestamp_time}
+                                    </div>
+                                </div>
+                                <div class="row" show.bind="tx.ChainTransactionId">
+                                    <div class="col-sm-6">Transaction id:</div>
+                                    <div class="col-sm-6"><a target="_blank" href="${blockExplorerUrl + '/tx/' + tx.ChainTransactionId}">${tx.ChainTransactionId}<i class="fas fa-external-link-alt"></i></a></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">From token:</div>
+                                    <div class="col-sm-6">${tx.TokenInputAmount} ${tx.TokenInput}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">To token:</div>
+                                    <div class="col-sm-6">${tx.TokenOutputAmount} ${tx.TokenOutput}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">Result:</div>
+                                    <div class="col-sm-6"><button class="btn ${tx.SwapStatusName == 'Success' ? 'btn-success' : tx.SwapStatusName == 'Failure' ? 'btn-danger' : 'btn-warning'}">${tx.SwapStatusName}</button></div>
+                                </div>
+                                <div class="row" show.bind="tx.SwapStatusName == 'Failure'">
+                                    <div class="col-sm-6">Message:</div>
+                                    <div class="col-sm-6"><p class="alert alert-danger">${swapRequestModel.Message}</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ux-dialog-body>
+
+        <ux-dialog-footer>
+            <button
+                class="btn btn-lg greenBtns trade-button"
+                click.trigger="controller.ok()"
+            >
+                ${'Ok' & t}
+            </button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

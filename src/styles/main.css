@@ -617,7 +617,7 @@ a.item:hover .item-icon {
     font-size: 15px;
 }
 .transaction-type-info {
-    font-size: 12px;
+    font-size: 13px;
     color: #05413c;
 }
 
@@ -1274,7 +1274,8 @@ input.tradeValueUsd {
     align-self: center;
     font-weight: 500;
 }
-.view-market-btn {
+.view-market-btn,
+.view-swap-details-btn {
     color: #05413c;
     font-weight: 500;
     align-self: center;
@@ -1968,3 +1969,19 @@ input.tradeValueUsd {
     width: 90%;
     display: flex;
 }
+
+.view-swap-details-btn {
+    padding: 0;
+    font-size: 12px;
+}
+
+.swapDetailsAccordion .card {
+    text-align: left;
+    transition: none;
+}
+
+    .swapDetailsAccordion .card:hover {
+        transform: none;
+        cursor: pointer;
+        border-radius: unset;
+    }
