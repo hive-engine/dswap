@@ -6,10 +6,11 @@ import firebase from 'firebase/app';
 import { ToastMessage, ToastService } from './toast-service';
 import { I18N } from 'aurelia-i18n';
 import { Store } from 'aurelia-store';
-import { loadCoins, loadCoinPairs, loadAccountHistory } from 'common/hive-engine-api';
+import { loadCoins, loadCoinPairs, loadAccountHistory, checkTransaction } from 'common/hive-engine-api';
 import { filterXSS } from 'xss';
 import { TokenService } from './token-service';
 import moment from 'moment';
+import { hiveSignerJson } from '../common/hive';
 
 const http = new HttpClient();
 
@@ -146,9 +147,82 @@ export class HiveEngineService {
                 h.timestamp_string = moment.unix(h.timestamp).format('YYYY-MM-DD HH:mm:ss');
                 h.timestamp_month_name = moment.unix(h.timestamp).format('MMMM');
                 h.timestamp_day = moment.unix(h.timestamp).format('DD');
+                h.timestamp_year = moment.unix(h.timestamp).format('YYYY');
             }
         }
 
         return history;
+    }
+
+    async sendToken(symbol: string, to: string, quantity: number, memo: string, waitMsg?: string): Promise<any> {
+        return new Promise((resolve) => {
+            const username = this.getUser();
+
+            if (!username) {
+                window.location.reload();
+                return;
+            }
+
+            const transaction_data = {
+                'contractName': 'tokens',
+                'contractAction': 'transfer',
+                'contractPayload': {
+                    'symbol': symbol,
+                    'to': to,
+                    'quantity': quantity,
+                    'memo': memo
+                }
+            };
+
+            console.log('SENDING: ' + symbol);
+
+            if (window.hive_keychain) {
+                window.hive_keychain.requestCustomJson(username, environment.chainId, 'Active', JSON.stringify(transaction_data), 'Token Transfer: ' + symbol, async (response) => {
+                    if (response.success && response.result) {
+                        try {
+                            let toast = new ToastMessage();
+
+                            if (waitMsg) {
+                                toast.message = waitMsg;
+                            } else {
+                                toast.message = this.i18n.tr('sendTokensWait', {
+                                    ns: 'notifications'
+                                });
+                            }
+                            toast.overrideOptions.timeout = 10000;
+
+                            this.toast.success(toast);
+
+                            let tx = await checkTransaction(response.result.id, 3);                            
+
+                            toast.message = this.i18n.tr('tokensSent', {
+                                quantity,
+                                symbol,
+                                to,
+                                ns: 'notifications'
+                            });
+
+                            //this.toast.success(toast);
+
+                            resolve(tx);
+                        } catch (e) {
+                            const toast = new ToastMessage();
+
+                            toast.message = this.i18n.tr('errorSubmittedTransfer', {
+                                ns: 'errors',
+                                error: e
+                            });
+
+                            this.toast.error(toast);
+
+                            resolve(false);
+                        }
+                    } else {
+                        resolve(false);
+                        // hide
+                    }
+                });
+            } 
+        });
     }
 }

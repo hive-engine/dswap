@@ -11,8 +11,13 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     FIREBASE_API_SE: 'https://us-central1-steem-engine-dex.cloudfunctions.net/api/',
     EXCHANGE_URL_HE: 'https://hive-engine.com/',
     EXCHANGE_URL_SE: 'https://steem-engine.net/',
+    DSWAP_API_URL: 'https://dswap.azurewebsites.net/api/',
+    BLOCK_EXPLORER_HE: 'https://he.dtools.dev/',
+    BLOCK_EXPLORER_SE: 'https://se.dtools.dev/',
+    DSWAP_ACCOUNT_HE: 'dswap',
+    DSWAP_SOURCE_ID: '5fab0821cdef24759c5ae9a9',
     maintenanceMode: false,
-    swapEnabledTokens: ['BEE', 'DEC', 'KANDA', 'SAND', 'SWAP.BCH', 'SWAP.BTC', 'SWAP.BTS', 'SWAP.DOGE', 'SWAP.ENG', 'SWAP.EOS', 'SWAP.GOLOS', 'SWAP.HBD', 'SWAP.LTC', 'SWAP.SBD', 'SWAP.STEEM', 'SWAP.SWIFT', 'SWAP.TLOS', 'WEED', 'WORKERBEE'],
+    swapEnabledTokens: ['BEE', 'DEC', 'KANDA', 'SAND', 'SWAP.BCH', 'SWAP.BTC', 'SWAP.BTS', 'SWAP.DOGE', 'SWAP.ENG', 'SWAP.EOS', 'SWAP.GOLOS', 'SWAP.HBD', 'SWAP.LTC', 'SWAP.SBD', 'SWAP.STEEM', 'SWAP.SWIFT', 'SWAP.TLOS', 'WEED', 'WORKERBEE', 'PAL', 'LEO', 'SWAP.HIVE'],
     disabledTokens: ['BTC', 'LTC', 'HIVE', 'HBD', 'BCC', 'XAP', 'XRP', 'GOLOS', 'DISNEY', 'AMAZON', 'VOICE', 'ETH', 'EOS', 'LASSE', 'TIME', 'R', 'SCTR', 'ALLAH', 'BNB', 'DONE', 'ETHER', 'LTCPEG', 'SBC', 'BEEHIVE', 'BEECASH'],
     disabledTokens_SE: ['BTC', 'LTC', 'STEEM', 'SBD', 'BCC', 'XAP', 'XRP', 'GOLOS', 'DISNEY', 'AMAZON', 'VOICE', 'ETH', 'EOS', 'LASSE', 'TIME', 'R', 'SCTR', 'ALLAH', 'DONE', 'BNB', 'ETHER', 'LTCPEG', 'SBC', 'LASSECASH', 'HIVE', 'TIX', 'TIXM', 'STEM', 'STEMM', 'LEO', 'LEOM', 'LEOMM', 'NEO', 'NEOX', 'PORN', 'SPORTS', 'BATTLE', 'SIM', 'CTP', 'CTPM', 'EMFOUR', 'CCC', 'CCCM', 'BEER', 'WEED', 'WEEDM', 'WEEDMM', 'SPACO', 'SPACOM', 'NEOXAG', 'NEOXAGM', 'KANDA', 'SAND', 'INFOWARS', 'SPI', 'PAL', 'PALM', 'PALMM', 'ENGAGE', 'BRO', 'CC', 'BUILDTEAM', 'ECO', 'GAMER', 'EPC', 'SPT', 'JAHM'],
     peggedToken: 'SWAP.HIVE',
@@ -28,7 +33,7 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     marketMakerFeeToken_SE: 'ENG',
     isDebug: false,
     debugAccount: '',
-    dswapEnabled: false,
+    dswapEnabled: true,
     marketMakerEnabled: true,
     features: {
         nfts: {

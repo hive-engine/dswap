@@ -198,3 +198,11 @@ export async function loadAccountHistory(account: string, symbol?: string, times
 
     return response.json() as Promise<IAccountHistoryItemResult[]>;
 }
+
+export async function loadBuyBook(symbol, limit = 10, offset = 0) {
+    return ssc.find('market', 'buyBook', { symbol: symbol }, limit, offset, [{ index: 'priceDec', descending: true }], false);
+}
+
+export async function loadSellBook(symbol, limit = 10, offset = 0) {
+    return ssc.find('market', 'sellBook', { symbol: symbol }, limit, offset, [{ index: 'priceDec', descending: false }], false);
+}

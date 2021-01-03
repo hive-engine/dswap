@@ -10,113 +10,77 @@
                 <li class="nav-item table-head-links">
                     <a
                         class="nav-link table-link active"
-                        id="pending-tab"
+                        id="all-tab"
                         data-toggle="tab"
-                        href="#pending"
+                        href="#all"
                         role="tab"
                         aria-controls="pending"
                         aria-selected="true"
-                        >Pending</a
+                       click.delegate="swapStatus = null"
+                        >All</a
                     >
                 </li>
-                <li class="nav-item table-head-links" style="display: none;">
+                <li class="nav-item table-head-links">
                     <a
                         class="nav-link table-link"
-                        id="completed-tab"
+                        id="all-tab"
                         data-toggle="tab"
-                        href="#completed"
+                        href="#all"
                         role="tab"
                         aria-controls="completed"
                         aria-selected="false"
+                        click.delegate="swapStatus = 3"
                         >Completed</a
                     >
                 </li>
-                <li class="nav-item table-head-links" style="display: none;">
+                <li class="nav-item table-head-links">
                     <a
                         class="nav-link table-link"
-                        id="failed-tab"
+                        id="all-tab"
                         data-toggle="tab"
-                        href="#failed"
+                        href="#all"
                         role="tab"
                         aria-controls="failed"
                         aria-selected="false"
+                        click.delegate="swapStatus = 4"
                         >Failed</a
                     >
                 </li>
             </ul>
 
             <div class="tab-content" id="myTabContent">
-                <div
-                    class="tab-pane fade show active"
-                    id="pending"
-                    role="tabpanel"
-                    aria-labelledby="pending-tab"
-                >
+                <div class="tab-pane fade show active"
+                     id="all"
+                     role="tabpanel"
+                     aria-labelledby="all-tab">
                     <table class="table">
                         <thead class="table-head">
                             <tr>
-                                <th
-                                    class="icon-head head-item"
-                                    scope="col"
-                                ></th>
+                                <th class="icon-head head-item"
+                                    scope="col"></th>
                                 <th class="date-head head-item" scope="col">
                                     Date
                                 </th>
-                                <th
-                                    class="transaction-head head-item"
-                                    scope="col"
-                                >
-                                    Transaction Type
+                                <th class="transaction-head head-item"
+                                    scope="col">
+                                    Transaction Details
                                 </th>
-                                <th class="amount-head head-item" scope="col">
-                                    Amount
-                                </th>
+                                <th scope="col">Status</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div
-                    class="tab-pane fade"
-                    id="completed"
-                    role="tabpanel"
-                    aria-labelledby="completed-tab"
-                >
-                    <table class="table">
-                        <thead class="table-head">
-                            <tr>
-                                <th
-                                    class="icon-head head-item"
-                                    scope="col"
-                                ></th>
-                                <th class="date-head head-item" scope="col">
-                                    Date
-                                </th>
-                                <th
-                                    class="transaction-head head-item"
-                                    scope="col"
-                                >
-                                    Transaction Type
-                                </th>
-                                <th class="amount-head head-item" scope="col">
-                                    Amount
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody repeat.for="trade of tradesCompleted">
+                        <tbody repeat.for="trade of allTrades">
                             <tr>
                                 <th class="table-item" scope="row">
                                     <div class="transaction-icon">
-                                        <font-awesome-icon
-                                            show.bind="trade.type == 'received'"
-                                            class="table-icon"
-                                            icon.bind="['fas', 'university']"
-                                        ></font-awesome-icon>
-                                        <font-awesome-icon
-                                            class="table-icon"
-                                            show.bind="trade.type == 'sent'"
-                                            icon.bind="['fas', 'exchange']"
-                                        ></font-awesome-icon>
+                                        <font-awesome-icon show.bind="trade.SwapStatusId == 3"
+                                                           class="table-icon"
+                                                           icon.bind="['fas', 'check']"></font-awesome-icon>
+                                        <font-awesome-icon show.bind="trade.SwapStatusId == 4" title.bind="trade.Message"
+                                                           class="delete-icon"
+                                                           icon.bind="['fas', 'times']"></font-awesome-icon>
+                                        <font-awesome-icon show.bind="trade.SwapStatusId == 1 || trade.SwapStatusId == 2"
+                                                           class="table-icon"
+                                                           icon.bind="['fas', 'exclamation']"></font-awesome-icon>
                                     </div>
                                 </th>
                                 <td class="table-item">
@@ -126,102 +90,61 @@
                                     <h6 class="text-center mb-0">
                                         ${trade.timestamp_day}
                                     </h6>
+                                    <p class="text-center mb-0">
+                                        <strong>${trade.timestamp_time}</strong>
+                                    </p>
                                 </td>
                                 <td class="table-item transaction-type">
-                                    ${trade.symbol} ${trade.type == 'received' ?
-                                    'Received' : 'Sent'}
-                                    <br />
-                                    <span
-                                        class="transaction-type-info"
-                                        show.bind="trade.type == 'received'"
-                                        >You received ${trade.quantity}
-                                        ${trade.symbol} worth ${'$' +
-                                        trade.usdValue} from ${trade.from}</span
-                                    >
-                                    <span
-                                        class="transaction-type-info"
-                                        show.bind="trade.type == 'sent'"
-                                        >You sent ${trade.quantity}
-                                        ${trade.symbol} worth ${'$' +
-                                        trade.usdValue} to ${trade.to}</span
-                                    >
+                                    <span class="transaction-type-info">Swap requested ${trade.TokenInputAmount} ${trade.TokenInput} for ${trade.TokenOutputAmount} ${trade.TokenOutput} (estimated) ${trade.TokenOutputAmountActual} ${trade.TokenOutput} (realized)</span>
+                                    <p><a class="btn view-swap-details-btn" href="#" click.delegate="viewSwapDetails(trade)">View details</a></p>
                                 </td>
-                                <td class="table-item text-right">
-                                    ${trade.quantity} ${trade.symbol}
+                                <td>
+                                    <div class="text-center">
+                                        <span>
+                                            <strong>${trade.SwapStatusId == 2 ? 'In progress' : trade.SwapStatusId == 3 ? 'Completed' : trade.SwapStatusId == 4 ? 'Failed' : 'Init'}</strong>
+                                        </span>
+                                        <font-awesome-icon show.bind="trade.SwapStatusId == 4"
+                                                           title.bind="trade.Message"
+                                                            class="chart-icon"
+                                                            icon.bind="['fas', 'info-circle']"></font-awesome-icon>
+                                        <button alt="Reload" title="Refresh" show.bind="trade.SwapStatusId != 3 && trade.SwapStatusId != 4"                                                
+                                                class="btn btn-warning text-center" 
+                                                click.delegate="getTransactionInfo(trade)">
+                                            Refresh
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <br />
-                    <nav
-                        class="numbering"
-                        aria-label="Page navigation example"
-                        
-                    >
-                        <ul class="pagination m-auto">
+                    <nav class="text-right ml-auto"
+                         aria-label="Swap page navigation">
+                        <ul class="pagination"
+                            style="margin-bottom: 0;">
                             <li class="page-item pagination-btn">
-                                <a
-                                    class="page-link pagination-link"
-                                    click.delegate="pageClick('prev')"
-                                    aria-label="Previous"
-                                    show.bind="page > 1"
-                                >
+                                <a class="page-link pagination-link text-white-custom"
+                                   click.delegate="pageClick('prev')"
+                                   aria-label="Previous"
+                                   show.bind="page > 1">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
-                            <li
-                                class="page-item pagination-btn"
-                                repeat.for="p of totalPages"
-                            >
-                                <a
-                                    class="page-link pagination-link ${page == p+1 ? 'active' : ''}"
-                                    click.delegate="pageClick(p+1)"
-                                    >${p+1}</a
-                                >
+                            <li class="page-item pagination-btn"
+                                repeat.for="p of totalPages">
+                                <a class="page-link pagination-link text-white-custom ${page == p+1 ? 'active' : ''}"
+                                   click.delegate="pageClick(p+1)">${p+1}</a>
                             </li>
                             <li class="page-item pagination-btn">
-                                <a
-                                    class="page-link pagination-link"
-                                    click.delegate="pageClick('next')"
-                                    aria-label="Next"
-                                    show.bind="page < totalPages"
-                                >
+                                <a class="page-link pagination-link text-white-custom"
+                                   click.delegate="pageClick('next')"
+                                   aria-label="Next"
+                                   show.bind="page < totalPages">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
                         </ul>
                     </nav>
-                </div>
-                <div
-                    class="tab-pane fade"
-                    id="failed"
-                    role="tabpanel"
-                    aria-labelledby="failed-tab"
-                >
-                    <table class="table">
-                        <thead class="table-head">
-                            <tr>
-                                <th
-                                    class="icon-head head-item"
-                                    scope="col"
-                                ></th>
-                                <th class="date-head head-item" scope="col">
-                                    Date
-                                </th>
-                                <th
-                                    class="transaction-head head-item"
-                                    scope="col"
-                                >
-                                    Transaction Type
-                                </th>
-                                <th class="amount-head head-item" scope="col">
-                                    Amount
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+                </div>                
             </div>
         </div>
     </div>

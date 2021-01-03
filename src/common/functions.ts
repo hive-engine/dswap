@@ -6,7 +6,7 @@ import { environment } from 'environment';
 import { hiveSignerJson } from 'common/hive';
 import { HttpClient } from 'aurelia-fetch-client';
 import trim from 'trim-character';
-import { Chain } from './enums';
+import { Chain, SwapStatus, SwapStep } from './enums';
 import { DefaultChainId } from './constants';
 
 const http: HttpClient = new HttpClient();
@@ -301,4 +301,57 @@ export async function getChainByState(state: IState) {
         chainId = DefaultChainId;
     }    
     return chainId;
+}
+
+export async function getBlockExplorerByChain(chain: Chain) {
+    let symbol: string;
+    if (chain === Chain.Hive) {
+        symbol = environment.BLOCK_EXPLORER_HE;
+    } else if (chain === Chain.Steem) {
+        symbol = environment.BLOCK_EXPLORER_SE;
+    }
+
+    return symbol;
+}
+
+export async function getSwapStatusById(swapStatusId: number) {
+    let swapStatusName = "";
+
+    switch (swapStatusId) {
+        case SwapStatus.Init:
+            swapStatusName = "Init";
+            break;
+        case SwapStatus.InProgress:
+            swapStatusName = "In progress";
+            break;
+        case SwapStatus.Failure:
+            swapStatusName = "Failure";
+            break;
+        case SwapStatus.Success:
+            swapStatusName = "Success";
+            break;        
+    }
+
+    return swapStatusName;
+}
+
+export async function getSwapStepById(swapStepId: number) {
+    let swapStepName = "";
+
+    switch (swapStepId) {
+        case SwapStep.ValidateSwapRequest:
+            swapStepName = "Validation";
+            break;
+        case SwapStep.ConvertToSwapBaseToken:
+            swapStepName = "Convert to base token";
+            break;
+        case SwapStep.ConvertToSwapOutput:
+            swapStepName = "Convert to output token";
+            break;
+        case SwapStep.TransferToDestionationAccount:
+            swapStepName = "Transfer tokens to receiver";
+            break;
+    }
+
+    return swapStepName;
 }
