@@ -31,7 +31,7 @@ export class MarketMakerDashboard {
     private state: IState;
     private markets : IMarketMakerMarket[] = [];
     private marketTokens = [];
-    private exchangeMarketUrl;
+    @bindable() exchangeMarketUrl;
     private currentChainId;
     private eaSubscriber: eaSubscription;
 
@@ -49,7 +49,7 @@ export class MarketMakerDashboard {
         this.currentChainId = await getChainByState(this.state);
         await this.loadMarkets();
         let exchangeUrl = this.currentChainId === Chain.Hive ? environment.EXCHANGE_URL_HE : environment.EXCHANGE_URL_SE;
-        this.exchangeMarketUrl = exchangeUrl + "?p=market&t=";        
+        this.exchangeMarketUrl = exchangeUrl + "?p=market&t=";
     }
 
     async loadMarkets() {
