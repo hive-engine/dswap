@@ -50,7 +50,7 @@ export class HiveEngineService {
         return this.user?.name ?? null;
     }
 
-    async getDepositAddress(symbol) {
+    async getDepositAddress(symbol, userName) {
         const pairs = await this.getFormattedCoinPairs();   
         const peggedToken = pairs.find(p => p.pegged_token_symbol === symbol);
         
@@ -59,8 +59,6 @@ export class HiveEngineService {
         }
 
         try {
-            const userName = this.getUser();
-
             if (userName == null || userName == '') {
                 throw new Error('User is unknown');
             }
@@ -84,6 +82,29 @@ export class HiveEngineService {
             return result;
         } catch (e) {
             console.error(e);
+            return null;
+        }
+    }
+
+    async getWithdrawalAddress(symbol, address) {
+        const pairs = await this.getFormattedCoinPairs();
+
+        const peggedToken = pairs.find(p => p.symbol === symbol);
+
+        if (!peggedToken) {
+            return;
+        }
+
+        try {
+            const request = await this.http.fetch(`${environment.CONVERTER_API_HE}/convert/`, {
+                method: 'POST',
+                body: json({ from_coin: peggedToken.pegged_token_symbol, to_coin: symbol, destination: address })
+            });
+
+            const response = await request.json();
+
+            return { ...response, ...peggedToken };
+        } catch {
             return null;
         }
     }
@@ -189,7 +210,7 @@ export class HiveEngineService {
                                     ns: 'notifications'
                                 });
                             }
-                            toast.overrideOptions.timeout = 10000;
+                            toast.overrideOptions.timeout = 15000;
 
                             this.toast.success(toast);
 

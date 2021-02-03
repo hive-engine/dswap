@@ -31,6 +31,7 @@ interface IEnvironment {
   hivePegAccount: string;
   nativeToken: string;
     swapEnabledTokens: string[];
+    swapEnabledCrypto: string[];
     disabledTokens: string[];
     disabledTokens_SE: string[];
     peggedToken: string;
@@ -136,6 +137,7 @@ interface IToken {
     usdValueFormatted?: string;
     metrics?: ITokenMetrics;
     userBalance?: IBalance;
+    isCrypto: boolean;
 }
 
 interface ITokenMetrics {
@@ -281,7 +283,8 @@ interface ISwapRequestModel {
     SwapSourceId: string;
     MaxSlippageInputToken: number;
     MaxSlippageOutputToken: number;
-    BaseTokenAmount: number;    
+    BaseTokenAmount: number;   
+    TokenInputMemo: string;
 }
 
 interface ISwapRequestViewModel {

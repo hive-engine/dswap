@@ -8,7 +8,7 @@ import { Store, dispatchify } from 'aurelia-store';
 import { ChartComponent } from 'components/chart/chart';
 import { loadTokenMarketHistory, loadBuyBook, loadSellBook } from 'common/hive-engine-api';
 import moment from 'moment';
-import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain } from 'common/functions';
+import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain, getSwapTokenByCrypto } from 'common/functions';
 import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
 import { ValidationControllerFactory, ControllerValidateResult, ValidationRules } from 'aurelia-validation';
@@ -48,8 +48,8 @@ export class Dashboard {
     private currentChainId;
     private baseTokenSymbol;
     private baseTokenAmount;
-    private maxSlippageInputToken = 0.00;
-    private maxSlippageOutputToken = 0.00;
+    private maxSlippageInputToken = 5.00;
+    private maxSlippageOutputToken = 5.00;
 
     constructor(private dialogService: DialogService, 
                 private ts: TokenService, 
@@ -145,8 +145,9 @@ export class Dashboard {
                 SwapSourceId: environment.DSWAP_SOURCE_ID,
                 BaseTokenAmount: this.baseTokenAmount,
                 MaxSlippageInputToken: this.maxSlippageInputToken,
-                MaxSlippageOutputToken: this.maxSlippageOutputToken
-            };
+                MaxSlippageOutputToken: this.maxSlippageOutputToken,
+                TokenInputMemo: ""
+            };            
 
             this.dialogService.open({ viewModel: DswapOrderModal, model: swapRequestModel }).whenClosed(response => {
                 console.log(response);
@@ -161,6 +162,9 @@ export class Dashboard {
 
         this.buyTokens = [...this.state.tokens];
         this.sellTokens = [...this.state.tokens];
+
+        // filter out crypto from buy token list for now
+        this.buyTokens = this.buyTokens.filter(x => !x.isCrypto);
         
         if (this.buyToken)
             this.sellTokens.splice(this.sellTokens.indexOf(this.sellTokens.find(x => x.symbol == this.buyToken.symbol)), 1);
@@ -301,14 +305,27 @@ export class Dashboard {
         }
     }
 
+    async getTokenSymbolToCheck(tokenSymbol) {
+        let tokenSymbolToCheck = tokenSymbol;
+        let tokenToCheck = this.state.tokens.find(x => x.symbol == tokenSymbol);
+        if (tokenToCheck && tokenToCheck.isCrypto)
+            tokenSymbolToCheck = getSwapTokenByCrypto(tokenSymbol);
+
+        return tokenSymbolToCheck;
+    }
+
     async getEstimatedTokenAmountByBaseToken(baseTokenAmount, tokenSymbol) {
         // get next x buy orders until you reach the amount you want to sell
         let buyTokenAmount = 0;
         let tokensLeft = baseTokenAmount;
         let limit = 10;
         let offset = 0;
+
+        // change token symbol to check to SWAP.token in case it is crypto
+        let tokenSymbolToCheck = await this.getTokenSymbolToCheck(tokenSymbol);
+        
         while (tokensLeft > 0 && offset < 100) {
-            let orders = await loadSellBook(tokenSymbol, limit, offset);
+            let orders = await loadSellBook(tokenSymbolToCheck, limit, offset);
             if (orders) {
                 for (let i = 0; i < orders.length; i++) {
                     let order = orders[i];
@@ -343,8 +360,11 @@ export class Dashboard {
         let soldAmount = 0;
         let limit = 10;
         let offset = 0;
+        // change token symbol to check to SWAP.token in case it is crypto
+        let tokenSymbolToCheck = await this.getTokenSymbolToCheck(tokenSymbol);
+
         while (soldAmount < tokenAmount && offset < 100) {
-            let sellTokenBuyOrders = await loadBuyBook(tokenSymbol, limit, offset);
+            let sellTokenBuyOrders = await loadBuyBook(tokenSymbolToCheck, limit, offset);
             if (sellTokenBuyOrders) {
                 for (let i = 0; i < sellTokenBuyOrders.length; i++) {
                     let buyOrder = sellTokenBuyOrders[i];                    
@@ -391,8 +411,8 @@ export class Dashboard {
                         .withMessageKey("errors:dashboardSellTokenAmountRequired")
                     .then()
                     .satisfies((value: any, object: any) => parseFloat(value) > 0)
-                    .withMessageKey('errors:dashboardAmountMustBeGreaterThanZero')
-                    .satisfies((value: any, object: any) => parseFloat(value) <= this.sellToken.userBalance.balance)
+            .withMessageKey('errors:dashboardAmountMustBeGreaterThanZero')
+            .satisfies((value: any, object: any) => this.sellToken.isCrypto || parseFloat(value) <= this.sellToken.userBalance.balance)
                     .withMessageKey('errors:dashboardInsufficientBalance')
         .rules;
 

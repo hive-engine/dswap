@@ -355,3 +355,7 @@ export async function getSwapStepById(swapStepId: number) {
 
     return swapStepName;
 }
+
+export async function getSwapTokenByCrypto(crypto) {
+    return "SWAP." + crypto;
+}
