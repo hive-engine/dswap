@@ -45,18 +45,23 @@ export class SwapService {
         });
     }
 
-    async SwapRequest(swapRequestModel: ISwapRequestModel) {
-        let toast = new ToastMessage();        
+    async SwapRequest(swapRequestModel: ISwapRequestModel) {       
+        let toastWait = new ToastMessage();
+        toastWait.message = this.i18n.tr('swapRequestWait', {
+            ns: 'notifications'
+        });
+        toastWait.overrideOptions.timeout = 2000;
+        this.toast.warning(toastWait);
 
-        let response = await swapRequest(swapRequestModel);
-
+        let response = await swapRequest(swapRequestModel);        
         console.log(response);
-        
-        toast.message = this.i18n.tr('swapRequestQueued', {
+        let toastSuccess = new ToastMessage();
+
+        toastSuccess.message = this.i18n.tr('swapRequestQueued', {
             ns: 'notifications'
         });
 
-        this.toast.success(toast);
+        this.toast.success(toastSuccess);
 
         return response;
     }

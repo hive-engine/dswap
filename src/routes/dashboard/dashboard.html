@@ -34,6 +34,15 @@
     </div>
     </div>
     <div class="dashboard-wrapper d-none d-md-block text-center" show.bind="dswapEnabled">
+        <div class="row" show.bind="sellToken && sellToken.isCrypto">
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-5 alert alert-warning">
+                        Attention: You will need to deposit to a given address!
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-9">
                 <div class="row">

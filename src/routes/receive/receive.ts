@@ -80,7 +80,8 @@ export class Receive {
 
                 try {
                     const result = await this.hes.getDepositAddress(
-                        this.tokenSymbol
+                        this.tokenSymbol,
+                        this.state.account.name
                     );
                     
                     if (result) {

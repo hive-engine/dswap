@@ -8,7 +8,7 @@ import { I18N } from 'aurelia-i18n';
 import { Store } from 'aurelia-store';
 import { loadCoins, loadTokenMetrics, loadUserBalances, loadTokens } from 'common/hive-engine-api';
 import { HiveEngineService } from './hive-engine-service';
-import { getPrices, usdFormat } from 'common/functions';
+import { getPrices, usdFormat, getSwapTokenByCrypto } from 'common/functions';
 import { Chain } from '../common/enums';
 import { loadUserBalancesSE, loadTokensSE, loadTokenMetricsSE } from '../common/steem-engine-api';
 
@@ -46,15 +46,38 @@ export class TokenService {
 
     async getDSwapTokens(includeMetrics = true, chain: Chain = Chain.Hive) {
         const symbols = environment.swapEnabledTokens;
+        
         let dTokens = await loadTokens(symbols);
 
         if (includeMetrics)
             await this.enrichTokensWithMetrics(dTokens, symbols, chain);
 
+        await this.addEnabledCryptoTokens(dTokens);
+
         this.state.tokens = dTokens;
 
         return dTokens;
-    }    
+    }   
+
+    async addEnabledCryptoTokens(dTokens: IToken[]) {
+        var cryptoTokens = environment.swapEnabledCrypto;
+
+        if (cryptoTokens) {
+            for (const c of cryptoTokens) {
+                let swapTokenSymbol = await getSwapTokenByCrypto(c);
+
+                let token = dTokens.find(x => x.symbol == swapTokenSymbol);
+                if (token) {
+                    let cryptoToken = { ...token };
+                    cryptoToken.symbol = c;
+                    cryptoToken.name = cryptoToken.name.replace(" Pegged", "").replace(" pegged", "");
+                    cryptoToken.isCrypto = true;
+
+                    dTokens.push(cryptoToken);
+                }
+            }            
+        }
+    }
 
     async enrichTokensWithMetrics(dTokens: IToken[], symbols: string[], chain: Chain) {
         let metrics = [];

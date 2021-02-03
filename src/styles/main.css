@@ -1985,3 +1985,7 @@ input.tradeValueUsd {
         cursor: pointer;
         border-radius: unset;
     }
+
+.tbDepositAddress {
+    width: 400px;
+}
