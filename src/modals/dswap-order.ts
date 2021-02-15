@@ -31,6 +31,7 @@ export class DswapOrderModal {
     private state: IState;
     private depositAddress;
     private sellToken;    
+    private depositAmount : number;
 
     constructor(private controller: DialogController, private toast: ToastService, private taskQueue: TaskQueue, private store: Store<IState>,
         private controllerFactory: ValidationControllerFactory, private i18n: I18N, private hes: HiveEngineService, private ss: SwapService) {
@@ -63,6 +64,11 @@ export class DswapOrderModal {
             this.depositAddress = await this.hes.getDepositAddress(sellTokenSwap, environment.DSWAP_ACCOUNT_HE);
             if (this.depositAddress)
                 this.swapRequestModel.TokenInputMemo = this.depositAddress.address;
+
+            // calculate 1.001% fee instead of 1% to be safe with rounding differences
+            let amtInclFee = parseFloat((this.swapRequestModel.TokenInputAmount * 100 / 98.999).toFixed(8));
+
+            this.depositAmount = amtInclFee;
         }
         
     }
