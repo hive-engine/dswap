@@ -11,13 +11,14 @@ import { HiveEngineService } from 'services/hive-engine-service';
 import { environment } from 'environment';
 import { SwapService } from 'services/swap-service';
 import { swapRequest } from 'common/dswap-api';
-import { getPeggedTokenSymbolByChain, getSwapTokenByCrypto } from 'common/functions';
+import { getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getRandomID } from 'common/functions';
 
 @autoinject()
 export class DswapOrderModal {
     @bindable amount;
     @bindable username;
     @bindable copyTxt = "Copy";
+    @bindable copyMemoTxt = "Copy";
 
     private styles = styles;
     private loading = false;
@@ -31,7 +32,9 @@ export class DswapOrderModal {
     private state: IState;
     private depositAddress;
     private sellToken;    
-    private depositAmount : number;
+    private depositAmount: number;
+    private customMemo;
+    private customMemoId;
 
     constructor(private controller: DialogController, private toast: ToastService, private taskQueue: TaskQueue, private store: Store<IState>,
         private controllerFactory: ValidationControllerFactory, private i18n: I18N, private hes: HiveEngineService, private ss: SwapService) {
@@ -62,8 +65,14 @@ export class DswapOrderModal {
         if (this.sellToken && this.sellToken.isCrypto) {
             let sellTokenSwap = await getSwapTokenByCrypto(this.sellToken.symbol);
             this.depositAddress = await this.hes.getDepositAddress(sellTokenSwap, environment.DSWAP_ACCOUNT_HE);
-            if (this.depositAddress)
+            if (this.depositAddress) {
                 this.swapRequestModel.TokenInputMemo = this.depositAddress.address;
+
+                if (this.depositAddress.memo) {
+                    this.customMemoId = getRandomID();
+                    this.customMemo = this.depositAddress.memo + " " + this.customMemoId;
+                }
+            }
 
             // calculate 1.001% fee instead of 1% to be safe with rounding differences
             let amtInclFee = parseFloat((this.swapRequestModel.TokenInputAmount * 100 / 98.999).toFixed(8));
@@ -73,7 +82,7 @@ export class DswapOrderModal {
         
     }
 
-    copyMessage(val: string) {
+    copyMessage(val: string, memo: boolean) {
         const selBox = document.createElement('textarea');
         selBox.style.position = 'fixed';
         selBox.style.left = '0';
@@ -85,7 +94,12 @@ export class DswapOrderModal {
         selBox.select();
         document.execCommand('copy');
         document.body.removeChild(selBox);
-        this.copyTxt = "Copied!";
+
+        if (memo) {
+            this.copyMemoTxt = "Copied!";
+        } else {
+            this.copyTxt = "Copied!";
+        }
     }
 
     balanceClicked() {
@@ -136,7 +150,13 @@ export class DswapOrderModal {
 
             if (this.swapRequestModel.TokenInputMemo)
             {
-                this.swapRequestModel.ChainTransactionId = this.swapRequestModel.TokenInputMemo;
+                let txMemo = this.swapRequestModel.TokenInputMemo;
+                if (this.customMemo)
+                    txMemo += " " + this.customMemo;
+
+                this.swapRequestModel.ChainTransactionId = txMemo;
+                this.swapRequestModel.TokenInputMemo = this.customMemoId;
+
                 let swapResponse = await this.ss.SwapRequest(this.swapRequestModel);
 
                 if (swapResponse && swapResponse.ok) {
@@ -159,4 +179,5 @@ export class DswapOrderModal {
 
         this.loading = false;
     }
+
 }

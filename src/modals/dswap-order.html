@@ -26,9 +26,16 @@
                         <div class="alert alert-warning">
                             <p>Please make sure you deposit at least ${depositAmount} ${swapRequestModel.TokenInput} to the address below. </p>
                             <p>Your SWAP will be processed as soon as the deposit is received.</p>
-                        </div>                        
-                        <p><b>Deposit address:</b><br />
-                           <input type="text" readonly value.bind="swapRequestModel.TokenInputMemo" class="tbDepositAddress"/> <button value="Copy" click.delegate="copyMessage(swapRequestModel.TokenInputMemo)">${copyTxt}</button></p>
+                        </div>
+                        <p>
+                            <b>Deposit address:</b><br />
+                            <input type="text" readonly value.bind="swapRequestModel.TokenInputMemo" class="tbDepositAddress" /> <button value="Copy" click.delegate="copyMessage(swapRequestModel.TokenInputMemo, false)">${copyTxt}</button>
+                        </p>
+
+                        <p show.bind="customMemo">
+                            <b>Memo:</b><br />
+                            <input type="text" readonly value.bind="customMemo" class="tbDepositAddress" /> <button value="Copy" click.delegate="copyMessage(customMemo, true)">${copyMemoTxt}</button>
+                        </p>
                     </div>
                     <p>
                         Max slippage ${swapRequestModel.TokenInput} -> ${baseTokenSymbol}: ${swapRequestModel.MaxSlippageInputToken}

@@ -63,6 +63,7 @@ export class TokenService {
         var cryptoTokens = environment.swapEnabledCrypto;
 
         if (cryptoTokens) {
+            cryptoTokens = cryptoTokens.sort().reverse();
             for (const c of cryptoTokens) {
                 let swapTokenSymbol = await getSwapTokenByCrypto(c);
 
@@ -73,7 +74,7 @@ export class TokenService {
                     cryptoToken.name = cryptoToken.name.replace(" Pegged", "").replace(" pegged", "");
                     cryptoToken.isCrypto = true;
 
-                    dTokens.push(cryptoToken);
+                    dTokens.unshift(cryptoToken);
                 }
             }            
         }
