@@ -8,7 +8,7 @@ import { Store, dispatchify } from 'aurelia-store';
 import { ChartComponent } from 'components/chart/chart';
 import { loadTokenMarketHistory, loadBuyBook, loadSellBook } from 'common/hive-engine-api';
 import moment from 'moment';
-import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain, getSwapTokenByCrypto } from 'common/functions';
+import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getPeggedTokenPriceByChain } from 'common/functions';
 import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
 import { ValidationControllerFactory, ControllerValidateResult, ValidationRules } from 'aurelia-validation';
@@ -193,6 +193,7 @@ export class Dashboard {
             this.chartRefBuy.attached();
         
         this.buyToken = this.state.tokens.find(x => x.symbol == this.buyTokenSymbol);
+        this.fillPeggedTokenMetrics(this.buyToken);
         this.refreshTokenLists();
 
         if (!this.buyToken.userBalance)
@@ -223,6 +224,14 @@ export class Dashboard {
         this.tradeValueUsd = (this.sellTokenAmount * parseFloat(this.sellToken.metrics.lastPriceUsd)).toFixed(4);
     }
 
+    async fillPeggedTokenMetrics(token) {
+        let symbolToCheck = await this.getTokenSymbolToCheck(token.symbol);
+        if (symbolToCheck == this.baseTokenSymbol) {
+            let peggedTokenPrice = await getPeggedTokenPriceByChain(this.currentChainId);
+            token.metrics = { lastPriceUsd: peggedTokenPrice, lastPrice: peggedTokenPrice };
+        }
+    }
+
     async sellTokenSelected() {
         if (this.chartRefSell)
             this.chartRefSell.detached();
@@ -233,6 +242,7 @@ export class Dashboard {
             this.chartRefSell.attached();
         
         this.sellToken = this.state.tokens.find(x => x.symbol == this.sellTokenSymbol);
+        this.fillPeggedTokenMetrics(this.sellToken);
         this.refreshTokenLists();
 
         if (!this.sellToken.userBalance)
@@ -271,7 +281,13 @@ export class Dashboard {
 
             // first get price for the amount of sell tokens you want to sell in SWAP.HIVE
             if (this.sellTokenAmount > 0) {
-                baseTokenEarnedSell = await this.getEstimatedBaseTokenEarnedSell(this.sellTokenAmount, this.sellTokenSymbol);
+                let symbolToCheck = await this.getTokenSymbolToCheck(this.sellTokenSymbol);
+                if (symbolToCheck == this.baseTokenSymbol) {
+                    baseTokenEarnedSell = this.sellTokenAmount;
+                } else {
+                    baseTokenEarnedSell = await this.getEstimatedBaseTokenEarnedSell(this.sellTokenAmount, this.sellTokenSymbol);
+                }
+
                 this.baseTokenAmount = baseTokenEarnedSell;
             }
 
@@ -291,7 +307,11 @@ export class Dashboard {
 
             // first get price needed to buy this buy token amount
             if (this.buyTokenAmount > 0) {
-                baseTokenNeeded = await this.getEstimatedBaseTokenEarnedSell(this.buyTokenAmount, this.buyTokenSymbol);
+                if (this.buyTokenSymbol == this.baseTokenSymbol) {
+                    baseTokenNeeded = this.buyTokenAmount;
+                } else {
+                    baseTokenNeeded = await this.getEstimatedBaseTokenEarnedSell(this.buyTokenAmount, this.buyTokenSymbol);
+                }
                 this.baseTokenAmount = baseTokenNeeded;
             }
 
@@ -320,6 +340,9 @@ export class Dashboard {
         let tokensLeft = baseTokenAmount;
         let limit = 10;
         let offset = 0;
+
+        if (tokenSymbol == this.baseTokenSymbol)
+            return baseTokenAmount;
 
         // change token symbol to check to SWAP.token in case it is crypto
         let tokenSymbolToCheck = await this.getTokenSymbolToCheck(tokenSymbol);

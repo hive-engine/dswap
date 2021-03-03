@@ -64,13 +64,17 @@ export class DswapOrderModal {
         this.sellToken = this.state.tokens.find(x => x.symbol === swapRequestModel.TokenInput);
         if (this.sellToken && this.sellToken.isCrypto) {
             let sellTokenSwap = await getSwapTokenByCrypto(this.sellToken.symbol);
-            this.depositAddress = await this.hes.getDepositAddress(sellTokenSwap, environment.DSWAP_ACCOUNT_HE);
-            if (this.depositAddress) {
-                this.swapRequestModel.TokenInputMemo = this.depositAddress.address;
+            if (sellTokenSwap == this.baseTokenSymbol) {
+                this.depositAddress = environment.DSWAP_ACCOUNT_HE;
+            } else {
+                this.depositAddress = await this.hes.getDepositAddress(sellTokenSwap, environment.DSWAP_ACCOUNT_HE);
+                if (this.depositAddress) {
+                    this.swapRequestModel.TokenInputMemo = this.depositAddress.address;
 
-                if (this.depositAddress.memo) {
-                    this.customMemoId = getRandomID();
-                    this.customMemo = this.depositAddress.memo + " " + this.customMemoId;
+                    if (this.depositAddress.memo) {
+                        this.customMemoId = getRandomID();
+                        this.customMemo = this.depositAddress.memo + " " + this.customMemoId;
+                    }
                 }
             }
 

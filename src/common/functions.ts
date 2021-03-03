@@ -224,7 +224,8 @@ export async function getPrices() {
 export async function getPeggedTokenPriceByChain(chain: Chain) {
     let price: number;
     if (chain === Chain.Hive) {
-        price = await this.getHivePrice();
+        const response = await getPrices();
+        price = response.hive.usd;
     } else if (chain === Chain.Steem) {
         //symbol = environment.marketMakerFeeToken_SE;
     }

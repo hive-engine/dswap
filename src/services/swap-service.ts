@@ -47,7 +47,7 @@ export class SwapService {
 
     async SwapRequest(swapRequestModel: ISwapRequestModel) {       
         let toastWait = new ToastMessage();
-        toastWait.message = this.i18n.tr('swapRequestWait', {
+        toastWait.message = this.i18n.tr('swapRequestInProgress', {
             ns: 'notifications'
         });
         toastWait.overrideOptions.timeout = 2000;
