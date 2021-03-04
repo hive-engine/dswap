@@ -43,5 +43,7 @@
     "marketMakerUpgradeAccountInsufficientStake": "Insufficient stake amount. Your stake: {{userStake}} {{symbol}}. {{symbol}} stake required: {{requiredStake}} {{symbol}}.",
     "marketMakerUpgradeAccountInsufficientBalance": "Insufficient balance. Your balance: {{userBalance}} {{symbol}}. {{symbol}} balance required: {{requiredBalance}} {{symbol}}.",
     "marketMakerUpgradeAccountAlreadyPremium": "Your account is already upgraded to Premium.",
-    "errorLogin": "An error occured while trying to login. Please try again."
+    "errorLogin": "An error occured while trying to login. Please try again.",
+    "DepositAddressMissing": "Missing deposit address. Please try again later.",
+    "swapRequestQueueFailed":  "Swap request queueing has failed. Please try again later or contact us via Discord"
 }

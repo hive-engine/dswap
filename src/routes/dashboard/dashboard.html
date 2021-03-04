@@ -34,6 +34,16 @@
     </div>
     </div>
     <div class="dashboard-wrapper d-none d-md-block text-center" show.bind="dswapEnabled">
+        <div class="row" show.bind="sellToken && sellToken.isCrypto">
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-5 alert alert-warning">
+                        <p>Attention: You will need to deposit to a given address!</p>
+                        <p>We recommend a minimum of $10 to deposit, if you do less blockchain fees may eat a substantial portion of your trade request.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-9">
                 <div class="row">

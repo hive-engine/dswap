@@ -221,6 +221,18 @@ export async function getPrices() {
     }
 }
 
+export async function getPeggedTokenPriceByChain(chain: Chain) {
+    let price: number;
+    if (chain === Chain.Hive) {
+        const response = await getPrices();
+        price = response.hive.usd;
+    } else if (chain === Chain.Steem) {
+        //symbol = environment.marketMakerFeeToken_SE;
+    }
+
+    return price;
+}
+
 export async function getHivePrice() {
     try {
         const response = await getPrices();
@@ -354,4 +366,15 @@ export async function getSwapStepById(swapStepId: number) {
     }
 
     return swapStepName;
+}
+
+export async function getSwapTokenByCrypto(crypto) {
+    return "SWAP." + crypto;
+}
+
+export function getRandomID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }

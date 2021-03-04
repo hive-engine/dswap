@@ -8,7 +8,7 @@ import { Store, dispatchify } from 'aurelia-store';
 import { ChartComponent } from 'components/chart/chart';
 import { loadTokenMarketHistory, loadBuyBook, loadSellBook } from 'common/hive-engine-api';
 import moment from 'moment';
-import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain } from 'common/functions';
+import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getPeggedTokenPriceByChain } from 'common/functions';
 import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
 import { ValidationControllerFactory, ControllerValidateResult, ValidationRules } from 'aurelia-validation';
@@ -48,8 +48,8 @@ export class Dashboard {
     private currentChainId;
     private baseTokenSymbol;
     private baseTokenAmount;
-    private maxSlippageInputToken = 0.00;
-    private maxSlippageOutputToken = 0.00;
+    private maxSlippageInputToken = 5.00;
+    private maxSlippageOutputToken = 5.00;
 
     constructor(private dialogService: DialogService, 
                 private ts: TokenService, 
@@ -145,8 +145,9 @@ export class Dashboard {
                 SwapSourceId: environment.DSWAP_SOURCE_ID,
                 BaseTokenAmount: this.baseTokenAmount,
                 MaxSlippageInputToken: this.maxSlippageInputToken,
-                MaxSlippageOutputToken: this.maxSlippageOutputToken
-            };
+                MaxSlippageOutputToken: this.maxSlippageOutputToken,
+                TokenInputMemo: ""
+            };            
 
             this.dialogService.open({ viewModel: DswapOrderModal, model: swapRequestModel }).whenClosed(response => {
                 console.log(response);
@@ -161,6 +162,9 @@ export class Dashboard {
 
         this.buyTokens = [...this.state.tokens];
         this.sellTokens = [...this.state.tokens];
+
+        // filter out crypto from buy token list for now
+        this.buyTokens = this.buyTokens.filter(x => !x.isCrypto);
         
         if (this.buyToken)
             this.sellTokens.splice(this.sellTokens.indexOf(this.sellTokens.find(x => x.symbol == this.buyToken.symbol)), 1);
@@ -189,6 +193,7 @@ export class Dashboard {
             this.chartRefBuy.attached();
         
         this.buyToken = this.state.tokens.find(x => x.symbol == this.buyTokenSymbol);
+        this.fillPeggedTokenMetrics(this.buyToken);
         this.refreshTokenLists();
 
         if (!this.buyToken.userBalance)
@@ -219,6 +224,14 @@ export class Dashboard {
         this.tradeValueUsd = (this.sellTokenAmount * parseFloat(this.sellToken.metrics.lastPriceUsd)).toFixed(4);
     }
 
+    async fillPeggedTokenMetrics(token) {
+        let symbolToCheck = await this.getTokenSymbolToCheck(token.symbol);
+        if (symbolToCheck == this.baseTokenSymbol) {
+            let peggedTokenPrice = await getPeggedTokenPriceByChain(this.currentChainId);
+            token.metrics = { lastPriceUsd: peggedTokenPrice, lastPrice: peggedTokenPrice };
+        }
+    }
+
     async sellTokenSelected() {
         if (this.chartRefSell)
             this.chartRefSell.detached();
@@ -229,6 +242,7 @@ export class Dashboard {
             this.chartRefSell.attached();
         
         this.sellToken = this.state.tokens.find(x => x.symbol == this.sellTokenSymbol);
+        this.fillPeggedTokenMetrics(this.sellToken);
         this.refreshTokenLists();
 
         if (!this.sellToken.userBalance)
@@ -267,7 +281,13 @@ export class Dashboard {
 
             // first get price for the amount of sell tokens you want to sell in SWAP.HIVE
             if (this.sellTokenAmount > 0) {
-                baseTokenEarnedSell = await this.getEstimatedBaseTokenEarnedSell(this.sellTokenAmount, this.sellTokenSymbol);
+                let symbolToCheck = await this.getTokenSymbolToCheck(this.sellTokenSymbol);
+                if (symbolToCheck == this.baseTokenSymbol) {
+                    baseTokenEarnedSell = this.sellTokenAmount;
+                } else {
+                    baseTokenEarnedSell = await this.getEstimatedBaseTokenEarnedSell(this.sellTokenAmount, this.sellTokenSymbol);
+                }
+
                 this.baseTokenAmount = baseTokenEarnedSell;
             }
 
@@ -287,7 +307,11 @@ export class Dashboard {
 
             // first get price needed to buy this buy token amount
             if (this.buyTokenAmount > 0) {
-                baseTokenNeeded = await this.getEstimatedBaseTokenEarnedSell(this.buyTokenAmount, this.buyTokenSymbol);
+                if (this.buyTokenSymbol == this.baseTokenSymbol) {
+                    baseTokenNeeded = this.buyTokenAmount;
+                } else {
+                    baseTokenNeeded = await this.getEstimatedBaseTokenEarnedSell(this.buyTokenAmount, this.buyTokenSymbol);
+                }
                 this.baseTokenAmount = baseTokenNeeded;
             }
 
@@ -301,14 +325,30 @@ export class Dashboard {
         }
     }
 
+    async getTokenSymbolToCheck(tokenSymbol) {
+        let tokenSymbolToCheck = tokenSymbol;
+        let tokenToCheck = this.state.tokens.find(x => x.symbol == tokenSymbol);
+        if (tokenToCheck && tokenToCheck.isCrypto)
+            tokenSymbolToCheck = getSwapTokenByCrypto(tokenSymbol);
+
+        return tokenSymbolToCheck;
+    }
+
     async getEstimatedTokenAmountByBaseToken(baseTokenAmount, tokenSymbol) {
         // get next x buy orders until you reach the amount you want to sell
         let buyTokenAmount = 0;
         let tokensLeft = baseTokenAmount;
         let limit = 10;
         let offset = 0;
+
+        if (tokenSymbol == this.baseTokenSymbol)
+            return baseTokenAmount;
+
+        // change token symbol to check to SWAP.token in case it is crypto
+        let tokenSymbolToCheck = await this.getTokenSymbolToCheck(tokenSymbol);
+        
         while (tokensLeft > 0 && offset < 100) {
-            let orders = await loadSellBook(tokenSymbol, limit, offset);
+            let orders = await loadSellBook(tokenSymbolToCheck, limit, offset);
             if (orders) {
                 for (let i = 0; i < orders.length; i++) {
                     let order = orders[i];
@@ -343,8 +383,11 @@ export class Dashboard {
         let soldAmount = 0;
         let limit = 10;
         let offset = 0;
+        // change token symbol to check to SWAP.token in case it is crypto
+        let tokenSymbolToCheck = await this.getTokenSymbolToCheck(tokenSymbol);
+
         while (soldAmount < tokenAmount && offset < 100) {
-            let sellTokenBuyOrders = await loadBuyBook(tokenSymbol, limit, offset);
+            let sellTokenBuyOrders = await loadBuyBook(tokenSymbolToCheck, limit, offset);
             if (sellTokenBuyOrders) {
                 for (let i = 0; i < sellTokenBuyOrders.length; i++) {
                     let buyOrder = sellTokenBuyOrders[i];                    
@@ -391,8 +434,8 @@ export class Dashboard {
                         .withMessageKey("errors:dashboardSellTokenAmountRequired")
                     .then()
                     .satisfies((value: any, object: any) => parseFloat(value) > 0)
-                    .withMessageKey('errors:dashboardAmountMustBeGreaterThanZero')
-                    .satisfies((value: any, object: any) => parseFloat(value) <= this.sellToken.userBalance.balance)
+            .withMessageKey('errors:dashboardAmountMustBeGreaterThanZero')
+            .satisfies((value: any, object: any) => this.sellToken.isCrypto || parseFloat(value) <= this.sellToken.userBalance.balance)
                     .withMessageKey('errors:dashboardInsufficientBalance')
         .rules;
 

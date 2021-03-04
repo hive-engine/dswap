@@ -7,7 +7,8 @@ export function mapTokenResultToIToken(token) {
         name: token.name,
         precision: token.precision,        
         supply: token.supply,
-        symbol: token.symbol       
+        symbol: token.symbol,
+        isCrypto: false
     }
 
     return mapped;
