@@ -8,6 +8,9 @@ import { ToastService, ToastMessage } from "services/toast-service";
 import { ValidationControllerFactory } from "aurelia-validation";
 import { I18N } from "aurelia-i18n";
 import { BootstrapFormRenderer } from "resources/bootstrap-form-renderer";
+import { environment } from 'environment';
+import { Chain } from "../../common/enums";
+import { loadTokens } from "../../common/hive-engine-api";
 
 @autoinject()
 export class Receive {
@@ -20,6 +23,7 @@ export class Receive {
     private loading = false;
     private validationController;
     private renderer;
+    private dswapEnabled = false;
 
     constructor(
         private dialogService: DialogService,
@@ -61,14 +65,13 @@ export class Receive {
 
     async attached() {
         this.refreshSelectPicker();
+        this.dswapEnabled = environment.dswapEnabled;
     }
 
     async refreshTokenLists() {
-        if (!this.state.tokens) {
-            await this.ts.getDSwapTokens();
-        }
-
-        this.tokens = [...this.state.tokens];
+        const symbols = environment.swapEnabledTokens;
+        this.tokens = await loadTokens(symbols);
+        await this.ts.enrichTokensWithMetrics(this.tokens, symbols, Chain.Hive);
     }
 
     async generateAddress() {
