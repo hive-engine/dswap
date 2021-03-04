@@ -44,5 +44,6 @@
     "marketMakerUpgradeAccountInsufficientBalance": "Insufficient balance. Your balance: {{userBalance}} {{symbol}}. {{symbol}} balance required: {{requiredBalance}} {{symbol}}.",
     "marketMakerUpgradeAccountAlreadyPremium": "Your account is already upgraded to Premium.",
     "errorLogin": "An error occured while trying to login. Please try again.",
-    "DepositAddressMissing": "Missing deposit address. Please try again later."
+    "DepositAddressMissing": "Missing deposit address. Please try again later.",
+    "swapRequestQueueFailed":  "Swap request queueing has failed. Please try again later or contact us via Discord"
 }

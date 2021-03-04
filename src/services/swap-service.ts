@@ -45,7 +45,7 @@ export class SwapService {
         });
     }
 
-    async SwapRequest(swapRequestModel: ISwapRequestModel) {       
+    async SwapRequest(swapRequestModel: ISwapRequestModel) {
         let toastWait = new ToastMessage();
         toastWait.message = this.i18n.tr('swapRequestInProgress', {
             ns: 'notifications'
@@ -53,15 +53,25 @@ export class SwapService {
         toastWait.overrideOptions.timeout = 2000;
         this.toast.warning(toastWait);
 
-        let response = await swapRequest(swapRequestModel);        
+        let response = await swapRequest(swapRequestModel);
         console.log(response);
-        let toastSuccess = new ToastMessage();
+        if (!response.ok) {
+            let toastFailure = new ToastMessage();
+            toastFailure.overrideOptions.timeout = 2000;
+            toastFailure.message = this.i18n.tr('swapRequestQueueFailed', {
+                ns: 'errors'
+            });
 
-        toastSuccess.message = this.i18n.tr('swapRequestQueued', {
-            ns: 'notifications'
-        });
+            this.toast.error(toastFailure);
+        } else {            
+            let toastSuccess = new ToastMessage();
 
-        this.toast.success(toastSuccess);
+            toastSuccess.message = this.i18n.tr('swapRequestQueued', {
+                ns: 'notifications'
+            });
+
+            this.toast.success(toastSuccess);
+        }
 
         return response;
     }
