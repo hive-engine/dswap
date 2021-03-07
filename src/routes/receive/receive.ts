@@ -11,6 +11,7 @@ import { BootstrapFormRenderer } from "resources/bootstrap-form-renderer";
 import { environment } from 'environment';
 import { Chain } from "../../common/enums";
 import { loadTokens } from "../../common/hive-engine-api";
+import { isPeggedToken } from "../../common/functions";
 
 @autoinject()
 export class Receive {
@@ -70,7 +71,8 @@ export class Receive {
 
     async refreshTokenLists() {
         const symbols = environment.swapEnabledTokens;
-        this.tokens = await loadTokens(symbols);
+        let tokens = await loadTokens(symbols);
+        this.tokens = tokens.filter(x => isPeggedToken(x));
         await this.ts.enrichTokensWithMetrics(this.tokens, symbols, Chain.Hive);
     }
 

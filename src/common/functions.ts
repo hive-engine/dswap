@@ -378,3 +378,7 @@ export function getRandomID() {
         return v.toString(16);
     });
 }
+
+export function isPeggedToken(token: IToken) {
+    return token.symbol.includes("SWAP") || token.name.includes("Pegged");
+}
