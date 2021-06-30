@@ -1,4 +1,4 @@
-# Tribaldex 
+# DSwap 
 
 ![CI](https://github.com/hive-engine/dswap/workflows/CI/badge.svg)
 ![Deploy](https://github.com/hive-engine/dswap/workflows/Deploy/badge.svg)
