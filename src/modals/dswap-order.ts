@@ -159,7 +159,10 @@ export class DswapOrderModal {
                     txMemo += " " + this.customMemo;
 
                 this.swapRequestModel.ChainTransactionId = txMemo;
-                this.swapRequestModel.TokenInputMemo = this.customMemoId;
+
+                // update token input memo with unique id generated (if it is applicable)
+                if (this.customMemo)
+                    this.swapRequestModel.TokenInputMemo = this.customMemoId;
 
                 let swapResponse = await this.ss.SwapRequest(this.swapRequestModel);
 

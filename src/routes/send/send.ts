@@ -8,6 +8,9 @@ import { ValidationControllerFactory, ValidationRules, ControllerValidateResult 
 import { I18N } from 'aurelia-i18n';
 import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { getChainByState } from 'common/functions';
+import { environment } from 'environment';
+import { Chain } from '../../common/enums';
+import { loadTokens } from '../../common/hive-engine-api';
 
 @autoinject()
 export class Send {
@@ -21,6 +24,7 @@ export class Send {
     private validationController;
     private renderer;
     private currentChainId;
+    private dswapEnabled = false;
 
     constructor(
         private dialogService: DialogService,
@@ -59,6 +63,7 @@ export class Send {
 
     async attached() {
         this.refreshSelectPicker();
+        this.dswapEnabled = environment.dswapEnabled;
     }
 
     async setFullAmount() {
@@ -66,11 +71,9 @@ export class Send {
     }
 
     async refreshTokenLists() {
-        if (!this.state.tokens) {
-            await this.ts.getDSwapTokens();
-        }
-
-        this.tokens = [...this.state.tokens];        
+        const symbols = environment.swapEnabledTokens;
+        this.tokens = await loadTokens(symbols);
+        await this.ts.enrichTokensWithMetrics(this.tokens, symbols, Chain.Hive);
     }
     
     async tokenSelected() {
