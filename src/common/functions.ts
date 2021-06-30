@@ -326,7 +326,7 @@ export async function getBlockExplorerByChain(chain: Chain) {
     return symbol;
 }
 
-export async function getSwapStatusById(swapStatusId: number) {
+export function getSwapStatusById(swapStatusId: number) {
     let swapStatusName = "";
 
     switch (swapStatusId) {
@@ -381,4 +381,8 @@ export function getRandomID() {
 
 export function isPeggedToken(token: IToken) {
     return token.symbol.includes("SWAP") || token.name.includes("Pegged");
+}
+
+export function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
 }

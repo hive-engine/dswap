@@ -325,3 +325,12 @@ interface ISwapRequestTransactionViewModel {
     SwapStatusName: string;
     SwapStepName: string;
 }
+
+interface ISwapCalcValuesModel {
+    TokenInput?: string;
+    TokenInputAmount?: number;
+    TokenOutput?: string;
+    TokenOutputAmount?: number;
+    Chain?: number;
+    BaseTokenAmount?: number;
+}

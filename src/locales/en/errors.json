@@ -45,5 +45,8 @@
     "marketMakerUpgradeAccountAlreadyPremium": "Your account is already upgraded to Premium.",
     "errorLogin": "An error occured while trying to login. Please try again.",
     "DepositAddressMissing": "Missing deposit address. Please try again later.",
-    "swapRequestQueueFailed":  "Swap request queueing has failed. Please try again later or contact us via Discord"
+    "swapRequestQueueFailed": "Swap request queueing has failed. Please try again later or contact us via Discord",
+    "calculateSwapOutputFailed": "Error occured while trying to retrieve corresponding output token amount for this swap.",
+    "calculateSwapInputFailed": "Error occured while trying to retrieve corresponding input token amount for this swap.",
+    "sendTransactionFailed":  "Error occured while sending transaction. Error: {{error}}"
 }

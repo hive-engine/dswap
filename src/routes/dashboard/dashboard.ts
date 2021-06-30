@@ -8,7 +8,7 @@ import { Store, dispatchify } from 'aurelia-store';
 import { ChartComponent } from 'components/chart/chart';
 import { loadTokenMarketHistory, loadBuyBook, loadSellBook } from 'common/hive-engine-api';
 import moment from 'moment';
-import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getPeggedTokenPriceByChain } from 'common/functions';
+import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getPeggedTokenPriceByChain, isNumeric } from 'common/functions';
 import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
 import { ValidationControllerFactory, ControllerValidateResult, ValidationRules } from 'aurelia-validation';
@@ -17,6 +17,7 @@ import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
 import { environment } from 'environment';
 import { Chain } from 'common/enums';
+import { SwapService } from '../../services/swap-service';
 
 @autoinject()
 @customElement('dashboard')
@@ -27,8 +28,8 @@ export class Dashboard {
     @bindable() sellTokens: IToken[];
     public buyTokenSymbol;
     public sellTokenSymbol;
-    public sellTokenAmount;
-    public buyTokenAmount;
+    @bindable() sellTokenAmount;
+    @bindable() buyTokenAmount;
     public buyToken : IToken;
     public sellToken : IToken;
     private unitEstimateRate;
@@ -57,8 +58,8 @@ export class Dashboard {
                 private toast: ToastService, 
                 private controllerFactory: ValidationControllerFactory, 
                 private i18n: I18N,
-                private taskQueue: TaskQueue) {
-
+                private taskQueue: TaskQueue,
+                private ss: SwapService) {
         this.validationController = controllerFactory.createForCurrentScope();
 
         this.renderer = new BootstrapFormRenderer();
@@ -275,53 +276,49 @@ export class Dashboard {
         return { ohlcData: candleStickData };
     }
 
-    public async sellTokenAmountInViewChanged() {
+    public async sellTokenAmountInViewChanged(event) {
         if (this.sellToken) {
-            let baseTokenEarnedSell = 0;
+            if (isNumeric(this.sellTokenAmount)) {
+                let swapCalcRequestModel: ISwapCalcValuesModel = {
+                    Chain: Chain.Hive,
+                    TokenInput: this.sellTokenSymbol,
+                    TokenInputAmount: this.sellTokenAmount,
+                    TokenOutput: this.buyTokenSymbol
+                };
 
-            // first get price for the amount of sell tokens you want to sell in SWAP.HIVE
-            if (this.sellTokenAmount > 0) {
-                let symbolToCheck = await this.getTokenSymbolToCheck(this.sellTokenSymbol);
-                if (symbolToCheck == this.baseTokenSymbol) {
-                    baseTokenEarnedSell = this.sellTokenAmount;
-                } else {
-                    baseTokenEarnedSell = await this.getEstimatedBaseTokenEarnedSell(this.sellTokenAmount, this.sellTokenSymbol);
+                let swapCalcResponse = await this.ss.CalculateSwapOutput(swapCalcRequestModel);
+                if (swapCalcResponse) {
+                    this.baseTokenAmount = swapCalcResponse.BaseTokenAmount;
+                    this.buyTokenAmount = swapCalcResponse.TokenOutputAmount.toFixed(this.buyToken.precision);
                 }
 
-                this.baseTokenAmount = baseTokenEarnedSell;
+                await this.updateTradeValueUsd();
+            } else {
+                this.buyTokenAmount = "Not a number";
             }
-
-            // second get amount of buy tokens you would get for the price earned from selling your token
-            if (baseTokenEarnedSell > 0) {
-                let amount = await this.getEstimatedTokenAmountByBaseToken(baseTokenEarnedSell, this.buyTokenSymbol);                
-                this.buyTokenAmount = amount.toFixed(this.buyToken.precision);
-            }
-
-            await this.updateTradeValueUsd();
         }
     }
 
-    public async buyTokenAmountInViewChanged() {
+    public async buyTokenAmountInViewChanged(event) {
         if (this.buyToken) {
-            let baseTokenNeeded = 0;
+            if (isNumeric(this.buyTokenAmount)) {
+                let swapCalcRequestModel: ISwapCalcValuesModel = {
+                    Chain: Chain.Hive,
+                    TokenInput: this.sellTokenSymbol,
+                    TokenOutput: this.buyTokenSymbol,
+                    TokenOutputAmount: this.buyTokenAmount
+                };
 
-            // first get price needed to buy this buy token amount
-            if (this.buyTokenAmount > 0) {
-                if (this.buyTokenSymbol == this.baseTokenSymbol) {
-                    baseTokenNeeded = this.buyTokenAmount;
-                } else {
-                    baseTokenNeeded = await this.getEstimatedBaseTokenEarnedSell(this.buyTokenAmount, this.buyTokenSymbol);
+                let swapCalcResponse = await this.ss.CalculateSwapInput(swapCalcRequestModel);
+                if (swapCalcResponse) {
+                    this.baseTokenAmount = swapCalcResponse.BaseTokenAmount;
+                    this.sellTokenAmount = swapCalcResponse.TokenInputAmount.toFixed(this.sellToken.precision);
                 }
-                this.baseTokenAmount = baseTokenNeeded;
-            }
 
-            // second get amount of buy tokens you would get for the price earned from selling your token
-            if (baseTokenNeeded > 0) {
-                let amount = await this.getEstimatedTokenAmountByBaseToken(baseTokenNeeded, this.sellTokenSymbol);
-                this.sellTokenAmount = amount.toFixed(this.sellToken.precision);
+                await this.updateTradeValueUsd();
+            } else {
+                this.sellTokenAmount = "Not a number";
             }
-
-            await this.updateTradeValueUsd();
         }
     }
 
@@ -332,87 +329,6 @@ export class Dashboard {
             tokenSymbolToCheck = getSwapTokenByCrypto(tokenSymbol);
 
         return tokenSymbolToCheck;
-    }
-
-    async getEstimatedTokenAmountByBaseToken(baseTokenAmount, tokenSymbol) {
-        // get next x buy orders until you reach the amount you want to sell
-        let buyTokenAmount = 0;
-        let tokensLeft = baseTokenAmount;
-        let limit = 10;
-        let offset = 0;
-
-        if (tokenSymbol == this.baseTokenSymbol)
-            return baseTokenAmount;
-
-        // change token symbol to check to SWAP.token in case it is crypto
-        let tokenSymbolToCheck = await this.getTokenSymbolToCheck(tokenSymbol);
-        
-        while (tokensLeft > 0 && offset < 100) {
-            let orders = await loadSellBook(tokenSymbolToCheck, limit, offset);
-            if (orders) {
-                for (let i = 0; i < orders.length; i++) {
-                    let order = orders[i];
-                    let orderQuantity = parseFloat(order.quantity);
-                    let orderPrice = parseFloat(order.price);
-
-                    let orderCost = orderQuantity * orderPrice;
-
-                    if (tokensLeft <= orderCost) {
-                        buyTokenAmount += tokensLeft / orderPrice;
-                        tokensLeft = 0;
-                    } else {
-                        buyTokenAmount += orderQuantity;
-                        tokensLeft -= orderCost;
-                    }
-
-                    if (tokensLeft == 0) {
-                        break;
-                    }
-                }
-            }
-
-            offset += limit;
-        }
-
-        return buyTokenAmount;
-    }
-
-    async getEstimatedBaseTokenEarnedSell(tokenAmount, tokenSymbol) {
-        // get next x buy orders until you reach the amount you want to sell
-        let earnedPriceTotal = 0;
-        let soldAmount = 0;
-        let limit = 10;
-        let offset = 0;
-        // change token symbol to check to SWAP.token in case it is crypto
-        let tokenSymbolToCheck = await this.getTokenSymbolToCheck(tokenSymbol);
-
-        while (soldAmount < tokenAmount && offset < 100) {
-            let sellTokenBuyOrders = await loadBuyBook(tokenSymbolToCheck, limit, offset);
-            if (sellTokenBuyOrders) {
-                for (let i = 0; i < sellTokenBuyOrders.length; i++) {
-                    let buyOrder = sellTokenBuyOrders[i];                    
-                    let buyOrderQuantity = parseFloat(buyOrder.quantity);
-                    let buyOrderPrice = parseFloat(buyOrder.price);
-                    let diff = tokenAmount - soldAmount;
-
-                    if (buyOrderQuantity <= diff) {
-                        soldAmount += buyOrderQuantity;
-                        earnedPriceTotal += buyOrderQuantity * buyOrderPrice;
-                    } else {                        
-                        soldAmount += diff;
-                        earnedPriceTotal += diff * buyOrderPrice;
-                    }
-
-                    if (soldAmount == tokenAmount) {
-                        break;
-                    }
-                }
-            }
-
-            offset += limit;            
-        }
-
-        return earnedPriceTotal;
     }
 
     private createValidationRules() {

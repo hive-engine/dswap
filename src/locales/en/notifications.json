@@ -22,5 +22,6 @@
     "tokensSent": "Tokens are sent successfully",
     "swapRequestQueued": "Your swap request is successfully queued. Check the Trades tab to view your swap request statuses",
     "swapRequestWait": "Please wait while we are sending your swap request.",
-    "swapRequestInProgress": "Queueing your swap request..."
+    "swapRequestInProgress": "Queueing your swap request...",
+    "sendTransactionSuccess":  "Transaction verified. Successfully sent {{tokenAmount}} {{tokenSymbol}} to {{tokenAddress}}"
 }

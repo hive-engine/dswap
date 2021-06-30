@@ -73,3 +73,37 @@ export async function getSwapRequestTransactions(id: string): Promise<any> {
 
     return response.json() as Promise<ISwapRequestTransactionViewModel[]>;
 }
+
+export async function calculateSwapOutput(requestModel: ISwapCalcValuesModel): Promise<ISwapCalcValuesModel>{
+    let baseUrl = environment.DSWAP_API_URL;
+    let urlToCall = baseUrl + "SwapRequest/CalculateSwapOutput";
+
+    let request = await http.fetch(urlToCall, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestModel)
+    });
+
+    const response = await request.json();
+    return response as Promise<ISwapCalcValuesModel>;
+}
+
+export async function calculateSwapInput(requestModel: ISwapCalcValuesModel): Promise<ISwapCalcValuesModel> {
+    let baseUrl = environment.DSWAP_API_URL;
+    let urlToCall = baseUrl + "SwapRequest/CalculateSwapInput";
+
+    let request = await http.fetch(urlToCall, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestModel)
+    });
+
+    const response = await request.json();
+    return response as Promise<ISwapCalcValuesModel>;
+}
