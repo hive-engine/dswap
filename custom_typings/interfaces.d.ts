@@ -287,6 +287,22 @@ interface ISwapRequestModel {
     TokenInputMemo: string;
 }
 
+interface ISwapRequestResponseModel {
+    Id: string;
+    Account: string;
+    TokenInput: string;
+    TokenInputAmount: number;
+    TokenOutput: string;
+    TokenOutputAmount: number;
+    Chain: number;
+    ChainTransactionId: string;
+    SwapSourceId: string;
+    MaxSlippageInputToken: number;
+    MaxSlippageOutputToken: number;
+    BaseTokenAmount: number;
+    TokenInputMemo: string;
+}
+
 interface ISwapRequestViewModel {
     Id: string;
     Account: string;
@@ -324,4 +340,13 @@ interface ISwapRequestTransactionViewModel {
     SwapStatusId: number;
     SwapStatusName: string;
     SwapStepName: string;
+}
+
+interface ISwapCalcValuesModel {
+    TokenInput?: string;
+    TokenInputAmount?: number;
+    TokenOutput?: string;
+    TokenOutputAmount?: number;
+    Chain?: number;
+    BaseTokenAmount?: number;
 }

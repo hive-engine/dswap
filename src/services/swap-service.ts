@@ -11,7 +11,7 @@ import { HiveEngineService } from './hive-engine-service';
 import { getPrices, usdFormat } from 'common/functions';
 import { Chain } from '../common/enums';
 import { loadUserBalancesSE, loadTokensSE, loadTokenMetricsSE } from '../common/steem-engine-api';
-import { swapRequest } from '../common/dswap-api';
+import { calculateSwapInput, calculateSwapOutput, swapRequest } from '../common/dswap-api';
 
 const http = new HttpClient();
 
@@ -45,7 +45,7 @@ export class SwapService {
         });
     }
 
-    async SwapRequest(swapRequestModel: ISwapRequestModel) {
+    async SwapRequest(model: ISwapRequestModel) {
         let toastWait = new ToastMessage();
         toastWait.message = this.i18n.tr('swapRequestInProgress', {
             ns: 'notifications'
@@ -53,9 +53,9 @@ export class SwapService {
         toastWait.overrideOptions.timeout = 2000;
         this.toast.warning(toastWait);
 
-        let response = await swapRequest(swapRequestModel);
+        let response = await swapRequest(model);
         console.log(response);
-        if (!response.ok) {
+        if (!response || !response.Id) {
             let toastFailure = new ToastMessage();
             toastFailure.overrideOptions.timeout = 2000;
             toastFailure.message = this.i18n.tr('swapRequestQueueFailed', {
@@ -71,6 +71,36 @@ export class SwapService {
             });
 
             this.toast.success(toastSuccess);
+        }
+
+        return response;
+    }
+
+    async CalculateSwapOutput(model: ISwapCalcValuesModel) {
+        let response = await calculateSwapOutput(model);
+        if (!response) {
+            let toastFailure = new ToastMessage();
+            toastFailure.overrideOptions.timeout = 2000;
+            toastFailure.message = this.i18n.tr('calculateSwapOutputFailed', {
+                ns: 'errors'
+            });
+
+            this.toast.error(toastFailure);
+        } 
+
+        return response;
+    }
+
+    async CalculateSwapInput(model: ISwapCalcValuesModel) {
+        let response = await calculateSwapInput(model);
+        if (!response) {
+            let toastFailure = new ToastMessage();
+            toastFailure.overrideOptions.timeout = 2000;
+            toastFailure.message = this.i18n.tr('calculateSwapInputFailed', {
+                ns: 'errors'
+            });
+
+            this.toast.error(toastFailure);
         }
 
         return response;

@@ -1,4 +1,5 @@
 <template bindable="selected">
+    <loader loading.bind="loading" mode="tiny"></loader>
     <div class="dashboard-wrapper " show.bind="!dswapEnabled">
         <div class="market-maker-landing-wrapper">
         <div class="market-maker-landing-wrapper-content">
@@ -119,7 +120,7 @@
                                        type="text"
                                        readonly.bind="!sellToken || !buyToken"
                                        value.bind="sellTokenAmount"
-                                       change.delegate="sellTokenAmountInViewChanged()"
+                                       keydown.trigger="sellTokenAmountInViewChanged($event) & debounce:300"
                                        placeholder="0.000" />
                                 <div class="token-sym">
                                     <div class="input-group-text token-sym-text h-100 input-group-text-dark">
@@ -250,7 +251,7 @@
                                        type="text"
                                        readonly.bind="!sellToken || !buyToken"
                                        value.bind="buyTokenAmount"
-                                       change.delegate="buyTokenAmountInViewChanged()"
+                                       keydown.trigger="buyTokenAmountInViewChanged($event) & debounce:300"
                                        placeholder="0.000" />
                                 <div class="token-sym">
                                     <div class="input-group-text token-sym-text h-100 input-group-text-dark">
@@ -529,7 +530,7 @@
                                     class="form-control transparent-bgn action-input-box text-right"
                                     type="text"
                                     value.bind="buyTokenAmount"
-                                    change.delegate="buyTokenAmountInViewChanged()"
+                                    keydown.trigger="buyTokenAmountInViewChanged($event) & debounce:300"
                                     placeholder="0.000"
                                 />
                                 <div class="token-sym">
@@ -572,7 +573,7 @@
                                     class="form-control transparent-bgn action-input-box text-right"
                                     type="text"
                                     value.bind="sellTokenAmount"
-                                    change.delegate="sellTokenAmountInViewChanged()"
+                                    keydown.trigger="sellTokenAmountInViewChanged($event) & debounce:300"
                                     placeholder="0.000"
                                 />
                                 <div class="token-sym">

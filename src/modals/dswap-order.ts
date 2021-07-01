@@ -57,7 +57,7 @@ export class DswapOrderModal {
         this.createValidationRules();
     }
 
-    async activate(swapRequestModel: ISwapRequestModel) {
+    async activate(swapRequestModel: ISwapRequestModel) {        
         this.swapRequestModel = swapRequestModel;
         this.baseTokenSymbol = await getPeggedTokenSymbolByChain(swapRequestModel.Chain);
 
@@ -68,6 +68,7 @@ export class DswapOrderModal {
                 this.depositAddress = environment.DSWAP_ACCOUNT_HE;
             } else {
                 this.depositAddress = await this.hes.getDepositAddress(sellTokenSwap, environment.DSWAP_ACCOUNT_HE);
+                
                 if (this.depositAddress) {
                     this.swapRequestModel.TokenInputMemo = this.depositAddress.address;
 
@@ -75,6 +76,14 @@ export class DswapOrderModal {
                         this.customMemoId = getRandomID();
                         this.customMemo = this.depositAddress.memo + " " + this.customMemoId;
                     }
+                } else {
+                    const toast = new ToastMessage();
+
+                    toast.message = this.i18n.tr("converterApiTimeout", {
+                        ns: 'errors'
+                    });
+
+                    this.toast.error(toast);
                 }
             }
 
@@ -83,7 +92,6 @@ export class DswapOrderModal {
 
             this.depositAmount = amtInclFee;
         }
-        
     }
 
     copyMessage(val: string, memo: boolean) {
@@ -166,7 +174,7 @@ export class DswapOrderModal {
 
                 let swapResponse = await this.ss.SwapRequest(this.swapRequestModel);
 
-                if (swapResponse && swapResponse.ok) {
+                if (swapResponse && swapResponse.Id) {
                     this.controller.ok();
                 }
             } else {
@@ -176,7 +184,7 @@ export class DswapOrderModal {
                         this.swapRequestModel.ChainTransactionId = sendTx.transactionId;
                         let swapResponse = await this.ss.SwapRequest(this.swapRequestModel);
 
-                        if (swapResponse && swapResponse.ok) {
+                        if (swapResponse && swapResponse.Id) {
                             this.controller.ok();
                         }
                     }

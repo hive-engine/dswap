@@ -29,6 +29,7 @@ export class DswapSwapdetailsModal {
     private baseTokenSymbol;
     private blockExplorerUrl;
     private swapTransactions: ISwapRequestTransactionViewModel[];
+    private swapStatusName;
 
     constructor(private controller: DialogController, private toast: ToastService, private taskQueue: TaskQueue,
         private controllerFactory: ValidationControllerFactory, private i18n: I18N, private hes: HiveEngineService, private ss: SwapService) {
@@ -47,8 +48,8 @@ export class DswapSwapdetailsModal {
 
     async activate(swapRequestModel: ISwapRequestViewModel) {
         this.loading = true;
-        console.log(swapRequestModel);
         this.swapRequestModel = swapRequestModel;
+        this.swapStatusName = getSwapStatusById(swapRequestModel.SwapStatusId);
         this.baseTokenSymbol = await getPeggedTokenSymbolByChain(swapRequestModel.Chain);
         this.blockExplorerUrl = await getBlockExplorerByChain(swapRequestModel.Chain);
         this.swapTransactions = await getSwapRequestTransactions(swapRequestModel.Id)
@@ -60,7 +61,7 @@ export class DswapSwapdetailsModal {
             t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
             t.SwapStepName = await getSwapStepById(t.SwapStepId);
         }
-        //this.token = this.state.account.balances.find(x => x.symbol === symbol);      
+        
         this.loading = false;
     }
 
