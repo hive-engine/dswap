@@ -17,7 +17,7 @@ import { BootstrapFormRenderer } from 'resources/bootstrap-form-renderer';
 import { I18N } from 'aurelia-i18n';
 import { environment } from 'environment';
 import { Chain } from 'common/enums';
-import { SwapService } from '../../services/swap-service';
+import { SwapService } from 'services/swap-service';
 
 @autoinject()
 @customElement('dashboard')
@@ -36,6 +36,7 @@ export class Dashboard {
     private tradeValueUsd;
     private loggedIn;
     @bindable() tradePercentage;
+    @bindable loading = false;
     
     private chartRefBuy: ChartComponent;
     private chartRefSell: ChartComponent;
@@ -150,8 +151,10 @@ export class Dashboard {
                 TokenInputMemo: ""
             };            
 
+            this.loading = true;
             this.dialogService.open({ viewModel: DswapOrderModal, model: swapRequestModel }).whenClosed(response => {
                 console.log(response);
+                this.loading = false;
             });
         }
     }
@@ -277,6 +280,7 @@ export class Dashboard {
     }
 
     public async sellTokenAmountInViewChanged(event) {
+        this.loading = true;
         if (this.sellToken) {
             if (isNumeric(this.sellTokenAmount)) {
                 let swapCalcRequestModel: ISwapCalcValuesModel = {
@@ -297,9 +301,11 @@ export class Dashboard {
                 this.buyTokenAmount = "Not a number";
             }
         }
+        this.loading = false;
     }
 
     public async buyTokenAmountInViewChanged(event) {
+        this.loading = true;
         if (this.buyToken) {
             if (isNumeric(this.buyTokenAmount)) {
                 let swapCalcRequestModel: ISwapCalcValuesModel = {
@@ -320,6 +326,7 @@ export class Dashboard {
                 this.sellTokenAmount = "Not a number";
             }
         }
+        this.loading = false;
     }
 
     async getTokenSymbolToCheck(tokenSymbol) {
