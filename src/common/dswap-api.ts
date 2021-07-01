@@ -4,11 +4,11 @@ import { SwapStatus } from "./enums";
 
 const http = new HttpClient();
 
-export async function swapRequest(swapRequest: ISwapRequestModel) {
+export async function swapRequest(swapRequest: ISwapRequestModel): Promise<ISwapRequestResponseModel> {
     let baseUrl = environment.DSWAP_API_URL;
     let urlToCall = baseUrl + "SwapRequest";
 
-    return http.fetch(urlToCall, {
+    const response = await http.fetch(urlToCall, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -16,6 +16,8 @@ export async function swapRequest(swapRequest: ISwapRequestModel) {
         },
         body: JSON.stringify(swapRequest)
     });
+
+    return response.json() as Promise<ISwapRequestResponseModel>;
 }
 
 export async function getSwapRequests(account: string, limit = 20, offset = 0, status?: SwapStatus): Promise<ISwapRequestViewModel[]> {

@@ -68,7 +68,7 @@ export class DswapOrderModal {
                 this.depositAddress = environment.DSWAP_ACCOUNT_HE;
             } else {
                 this.depositAddress = await this.hes.getDepositAddress(sellTokenSwap, environment.DSWAP_ACCOUNT_HE);
-                console.log(this.depositAddress);
+                
                 if (this.depositAddress) {
                     this.swapRequestModel.TokenInputMemo = this.depositAddress.address;
 
@@ -174,7 +174,7 @@ export class DswapOrderModal {
 
                 let swapResponse = await this.ss.SwapRequest(this.swapRequestModel);
 
-                if (swapResponse && swapResponse.ok) {
+                if (swapResponse && swapResponse.Id) {
                     this.controller.ok();
                 }
             } else {
@@ -184,7 +184,7 @@ export class DswapOrderModal {
                         this.swapRequestModel.ChainTransactionId = sendTx.transactionId;
                         let swapResponse = await this.ss.SwapRequest(this.swapRequestModel);
 
-                        if (swapResponse && swapResponse.ok) {
+                        if (swapResponse && swapResponse.Id) {
                             this.controller.ok();
                         }
                     }

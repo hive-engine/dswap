@@ -55,7 +55,7 @@ export class SwapService {
 
         let response = await swapRequest(model);
         console.log(response);
-        if (!response.ok) {
+        if (!response || !response.Id) {
             let toastFailure = new ToastMessage();
             toastFailure.overrideOptions.timeout = 2000;
             toastFailure.message = this.i18n.tr('swapRequestQueueFailed', {
