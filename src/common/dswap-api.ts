@@ -4,11 +4,11 @@ import { SwapStatus } from "./enums";
 
 const http = new HttpClient();
 
-export async function swapRequest(swapRequest: ISwapRequestModel) {
+export async function swapRequest(swapRequest: ISwapRequestModel): Promise<ISwapRequestResponseModel> {
     let baseUrl = environment.DSWAP_API_URL;
     let urlToCall = baseUrl + "SwapRequest";
 
-    return http.fetch(urlToCall, {
+    const response = await http.fetch(urlToCall, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -16,6 +16,8 @@ export async function swapRequest(swapRequest: ISwapRequestModel) {
         },
         body: JSON.stringify(swapRequest)
     });
+
+    return response.json() as Promise<ISwapRequestResponseModel>;
 }
 
 export async function getSwapRequests(account: string, limit = 20, offset = 0, status?: SwapStatus): Promise<ISwapRequestViewModel[]> {
@@ -72,4 +74,38 @@ export async function getSwapRequestTransactions(id: string): Promise<any> {
     });
 
     return response.json() as Promise<ISwapRequestTransactionViewModel[]>;
+}
+
+export async function calculateSwapOutput(requestModel: ISwapCalcValuesModel): Promise<ISwapCalcValuesModel>{
+    let baseUrl = environment.DSWAP_API_URL;
+    let urlToCall = baseUrl + "SwapRequest/CalculateSwapOutput";
+
+    let request = await http.fetch(urlToCall, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestModel)
+    });
+
+    const response = await request.json();
+    return response as Promise<ISwapCalcValuesModel>;
+}
+
+export async function calculateSwapInput(requestModel: ISwapCalcValuesModel): Promise<ISwapCalcValuesModel> {
+    let baseUrl = environment.DSWAP_API_URL;
+    let urlToCall = baseUrl + "SwapRequest/CalculateSwapInput";
+
+    let request = await http.fetch(urlToCall, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestModel)
+    });
+
+    const response = await request.json();
+    return response as Promise<ISwapCalcValuesModel>;
 }

@@ -12,6 +12,7 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     EXCHANGE_URL_HE: 'https://hive-engine.com/',
     EXCHANGE_URL_SE: 'https://steem-engine.net/',
     DSWAP_API_URL: 'https://dswap-api.dswap.trade/api/',
+    /*DSWAP_API_URL: 'https://dswap.azurewebsites.net/api/',*/
     BLOCK_EXPLORER_HE: 'https://he.dtools.dev/',
     BLOCK_EXPLORER_SE: 'https://se.dtools.dev/',
     DSWAP_ACCOUNT_HE: 'dswap',

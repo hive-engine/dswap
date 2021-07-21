@@ -126,7 +126,7 @@ export class TokenService {
 
     async getUserBalanceOfToken(symbol, chain: Chain) {
         let account = environment.isDebug && environment.debugAccount ? environment.debugAccount : this.user.name;
-        let userBalances = await this.getUserBalances(account, symbol, chain);
+        let userBalances = await this.getUserBalances(account, symbol, chain);        
         let balance = userBalances.find(x => x.symbol == symbol);
         if (balance) {
             return balance;

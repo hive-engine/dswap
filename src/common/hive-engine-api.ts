@@ -124,7 +124,7 @@ export async function loadUserBalances(account: string, symbols = [], limit = 10
     queryConfig.account = account;
 
     const results: any[] = await ssc.find('tokens', 'balances', queryConfig, limit, offset, '', false);    
-    let balances: IBalance[] = [];
+    let balances: IBalance[] = [];    
     for (const res of results) {
         balances.push(mapBalanceResultToIBalance(res));
     }

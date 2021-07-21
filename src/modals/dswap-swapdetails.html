@@ -40,6 +40,14 @@
                     <div class="col-sm-6">Max slippage ${baseTokenSymbol} -> ${swapRequestModel.TokenOutput}:</div>
                     <div class="col-sm-6">${swapRequestModel.MaxSlippageOutputToken} %</div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-6">Status:</div>
+                    <div class="col-sm-6">${swapStatusName}</div>
+                </div>
+                <div class="row" show.bind="swapRequestModel.Message">
+                    <div class="col-sm-6">Message:</div>
+                    <div class="col-sm-6">${swapRequestModel.Message}</div>
+                </div>
             </div>
             <div class="form-group swapDetailsAccordion" id="accordion">
                 <h4>

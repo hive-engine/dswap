@@ -11,6 +11,8 @@ import { getChainByState } from 'common/functions';
 import { environment } from 'environment';
 import { Chain } from '../../common/enums';
 import { loadTokens } from '../../common/hive-engine-api';
+import { HiveEngineService } from '../../services/hive-engine-service';
+import { send } from 'process';
 
 @autoinject()
 export class Send {
@@ -21,6 +23,7 @@ export class Send {
     public token;
     private tokenAddress;
     private tokenAmount;
+    private memo;
     private validationController;
     private renderer;
     private currentChainId;
@@ -31,7 +34,8 @@ export class Send {
         private ts: TokenService,
         private store: Store<IState>,
         private toast: ToastService, 
-        private controllerFactory: ValidationControllerFactory, 
+        private controllerFactory: ValidationControllerFactory,
+        private hes: HiveEngineService,
         private i18n: I18N
     ) {
         this.validationController = controllerFactory.createForCurrentScope();
@@ -77,10 +81,10 @@ export class Send {
     }
     
     async tokenSelected() {
-        this.token = this.tokens.find(x => x.symbol == this.tokenSymbol);
+        this.token = this.tokens.find(x => x.symbol == this.tokenSymbol);        
         if (!this.token.userBalance)
         {
-            this.token.userBalance = await this.ts.getUserBalanceOfToken(this.token, this.currentChainId);
+            this.token.userBalance = await this.ts.getUserBalanceOfToken(this.tokenSymbol, this.currentChainId);
         }
     }
 
@@ -104,7 +108,35 @@ export class Send {
         }
 
         if (validationResult.valid) {
-            console.log('valid');
+            let sendResult = await this.hes.sendToken(this.tokenSymbol, this.tokenAddress, this.tokenAmount, this.memo);
+            
+            if (sendResult) {
+                const toast = new ToastMessage();
+
+                if (sendResult.error) {
+                    toast.message = this.i18n.tr("sendTransactionFailed", {
+                        error: sendResult.error,
+                        ns: 'errors'
+                    });
+
+                    this.toast.error(toast);
+                } else {
+                    toast.message = this.i18n.tr("sendTransactionSuccess", {
+                        tokenSymbol: this.tokenSymbol,
+                        tokenAmount: this.tokenAmount,
+                        tokenAddress: this.tokenAddress,
+                        ns: 'notifications'
+                    });
+
+                    this.toast.success(toast);
+
+                    // update user balance & clear values
+                    this.token.userBalance = await this.ts.getUserBalanceOfToken(this.tokenSymbol, this.currentChainId);
+                    this.tokenAmount = "";
+                    this.tokenAddress = "";
+                    this.memo = "";
+                }
+            }
         }
     }
 
