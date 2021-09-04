@@ -356,9 +356,9 @@
                 </div>
                 <div class="row">
                     <div class="col-md-5">
-                        <button class="start-trade" click.delegate="startTrade()" show.bind="loggedIn">
+                        <!--<button class="start-trade" click.delegate="startTrade()" show.bind="loggedIn">
                             SWAP
-                        </button>
+                        </button>-->
                         <div class="warning" show.bind="!loggedIn">
                             <font-awesome-icon class="warning-icon"
                                                icon.bind="['fas', 'engine-warning']"></font-awesome-icon>
@@ -366,6 +366,13 @@
                             <p class="warning-info">
                                 Please <a href="">Signup</a> or
                                 <a href="">Login</a> to continue
+                            </p>
+                        </div>
+                        <div class="warning">
+                            <font-awesome-icon class="warning-icon"
+                                               icon.bind="['fas', 'engine-warning']"></font-awesome-icon>                            
+                            <p class="warning-info">
+                                DSwap is under maintenance for updates. Please use hive-engine / tribaldex market instead until dswap is available.
                             </p>
                         </div>
                     </div>
