@@ -339,26 +339,9 @@
                 </div>
                 <div class="row">
                     <div class="col-md-5">
-                        <div class="action-input text-center col-sm-4">
-                            <div class="token-sym">
-                                <div class="input-group-text token-sym-text h-100 input-group-text-dark">
-                                    $
-                                </div>
-                            </div>
-                            <input class="form-control transparent-bgn add-border-right action-input-box text-right tradeValueUsd"
-                                   type="text"
-                                   readonly="readonly"
-                                   value.bind="tradeValueUsd"
-                                   placeholder="0.00" />
-                        </div>
-                        <p class="balance-title">EST. USD Value</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-5">
-                        <!--<button class="start-trade" click.delegate="startTrade()" show.bind="loggedIn">
+                        <button class="start-trade" click.delegate="startTrade()" show.bind="loggedIn && !dswapPaused">
                             SWAP
-                        </button>-->
+                        </button>
                         <div class="warning" show.bind="!loggedIn">
                             <font-awesome-icon class="warning-icon"
                                                icon.bind="['fas', 'engine-warning']"></font-awesome-icon>
@@ -368,7 +351,7 @@
                                 <a href="">Login</a> to continue
                             </p>
                         </div>
-                        <div class="warning">
+                        <div class="warning" show.bind="dswapPaused">
                             <font-awesome-icon class="warning-icon"
                                                icon.bind="['fas', 'engine-warning']"></font-awesome-icon>                            
                             <p class="warning-info">
