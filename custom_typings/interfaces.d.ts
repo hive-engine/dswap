@@ -26,8 +26,9 @@ interface IEnvironment {
     DSWAP_SOURCE_ID: string;
     BLOCK_EXPLORER_HE: string;
     BLOCK_EXPLORER_SE: string;
-  dswapEnabled: boolean;
-  marketMakerEnabled: boolean;
+    dswapEnabled: boolean;
+    dswapPaused: boolean;
+    marketMakerEnabled: boolean;
   hivePegAccount: string;
   nativeToken: string;
     swapEnabledTokens: string[];

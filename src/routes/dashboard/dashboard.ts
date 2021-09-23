@@ -47,6 +47,7 @@ export class Dashboard {
     private validationController;
     private renderer;    
     private dswapEnabled = false;
+    private dswapPaused = false;
     private currentChainId;
     private baseTokenSymbol;
     private baseTokenAmount;
@@ -113,6 +114,7 @@ export class Dashboard {
     async attached() {
         this.refreshSelectPicker();
         this.dswapEnabled = environment.dswapEnabled;
+        this.dswapPaused = environment.dswapPaused;
     }
 
     async startTrade() {
@@ -181,9 +183,9 @@ export class Dashboard {
 
     async calcUnitEstimateRate() {
         if (this.buyToken && this.sellToken) {
-            this.unitEstimateRate = (this.buyToken.metrics.lastPrice / this.sellToken.metrics.lastPrice).toFixed(8);
+            //this.unitEstimateRate = (this.buyToken.metrics.lastPrice / this.sellToken.metrics.lastPrice).toFixed(8);
 
-            await this.updateTradeValueUsd();            
+            //await this.updateTradeValueUsd();            
         }
     }
 
