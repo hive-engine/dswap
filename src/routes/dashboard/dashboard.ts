@@ -227,7 +227,8 @@ export class Dashboard {
     }
 
     async updateTradeValueUsd() {
-        this.tradeValueUsd = (this.sellTokenAmount * parseFloat(this.sellToken.metrics.lastPriceUsd)).toFixed(4);
+        if (this.sellToken.metrics)
+            this.tradeValueUsd = (this.sellTokenAmount * parseFloat(this.sellToken.metrics.lastPriceUsd)).toFixed(4);
     }
 
     async fillPeggedTokenMetrics(token) {
@@ -281,6 +282,11 @@ export class Dashboard {
         return { ohlcData: candleStickData };
     }
 
+    public toFixed(num, fixed) {
+        var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+        return num.toString().match(re)[0];
+    }
+
     public async sellTokenAmountInViewChanged(event) {
         this.loading = true;
         if (this.sellToken) {
@@ -295,7 +301,7 @@ export class Dashboard {
                 let swapCalcResponse = await this.ss.CalculateSwapOutput(swapCalcRequestModel);
                 if (swapCalcResponse) {
                     this.baseTokenAmount = swapCalcResponse.BaseTokenAmount;
-                    this.buyTokenAmount = swapCalcResponse.TokenOutputAmount.toFixed(this.buyToken.precision);
+                    this.buyTokenAmount = this.toFixed(swapCalcResponse.TokenOutputAmount, this.buyToken.precision);
                 }
 
                 await this.updateTradeValueUsd();

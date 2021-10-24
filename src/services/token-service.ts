@@ -47,7 +47,7 @@ export class TokenService {
     async getDSwapTokens(includeMetrics = true, chain: Chain = Chain.Hive) {
         const symbols = environment.swapEnabledTokens;
         
-        let dTokens = await loadTokens(symbols);
+        let dTokens = await loadTokens([], 1000);        
 
         if (includeMetrics)
             await this.enrichTokensWithMetrics(dTokens, symbols, chain);

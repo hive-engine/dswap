@@ -139,11 +139,15 @@ export async function loadTokens(symbols = [], limit = 50, offset = 0): Promise<
         queryConfig.symbol = { $in: symbols };
     }
 
-    const results: any[] = await ssc.find('tokens', 'tokens', queryConfig, limit, offset, [{ index: 'symbol', descending: false }]);
+    let results: any[] = await ssc.find('tokens', 'tokens', queryConfig, limit, offset, [{ index: 'symbol', descending: false }]);
     let tokens: IToken[] = [];
 
-    for (const res of results) {
-        tokens.push(mapTokenResultToIToken(res));
+    if (results) {
+        results = results.filter(t => !environment.disabledTokens.includes(t.symbol));
+
+        for (const res of results) {
+            tokens.push(mapTokenResultToIToken(res));
+        }
     }
 
     return tokens;

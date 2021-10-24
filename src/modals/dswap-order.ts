@@ -12,6 +12,7 @@ import { environment } from 'environment';
 import { SwapService } from 'services/swap-service';
 import { swapRequest } from 'common/dswap-api';
 import { getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getRandomID } from 'common/functions';
+import { TokenService } from '../services/token-service';
 
 @autoinject()
 export class DswapOrderModal {
@@ -37,7 +38,7 @@ export class DswapOrderModal {
     private customMemoId;
 
     constructor(private controller: DialogController, private toast: ToastService, private taskQueue: TaskQueue, private store: Store<IState>,
-        private controllerFactory: ValidationControllerFactory, private i18n: I18N, private hes: HiveEngineService, private ss: SwapService) {
+        private controllerFactory: ValidationControllerFactory, private i18n: I18N, private hes: HiveEngineService, private ss: SwapService, private ts: TokenService) {
         this.validationController = controllerFactory.createForCurrentScope();
 
         this.renderer = new BootstrapFormRenderer();
@@ -185,7 +186,8 @@ export class DswapOrderModal {
                         let swapResponse = await this.ss.SwapRequest(this.swapRequestModel);
 
                         if (swapResponse && swapResponse.Id) {
-                            this.controller.ok();
+                            await this.ts.enrichTokensWithUserBalances([this.swapRequestModel.TokenInput]);
+                            this.controller.ok();                            
                         }
                     }
                 }
