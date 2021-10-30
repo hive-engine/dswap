@@ -170,7 +170,9 @@ export class Dashboard {
         this.sellTokens = [...this.state.tokens];
 
         // filter out crypto from buy token list for now
-        this.buyTokens = this.buyTokens.filter(x => !x.isCrypto);
+        // filter out 0 precision tokens to prevent loss
+        this.buyTokens = this.buyTokens.filter(x => !x.isCrypto && x.precision != 0);
+        this.sellTokens = this.sellTokens.filter(x => x.precision != 0);
         
         if (this.buyToken)
             this.sellTokens.splice(this.sellTokens.indexOf(this.sellTokens.find(x => x.symbol == this.buyToken.symbol)), 1);
