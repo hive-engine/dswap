@@ -37,7 +37,7 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     debugAccount: '',
     dswapEnabled: true,
     marketMakerEnabled: true,
-    dswapPaused: true,
+    dswapPaused: false,
     features: {
         nfts: {
             enabled: true
