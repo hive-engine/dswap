@@ -6,7 +6,11 @@ const http = new HttpClient();
 
 export async function swapRequest(swapRequest: ISwapRequestModel): Promise<ISwapRequestResponseModel> {
     let baseUrl = environment.DSWAP_API_URL;
-    let urlToCall = baseUrl + "SwapRequest?api-version=2.0";
+    let urlToCall = baseUrl + "SwapRequest";
+
+    if (environment.DSWAP_API_VERSION != "" && environment.DSWAP_API_VERSION != "1.0") {
+        urlToCall += `?api-version=${environment.DSWAP_API_VERSION}`;
+    }
 
     const response = await http.fetch(urlToCall, {
         method: 'POST',
@@ -35,15 +39,23 @@ export async function getSwapRequests(account: string, limit = 20, offset = 0, s
         url += `&status=${status}`;
     }
 
+    if (environment.DSWAP_API_VERSION != "" && environment.DSWAP_API_VERSION != "1.0") {
+        url += `&api-version=${environment.DSWAP_API_VERSION}`;
+    }
+
     const response = await http.fetch(url, {
         method: 'GET',
-    });
+    });    
 
     return response.json() as Promise<ISwapRequestViewModel[]>;
 }
 
 export async function getSwapRequestById(txId: string): Promise<ISwapRequestViewModel> {
     let url = `${environment.DSWAP_API_URL}SwapRequest/${txId}`;
+
+    if (environment.DSWAP_API_VERSION != "" && environment.DSWAP_API_VERSION != "1.0") {
+        url += `?api-version=${environment.DSWAP_API_VERSION}`;
+    }
 
     const response = await http.fetch(url, {
         method: 'GET',
@@ -59,6 +71,10 @@ export async function getSwapRequestsCount(account: string, status?: SwapStatus)
         url += `/${status}`;
     }
 
+    if (environment.DSWAP_API_VERSION != "" && environment.DSWAP_API_VERSION != "1.0") {
+        url += `?api-version=${environment.DSWAP_API_VERSION}`;
+    }
+
     const response = await http.fetch(url, {
         method: 'GET',
     });
@@ -68,6 +84,10 @@ export async function getSwapRequestsCount(account: string, status?: SwapStatus)
 
 export async function getSwapRequestTransactions(id: string): Promise<any> {
     let url = `${environment.DSWAP_API_URL}SwapRequest/SwapRequestTransactions/${id}`;
+
+    if (environment.DSWAP_API_VERSION != "" && environment.DSWAP_API_VERSION != "1.0") {
+        url += `?api-version=${environment.DSWAP_API_VERSION}`;
+    }
 
     const response = await http.fetch(url, {
         method: 'GET',
@@ -79,6 +99,10 @@ export async function getSwapRequestTransactions(id: string): Promise<any> {
 export async function calculateSwapOutput(requestModel: ISwapCalcValuesModel): Promise<ISwapCalcValuesModel>{
     let baseUrl = environment.DSWAP_API_URL;
     let urlToCall = baseUrl + "SwapRequest/CalculateSwapOutput";
+
+    if (environment.DSWAP_API_VERSION != "" && environment.DSWAP_API_VERSION != "1.0") {
+        urlToCall += `?api-version=${environment.DSWAP_API_VERSION}`;
+    }
 
     let request = await http.fetch(urlToCall, {
         method: 'POST',
@@ -96,6 +120,10 @@ export async function calculateSwapOutput(requestModel: ISwapCalcValuesModel): P
 export async function calculateSwapInput(requestModel: ISwapCalcValuesModel): Promise<ISwapCalcValuesModel> {
     let baseUrl = environment.DSWAP_API_URL;
     let urlToCall = baseUrl + "SwapRequest/CalculateSwapInput";
+
+    if (environment.DSWAP_API_VERSION != "" && environment.DSWAP_API_VERSION != "1.0") {
+        urlToCall += `?api-version=${environment.DSWAP_API_VERSION}`;
+    }
 
     let request = await http.fetch(urlToCall, {
         method: 'POST',
