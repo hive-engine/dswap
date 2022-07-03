@@ -6,7 +6,7 @@ const http = new HttpClient();
 
 export async function swapRequest(swapRequest: ISwapRequestModel): Promise<ISwapRequestResponseModel> {
     let baseUrl = environment.DSWAP_API_URL;
-    let urlToCall = baseUrl + "SwapRequest";
+    let urlToCall = baseUrl + "SwapRequest?api-version=2.0";
 
     const response = await http.fetch(urlToCall, {
         method: 'POST',
