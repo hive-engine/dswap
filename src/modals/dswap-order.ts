@@ -36,6 +36,7 @@ export class DswapOrderModal {
     private depositAmount: number;
     private customMemo;
     private customMemoId;
+    private swapV2;
 
     constructor(private controller: DialogController, private toast: ToastService, private taskQueue: TaskQueue, private store: Store<IState>,
         private controllerFactory: ValidationControllerFactory, private i18n: I18N, private hes: HiveEngineService, private ss: SwapService, private ts: TokenService) {
@@ -157,12 +158,13 @@ export class DswapOrderModal {
         }
 
         if (validationResult.valid && customValid) {
-            let waitMsg = this.i18n.tr('swapRequestWait', {
-                ns: 'notifications'
-            });
+            //let waitMsg = this.i18n.tr('swapRequestQueued', {
+            //    ns: 'notifications'
+            //});
 
             if (this.swapRequestModel.TokenInputMemo)
             {
+                this.swapV2 = false;
                 let txMemo = this.swapRequestModel.TokenInputMemo;
                 if (this.customMemo)
                     txMemo += " " + this.customMemo;
@@ -179,16 +181,23 @@ export class DswapOrderModal {
                     this.controller.ok();
                 }
             } else {
-                var sendTx = await this.hes.sendToken(this.swapRequestModel.TokenInput, environment.DSWAP_ACCOUNT_HE, this.swapRequestModel.TokenInputAmount, "SwapRequest", waitMsg);
-                if (sendTx) {
-                    if (sendTx.transactionId) {
-                        this.swapRequestModel.ChainTransactionId = sendTx.transactionId;
-                        let swapResponse = await this.ss.SwapRequest(this.swapRequestModel);
+                var txMemoId = getRandomID();                
+                this.swapRequestModel.TokenInputMemo = txMemoId;                
+                let swapResponse = await this.ss.SwapRequest(this.swapRequestModel);
+                this.swapV2 = true;
 
-                        if (swapResponse && swapResponse.Id) {
+                var txMemo = "SwapRequest " + txMemoId;
+                if (swapResponse && swapResponse.Id) {
+                    var sendTx = await this.hes.sendToken(this.swapRequestModel.TokenInput, environment.DSWAP_ACCOUNT_HE, this.swapRequestModel.TokenInputAmount, txMemo);
+                    if (sendTx) {
+                        if (sendTx.transactionId) {
+                            //this.swapRequestModel.ChainTransactionId = sendTx.transactionId;
+
                             await this.ts.enrichTokensWithUserBalances([this.swapRequestModel.TokenInput]);
-                            this.controller.ok();                            
+                            this.controller.ok();
                         }
+                    } else {
+                        this.swapRequestModel.TokenInputMemo = "";
                     }
                 }
             }

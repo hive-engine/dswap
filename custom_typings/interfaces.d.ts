@@ -22,6 +22,7 @@ interface IEnvironment {
     EXCHANGE_URL_HE: string;
     EXCHANGE_URL_SE: string;
     DSWAP_API_URL: string;
+    DSWAP_API_VERSION: string;
     DSWAP_ACCOUNT_HE: string;
     DSWAP_SOURCE_ID: string;
     BLOCK_EXPLORER_HE: string;

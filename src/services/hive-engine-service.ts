@@ -210,7 +210,7 @@ export class HiveEngineService {
                                     ns: 'notifications'
                                 });
                             }
-                            toast.overrideOptions.timeout = 15000;
+                            toast.overrideOptions.timeout = 5000;
 
                             this.toast.success(toast);
 
@@ -223,7 +223,7 @@ export class HiveEngineService {
                                 ns: 'notifications'
                             });
 
-                            //this.toast.success(toast);
+                            this.toast.success(toast);
 
                             resolve(tx);
                         } catch (e) {
