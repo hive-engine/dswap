@@ -81,7 +81,7 @@
                                         <font-awesome-icon show.bind="trade.SwapStatusId == 5" title.bind="trade.Message"
                                                            class="table-icon"
                                                            icon.bind="['fas', 'spinner']"></font-awesome-icon>
-                                        <font-awesome-icon show.bind="trade.SwapStatusId == 1 || trade.SwapStatusId == 2"
+                                        <font-awesome-icon show.bind="trade.SwapStatusId == 1 || trade.SwapStatusId == 2 || trade.SwapStatusId == 7 || trade.SwapStatusId == 8"
                                                            class="table-icon"
                                                            icon.bind="['fas', 'exclamation']"></font-awesome-icon>
                                     </div>
@@ -104,13 +104,13 @@
                                 <td>
                                     <div class="text-center">
                                         <span>
-                                            <strong>${trade.SwapStatusId == 2 ? 'In progress' : trade.SwapStatusId == 3 ? 'Completed' : trade.SwapStatusId == 4 ? 'Failed' : trade.SwapStatusId == 5 ? 'Awaiting deposit' : 'Init'}</strong>
+                                            <strong>${trade.SwapStatusId == 2 ? 'In progress' : trade.SwapStatusId == 3 ? 'Completed' : trade.SwapStatusId == 4 ? 'Failed' : trade.SwapStatusId == 5 ? 'Awaiting deposit' : trade.SwapStatusId == 7 ? 'Expired' : trade.SwapStatusId == 8 ? 'Refunded' : 'Init'}</strong>
                                         </span>
                                         <font-awesome-icon show.bind="trade.SwapStatusId == 4"
                                                            title.bind="trade.Message"
                                                             class="chart-icon"
                                                             icon.bind="['fas', 'info-circle']"></font-awesome-icon>
-                                        <button alt="Reload" title="Refresh" show.bind="trade.SwapStatusId != 3 && trade.SwapStatusId != 4"                                                
+                                        <button alt="Reload" title="Refresh" show.bind="trade.SwapStatusId != 3 && trade.SwapStatusId != 4 && trade.SwapStatusId != 7 && trade.SwapStatusId != 8"
                                                 class="btn btn-warning text-center" 
                                                 click.delegate="getTransactionInfo(trade)">
                                             Refresh
