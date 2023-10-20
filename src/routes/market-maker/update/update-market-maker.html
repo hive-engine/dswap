@@ -103,201 +103,407 @@
                                             <div
                                                 class="transaction-history-card"
                                             >
-                                            <hr />
-                                            <div class="form-group">
-                                                <label>
-                                                    ${'What is your order strategy?' &
-                                                    t}
-                                                </label>
-                                                <select class="form-control"
-                                                        value.bind="selectedOrderStrategy">
-                                                    <option model.bind="o" repeat.for="o of orderStrategies">
-                                                        ${o.name & t}
-                                                    </option>
-                                                </select>
-                                                <small show.bind="orderStrategies.length == 1" id="emailHelp" class="form-text text-muted">
-                                                    <a href="javascript:void(0)" click.delegate="upgradeAccount()" class="text-success">Upgrade</a> your account to select other strategies
-                                                </small>
-                                            </div>
-                                            <div class="form-group" show.bind="selectedOrderStrategy && selectedOrderStrategy._id == 2">
-                                                <label>${'Set the wall size threshold that determines where buy orders will be placed' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                        type="text"
-                                                        placeholder="Default: 10000"
-                                                        value.bind="placeAtBidWall" />
-                                                    <div class="input-group-append">
-                                                        ${selectedTokenSymbol & t}
+
+                                                <hr />
+                                                <div class="form-group">
+                                                    <label>
+                                                        ${'Strategy' & t}
+                                                        <tooltip
+                                                            text="What is your order
+                                                        strategy? Premium gives you access to more strategies"
+                                                        ></tooltip>
+                                                    </label>
+                                                    <select
+                                                        class="form-control"
+                                                        value.bind="selectedOrderStrategy"
+                                                    >
+                                                        <option
+                                                            model.bind="o"
+                                                            repeat.for="o of orderStrategies"
+                                                        >
+                                                            ${o.name & t}
+                                                        </option>
+                                                    </select>
+                                                    <small
+                                                        show.bind="orderStrategies.length == 1"
+                                                        id="emailHelp"
+                                                        class="form-text text-muted"
+                                                    >
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            click.delegate="upgradeAccount()"
+                                                            class="text-success"
+                                                            >Upgrade</a
+                                                        >
+                                                        your account to select
+                                                        other strategies
+                                                    </small>
+                                                </div>
+                                                <div
+                                                    class="form-group"
+                                                    show.bind="selectedOrderStrategy && selectedOrderStrategy._id == 2"
+                                                >
+                                                    <label
+                                                        >${'Set the wall size
+                                                        threshold that
+                                                        determines where buy
+                                                        orders will be placed' &
+                                                        t}</label
+                                                    >
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="Default: 10000"
+                                                            value.bind="placeAtBidWall"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${selectedTokenSymbol
+                                                            & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+
                                                     </div>
                                                     <div class="invalid-tooltip">
                                                         ${'errors:Please enter an amount greater than 0' & t}
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group" show.bind="selectedOrderStrategy && selectedOrderStrategy._id == 2">
-                                                <label>${'Set the wall size threshold that determines where sell orders will be placed' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                        type="text"
-                                                        placeholder="Default: 10000"
-                                                        value.bind="placeAtSellWall" />
-                                                    <div class="input-group-append">
-                                                        ${selectedTokenSymbol & t}
-                                                    </div>
-                                                    <div class="invalid-tooltip">
-                                                        ${'errors:Please enter an amount greater than 0' & t}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>${'What is the maximum price you\'re willing to buy the token ' + selectedTokenSymbol + ' for?' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                           type="text"
-                                                           placeholder="Default: 1000"
-                                                           value.bind="maxBidPrice" />
-                                                    <div class="input-group-append">
-                                                        ${baseToken & t}
-                                                    </div>
-                                                    <div class="invalid-tooltip">
-                                                        ${'errors:Please enter an amount greater than 0' & t}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>${'What is the minimum price you\'re willing to sell the token ' + selectedTokenSymbol + ' for?' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                           type="text"
-                                                           placeholder="Default: 0.00000001"
-                                                           value.bind="minSellPrice" />
-                                                    <div class="input-group-append">
-                                                        ${baseToken & t}
-                                                    </div>
-                                                    <div class="invalid-tooltip">
-                                                        ${'errors:Please enter an amount greater than 0' & t}
+
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'Maximum Bid Price' & t}
+                                                        <tooltip
+                                                            text="What is the maximum
+                                                        price you're willing to
+                                                        buy the token
+                                                        ${selectedTokenSymbol} 
+                                                        for?"
+                                                        ></tooltip
+                                                    ></label>
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="Default: 1000"
+                                                            value.bind="maxBidPrice"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${baseToken & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>${'What is the maximum amount of ' + baseToken + ' you\'re willing to buy with in a single order?' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                           type="text"
-                                                           placeholder="Default: 100"
-                                                           value.bind="maxBaseToSpend" />
-                                                    <div class="input-group-append">
-                                                        ${baseToken & t}
-                                                    </div>
-                                                    <div class="invalid-tooltip">
-                                                        ${'errors:Please enter an amount greater than 0' & t}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>${'What is the minimum amount of ' + baseToken + ' you\'re willing to buy with in a single order?' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                           type="text"
-                                                           placeholder="Default: 1"
-                                                           value.bind="minBaseToSpend" />
-                                                    <div class="input-group-append">
-                                                        ${baseToken & t}
-                                                    </div>
-                                                    <div class="invalid-tooltip">
-                                                        ${'errors:Please enter an amount greater than 0' & t}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>${'What is the maximum amount of ' + selectedTokenSymbol + ' tokens you\'re willing to sell in a single order?' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                           type="text"
-                                                           placeholder="Default: 100"
-                                                           value.bind="maxTokensToSell" />
-                                                    <div class="input-group-append">
-                                                        ${selectedTokenSymbol & t}
-                                                    </div>
-                                                    <div class="invalid-tooltip">
-                                                        ${'errors:Please enter an amount greater than 0' & t}
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'Minimum Sell Price' & t}
+                                                        <tooltip
+                                                            text="What is the minimum
+                                                        price you're willing to
+                                                        sell the token 
+                                                        ${selectedTokenSymbol}
+                                                        for?"
+                                                        ></tooltip
+                                                    ></label>
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="Default: 0.00000001"
+                                                            value.bind="minSellPrice"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${baseToken & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>${'What is the minimum amount of ' + selectedTokenSymbol + ' tokens you\'re willing to sell in a single order?' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                           type="text"
-                                                           placeholder="Default: 1"
-                                                           value.bind="minTokensToSell" />
-                                                    <div class="input-group-append">
-                                                        ${selectedTokenSymbol & t}
-                                                    </div>
-                                                    <div class="invalid-tooltip">
-                                                        ${'errors:Please enter an amount greater than 0' & t}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>${'What is the minimum spread between bid and asks before the bot won\'t place orders any closer?' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                           type="text"
-                                                           placeholder="Default: 0.00000001"
-                                                           value.bind="minSpread" />
-                                                    <div class="input-group-append">
-                                                        ${baseToken & t}
-                                                    </div>
-                                                    <div class="invalid-tooltip">
-                                                        ${'errors:Please enter an amount greater than 0' & t}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label>${'What is the amount you want to increase/decrease the price by when placing new orders?' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                           type="text"
-                                                           placeholder="Default: 0.00001"
-                                                           value.bind="priceIncrement" />
-                                                    <div class="input-group-append">
-                                                        ${baseToken & t}
-                                                    </div>
-                                                    <div class="invalid-tooltip">
-                                                        ${'errors:Please enter an amount greater than 0' & t}
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'Maximum Amount To Spend' &
+                                                        t}<tooltip
+                                                            text="What is the maximum
+                                                        amount of ${baseToken}
+                                                         you're willing to
+                                                        buy with in a single
+                                                        order?"
+                                                        ></tooltip
+                                                    ></label>
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="Default: 100"
+                                                            value.bind="maxBaseToSpend"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${baseToken & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <hr />
-                                            <h4>Advanced settings</h4>
-                                            <div class="form-group">
-                                                <label>${'What is the maximum allowed price difference between top-of-the-book price and the next level of order depth?' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                           type="text"
-                                                           placeholder="Default: 0.0001"
-                                                           value.bind="maxDistFromNext" />
-                                                    <div class="input-group-append">
-                                                        ${baseToken & t}
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'Minimum Amount To Spend' &
+                                                        t}<tooltip
+                                                            text="What is the minimum
+                                                        amount of ${baseToken}
+                                                         you're willing to
+                                                        buy with in a single
+                                                        order?"
+                                                        ></tooltip
+                                                    ></label>
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="Default: 1"
+                                                            value.bind="minBaseToSpend"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${baseToken & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
                                                     </div>
-                                                    <div class="invalid-tooltip">
-                                                        ${'errors:Please enter an amount greater than 0' & t}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'Maximum Tokens To Sell' &
+                                                        t}<tooltip
+                                                            text="What is the minimum
+                                                        amount of
+                                                        ${selectedTokenSymbol}
+                                                        tokens you're willing
+                                                        to sell in a single
+                                                        order?"
+                                                        ></tooltip
+                                                    >
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="Default: 100"
+                                                            value.bind="maxTokensToSell"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${selectedTokenSymbol
+                                                            & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
                                                     </div>
-                                                </div>                                                
-                                            </div>
-                                            <div class="form-group">
-                                                <label>${'Ignore orders with token quantity less than or equal to this size, for the purpose of determining where to place new orders.?' & t}</label>
-                                                <div class="input-group">
-                                                    <input class="form-control"
-                                                           type="text"
-                                                           placeholder="Default: 50"
-                                                           value.bind="ignoreOrderQtyLt" />
-                                                    <div class="input-group-append">
-                                                        ${selectedTokenSymbol & t}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'Minimum Tokens To Sell' &
+                                                        t}<tooltip
+                                                            text="What is the minimum
+                                                        amount of
+                                                        ${selectedTokenSymbol}
+                                                        tokens you're willing
+                                                        to sell in a single
+                                                        order?"
+                                                        ></tooltip
+                                                    ></label>
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="Default: 1"
+                                                            value.bind="minTokensToSell"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${selectedTokenSymbol
+                                                            & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
                                                     </div>
-                                                    <div class="invalid-tooltip">
-                                                        ${'errors:Please enter an amount greater than 0' & t}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'Minimum Spread' &
+                                                        t}<tooltip
+                                                            text="What is the minimum
+                                                        spread between bid and
+                                                        asks before the bot
+                                                        won't place orders any
+                                                        closer?"
+                                                        ></tooltip
+                                                    ></label>
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="Default: 0.00000001"
+                                                            value.bind="minSpread"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${baseToken & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'Price
+                                                        Increment' &
+                                                        t}<tooltip
+                                                            text="What is the amount
+                                                        you want to
+                                                        increase/decrease the
+                                                        price by when placing
+                                                        new orders?"
+                                                        ></tooltip
+                                                    ></label>
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="Default: 0.00001"
+                                                            value.bind="priceIncrement"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${baseToken & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                                <h4>Advanced settings</h4>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'Maximum Distance From Next Order' & t}<tooltip
+                                                            text="What is the maximum
+                                                        allowed price difference
+                                                        between top-of-the-book
+                                                        price and the next level
+                                                        of order depth?"
+                                                        ></tooltip
+                                                    ></label>
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="Default: 0.0001"
+                                                            value.bind="maxDistFromNext"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${baseToken & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label
+                                                        >${'Ignore Order
+                                                        Quantity' & t}<tooltip
+                                                            text="Ignore orders with
+                                                        token quantity less than
+                                                        or equal to this size,
+                                                        for the purpose of
+                                                        determining where to
+                                                        place new orders?"
+                                                        ></tooltip
+                                                    ></label>
+                                                    <div class="input-group">
+                                                        <input
+                                                            class="form-control"
+                                                            type="text"
+                                                            placeholder="Default: 50"
+                                                            value.bind="ignoreOrderQtyLt"
+                                                        />
+                                                        <div
+                                                            class="input-group-append"
+                                                        >
+                                                            ${selectedTokenSymbol
+                                                            & t}
+                                                        </div>
+                                                        <div
+                                                            class="invalid-tooltip"
+                                                        >
+                                                            ${'errors:Please
+                                                            enter an amount
+                                                            greater than 0' & t}
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                             </div>

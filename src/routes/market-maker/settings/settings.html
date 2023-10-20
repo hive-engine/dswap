@@ -20,9 +20,14 @@
                         
                         <div class="form-group">
                             <label
-                                >${'What token do you want the market maker to
-                                trade?' & t}</label
-                            >
+
+                                >${'Choose Token' & t}
+                                <tooltip
+                                    text="What token do you want the market maker to
+                                trade?"
+                                ></tooltip>
+                            </label>
+
                             <select
                                 class="form-control"
                                 value.bind="token"
@@ -55,8 +60,40 @@
 
                             <div class="form-group">
                                 <label
-                                    >${'What is the maximum price you\'re
-                                    willing to buy the token for?' & t}</label
+
+                                    >${'Maximum Price' & t}
+                                    <tooltip
+                                        text="What is the maximum price you\'re
+                                    willing to buy the token for?"
+                                    ></tooltip>
+                                </label>
+
+                                <div class="input-group">
+                                    <input
+                                        class="form-control"
+                                        type="text"
+                                        placeholder="0.000"
+                                        value.bind="amount"
+                                    />
+                                    <div class="input-group-append">
+                                        ${token.pegged_token_symbol & t}
+                                    </div>
+                                    <div class="invalid-tooltip">
+                                        ${'errors:Please enter an amount greater
+                                        than 0' & t}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label
+
+                                    >${'Minimum Price' & t}
+                                    <tooltip
+                                        text="What is the minimum price you\'re
+                                    willing to sell the token for?"
+                                    ></tooltip>
+                                    </label
+
                                 >
                                 <div class="input-group">
                                     <input
@@ -76,28 +113,11 @@
                             </div>
                             <div class="form-group">
                                 <label
-                                    >${'What is the minimum price you\'re
-                                    willing to sell the token for?' & t}</label
-                                >
-                                <div class="input-group">
-                                    <input
-                                        class="form-control"
-                                        type="text"
-                                        placeholder="0.000"
-                                        value.bind="amount"
-                                    />
-                                    <div class="input-group-append">
-                                        ${token.pegged_token_symbol & t}
-                                    </div>
-                                    <div class="invalid-tooltip">
-                                        ${'errors:Please enter an amount greater
-                                        than 0' & t}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label
-                                    >${'What is the maximum amount of HIVE
+
+                                    >${'Maximum Buy' & t}
+                                    <tooltip
+                                        text="What is the maximum amount of HIVE
+
                                     you\'re willing to buy with in a single
                                     order?' & t}</label
                                 >
@@ -119,9 +139,16 @@
                             </div>
                             <div class="form-group">
                                 <label
-                                    >${'What is the maximum amount of tokens
-                                    you\'re willing to sell in a single order?'
-                                    & t}</label
+
+                                    >${'Maximum Sell'
+                                    & t}
+                                    <tooltip
+                                        text="What is the maximum amount of HIVE
+                                    you\'re willing to Sell with in a single
+                                    order?"
+                                    ></tooltip>
+                                    </label
+
                                 >
                                 <div class="input-group">
                                     <input
@@ -141,7 +168,11 @@
                             </div>
                             <div class="form-group">
                                 <label
-                                    >${'What is the minimum spread between bid
+
+                                    >${'Minimum Spread' & t}
+                                    <tooltip
+                                        text="What is the minimum spread between bid
+
                                     and asks before the bot won\'t place orders
                                     any closer?' & t}</label
                                 >

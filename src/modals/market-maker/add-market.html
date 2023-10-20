@@ -20,8 +20,12 @@
 
                 <div class="form-group">
                     <label>
-                        ${'What token do you want the market maker to trade?' &
-                        t}
+
+                        ${'Choose Token' & t}
+                        <tooltip
+                            text="What token do you want the market maker to trade?"
+                        ></tooltip>
+
                     </label>
                     <select class="form-control"
                             value.bind="selectedToken"
@@ -37,8 +41,12 @@
                 <hr />
                 <div class="form-group">
                     <label>
-                        ${'What is your order strategy?' &
-                        t}
+
+                        ${'Strategy' & t}
+                        <tooltip
+                            text="What is your order strategy?"
+                        ></tooltip>
+
                     </label>
                     <select class="form-control"
                             value.bind="selectedOrderStrategy">
@@ -50,8 +58,19 @@
                         <a href="javascript:void(0)" click.delegate="upgradeAccount()" class="text-success">Upgrade</a> your account to select other strategies
                     </small>
                 </div>
-                <div class="form-group" show.bind="selectedOrderStrategy && selectedOrderStrategy._id == 2">
-                    <label>${'Set the wall size threshold that determines where buy orders will be placed' & t}</label>
+
+                <div
+                    class="form-group"
+                    show.bind="selectedOrderStrategy && selectedOrderStrategy._id == 2"
+                >
+                    <label
+                        >${'Buy Order Threshold' & t}
+                        <tooltip
+                            text="Set the wall size threshold that determines where
+                        buy orders will be placed"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
@@ -65,8 +84,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group" show.bind="selectedOrderStrategy && selectedOrderStrategy._id == 2">
-                    <label>${'Set the wall size threshold that determines where sell orders will be placed' & t}</label>
+
+                <div
+                    class="form-group"
+                    show.bind="selectedOrderStrategy && selectedOrderStrategy._id == 2"
+                >
+                    <label
+                        >${'Sell Order Threshold' & t}
+                        <tooltip
+                            text="Set the wall size threshold that determines where
+                        sell orders will be placed"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
@@ -83,7 +113,15 @@
 
                 <hr />
                 <div class="form-group">
-                    <label>${'What is the maximum price you\'re willing to buy the token ' + selectedTokenSymbol + ' for?' & t}</label>
+
+                    <label
+                        >${'Maximum Price' & t}
+                        <tooltip
+                            text="What is the maximum price you're willing to
+                                buy the token ${selectedTokenSymbol} for?"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
@@ -98,7 +136,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>${'What is the minimum price you\'re willing to sell the token ' + selectedTokenSymbol + ' for?' & t}</label>
+
+                    <label
+                        >${'Minimum Price' & t}
+                        <tooltip
+                            text="What is the minimum price you're willing to
+                                sell the token ${selectedTokenSymbol} for?"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
@@ -113,7 +159,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>${'What is the maximum amount of ' + baseToken + ' you\'re willing to buy with in a single order?' & t}</label>
+
+                    <label
+                        >${'Maximum Buy' & t}
+                        <tooltip
+                            text="What is the maximum amount of ${baseToken}
+                        you're willing to buy with in a single order?"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
@@ -128,7 +182,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>${'What is the minimum amount of ' + baseToken + ' you\'re willing to buy with in a single order?' & t}</label>
+
+                    <label
+                        >${'Minimum Buy' & t}
+                        <tooltip
+                            text="What is the minimum amount of ${baseToken}
+                        you're willing to buy with in a single order?"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
@@ -143,7 +205,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>${'What is the maximum amount of ' + selectedTokenSymbol + ' tokens you\'re willing to sell in a single order?' & t}</label>
+
+                    <label
+                        >${'Maximum Sell' & t}
+                        <tooltip
+                            text="What is the maximum amount of ${selectedTokenSymbol}
+                        you're willing to sell in a single order?"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
@@ -158,7 +228,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>${'What is the minimum amount of ' + selectedTokenSymbol + ' tokens you\'re willing to sell in a single order?' & t}</label>
+
+                    <label
+                        >${'Minimum Sell' & t}
+                        <tooltip
+                            text="What is the minimum amount of ${selectedTokenSymbol}
+                        you're willing to sell in a single order?"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
@@ -173,7 +251,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>${'What is the minimum spread between bid and asks before the bot won\'t place orders any closer?' & t}</label>
+
+                    <label
+                        >${'Minimum Spread' & t}
+                        <tooltip
+                            text="What is the minimum spread between bid and asks
+                        before the bot won't place orders any closer?"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
@@ -188,7 +274,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>${'What is the amount you want to increase/decrease the price by when placing new orders?' & t}</label>
+
+                    <label
+                        >${'Price Increment/Decrement' & t}
+                        <tooltip
+                            text="What is the amount you want to increase/decrease the price by when placing new orders?"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
@@ -205,7 +298,14 @@
                 <hr />
                 <h4>Advanced settings</h4>
                 <div class="form-group">
-                    <label>${'What is the maximum allowed price difference between top-of-the-book price and the next level of order depth?' & t}</label>
+
+                    <label
+                        >${'Maximum Price Difference' & t}
+                        <tooltip
+                            text="What is the maximum allowed price difference between top-of-the-book price and the next level of order depth?"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
@@ -220,7 +320,15 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>${'Ignore orders with token quantity less than or equal to this size, for the purpose of determining where to place new orders.?' & t}</label>
+
+                    <label
+                        >${'IMinimum Order Quantity' & t}
+                        <tooltip
+                            text="Ignore orders with token quantity less than or equal to this size, for the purpose of
+                                determining where to place new orders?"
+                        ></tooltip>
+                    </label>
+
                     <div class="input-group">
                         <input class="form-control"
                                type="text"
