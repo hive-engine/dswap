@@ -1,0 +1,77 @@
+<template>
+    <ux-dialog>
+        <loader mode="tiny" loading.bind="loading"></loader>
+
+        <ux-dialog-header class="modal-header">
+            <h2>${'DSwap confirmation' & t}</h2>
+        </ux-dialog-header>
+        <ux-dialog-body class="withdrawDialogBody modal-body">
+            <div class="form-group">
+                <div class="estimated-trade-info-wrapper">
+                    <div show.bind="swapRequestModel.TokenInputMemo && !swapV2">
+                        <div class="alert alert-warning">
+                            <p>Please make sure you deposit at least ${depositAmount} ${swapRequestModel.TokenInput} to the address below. </p>
+                            <p>Your SWAP will be processed as soon as the deposit is received.</p>
+                        </div>
+                        <p>
+                            <b>Deposit address:</b><br />
+                            <input type="text" readonly value.bind="swapRequestModel.TokenInputMemo" class="tbDepositAddress" /> <button value="Copy" click.delegate="copyMessage(swapRequestModel.TokenInputMemo, false)">${copyTxt}</button>
+                        </p>
+
+                        <p show.bind="customMemo">
+                            <b>Memo:</b><br />
+                            <input type="text" readonly value.bind="customMemo" class="tbDepositAddress" /> <button value="Copy" click.delegate="copyMessage(customMemo, true)">${copyMemoTxt}</button>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 style="margin-left: 0; margin-bottom: 7px;"
+                                    class="action-title">
+                                    DCA Summary                                
+                            </h4>
+                            <div class="row">
+                                <div class="col-md-6">Sell total</div>
+                                <div class="col-md-6">${swapRequestModel.TokenInputAmount} ${swapRequestModel.TokenInput}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Sell per order</div>
+                                <div class="col-md-6">${swapRequestModel.TokenInputAmount / swapRequestModel.OrderCount} ${swapRequestModel.TokenInput}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">To buy</div>
+                                <div class="col-md-6">${swapRequestModel.TokenOutput}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Order interval</div>
+                                <div class="col-md-6">Every ${swapRequestModel.RecurrenceTypeAmount} ${swapRequestModel.RecurrenceType}</div>
+                            </div>                        
+                            <div class="row">
+                                <div class="col-md-6">Total orders</div>
+                                <div class="col-md-6">${swapRequestModel.OrderCount}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Platform fee</div>
+                                <div class="col-md-6">${dswapDcaFee}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ux-dialog-body>
+
+        <ux-dialog-footer>
+            <button
+                class="btn btn-lg redBtn"
+                click.trigger="controller.cancel()"
+            >
+                ${'Cancel' & t}
+            </button>
+            <button
+                class="btn btn-lg greenBtns trade-button"
+                click.trigger="confirmSend()"
+            >
+                ${'Proceed' & t}
+            </button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

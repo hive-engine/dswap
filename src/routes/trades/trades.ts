@@ -16,7 +16,7 @@ import { DswapSwapdetailsModal } from 'modals/dswap-swapdetails';
 export class Trades {
     private limit = 5;
     private offset = 0;
-    private page = 1;    
+    @bindable() page = 1;    
     private symbol;
     private tradesCompleted;
     private tradesPending;
@@ -26,7 +26,7 @@ export class Trades {
     // to retrieve later from an endpoint
     private totalItems = 50;
     // calculate later based on totalItems
-    private totalPages = 9;
+    @bindable() totalPages = 9;
     private currentChainId;
     public subscription: Subscription;
     private state: IState;
@@ -58,6 +58,8 @@ export class Trades {
         this.totalPages = this.totalItems / this.limit;
         if (this.totalItems % this.limit > 0)
             this.totalPages += 1;
+
+        console.log(this.totalPages);
     }
 
     async canActivate({ symbol, page = 1 })
@@ -82,12 +84,18 @@ export class Trades {
     }
 
     async pageClick(pageVal) {
+        console.log("pageclick");
+        console.log(pageVal);
         if (pageVal == 'prev')
-            pageVal = this.page - 1;
+            this.page -= 1;
         else if (pageVal == 'next') 
-            pageVal = this.page + 1;
+            this.page += 1;
 
-        this.allTrades = await this.loadTradesCompleted(pageVal, this.swapStatus);        
+        this.allTrades = await this.loadTradesCompleted(this.page, this.swapStatus);        
+    }
+
+    async pageChanged(newVal) {   
+        this.allTrades = await this.loadTradesCompleted(this.page, this.swapStatus);        
     }
 
     async getTransactionInfo(trade) {

@@ -1989,3 +1989,21 @@ input.tradeValueUsd {
 .tbDepositAddress {
     width: 400px;
 }
+
+.dcaInput {
+    width: 50%;
+    border: none;
+    text-align: center !important;
+}
+
+.dcaInput::placeholder {
+    text-align: center; 
+ }
+
+ .dcaInputLastElement {
+    padding-bottom: 10px;
+ }
+
+ .dcaDetailsBlock {
+    min-height: 130px;
+ }

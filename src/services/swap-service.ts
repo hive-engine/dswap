@@ -11,7 +11,7 @@ import { HiveEngineService } from './hive-engine-service';
 import { getPrices, usdFormat } from 'common/functions';
 import { Chain } from '../common/enums';
 import { loadUserBalancesSE, loadTokensSE, loadTokenMetricsSE } from '../common/steem-engine-api';
-import { calculateSwapInput, calculateSwapOutput, swapRequest } from '../common/dswap-api';
+import { calculateSwapInput, calculateSwapOutput, swapRequest, swapRequestDca } from '../common/dswap-api';
 
 const http = new HttpClient();
 
@@ -54,6 +54,37 @@ export class SwapService {
         //this.toast.warning(toastWait);
 
         let response = await swapRequest(model);
+        console.log(response);
+        if (!response || !response.Id) {
+            let toastFailure = new ToastMessage();
+            toastFailure.overrideOptions.timeout = 2000;
+            toastFailure.message = this.i18n.tr('swapRequestQueueFailed', {
+                ns: 'errors'
+            });
+
+            this.toast.error(toastFailure);
+        } else {            
+            //let toastSuccess = new ToastMessage();
+
+            //toastSuccess.message = this.i18n.tr('swapRequestInProgress', {
+            //    ns: 'notifications'
+            //});
+
+            //this.toast.success(toastSuccess);
+        }
+
+        return response;
+    }
+
+    async SwapRequestDCA(model: ISwapRequestDCAModel) {
+        //let toastWait = new ToastMessage();
+        //toastWait.message = this.i18n.tr('swapRequestInProgress', {
+        //    ns: 'notifications'
+        //});
+        //toastWait.overrideOptions.timeout = 2000;
+        //this.toast.warning(toastWait);
+
+        let response = await swapRequestDca(model);
         console.log(response);
         if (!response || !response.Id) {
             let toastFailure = new ToastMessage();

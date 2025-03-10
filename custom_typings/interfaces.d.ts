@@ -50,6 +50,7 @@ interface IEnvironment {
     marketMakerFeeToken_SE: string;
     isDebug: boolean;
     debugAccount: string;
+    dswapDcaFee: number;
 }
 
 interface IState {
@@ -351,4 +352,62 @@ interface ISwapCalcValuesModel {
     TokenOutputAmount?: number;
     Chain?: number;
     BaseTokenAmount?: number;
+}
+
+/* DCA */
+interface ISwapRequestDCAModel {
+    Account: string;
+    TokenInput: string;
+    TokenInputAmount: number;
+    TokenOutput: string;
+    Chain: number;
+    ChainTransactionId: string;
+    SwapSourceId: string;
+    TokenInputMemo: string;    
+    RecurrenceTypeAmount: number,
+    RecurrenceType: string,
+    OrderCount: number
+}
+
+interface ISwapRequestDCAResponseModel {
+    Id: string;
+    Account: string;
+    TokenInput: string;
+    TokenInputAmount: number;
+    TokenOutput: string;
+    Chain: number;
+    ChainTransactionId: string;
+    SwapSourceId: string;
+    TokenInputMemo: string;    
+    RecurrenceTypeAmount: number,
+    RecurrenceType: string,
+    OrderCount: number
+}
+
+interface ISwapRequestDCAViewModel {
+    Id: string;
+    Account: string;
+    TokenInput: string;
+    TokenInputAmount: number;
+    TokenOutput: string;
+    TokenOutputAmount: number;
+    TokenOutputAmountActual: number;
+    Chain: number;
+    ChainTransactionId: string;
+    SwapSourceId: string;
+    timestamp_month_name: string;
+    timestamp_day: string;
+    timestamp_time: string;
+    timestamp_year: string;
+    CreatedAt: string;
+    SwapStatusId: number;
+    SwapStatusName: string;
+    RecurrenceTypeAmount: number,
+    RecurrenceType: string,
+    OrderCount: number
+}
+
+interface ISwapRequestDCADetailViewModel {
+    SwapRequestDCA: ISwapRequestDCAViewModel;
+    SwapRequests: ISwapRequestViewModel[];
 }
