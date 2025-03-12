@@ -20,6 +20,7 @@ import { Chain, SwapStatus } from 'common/enums';
 import { SwapService } from 'services/swap-service';
 import { env } from 'process';
 import { getSwapDCADetail, getSwapDCARequests } from 'common/dswap-api';
+import { DswapSwapdetailsModal } from 'modals/dswap-swapdetails';
 
 @autoinject()
 @customElement('dca')
@@ -383,7 +384,29 @@ export class DCA {
     }
 
     async loadDcaData(dcaId) {
-        this.dcaDetail = await getSwapDCADetail(dcaId);
+        let dcaDetail = await getSwapDCADetail(dcaId);
+        if (dcaDetail.SwapRequests){
+            for (let t of dcaDetail.SwapRequests) {
+                t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
+                t.timestamp_day = moment(t.CreatedAt).format('DD');
+                t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
+                t.timestamp_year = moment(t.CreatedAt).format('YYYY');
+            }
+        }
+        this.dcaDetail = dcaDetail;  
+        
+        this.activateDcaButton('details'+dcaId);
+    }
+
+    viewSwapDetails(trade) {
+            this.dialogService.open({ viewModel: DswapSwapdetailsModal, model: trade }).whenClosed(response => {
+                console.log(response);
+            });
+        }
+
+    activateDcaButton(button) {
+        $(".btn-dca").removeClass("active");
+        $("#btn-dca-"+button).addClass("active");
     }
 
     private getTime(date?: Date) {

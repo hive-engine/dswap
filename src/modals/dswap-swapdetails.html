@@ -30,13 +30,13 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6">Token to buy:</div>
-                    <div class="col-sm-6">${swapRequestModel.TokenOutputAmount} ${swapRequestModel.TokenOutput}</div>
+                    <div class="col-sm-6"><strong show.bind="swapRequestModel.DCAId == ''">${swapRequestModel.TokenOutputAmount}</strong> ${swapRequestModel.TokenOutput}</div>
                 </div>
-                <div class="row">
+                <div class="row" show.bind="swapRequestModel.DCAId == ''">
                     <div class="col-sm-6">Max slippage ${swapRequestModel.TokenInput} -> ${baseTokenSymbol}:</div>
                     <div class="col-sm-6">${swapRequestModel.MaxSlippageInputToken} %</div>
                 </div>
-                <div class="row">
+                <div class="row" show.bind="swapRequestModel.DCAId == ''">
                     <div class="col-sm-6">Max slippage ${baseTokenSymbol} -> ${swapRequestModel.TokenOutput}:</div>
                     <div class="col-sm-6">${swapRequestModel.MaxSlippageOutputToken} %</div>
                 </div>

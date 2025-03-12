@@ -1,6 +1,6 @@
 <template bindable="selected">
     <loader loading.bind="loading" mode="tiny"></loader>
-    <div class="dashboard-wrapper " show.bind="!dswapEnabled">
+    <div class="dashboard-wrapper" show.bind="!dswapEnabled">
         <div class="market-maker-landing-wrapper">
         <div class="market-maker-landing-wrapper-content">
             <div class="d-flex justify-center">
@@ -34,7 +34,7 @@
         </svg>
     </div>
     </div>
-    <div class="dashboard-wrapper d-none d-md-block text-center" show.bind="dswapEnabled">
+    <div class="dashboard-wrapper dcaWrapper d-none d-md-block text-center" show.bind="dswapEnabled">
         <div class="row" show.bind="sellToken && sellToken.isCrypto">
             <div class="col-md-9">
                 <div class="row">
@@ -122,7 +122,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row top10">
                     <div class="col-md-6">
                         <div class="trade-arrow">
                             <h4>To Buy</h4>
@@ -170,7 +170,7 @@
                     </div>
 
                 </div>                                
-                <div class="row">
+                <div class="row top20">
                     <div class="col-md-6">
                         <div class="estimate-wrapper">
                             <h4 style="margin-left: 0; margin-bottom: 7px;"
@@ -182,7 +182,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row top10">
                     <div class="col-md-3">
                         <div class="action-card dcaDetailsBlock">
                             <h5>Every</h5>
@@ -218,42 +218,45 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row top20">
                     <div class="col-md-6">
-                        <h4 style="margin-left: 0; margin-bottom: 7px;"
-                                class="action-title">
-                                Summary                                
-                        </h4>
-                        <div class="row">
-                            <div class="col-md-6">Sell total</div>
-                            <div class="col-md-6">${sellTokenAmount} ${sellTokenSymbol}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">Sell per order</div>
-                            <div class="col-md-6">${dcaSellPerOrder} ${sellTokenSymbol}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">To buy</div>
-                            <div class="col-md-6">${buyTokenSymbol}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">Order interval</div>
-                            <div class="col-md-6">Every ${dcaRecurrenceTypeAmount} ${recurrenceTypeValue}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">Total orders</div>
-                            <div class="col-md-6">${dcaOrderNo}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">Platform fee</div>
-                            <div class="col-md-6">${dswapDcaFee}</div>
+                        <div class="card">
+                            <div class="card-header">
+                                Summary
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">Sell total</div>
+                                    <div class="col-md-6">${sellTokenAmount} ${sellTokenSymbol}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">Sell per order</div>
+                                    <div class="col-md-6">${dcaSellPerOrder} ${sellTokenSymbol}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">To buy</div>
+                                    <div class="col-md-6">${buyTokenSymbol}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">Order interval</div>
+                                    <div class="col-md-6">Every ${dcaRecurrenceTypeAmount} ${recurrenceTypeValue}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">Total orders</div>
+                                    <div class="col-md-6">${dcaOrderNo}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">Platform fee</div>
+                                    <div class="col-md-6">${dswapDcaFee}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row top20">
                     <div class="col-md-6">
-                        <button class="start-trade" click.delegate="startTrade()" show.bind="loggedIn && !dswapPaused">
+                        <button class="get-started-btn text-center m-auto au-target" click.delegate="startTrade()" show.bind="loggedIn && !dswapPaused">
                             START DCA
                         </button>
                         <div class="warning" show.bind="!loggedIn">
@@ -276,14 +279,14 @@
                 </div>
 
                 <!-- DCA Overview existing orders and history -->
-                <div class="row">
+                <div class="row top10">
                     <div class="col-md-6">
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">DCA Active</a>
+                                <a class="nav-link dca-item-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">DCA Active</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">DCA History</a>
+                                <a class="nav-link dca-item-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">DCA History</a>
                             </li>
                         </ul>
                     </div>
@@ -292,37 +295,126 @@
                     <div class="col-md-6">
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                                <ul class="list-group">
-                                    <li class="list-group-item" repeat.for="trade of dcaTradesActive">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                ${trade.TokenInput} -> ${trade.TokenOutput}
+                                <div class="accordion" id="accordionExample">
+                                    <div class="card" repeat.for="trade of dcaTradesActive">
+                                      <div class="card-header" id.bind="'heading'+trade.Id" id="headingOne">
+                                        <h2 class="mb-0 dca-trade-h2">
+                                          <button class="btn btn-link dca-trade-button" type="button" click.delegate="loadDcaData(trade.Id)" data-toggle="collapse" data-target.bind="'#collapse'+trade.Id" aria-expanded="true" aria-controls="collapseOne">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    ${trade.timestamp_month_name}
+                                                    ${trade.timestamp_day}
+                                                    ${trade.timestamp_time}
+                                                </div>
+                                                <div class="col-md-3">
+                                                    ${trade.TokenInput} -> ${trade.TokenOutput}
+                                                </div>
+                                                <div class="col-md-2">
+                                                    ${trade.TokenInputAmount} ${trade.TokenInput}
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label show.bind="trade.SwapStatusName == 'Init'" class="btn btn-info">${trade.SwapStatusName}</label>
+                                                    <label show.bind="trade.SwapStatusName == 'In progress'" class="btn btn-primary">${trade.SwapStatusName}</label>     
+                                                    <label show.bind="trade.SwapStatusName == 'Success'" class="btn btn-success">${trade.SwapStatusName}</label>
+                                                    <label show.bind="trade.SwapStatusName == 'Cancelled'" class="btn btn-warning">${trade.SwapStatusName}</label>
+                                                    <label show.bind="trade.SwapStatusName == 'Failed'" class="btn btn-danger">${trade.SwapStatusName}</label>                                                    
+                                                </div>
                                             </div>
-                                            <div class="col-md-4">
-                                                ${trade.TokenInputAmount} ${trade.TokenInput}
-                                            </div>
-                                            <div class="col-md-4">
-                                                ${trade.SwapStatusName}
+                                          </button>
+                                        </h2>
+                                      </div>
+                                  
+                                      <div id.bind="'collapse'+trade.Id" class="collapse" aria-labelledby.bind="'heading'+trade.Id" data-parent="#accordionExample">
+                                        <div class="card-body" id.bind="'collapseDetail'+trade.Id">                                            
+                                            <button id.bind="'btn-dca-details'+trade.Id" click.delegate="activateDcaButton('details'+trade.Id)" class="btn dca-item-link active btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample'+trade.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample'+trade.Id">DCA Details</a>
+                                            <button id.bind="'btn-dca-orders'+trade.Id" click.delegate="activateDcaButton('orders'+trade.Id)" class="btn dca-item-link btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample'+trade.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample'+trade.Id">Orders (${dcaDetail.SwapRequests.length})</button>
+                                            <div class="accordion-group top20">
+                                                <div class="collapse show multi-collapse col-md-12" id.bind="'multiCollapseExample'+trade.Id" data-parent.bind="'#collapseDetail'+trade.Id">
+                                                    <div class="card card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">Sell total</div>
+                                                            <div class="col-md-6">${trade.TokenInputAmount} ${trade.TokenInput}</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Sell per order</div>
+                                                            <div class="col-md-6">${trade.TokenInputAmount / trade.OrderCount} ${trade.TokenInput}</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">To buy</div>
+                                                            <div class="col-md-6">${trade.TokenOutput}</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Order interval</div>
+                                                            <div class="col-md-6">Every ${trade.RecurrenceTypeAmount} ${trade.RecurrenceType}</div>
+                                                        </div>                        
+                                                        <div class="row">
+                                                            <div class="col-md-6">Total orders</div>
+                                                            <div class="col-md-6">${trade.OrderCount}</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Orders realized</div>
+                                                            <div class="col-md-6">${dcaDetail.SwapRequests.length}</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Total ${tradeH.TokenOutput} received</div>
+                                                            <div class="col-md-6">${dcaDetail.SwapRequestDCA.TokenOutputAmountActual} ${dcaDetail.SwapRequestDCA.TokenOutput}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="collapse multi-collapse" id.bind="'multiCollapseExample'+trade.Id" data-parent.bind="'#collapseDetail'+trade.Id">
+                                                    <div class="card card-body">
+                                                        <div class="row" repeat.for="s of dcaDetail.SwapRequests">                                                            
+                                                            <div class="col-md-4">
+                                                                <p>
+                                                                    ${s.timestamp_month_name}
+                                                                    ${s.timestamp_day}
+                                                                    ${s.timestamp_time}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <p class="dca-order-item-firstp">
+                                                                    ${s.TokenInputAmount} ${s.TokenInput} ->                                                                     
+                                                                </p>
+                                                                <p><strong>${s.TokenOutputAmountActual} ${s.TokenOutput}</strong></p>
+                                                            </div>                                                
+                                                            <div class="col-md-4">     
+                                                                <p>
+                                                                    <a class="dca-swap-details-link" href="#" click.delegate="viewSwapDetails(s)">Swap details</a>
+                                                                </p>                                                                                                                           
+                                                            </div>   
+                                                            <div class="col-md-12 dca-order-item-line"><hr /></div>                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </li>
-                                </ul>
+                                      </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
                                 <div class="accordion" id="accordionExample">
                                     <div class="card" repeat.for="tradeH of dcaTradesHistory">
                                       <div class="card-header" id.bind="'heading'+tradeH.Id" id="headingOne">
-                                        <h2 class="mb-0">
-                                          <button class="btn btn-link" type="button" click.delegate="loadDcaData(tradeH.Id)" data-toggle="collapse" data-target.bind="'#collapse'+tradeH.Id" aria-expanded="true" aria-controls="collapseOne">
+                                        <h2 class="mb-0 dca-trade-h2">
+                                          <button class="btn btn-link dca-trade-button" type="button" click.delegate="loadDcaData(tradeH.Id)" data-toggle="collapse" data-target.bind="'#collapse'+tradeH.Id" aria-expanded="true" aria-controls="collapseOne">
                                             <div class="row">
                                                 <div class="col-md-4">
+                                                    ${tradeH.timestamp_month_name}
+                                                    ${tradeH.timestamp_day}
+                                                    ${tradeH.timestamp_time}
+                                                </div>
+                                                <div class="col-md-3">
                                                     ${tradeH.TokenInput} -> ${tradeH.TokenOutput}
                                                 </div>
-                                                <div class="col-md-4">
+                                                <div class="col-md-2">
                                                     ${tradeH.TokenInputAmount} ${tradeH.TokenInput}
                                                 </div>
-                                                <div class="col-md-4">
-                                                    ${tradeH.SwapStatusName}
+                                                <div class="col-md-3">
+                                                    <label show.bind="tradeH.SwapStatusName == 'Init'" class="btn btn-info">${tradeH.SwapStatusName}</label>
+                                                    <label show.bind="tradeH.SwapStatusName == 'Success'" class="btn btn-success">${tradeH.SwapStatusName}</label>
+                                                    <label show.bind="tradeH.SwapStatusName == 'Cancelled'" class="btn btn-warning">${tradeH.SwapStatusName}</label>
+                                                    <label show.bind="tradeH.SwapStatusName == 'Failed'" class="btn btn-danger">${tradeH.SwapStatusName}</label> 
                                                 </div>
                                             </div>
                                           </button>
@@ -330,13 +422,11 @@
                                       </div>
                                   
                                       <div id.bind="'collapse'+tradeH.Id" class="collapse" aria-labelledby.bind="'heading'+tradeH.Id" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                            <p>
-                                                <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">DCA Details</a>
-                                                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Toggle second element</button>
-                                            </p>
-                                            <div class="row">
-                                                <div class="collapse multi-collapse col-md-12" id="multiCollapseExample1">
+                                        <div class="card-body" id.bind="'collapseDetail'+tradeH.Id">                                            
+                                            <button id.bind="'btn-dca-details'+tradeH.Id" click.delegate="activateDcaButton('details'+tradeH.Id)" class="btn dca-item-link active btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample'+tradeH.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample'+tradeH.Id">DCA Details</a>
+                                            <button id.bind="'btn-dca-orders'+tradeH.Id" click.delegate="activateDcaButton('orders'+tradeH.Id)" class="btn dca-item-link btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample'+tradeH.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample'+tradeH.Id">Orders (${dcaDetail.SwapRequests.length})</button>
+                                            <div class="accordion-group top20">
+                                                <div class="collapse show multi-collapse col-md-12" id.bind="'multiCollapseExample'+tradeH.Id" data-parent.bind="'#collapseDetail'+tradeH.Id">
                                                     <div class="card card-body">
                                                         <div class="row">
                                                             <div class="col-md-6">Sell total</div>
@@ -364,27 +454,40 @@
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">Total ${tradeH.TokenOutput} received</div>
-                                                            <div class="col-md-6">${dcaDetail.SwapRequests.reduce((n, {TokenOutputActual}) => n + TokenOutputActual, 0))</div>
+                                                            <div class="col-md-6">${dcaDetail.SwapRequestDCA.TokenOutputAmountActual} ${dcaDetail.SwapRequestDCA.TokenOutput}</div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="collapse multi-collapse" id="multiCollapseExample2">
-                                                <div class="card card-body">
-                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                                                </div>
+                                                <div class="collapse multi-collapse" id.bind="'multiCollapseExample'+tradeH.Id" data-parent.bind="'#collapseDetail'+tradeH.Id">
+                                                    <div class="card card-body">
+                                                        <div class="row" repeat.for="s of dcaDetail.SwapRequests">                                                            
+                                                            <div class="col-md-4">
+                                                                <p>
+                                                                    ${s.timestamp_month_name}
+                                                                    ${s.timestamp_day}
+                                                                    ${s.timestamp_time}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <p class="dca-order-item-firstp">
+                                                                    ${s.TokenInputAmount} ${s.TokenInput} ->                                                                     
+                                                                </p>
+                                                                <p><strong>${s.TokenOutputAmountActual} ${s.TokenOutput}</strong></p>
+                                                            </div>                                                
+                                                            <div class="col-md-4">     
+                                                                <p>
+                                                                    <a class="dca-swap-details-link" href="#" click.delegate="viewSwapDetails(s)">Swap details</a>
+                                                                </p>                                                                                                                           
+                                                            </div>   
+                                                            <div class="col-md-12 dca-order-item-line"><hr /></div>                                                            
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
-                                <ul class="list-group">
-                                    <li class="list-group-item" repeat.for="tradeH of dcaTradesHistory">
-                                        
-                                    </li>
-                                </ul>
+                                </div>
                             </div>
                         </div>
                     </div>

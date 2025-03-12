@@ -2007,3 +2007,53 @@ input.tradeValueUsd {
  .dcaDetailsBlock {
     min-height: 130px;
  }
+
+ .dcaWrapper .card {
+    transition: none;
+    transform: none;
+    border-radius: .25rem;
+ }
+
+ .top10 {
+    margin-top: 10px;
+ }
+
+ .top20 {
+    margin-top: 20px;
+ }
+
+ .dcaDetailsBlock .dcaInput {
+    border: 1px solid #22a275;
+ }
+
+ .dca-item-link,
+ .dca-swap-details-link {
+    color: #05413c !important;
+ }
+
+ .dca-swap-details-link {
+    text-decoration: underline;
+ }
+
+ .dca-item-link.active {
+    color: #fff !important;
+    background-color: #05413c !important;
+ }
+
+ .dca-trade-button {
+    color: #05413c !important;
+    text-align: left;
+    width: 100%;
+ }
+
+ .dca-trade-h2 {
+    text-align: left;
+ }
+
+ .dca-order-item-firstp {
+    margin-bottom: 0px;
+ }
+
+ .dca-order-item-line hr {
+    margin: 0px 0px 5px 0px;
+ }
