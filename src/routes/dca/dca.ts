@@ -369,7 +369,7 @@ export class DCA {
             t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
         }
         
-        let tradesFailure = await getSwapDCARequests(this.state.account.name, 100, 0, SwapStatus.Cancelled);
+        let tradesFailure = await getSwapDCARequests(this.state.account.name, 100, 0, SwapStatus.Failure);
         for (let t of tradesFailure) {
             t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
             t.timestamp_day = moment(t.CreatedAt).format('DD');
@@ -378,7 +378,25 @@ export class DCA {
             t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
         }
 
-        let tradesHistory = [...tradesSuccess, ...tradesFailure];
+        let tradesSuccessPartial = await getSwapDCARequests(this.state.account.name, 100, 0, SwapStatus.SuccessPartial);
+        for (let t of tradesSuccessPartial) {
+            t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
+            t.timestamp_day = moment(t.CreatedAt).format('DD');
+            t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
+            t.timestamp_year = moment(t.CreatedAt).format('YYYY');
+            t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
+        }
+
+        let tradesCancelled = await getSwapDCARequests(this.state.account.name, 100, 0, SwapStatus.Cancelled);
+        for (let t of tradesCancelled) {
+            t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
+            t.timestamp_day = moment(t.CreatedAt).format('DD');
+            t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
+            t.timestamp_year = moment(t.CreatedAt).format('YYYY');
+            t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
+        }
+
+        let tradesHistory = [...tradesSuccess, ...tradesFailure, ...tradesSuccessPartial, ...tradesCancelled];
         
         return this.sortByStartDate(tradesHistory);
     }
@@ -415,9 +433,9 @@ export class DCA {
     
       public sortByStartDate(array: ISwapRequestDCAViewModel[]): ISwapRequestDCAViewModel[] {
         return array.sort((a: ISwapRequestDCAViewModel, b: ISwapRequestDCAViewModel) => {
-            let aDate:Date = moment(a.CreatedAt,"YYYY-MM-DD").toDate();//.format("YYYY-MM-DD HH:mm");
-            let bDate:Date = moment(b.CreatedAt,"YYYY-MM-DD").toDate();//.format("YYYY-MM-DD HH:mm");
-          return this.getTime(aDate) - this.getTime(bDate);
+            let aDate:Date = moment(a.CreatedAt,"YYYY-MM-DD HH:mm").toDate();//.format("YYYY-MM-DD HH:mm");
+            let bDate:Date = moment(b.CreatedAt,"YYYY-MM-DD HH:mm").toDate();//.format("YYYY-MM-DD HH:mm");
+          return this.getTime(bDate) - this.getTime(aDate);
         });
       }
 

@@ -326,10 +326,10 @@
                                   
                                       <div id.bind="'collapse'+trade.Id" class="collapse" aria-labelledby.bind="'heading'+trade.Id" data-parent="#accordionExample">
                                         <div class="card-body" id.bind="'collapseDetail'+trade.Id">                                            
-                                            <button id.bind="'btn-dca-details'+trade.Id" click.delegate="activateDcaButton('details'+trade.Id)" class="btn dca-item-link active btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample'+trade.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample'+trade.Id">DCA Details</a>
-                                            <button id.bind="'btn-dca-orders'+trade.Id" click.delegate="activateDcaButton('orders'+trade.Id)" class="btn dca-item-link btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample'+trade.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample'+trade.Id">Orders (${dcaDetail.SwapRequests.length})</button>
+                                            <button id.bind="'btn-dca-details'+trade.Id" click.delegate="activateDcaButton('details'+trade.Id)" class="btn dca-item-link active btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample1'+trade.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample1'+trade.Id">DCA Details</a>
+                                            <button id.bind="'btn-dca-orders'+trade.Id" click.delegate="activateDcaButton('orders'+trade.Id)" class="btn dca-item-link btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample2'+trade.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample2'+trade.Id">Orders (${dcaDetail.SwapRequests.length})</button>
                                             <div class="accordion-group top20">
-                                                <div class="collapse show multi-collapse col-md-12" id.bind="'multiCollapseExample'+trade.Id" data-parent.bind="'#collapseDetail'+trade.Id">
+                                                <div class="collapse show multi-collapse col-md-12" id.bind="'multiCollapseExample1'+trade.Id" data-parent.bind="'#collapseDetail'+trade.Id">
                                                     <div class="card card-body">
                                                         <div class="row">
                                                             <div class="col-md-6">Sell total</div>
@@ -361,7 +361,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="collapse multi-collapse" id.bind="'multiCollapseExample'+trade.Id" data-parent.bind="'#collapseDetail'+trade.Id">
+                                                <div class="collapse multi-collapse" id.bind="'multiCollapseExample2'+trade.Id" data-parent.bind="'#collapseDetail'+trade.Id">
                                                     <div class="card card-body">
                                                         <div class="row" repeat.for="s of dcaDetail.SwapRequests">                                                            
                                                             <div class="col-md-4">
@@ -413,6 +413,7 @@
                                                 <div class="col-md-3">
                                                     <label show.bind="tradeH.SwapStatusName == 'Init'" class="btn btn-info">${tradeH.SwapStatusName}</label>
                                                     <label show.bind="tradeH.SwapStatusName == 'Success'" class="btn btn-success">${tradeH.SwapStatusName}</label>
+                                                    <label show.bind="tradeH.SwapStatusName == 'Success (partial)'" class="btn btn-success">${tradeH.SwapStatusName}</label>
                                                     <label show.bind="tradeH.SwapStatusName == 'Cancelled'" class="btn btn-warning">${tradeH.SwapStatusName}</label>
                                                     <label show.bind="tradeH.SwapStatusName == 'Failed'" class="btn btn-danger">${tradeH.SwapStatusName}</label> 
                                                 </div>
@@ -423,10 +424,10 @@
                                   
                                       <div id.bind="'collapse'+tradeH.Id" class="collapse" aria-labelledby.bind="'heading'+tradeH.Id" data-parent="#accordionExample">
                                         <div class="card-body" id.bind="'collapseDetail'+tradeH.Id">                                            
-                                            <button id.bind="'btn-dca-details'+tradeH.Id" click.delegate="activateDcaButton('details'+tradeH.Id)" class="btn dca-item-link active btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample'+tradeH.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample'+tradeH.Id">DCA Details</a>
-                                            <button id.bind="'btn-dca-orders'+tradeH.Id" click.delegate="activateDcaButton('orders'+tradeH.Id)" class="btn dca-item-link btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample'+tradeH.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample'+tradeH.Id">Orders (${dcaDetail.SwapRequests.length})</button>
+                                            <button id.bind="'btn-dca-details'+tradeH.Id" click.delegate="activateDcaButton('details'+tradeH.Id)" class="btn dca-item-link active btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample3'+tradeH.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample3'+tradeH.Id">DCA Details</a>
+                                            <button id.bind="'btn-dca-orders'+tradeH.Id" click.delegate="activateDcaButton('orders'+tradeH.Id)" class="btn dca-item-link btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample4'+tradeH.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample4'+tradeH.Id">Orders (${dcaDetail.SwapRequests.length})</button>
                                             <div class="accordion-group top20">
-                                                <div class="collapse show multi-collapse col-md-12" id.bind="'multiCollapseExample'+tradeH.Id" data-parent.bind="'#collapseDetail'+tradeH.Id">
+                                                <div class="collapse show multi-collapse col-md-12" id.bind="'multiCollapseExample3'+tradeH.Id" data-parent.bind="'#collapseDetail'+tradeH.Id">
                                                     <div class="card card-body">
                                                         <div class="row">
                                                             <div class="col-md-6">Sell total</div>
@@ -458,7 +459,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="collapse multi-collapse" id.bind="'multiCollapseExample'+tradeH.Id" data-parent.bind="'#collapseDetail'+tradeH.Id">
+                                                <div class="collapse multi-collapse" id.bind="'multiCollapseExample4'+tradeH.Id" data-parent.bind="'#collapseDetail'+tradeH.Id">
                                                     <div class="card card-body">
                                                         <div class="row" repeat.for="s of dcaDetail.SwapRequests">                                                            
                                                             <div class="col-md-4">
