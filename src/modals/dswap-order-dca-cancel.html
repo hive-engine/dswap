@@ -1,0 +1,68 @@
+<template>
+    <ux-dialog>
+        <loader mode="tiny" loading.bind="loading"></loader>
+
+        <ux-dialog-header class="modal-header">
+            <h2>${'DSwap Cancel DCA' & t}</h2>
+        </ux-dialog-header>
+        <ux-dialog-body class="withdrawDialogBody modal-body">
+            <div class="form-group">
+                <div class="estimated-trade-info-wrapper">
+                    <div>
+                        <div class="alert alert-warning">
+                            <p>Are you sure you want to cancel your DCA request with following details?</p>
+                            <p>Make sure you hold at least ${dswapDcaCancelFee} to send your cancel request.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 style="margin-left: 0; margin-bottom: 7px;"
+                                    class="action-title">
+                                    DCA Summary                                
+                            </h4>
+                            <div class="row">
+                                <div class="col-md-6">Sell total</div>
+                                <div class="col-md-6">${swapRequestModel.TokenInputAmount} ${swapRequestModel.TokenInput}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Sell per order</div>
+                                <div class="col-md-6">${swapRequestModel.TokenInputAmount / swapRequestModel.OrderCount} ${swapRequestModel.TokenInput}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">To buy</div>
+                                <div class="col-md-6">${swapRequestModel.TokenOutput}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Order interval</div>
+                                <div class="col-md-6">Every ${swapRequestModel.RecurrenceTypeAmount} ${swapRequestModel.RecurrenceType}</div>
+                            </div>                        
+                            <div class="row">
+                                <div class="col-md-6">Total orders</div>
+                                <div class="col-md-6">${swapRequestModel.OrderCount}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Platform fee</div>
+                                <div class="col-md-6">${dswapDcaFee}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ux-dialog-body>
+
+        <ux-dialog-footer>
+            <button
+                class="btn btn-lg redBtn"
+                click.trigger="controller.cancel()"
+            >
+                ${'No' & t}
+            </button>
+            <button
+                class="btn btn-lg greenBtns trade-button"
+                click.trigger="confirmSend()"
+            >
+                ${'Yes' & t}
+            </button>
+        </ux-dialog-footer>
+    </ux-dialog>
+</template>

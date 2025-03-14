@@ -14,7 +14,8 @@ export enum SwapStatus {
     Success = 3,
     Failure = 4,
     Cancelled = 9,
-    SuccessPartial = 10
+    SuccessPartial = 10,
+    CancelRequested = 11
 }
 
 export enum SwapStep {

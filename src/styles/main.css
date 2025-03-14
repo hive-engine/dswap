@@ -2057,3 +2057,12 @@ input.tradeValueUsd {
  .dca-order-item-line hr {
     margin: 0px 0px 5px 0px;
  }
+
+ .dcaWrapper img, video {
+    max-width: 100%;
+    height: auto;
+}
+
+.dcaWrapper .w-6 {
+    width: 1.5rem;
+}

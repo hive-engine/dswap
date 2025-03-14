@@ -13,9 +13,11 @@ import { SwapService } from 'services/swap-service';
 import { swapRequest } from 'common/dswap-api';
 import { getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getRandomID } from 'common/functions';
 import { TokenService } from '../services/token-service';
+import { env } from 'process';
+import { Chain, SwapStatus } from 'common/enums';
 
 @autoinject()
-export class DswapOrderDcaModal {
+export class DswapOrderDcaCancelModal {
     @bindable amount;
     @bindable username;
     @bindable copyTxt = "Copy";
@@ -27,7 +29,7 @@ export class DswapOrderDcaModal {
     private token: any;
     private validationController;
     private renderer;
-    private swapRequestModel: ISwapRequestDCAModel;
+    private swapRequestModel: ISwapRequestDCAViewModel;
     private baseTokenSymbol;
     public storeSubscription: Subscription;
     private state: IState;
@@ -38,6 +40,7 @@ export class DswapOrderDcaModal {
     private customMemoId;
     private swapV2;
     private dswapDcaFee;
+    private dswapDcaCancelFee;
 
     constructor(private controller: DialogController, private toast: ToastService, private taskQueue: TaskQueue, private store: Store<IState>,
         private controllerFactory: ValidationControllerFactory, private i18n: I18N, private hes: HiveEngineService, private ss: SwapService, private ts: TokenService) {
@@ -59,9 +62,10 @@ export class DswapOrderDcaModal {
     bind() {
         this.createValidationRules();
         this.dswapDcaFee = environment.dswapDcaFee + '%';
+        this.dswapDcaCancelFee = environment.dswapDcaCancelFee + " " + environment.peggedToken;
     }
 
-    async activate(swapRequestModel: ISwapRequestDCAModel) {        
+    async activate(swapRequestModel: ISwapRequestDCAViewModel) {        
         console.log(swapRequestModel);
         this.swapRequestModel = swapRequestModel;
         this.baseTokenSymbol = await getPeggedTokenSymbolByChain(swapRequestModel.Chain);
@@ -99,26 +103,6 @@ export class DswapOrderDcaModal {
         }
     }
 
-    copyMessage(val: string, memo: boolean) {
-        const selBox = document.createElement('textarea');
-        selBox.style.position = 'fixed';
-        selBox.style.left = '0';
-        selBox.style.top = '0';
-        selBox.style.opacity = '0';
-        selBox.value = val;
-        document.body.appendChild(selBox);
-        selBox.focus();
-        selBox.select();
-        document.execCommand('copy');
-        document.body.removeChild(selBox);
-
-        if (memo) {
-            this.copyMemoTxt = "Copied!";
-        } else {
-            this.copyTxt = "Copied!";
-        }
-    }
-
     balanceClicked() {
         this.amount = this.token.stake;
     }
@@ -147,61 +131,64 @@ export class DswapOrderDcaModal {
             }
         }
 
-        if (this.sellToken && this.sellToken.isCrypto && !this.depositAddress) {
-            const toast = new ToastMessage();
+        if (this.swapRequestModel.SwapStatusId != SwapStatus.InProgress &&
+            this.swapRequestModel.SwapStatusId != SwapStatus.CancelRequested &&
+            this.swapRequestModel.SwapStatusId != SwapStatus.Init
+        ) {
+            customValid = false;
 
-            toast.message = this.i18n.tr("DepositAddressMissing", {
-                stake: this.token.stake,
-                symbol: this.token.symbol,
+            const toast = new ToastMessage();            
+            toast.message = this.i18n.tr("dcaCancelErrorUnsupportedStatus", {
+                error: '',
                 ns: 'errors'
             });
 
             this.toast.error(toast);
+        }
+
+        if (this.swapRequestModel.Account != this.state.account.name) {
             customValid = false;
+
+            const toast = new ToastMessage();            
+            toast.message = this.i18n.tr("dcaCancelErrorUsernameMismatch", {
+                error: '',
+                ns: 'errors'
+            });
+
+            this.toast.error(toast);
         }
 
         if (validationResult.valid && customValid) {
             //let waitMsg = this.i18n.tr('swapRequestQueued', {
             //    ns: 'notifications'
             //});
+            var txMemoId = getRandomID();                
 
-            if (this.swapRequestModel.TokenInputMemo)
-            {
-                this.swapV2 = false;
-                let txMemo = this.swapRequestModel.TokenInputMemo;
-                if (this.customMemo)
-                    txMemo += " " + this.customMemo;
+             let dcaCancelRequestModel: IDCACancelRequestModel = {
+                            Account: this.state.account.name,
+                            Chain: Chain.Hive,
+                            ChainTransactionId: "",
+                            DCAId: this.swapRequestModel.Id,
+                            SourceId: environment.DSWAP_SOURCE_ID,
+                            TokenInputMemo: txMemoId,
+                            Message: ""
+                        };            
 
-                this.swapRequestModel.ChainTransactionId = txMemo;
+            let dcaCancelResponse = await this.ss.CancelSwapRequestDCA(dcaCancelRequestModel);
+            this.swapV2 = true;
 
-                // update token input memo with unique id generated (if it is applicable)
-                if (this.customMemo)
-                    this.swapRequestModel.TokenInputMemo = this.customMemoId;
+            var txMemo = "SwapRequestDCA Cancel " + txMemoId;
+            if (dcaCancelResponse && dcaCancelResponse.Id) {
+                var sendTx = await this.hes.sendToken(environment.peggedToken, environment.DSWAP_ACCOUNT_HE, environment.dswapDcaCancelFee, txMemo, '', 'tokensSentDca');
+                if (sendTx) {
+                    if (sendTx.transactionId) {
+                        //this.swapRequestModel.ChainTransactionId = sendTx.transactionId;
 
-                let swapResponse = await this.ss.SwapRequestDCA(this.swapRequestModel);
-
-                if (swapResponse && swapResponse.Id) {
-                    this.controller.ok();
-                }
-            } else {
-                var txMemoId = getRandomID();                
-                this.swapRequestModel.TokenInputMemo = txMemoId;                
-                let swapResponse = await this.ss.SwapRequestDCA(this.swapRequestModel);
-                this.swapV2 = true;
-
-                var txMemo = "SwapRequestDCA " + txMemoId;
-                if (swapResponse && swapResponse.Id) {
-                    var sendTx = await this.hes.sendToken(this.swapRequestModel.TokenInput, environment.DSWAP_ACCOUNT_HE, this.swapRequestModel.TokenInputAmount, txMemo, '', 'tokensSentDca');
-                    if (sendTx) {
-                        if (sendTx.transactionId) {
-                            //this.swapRequestModel.ChainTransactionId = sendTx.transactionId;
-
-                            await this.ts.enrichTokensWithUserBalances([this.swapRequestModel.TokenInput]);
-                            this.controller.ok();
-                        }
-                    } else {
-                        this.swapRequestModel.TokenInputMemo = "";
+                        await this.ts.enrichTokensWithUserBalances([this.swapRequestModel.TokenInput]);
+                        this.controller.ok();
                     }
+                } else {
+                    this.swapRequestModel.TokenInputMemo = "";
                 }
             }
         }

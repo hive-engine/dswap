@@ -19,8 +19,9 @@ import { environment } from 'environment';
 import { Chain, SwapStatus } from 'common/enums';
 import { SwapService } from 'services/swap-service';
 import { env } from 'process';
-import { getSwapDCADetail, getSwapDCARequests } from 'common/dswap-api';
+import { getDCACancelRequests, getSwapDCADetail, getSwapDCARequests } from 'common/dswap-api';
 import { DswapSwapdetailsModal } from 'modals/dswap-swapdetails';
+import { DswapOrderDcaCancelModal } from 'modals/dswap-order-dca-cancel';
 
 @autoinject()
 @customElement('dca')
@@ -120,6 +121,17 @@ export class DCA {
         this.taskQueue.queueTask({
             call: () => $('.selectpicker').selectpicker("refresh")
         });        
+    }
+
+    tokenImage(symbol) {
+        if (symbol == environment.marketMakerFeeToken) {
+            return environment.EXCHANGE_URL_HE + 'images/logo-small.png';
+        } else {
+            var t = this.state.tokens.find(x => x.symbol === symbol);
+            if (t) {
+                return t.metadata.icon;
+            }
+        }
     }
     
     async attached() {
@@ -355,6 +367,15 @@ export class DCA {
         }
 
         let tradesActive = [...tradesInit, ...tradesInProgress];
+
+        let dcaCancelRequests = await getDCACancelRequests(this.state.account.name, SwapStatus.Init);
+        for (let t of tradesActive) {
+            for (let d of dcaCancelRequests) {
+                if (t.Id == d.DCAId) {
+                    t.CancelRequested = true;
+                }
+            }
+        }
         
         return tradesActive;
     }
@@ -425,6 +446,21 @@ export class DCA {
     activateDcaButton(button) {
         $(".btn-dca").removeClass("active");
         $("#btn-dca-"+button).addClass("active");
+    }
+
+    dcaCancel(trade) {
+        console.log('DCA Cancel: ' + trade.Id);
+        this.dialogService.open({ viewModel: DswapOrderDcaCancelModal, model: trade }).whenClosed(response => {
+            console.log(response);
+            if (!response.wasCancelled) {
+                this.loadDCARequests();
+            }
+        });
+    }
+
+    async loadDCARequests(){
+        this.dcaTradesActive = await this.getActiveDCARequests();
+        this.dcaTradesHistory = await this.getHistoricalDCARequests();
     }
 
     private getTime(date?: Date) {

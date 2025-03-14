@@ -158,6 +158,26 @@ export async function swapRequestDca(swapRequest: ISwapRequestDCAModel): Promise
     return response.json() as Promise<ISwapRequestDCAResponseModel>;
 }
 
+export async function swapRequestDcaCancel(request: IDCACancelRequestModel): Promise<IDCACancelViewModel> {
+    let baseUrl = environment.DSWAP_API_URL;
+    let urlToCall = baseUrl + "SwapRequest/DCACancel";
+
+    if (environment.DSWAP_API_VERSION != "" && environment.DSWAP_API_VERSION != "1.0") {
+        urlToCall += `?api-version=${environment.DSWAP_API_VERSION}`;
+    }
+
+    const response = await http.fetch(urlToCall, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(request)
+    });
+
+    return response.json() as Promise<IDCACancelViewModel>;
+}
+
 export async function getSwapDCARequests(account: string, limit = 20, offset = 0, status?: SwapStatus): Promise<ISwapRequestDCAViewModel[]> {
     let url = `${environment.DSWAP_API_URL}SwapRequest/DCARequests?account=${account}`;
 
@@ -196,4 +216,23 @@ export async function getSwapDCADetail(id: string): Promise<ISwapRequestDCADetai
     });    
 
     return response.json() as Promise<ISwapRequestDCADetailViewModel>;
+}
+
+
+export async function getDCACancelRequests(account: string,status?: SwapStatus): Promise<IDCACancelViewModel[]> {
+    let url = `${environment.DSWAP_API_URL}SwapRequest/DCACancelRequests?account=${account}`;
+    
+    if (status) {
+        url += `&status=${status}`;
+    }
+
+    if (environment.DSWAP_API_VERSION != "" && environment.DSWAP_API_VERSION != "1.0") {
+        url += `&api-version=${environment.DSWAP_API_VERSION}`;
+    }
+
+    const response = await http.fetch(url, {
+        method: 'GET',
+    });    
+
+    return response.json() as Promise<IDCACancelViewModel[]>;
 }

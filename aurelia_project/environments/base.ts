@@ -41,6 +41,7 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     marketMakerEnabled: true,
     dswapPaused: false,
     dswapDcaFee: 1,
+    dswapDcaCancelFee: 0.001,
     features: {
         nfts: {
             enabled: true

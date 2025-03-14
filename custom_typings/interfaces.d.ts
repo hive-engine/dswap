@@ -51,6 +51,7 @@ interface IEnvironment {
     isDebug: boolean;
     debugAccount: string;
     dswapDcaFee: number;
+    dswapDcaCancelFee: number;
 }
 
 interface IState {
@@ -405,9 +406,39 @@ interface ISwapRequestDCAViewModel {
     RecurrenceTypeAmount: number,
     RecurrenceType: string,
     OrderCount: number
+    TokenInputMemo: string;
+    CancelRequested: boolean;
 }
 
 interface ISwapRequestDCADetailViewModel {
     SwapRequestDCA: ISwapRequestDCAViewModel;
     SwapRequests: ISwapRequestViewModel[];
+}
+
+interface IDCACancelRequestModel {
+    Account: string;
+    Chain: number;
+    ChainTransactionId: string;
+    DCAId: string;
+    SourceId: string; 
+    TokenInputMemo: string;
+    Message: string;
+}
+
+interface IDCACancelViewModel {
+    Id: string;
+    Account: string;
+    Chain: number;
+    ChainTransactionId: string;
+    CreatedAt: string;
+    DCAId: string;
+    Message: string;
+    SourceId: string; 
+    StatusId: number;
+    StatusName: string;
+    timestamp_month_name: string;
+    timestamp_day: string;
+    timestamp_time: string;
+    timestamp_year: string;
+    TokenInputMemo: string;
 }

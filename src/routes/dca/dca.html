@@ -301,13 +301,13 @@
                                         <h2 class="mb-0 dca-trade-h2">
                                           <button class="btn btn-link dca-trade-button" type="button" click.delegate="loadDcaData(trade.Id)" data-toggle="collapse" data-target.bind="'#collapse'+trade.Id" aria-expanded="true" aria-controls="collapseOne">
                                             <div class="row">
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     ${trade.timestamp_month_name}
                                                     ${trade.timestamp_day}
                                                     ${trade.timestamp_time}
                                                 </div>
-                                                <div class="col-md-3">
-                                                    ${trade.TokenInput} -> ${trade.TokenOutput}
+                                                <div class="col-md-4">
+                                                    ${trade.TokenInput} <img class="w-6" src.bind="tokenImage(trade.TokenInput)"/> -> ${trade.TokenOutput} <img class="w-6" src.bind="tokenImage(trade.TokenOutput)" />
                                                 </div>
                                                 <div class="col-md-2">
                                                     ${trade.TokenInputAmount} ${trade.TokenInput}
@@ -318,6 +318,8 @@
                                                     <label show.bind="trade.SwapStatusName == 'Success'" class="btn btn-success">${trade.SwapStatusName}</label>
                                                     <label show.bind="trade.SwapStatusName == 'Cancelled'" class="btn btn-warning">${trade.SwapStatusName}</label>
                                                     <label show.bind="trade.SwapStatusName == 'Failed'" class="btn btn-danger">${trade.SwapStatusName}</label>                                                    
+                                                    <label class="btn btn-danger" click.delegate="dcaCancel(trade)"><i class="fa fa-times" aria-hidden="true"></i></label>
+                                                    <label class="btn btn-warning" show.bind="trade.CancelRequested">Cancel requested</label>
                                                 </div>
                                             </div>
                                           </button>
@@ -333,15 +335,15 @@
                                                     <div class="card card-body">
                                                         <div class="row">
                                                             <div class="col-md-6">Sell total</div>
-                                                            <div class="col-md-6">${trade.TokenInputAmount} ${trade.TokenInput}</div>
+                                                            <div class="col-md-6">${trade.TokenInputAmount} ${trade.TokenInput} <img class="w-6" src.bind="tokenImage(trade.TokenInput)"/></div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">Sell per order</div>
-                                                            <div class="col-md-6">${trade.TokenInputAmount / trade.OrderCount} ${trade.TokenInput}</div>
+                                                            <div class="col-md-6">${trade.TokenInputAmount / trade.OrderCount} ${trade.TokenInput}  <img class="w-6" src.bind="tokenImage(trade.TokenInput)"/></div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">To buy</div>
-                                                            <div class="col-md-6">${trade.TokenOutput}</div>
+                                                            <div class="col-md-6">${trade.TokenOutput} <img class="w-6" src.bind="tokenImage(trade.TokenOutput)"/></div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">Order interval</div>
@@ -356,8 +358,8 @@
                                                             <div class="col-md-6">${dcaDetail.SwapRequests.length}</div>
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-md-6">Total ${tradeH.TokenOutput} received</div>
-                                                            <div class="col-md-6">${dcaDetail.SwapRequestDCA.TokenOutputAmountActual} ${dcaDetail.SwapRequestDCA.TokenOutput}</div>
+                                                            <div class="col-md-6">Total ${trade.TokenOutput} received</div>
+                                                            <div class="col-md-6">${dcaDetail.SwapRequestDCA.TokenOutputAmountActual} ${dcaDetail.SwapRequestDCA.TokenOutput} <img class="w-6" src.bind="tokenImage(trade.TokenOutput)"/></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -373,9 +375,9 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <p class="dca-order-item-firstp">
-                                                                    ${s.TokenInputAmount} ${s.TokenInput} ->                                                                     
+                                                                    ${s.TokenInputAmount} ${s.TokenInput} <img class="w-6" src.bind="tokenImage(s.TokenInput)"/> ->                                                                     
                                                                 </p>
-                                                                <p><strong>${s.TokenOutputAmountActual} ${s.TokenOutput}</strong></p>
+                                                                <p><strong>${s.TokenOutputAmountActual} ${s.TokenOutput} <img class="w-6" src.bind="tokenImage(s.TokenOutput)"/></strong></p>
                                                             </div>                                                
                                                             <div class="col-md-4">     
                                                                 <p>
@@ -399,16 +401,16 @@
                                         <h2 class="mb-0 dca-trade-h2">
                                           <button class="btn btn-link dca-trade-button" type="button" click.delegate="loadDcaData(tradeH.Id)" data-toggle="collapse" data-target.bind="'#collapse'+tradeH.Id" aria-expanded="true" aria-controls="collapseOne">
                                             <div class="row">
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     ${tradeH.timestamp_month_name}
                                                     ${tradeH.timestamp_day}
                                                     ${tradeH.timestamp_time}
                                                 </div>
-                                                <div class="col-md-3">
-                                                    ${tradeH.TokenInput} -> ${tradeH.TokenOutput}
+                                                <div class="col-md-4">
+                                                    ${tradeH.TokenInput} <img class="w-6" src.bind="tokenImage(tradeH.TokenInput)"/> -> ${tradeH.TokenOutput} <img class="w-6" src.bind="tokenImage(tradeH.TokenOutput)"/>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    ${tradeH.TokenInputAmount} ${tradeH.TokenInput}
+                                                    ${tradeH.TokenInputAmount} ${tradeH.TokenInput} 
                                                 </div>
                                                 <div class="col-md-3">
                                                     <label show.bind="tradeH.SwapStatusName == 'Init'" class="btn btn-info">${tradeH.SwapStatusName}</label>
@@ -431,15 +433,15 @@
                                                     <div class="card card-body">
                                                         <div class="row">
                                                             <div class="col-md-6">Sell total</div>
-                                                            <div class="col-md-6">${tradeH.TokenInputAmount} ${tradeH.TokenInput}</div>
+                                                            <div class="col-md-6">${tradeH.TokenInputAmount} ${tradeH.TokenInput} <img class="w-6" src.bind="tokenImage(tradeH.TokenInput)"/></div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">Sell per order</div>
-                                                            <div class="col-md-6">${tradeH.TokenInputAmount / tradeH.OrderCount} ${tradeH.TokenInput}</div>
+                                                            <div class="col-md-6">${tradeH.TokenInputAmount / tradeH.OrderCount} ${tradeH.TokenInput} <img class="w-6" src.bind="tokenImage(tradeH.TokenInput)"/></div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">To buy</div>
-                                                            <div class="col-md-6">${tradeH.TokenOutput}</div>
+                                                            <div class="col-md-6">${tradeH.TokenOutput} <img class="w-6" src.bind="tokenImage(tradeH.TokenOutput)"/></div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">Order interval</div>
@@ -455,7 +457,7 @@
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">Total ${tradeH.TokenOutput} received</div>
-                                                            <div class="col-md-6">${dcaDetail.SwapRequestDCA.TokenOutputAmountActual} ${dcaDetail.SwapRequestDCA.TokenOutput}</div>
+                                                            <div class="col-md-6">${dcaDetail.SwapRequestDCA.TokenOutputAmountActual} ${dcaDetail.SwapRequestDCA.TokenOutput}  <img class="w-6" src.bind="tokenImage(tradeH.TokenOutput)"/></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -471,9 +473,9 @@
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <p class="dca-order-item-firstp">
-                                                                    ${s.TokenInputAmount} ${s.TokenInput} ->                                                                     
+                                                                    ${s.TokenInputAmount} ${s.TokenInput}  <img class="w-6" src.bind="tokenImage(s.TokenInput)"/> ->                                                                     
                                                                 </p>
-                                                                <p><strong>${s.TokenOutputAmountActual} ${s.TokenOutput}</strong></p>
+                                                                <p><strong>${s.TokenOutputAmountActual} ${s.TokenOutput}  <img class="w-6" src.bind="tokenImage(s.TokenOutput)"/></strong></p>
                                                             </div>                                                
                                                             <div class="col-md-4">     
                                                                 <p>
