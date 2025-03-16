@@ -53,7 +53,7 @@
                         <div class="sell action-card">
                             <div class="action-card-options">
                                 <div class="form-group">
-                                    <select id="selectpicker-sell"
+                                    <select id="selectpicker-sell" data-live-search="true"
                                             class="form-control selectpicker tokenSelect"
                                             value.bind="sellTokenSymbol"
                                             change.delegate="sellTokenSelected()">
@@ -94,7 +94,7 @@
                             <div class="action-input">
                                 <input class="form-control transparent-bgn action-input-box text-right"
                                        type="text"
-                                       readonly.bind="!sellToken || !buyToken"
+                                       readonly.bind="!sellToken"
                                        value.bind="sellTokenAmount"
                                        keydown.trigger="sellTokenAmountInViewChanged($event) & debounce:300"
                                        placeholder="0.000" />
@@ -134,7 +134,7 @@
                         <div class="action-card">
                             <div class="action-card-options">
                                 <div class="form-group">
-                                    <select id="selectpicker-buy"
+                                    <select id="selectpicker-buy" data-live-search="true"
                                             class="form-control selectpicker tokenSelect"
                                             value.bind="buyTokenSymbol"
                                             change.delegate="buyTokenSelected()">
@@ -283,10 +283,12 @@
                     <div class="col-md-6">
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link dca-item-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">DCA Active</a>
+                                <a click.delegate="loadDcaActive()" class="nav-link dca-item-link active" id="pills-home-tab" 
+                                data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">DCA Active</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link dca-item-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">DCA History</a>
+                                <a click.delegate="loadDcaHistory()" class="nav-link dca-item-link" id="pills-profile-tab" 
+                                data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">DCA History</a>
                             </li>
                         </ul>
                     </div>

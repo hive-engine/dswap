@@ -184,13 +184,15 @@ export class HiveEngineService {
                 return;
             }
 
+            console.log(quantity);
+
             const transaction_data = {
                 'contractName': 'tokens',
                 'contractAction': 'transfer',
                 'contractPayload': {
                     'symbol': symbol,
                     'to': to,
-                    'quantity': JSON.stringify(quantity),
+                    'quantity': String(quantity),
                     'memo': memo
                 }
             };

@@ -6,7 +6,7 @@ import { DswapOrderDcaModal } from 'modals/dswap-order-dca';
 import { DialogService } from 'aurelia-dialog';
 import { Store, dispatchify } from 'aurelia-store';
 import { ChartComponent } from 'components/chart/chart';
-import { loadTokenMarketHistory, loadBuyBook, loadSellBook } from 'common/hive-engine-api';
+import { loadTokenMarketHistory, loadBuyBook, loadSellBook, loadTokens } from 'common/hive-engine-api';
 import moment from 'moment';
 import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getPeggedTokenPriceByChain, isNumeric, getSwapStatusById } from 'common/functions';
 import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
@@ -456,6 +456,14 @@ export class DCA {
                 this.loadDCARequests();
             }
         });
+    }
+
+    async loadDcaActive() {
+        this.dcaTradesActive = await this.getActiveDCARequests();
+    }
+
+    async loadDcaHistory() {
+        this.dcaTradesHistory = await this.getHistoricalDCARequests();
     }
 
     async loadDCARequests(){
