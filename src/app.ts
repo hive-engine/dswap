@@ -82,11 +82,11 @@ bind() {
             title: "Dashboard",
         },
         {
-            route: "dca/:symbol?/:transactionType?",
+            route: "dca",
             name: "dca",
             moduleId: PLATFORM.moduleName("./routes/dca/dca"),
             nav: false,
-            title: "DCA",
+            title: "Market DCA",
         },
         {
             route: "wallet",

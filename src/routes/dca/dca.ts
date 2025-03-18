@@ -40,7 +40,8 @@ export class DCA {
     private tradeValueUsd;
     private loggedIn;
     @bindable() tradePercentage;
-    @bindable loading = false;
+    @bindable() loading = false;
+    @bindable() loadingDCA = false;
     
     private chartRefBuy: ChartComponent;
     private chartRefSell: ChartComponent;
@@ -184,6 +185,9 @@ export class DCA {
             this.dialogService.open({ viewModel: DswapOrderDcaModal, model: swapRequestDcaModel }).whenClosed(response => {
                 console.log(response);
                 this.loading = false;
+                if (!response.wasCancelled) {
+                    this.loadDcaActive();
+                }
             });
         }
     }
@@ -347,26 +351,15 @@ export class DCA {
 
     // DCA overview & history
     async getActiveDCARequests(){               
-
-        let tradesInit = await getSwapDCARequests(this.state.account.name, 100, 0, SwapStatus.Init);
-        for (let t of tradesInit) {
+        this.loadingDCA = true;
+        let tradesActive = await getSwapDCARequests(this.state.account.name, 100, 0, [SwapStatus.Init, SwapStatus.InProgress]);
+        for (let t of tradesActive) {
             t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
             t.timestamp_day = moment(t.CreatedAt).format('DD');
             t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
             t.timestamp_year = moment(t.CreatedAt).format('YYYY');
             t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
         }
-        
-        let tradesInProgress = await getSwapDCARequests(this.state.account.name, 100, 0, SwapStatus.InProgress);
-        for (let t of tradesInProgress) {
-            t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
-            t.timestamp_day = moment(t.CreatedAt).format('DD');
-            t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
-            t.timestamp_year = moment(t.CreatedAt).format('YYYY');
-            t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
-        }
-
-        let tradesActive = [...tradesInit, ...tradesInProgress];
 
         let dcaCancelRequests = await getDCACancelRequests(this.state.account.name, SwapStatus.Init);
         for (let t of tradesActive) {
@@ -376,13 +369,22 @@ export class DCA {
                 }
             }
         }
+
+        this.loadingDCA = false;
         
         return tradesActive;
     }
 
+    async refreshDcaOverview(){
+        this.loadingDCA = true;
+        await this.loadDCARequests();
+        this.loadingDCA = false;
+    }
+
     async getHistoricalDCARequests(){
-        let tradesSuccess = await getSwapDCARequests(this.state.account.name, 100, 0, SwapStatus.Success);
-        for (let t of tradesSuccess) {
+        this.loadingDCA = true;
+        let tradesHistory = await getSwapDCARequests(this.state.account.name, 100, 0, [SwapStatus.Success, SwapStatus.Failure, SwapStatus.SuccessPartial, SwapStatus.Cancelled, SwapStatus.Expired]);
+        for (let t of tradesHistory) {
             t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
             t.timestamp_day = moment(t.CreatedAt).format('DD');
             t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
@@ -390,35 +392,7 @@ export class DCA {
             t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
         }
         
-        let tradesFailure = await getSwapDCARequests(this.state.account.name, 100, 0, SwapStatus.Failure);
-        for (let t of tradesFailure) {
-            t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
-            t.timestamp_day = moment(t.CreatedAt).format('DD');
-            t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
-            t.timestamp_year = moment(t.CreatedAt).format('YYYY');
-            t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
-        }
-
-        let tradesSuccessPartial = await getSwapDCARequests(this.state.account.name, 100, 0, SwapStatus.SuccessPartial);
-        for (let t of tradesSuccessPartial) {
-            t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
-            t.timestamp_day = moment(t.CreatedAt).format('DD');
-            t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
-            t.timestamp_year = moment(t.CreatedAt).format('YYYY');
-            t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
-        }
-
-        let tradesCancelled = await getSwapDCARequests(this.state.account.name, 100, 0, SwapStatus.Cancelled);
-        for (let t of tradesCancelled) {
-            t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
-            t.timestamp_day = moment(t.CreatedAt).format('DD');
-            t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
-            t.timestamp_year = moment(t.CreatedAt).format('YYYY');
-            t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
-        }
-
-        let tradesHistory = [...tradesSuccess, ...tradesFailure, ...tradesSuccessPartial, ...tradesCancelled];
-        
+        this.loadingDCA = false;
         return this.sortByStartDate(tradesHistory);
     }
 
@@ -430,6 +404,7 @@ export class DCA {
                 t.timestamp_day = moment(t.CreatedAt).format('DD');
                 t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
                 t.timestamp_year = moment(t.CreatedAt).format('YYYY');
+                t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
             }
         }
         this.dcaDetail = dcaDetail;  

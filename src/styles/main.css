@@ -2044,6 +2044,7 @@ input.tradeValueUsd {
     color: #05413c !important;
     text-align: left;
     width: 100%;
+    padding: 5px !important;
  }
 
  .dca-trade-h2 {
@@ -2065,4 +2066,45 @@ input.tradeValueUsd {
 
 .dcaWrapper .w-6 {
     width: 1.5rem;
+}
+
+.dcaArrowDown {
+    /*margin-left: -20px;*/
+    margin-top: 5px;
+}
+
+.dcaOverviewPanel {
+    margin-bottom: 50px;
+}
+
+.noDcaActive {
+    padding: 10px 0px;
+}
+
+.nav-item-refresh {
+    position: absolute;
+    right: 15px;
+    top: 0;
+}
+
+.dcaRow p,
+.dcaRow label {
+    font-size: 14px !important;
+}
+
+.dcaRow {
+    padding: 5px !important;
+}
+
+.dcaIndex {
+    /*margin-left: -20px;*/
+}
+
+.dcaIndexRow div {
+    padding: 5px !important;
+}
+
+.dcaIndexRow div.dcaIndexCol {
+    margin-left: 0px;
+    padding-left: 15px !important;
 }

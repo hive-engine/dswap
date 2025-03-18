@@ -348,6 +348,9 @@ export function getSwapStatusById(swapStatusId: number) {
         case SwapStatus.Cancelled:
             swapStatusName = "Cancelled";
             break;        
+        case SwapStatus.Expired:
+            swapStatusName = "Expired";
+            break;        
     }
 
     return swapStatusName;

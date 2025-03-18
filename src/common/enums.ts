@@ -13,6 +13,7 @@ export enum SwapStatus {
     InProgress = 2,
     Success = 3,
     Failure = 4,
+    Expired = 7,
     Cancelled = 9,
     SuccessPartial = 10,
     CancelRequested = 11

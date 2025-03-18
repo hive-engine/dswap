@@ -178,7 +178,7 @@ export async function swapRequestDcaCancel(request: IDCACancelRequestModel): Pro
     return response.json() as Promise<IDCACancelViewModel>;
 }
 
-export async function getSwapDCARequests(account: string, limit = 20, offset = 0, status?: SwapStatus): Promise<ISwapRequestDCAViewModel[]> {
+export async function getSwapDCARequests(account: string, limit = 20, offset = 0, statuses?: SwapStatus[]): Promise<ISwapRequestDCAViewModel[]> {
     let url = `${environment.DSWAP_API_URL}SwapRequest/DCARequests?account=${account}`;
 
     if (limit) {
@@ -189,8 +189,10 @@ export async function getSwapDCARequests(account: string, limit = 20, offset = 0
         url += `&offset=${offset}`;
     }
 
-    if (status) {
-        url += `&status=${status}`;
+    if (statuses) {
+        statuses.forEach(s => {
+            url += `&statuses=${s}`;
+        });        
     }
 
     if (environment.DSWAP_API_VERSION != "" && environment.DSWAP_API_VERSION != "1.0") {

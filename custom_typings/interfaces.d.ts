@@ -324,6 +324,7 @@ interface ISwapRequestViewModel {
     timestamp_year: string;
     CreatedAt: string;
     SwapStatusId: number;
+    SwapStatusName: string;
 }
 
 interface ISwapRequestTransactionViewModel {
