@@ -186,7 +186,7 @@ export class DCA {
                 console.log(response);
                 this.loading = false;
                 if (!response.wasCancelled) {
-                    this.loadDcaActive();
+                    this.loadDcaActive();                    
                 }
             });
         }
@@ -405,7 +405,17 @@ export class DCA {
                 t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
                 t.timestamp_year = moment(t.CreatedAt).format('YYYY');
                 t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
-            }
+            }            
+        }
+
+        if (dcaDetail.DCARefunds) {
+            for (let t of dcaDetail.DCARefunds) {
+                t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
+                t.timestamp_day = moment(t.CreatedAt).format('DD');
+                t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
+                t.timestamp_year = moment(t.CreatedAt).format('YYYY');
+                t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
+            }            
         }
         this.dcaDetail = dcaDetail;  
         

@@ -7,22 +7,7 @@
         </ux-dialog-header>
         <ux-dialog-body class="withdrawDialogBody modal-body">
             <div class="form-group">
-                <div class="estimated-trade-info-wrapper">
-                    <div show.bind="swapRequestModel.TokenInputMemo && !swapV2">
-                        <div class="alert alert-warning">
-                            <p>Please make sure you deposit at least ${depositAmount} ${swapRequestModel.TokenInput} to the address below. </p>
-                            <p>Your SWAP will be processed as soon as the deposit is received.</p>
-                        </div>
-                        <p>
-                            <b>Deposit address:</b><br />
-                            <input type="text" readonly value.bind="swapRequestModel.TokenInputMemo" class="tbDepositAddress" /> <button value="Copy" click.delegate="copyMessage(swapRequestModel.TokenInputMemo, false)">${copyTxt}</button>
-                        </p>
-
-                        <p show.bind="customMemo">
-                            <b>Memo:</b><br />
-                            <input type="text" readonly value.bind="customMemo" class="tbDepositAddress" /> <button value="Copy" click.delegate="copyMessage(customMemo, true)">${copyMemoTxt}</button>
-                        </p>
-                    </div>
+                <div class="estimated-trade-info-wrapper dcaWrapper">
                     <div class="row">
                         <div class="col-md-12">
                             <h4 style="margin-left: 0; margin-bottom: 7px;"
@@ -31,27 +16,39 @@
                             </h4>
                             <div class="row">
                                 <div class="col-md-6">Sell total</div>
-                                <div class="col-md-6">${swapRequestModel.TokenInputAmount} ${swapRequestModel.TokenInput}</div>
+                                <div class="col-md-6">${swapRequestModel.TokenInputAmount} ${swapRequestModel.TokenInput} <img class="w-6" src.bind="tokenImage(swapRequestModel.TokenInput)"/></div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">Sell per order</div>
-                                <div class="col-md-6">${swapRequestModel.TokenInputAmount / swapRequestModel.OrderCount} ${swapRequestModel.TokenInput}</div>
+                                <div class="col-md-6">Sell per swap</div>
+                                <div class="col-md-6">${swapRequestModel.TokenInputAmount / swapRequestModel.OrderCount} ${swapRequestModel.TokenInput} <img class="w-6" src.bind="tokenImage(swapRequestModel.TokenInput)"/></div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">To buy</div>
-                                <div class="col-md-6">${swapRequestModel.TokenOutput}</div>
+                                <div class="col-md-6">${swapRequestModel.TokenOutput} <img class="w-6" src.bind="tokenImage(swapRequestModel.TokenOutput)"/></div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">Order interval</div>
-                                <div class="col-md-6">Every ${swapRequestModel.RecurrenceTypeAmount} ${swapRequestModel.RecurrenceType}</div>
-                            </div>                        
-                            <div class="row">
-                                <div class="col-md-6">Total orders</div>
+                                <div class="col-md-6">Total swaps</div>
                                 <div class="col-md-6">${swapRequestModel.OrderCount}</div>
                             </div>
                             <div class="row">
+                                <div class="col-md-6">First swap</div>
+                                <div class="col-md-6">Immediate</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Remaining swaps</div>
+                                <div class="col-md-6">${swapRequestModel.OrderCount-1}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">Swap interval</div>
+                                <div class="col-md-6">Every ${swapRequestModel.RecurrenceTypeAmount} ${swapRequestModel.RecurrenceType}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">~ Total time</div>
+                                <div class="col-md-6">${(swapRequestModel.OrderCount-1)*swapRequestModel.RecurrenceTypeAmount} ${swapRequestModel.RecurrenceType}(s)</div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-6">Platform fee</div>
-                                <div class="col-md-6">${dswapDcaFee}</div>
+                                <div class="col-md-6">${dswapDcaFee} of ${swapRequestModel.TokenInput}<img class="w-6" src.bind="tokenImage(swapRequestModel.TokenInput)"/> sold</span></div>
                             </div>
                         </div>
                     </div>

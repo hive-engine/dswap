@@ -329,7 +329,7 @@
                                                 <div class="col-md-3">   
                                                     <div class="row dcaIndexRow">
                                                         <div class="col-md-4 dcaIndexCol">
-                                                            <span class="dcaIndex">${$index+1}</span>
+                                                            <span class="dcaIndex">${dcaTradesActive.length - $index}</span>
                                                                 <font-awesome-icon
                                                                 class="sidenav-icon dcaArrowDown"
                                                                 icon.bind="['fa', 'caret-down']"
@@ -460,7 +460,7 @@
                                                 <div class="col-md-3">  
                                                     <div class="row dcaIndexRow">
                                                         <div class="col-md-4 dcaIndexCol">
-                                                            <span class="dcaIndex">${$index+1}</span>
+                                                            <span class="dcaIndex">${dcaTradesHistory.length - $index}</span>
                                                                 <font-awesome-icon
                                                                 class="sidenav-icon dcaArrowDown"
                                                                 icon.bind="['fa', 'caret-down']"
@@ -547,6 +547,26 @@
                                                 </div>
                                                 <div class="collapse multi-collapse" id.bind="'multiCollapseExample4'+tradeH.Id" data-parent.bind="'#collapseDetail'+tradeH.Id">
                                                     <div class="dcaRow card card-body">
+                                                        <div class="row" repeat.for="dcaRef of dcaDetail.DCARefunds">                                                            
+                                                            <div class="col-md-4">
+                                                                <p class="bg-warning"><strong>Refund transaction</strong></p>
+                                                                <p>
+                                                                    ${dcaRef.timestamp_month_name}
+                                                                    ${dcaRef.timestamp_day}
+                                                                    ${dcaRef.timestamp_time}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <p><strong>${dcaRef.TokenOutputAmount} ${dcaRef.TokenOutput}  <img class="w-6" src.bind="tokenImage(dcaRef.TokenOutput)"/></strong></p>
+                                                            </div>                                                
+                                                            <div class="col-md-4">     
+                                                                <p>
+                                                                    <button class="btn ${dcaRef.SwapStatusName == 'Success' ? 'btn-success' : dcaRef.SwapStatusName == 'Failure' ? 'btn-danger' : 'btn-warning'}">${dcaRef.SwapStatusName}</button><br />
+                                                                    <a class="dca-swap-details-link" href="#" click.delegate="viewSwapDetails(s)">Swap details</a>
+                                                                </p>                                                                                                                           
+                                                            </div>   
+                                                            <div class="col-md-12 dca-order-item-line"><hr /></div>                                                            
+                                                        </div>
                                                         <div class="row" repeat.for="s of dcaDetail.SwapRequests">                                                            
                                                             <div class="col-md-4">
                                                                 <p>

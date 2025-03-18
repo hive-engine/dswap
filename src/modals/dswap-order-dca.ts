@@ -13,6 +13,7 @@ import { SwapService } from 'services/swap-service';
 import { swapRequest } from 'common/dswap-api';
 import { getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getRandomID } from 'common/functions';
 import { TokenService } from '../services/token-service';
+import { Chain } from 'common/enums';
 
 @autoinject()
 export class DswapOrderDcaModal {
@@ -127,6 +128,18 @@ export class DswapOrderDcaModal {
         
     }
 
+    tokenImage(symbol) {
+        if (symbol == environment.marketMakerFeeToken) {
+            return environment.EXCHANGE_URL_HE + 'images/logo-small.png';
+        } else {
+            console.log(this.state.tokens.length);
+            var t = this.state.tokens.find(x => x.symbol === symbol);
+            if (t) {
+                return t.metadata.icon;
+            }
+        }
+    }
+
     async confirmSend() {
         const validationResult: ControllerValidateResult = await this.validationController.validate();
 
@@ -196,7 +209,8 @@ export class DswapOrderDcaModal {
                         if (sendTx.transactionId) {
                             //this.swapRequestModel.ChainTransactionId = sendTx.transactionId;
 
-                            await this.ts.enrichTokensWithUserBalances([this.swapRequestModel.TokenInput]);
+                            //await this.ts.enrichTokensWithUserBalances([this.swapRequestModel.TokenInput]);
+                            this.ts.getDSwapTokenBalances(Chain.Hive, true);
                             this.controller.ok();
                         }
                     } else {

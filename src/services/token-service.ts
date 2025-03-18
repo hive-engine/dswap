@@ -177,12 +177,12 @@ export class TokenService {
         return dToken;
     }
 
-    async getDSwapTokenBalances(chain: Chain) {
+    async getDSwapTokenBalances(chain: Chain, forceReload?: boolean) {
         if (!this.state.tokens) {
             await this.getDSwapTokens(true, chain);
         }
 
-        if (!this.state.tokens.find((x) => x.userBalance != null)) {
+        if (!this.state.tokens.find((x) => x.userBalance != null) || forceReload) {
             let symbols = this.state.tokens.map(x => x.symbol);
             await this.enrichTokensWithUserBalances(symbols);
         }        

@@ -414,6 +414,7 @@ interface ISwapRequestDCAViewModel {
 interface ISwapRequestDCADetailViewModel {
     SwapRequestDCA: ISwapRequestDCAViewModel;
     SwapRequests: ISwapRequestViewModel[];
+    DCARefunds: ISwapRequestTransactionViewModel[];
 }
 
 interface IDCACancelRequestModel {
