@@ -157,6 +157,7 @@ export class DCA {
                     buyTokenAmount: this.buyTokenAmount,
                     sellTokenAmount: this.sellTokenAmount,
                     sellTokenBalance: this.sellToken != null ? this.sellToken.userBalance.balance : "",
+                    dcaTradeValueUsd: this.sellToken != null && this.sellToken.metrics != null ? parseFloat(this.sellToken.metrics.lastPriceUsd) * this.sellTokenAmount : "",
                     ns: 'errors' 
                 });
                 
@@ -177,13 +178,10 @@ export class DCA {
                 RecurrenceType: this.recurrenceTypeValue,
                 RecurrenceTypeAmount: this.dcaRecurrenceTypeAmount,
                 OrderCount: this.dcaOrderNo
-            };            
-
-            console.log(swapRequestDcaModel);
+            };                        
 
             this.loading = true;
-            this.dialogService.open({ viewModel: DswapOrderDcaModal, model: swapRequestDcaModel }).whenClosed(response => {
-                console.log(response);
+            this.dialogService.open({ viewModel: DswapOrderDcaModal, model: swapRequestDcaModel }).whenClosed(response => {                
                 this.loading = false;
                 if (!response.wasCancelled) {
                     this.loadDcaActive();                    
@@ -243,6 +241,10 @@ export class DCA {
         this.fillPeggedTokenMetrics(this.buyToken);
         this.refreshTokenLists();
 
+        if (!this.buyToken.metrics) {
+            await this.ts.enrichTokensWithMetrics([this.buyToken], [this.buyToken.symbol], Chain.Hive);
+        }
+
         if (!this.buyToken.userBalance)
             await this.getTokenBalance(this.buyToken);
 
@@ -271,7 +273,6 @@ export class DCA {
     }
 
     async dcaOrderNoChanged() {
-        console.log('order no changed');
         this.updateDcaSummary();
     }
 
@@ -298,6 +299,12 @@ export class DCA {
             this.chartRefSell.attached();
         
         this.sellToken = this.state.tokens.find(x => x.symbol == this.sellTokenSymbol);
+
+        if (!this.sellToken.metrics) {
+            await this.ts.enrichTokensWithMetrics([this.sellToken], [this.sellToken.symbol], Chain.Hive);
+        }
+
+        console.log(this.sellToken);
         this.fillPeggedTokenMetrics(this.sellToken);
         this.refreshTokenLists();
 
@@ -434,7 +441,6 @@ export class DCA {
     }
 
     dcaCancel(trade) {
-        console.log('DCA Cancel: ' + trade.Id);
         this.dialogService.open({ viewModel: DswapOrderDcaCancelModal, model: trade }).whenClosed(response => {
             console.log(response);
             if (!response.wasCancelled) {
@@ -454,6 +460,12 @@ export class DCA {
     async loadDCARequests(){
         this.dcaTradesActive = await this.getActiveDCARequests();
         this.dcaTradesHistory = await this.getHistoricalDCARequests();
+    }
+
+    async refreshMyBalances(){
+        this.loading = true;
+        await this.ts.getDSwapTokenBalances(Chain.Hive, true);
+        this.loading = false;
     }
 
     private getTime(date?: Date) {
@@ -480,10 +492,43 @@ export class DCA {
                     .required()
                         .withMessageKey("errors:dashboardSellTokenAmountRequired")
                     .then()
-                    .satisfies((value: any, object: any) => parseFloat(value) > 0)
-            .withMessageKey('errors:dashboardAmountMustBeGreaterThanZero')
-            .satisfies((value: any, object: any) => this.sellToken.isCrypto || parseFloat(value) <= this.sellToken.userBalance.balance)
-                    .withMessageKey('errors:dashboardInsufficientBalance')
+            .ensure('sellTokenAmount').satisfies((value: any, object: any) => parseFloat(value) > 0)
+                    .withMessageKey('errors:dashboardAmountMustBeGreaterThanZero')
+            .ensure('dcaRecurrenceTypeAmount')
+                    .required()
+                        .withMessageKey("errors:dcaRecurrenceTypeAmountRequired")
+                    .then()
+            .ensure('dcaRecurrenceTypeAmount').satisfies((value: any, object: any) => {                         
+                        if (parseFloat(value) > 0) 
+                            return true; 
+
+                        return false;
+                    })
+                    .withMessageKey('errors:dcaRecurrenceTypeAmountRanges')            
+            .ensure('dcaOrderNo')
+                    .required()
+                        .withMessageKey("errors:dcaOrderNoRequired")
+                    .then()
+            .ensure('dcaOrderNo').satisfies((value: any, object: any) => {
+                        if (parseFloat(value) >= 2 && parseFloat(value) <= 20){
+                            return true;
+                        }
+
+                        return false;
+                    }).withMessageKey('errors:dcaOrderNoRanges').then()               
+            .satisfies((value: any, object: any) => {
+                if (this.sellToken.isCrypto || parseFloat(this.sellTokenAmount) <= this.sellToken.userBalance.balance){ 
+                    return true;
+                }
+
+                return false;
+            }).withMessageKey('errors:dashboardInsufficientBalance').then()
+            .satisfies((value: any, object: any) => {
+                if(parseFloat(this.sellToken.metrics.lastPriceUsd) * this.sellTokenAmount < 1) {
+                    return false;
+                };
+                return true;
+            }).withMessageKey('errors:dcaMinimumOrderValueUsd')
         .rules;
 
         this.validationController.addObject(this, rules);

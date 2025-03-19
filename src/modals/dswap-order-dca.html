@@ -19,7 +19,7 @@
                                 <div class="col-md-6">${swapRequestModel.TokenInputAmount} ${swapRequestModel.TokenInput} <img class="w-6" src.bind="tokenImage(swapRequestModel.TokenInput)"/></div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">Sell per swap</div>
+                                <div class="col-md-6">Sell per order</div>
                                 <div class="col-md-6">${swapRequestModel.TokenInputAmount / swapRequestModel.OrderCount} ${swapRequestModel.TokenInput} <img class="w-6" src.bind="tokenImage(swapRequestModel.TokenInput)"/></div>
                             </div>
                             <div class="row">
@@ -27,19 +27,11 @@
                                 <div class="col-md-6">${swapRequestModel.TokenOutput} <img class="w-6" src.bind="tokenImage(swapRequestModel.TokenOutput)"/></div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">Total swaps</div>
+                                <div class="col-md-6">Total orders</div>
                                 <div class="col-md-6">${swapRequestModel.OrderCount}</div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">First swap</div>
-                                <div class="col-md-6">Immediate</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">Remaining swaps</div>
-                                <div class="col-md-6">${swapRequestModel.OrderCount-1}</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">Swap interval</div>
+                                <div class="col-md-6">Order interval</div>
                                 <div class="col-md-6">Every ${swapRequestModel.RecurrenceTypeAmount} ${swapRequestModel.RecurrenceType}</div>
                             </div>
                             <div class="row">

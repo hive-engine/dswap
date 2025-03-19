@@ -62,8 +62,7 @@ export class DswapOrderDcaModal {
         this.dswapDcaFee = environment.dswapDcaFee + '%';
     }
 
-    async activate(swapRequestModel: ISwapRequestDCAModel) {        
-        console.log(swapRequestModel);
+    async activate(swapRequestModel: ISwapRequestDCAModel) {                
         this.swapRequestModel = swapRequestModel;
         this.baseTokenSymbol = await getPeggedTokenSymbolByChain(swapRequestModel.Chain);
 
@@ -132,7 +131,6 @@ export class DswapOrderDcaModal {
         if (symbol == environment.marketMakerFeeToken) {
             return environment.EXCHANGE_URL_HE + 'images/logo-small.png';
         } else {
-            console.log(this.state.tokens.length);
             var t = this.state.tokens.find(x => x.symbol === symbol);
             if (t) {
                 return t.metadata.icon;
