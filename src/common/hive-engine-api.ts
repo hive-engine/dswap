@@ -6,6 +6,7 @@ import { queryParam } from 'common/functions';
 import { environment } from 'environment';
 import { ssc } from './ssc';
 import { mapTokenResultToIToken, mapBalanceResultToIBalance, mapMetricsResultToTokenMetrics } from './mappers';
+import { env } from 'process';
 
 const http = new HttpClient();
 
@@ -143,7 +144,21 @@ export async function loadTokens(symbols = [], limit = 50, offset = 0): Promise<
     let tokens: IToken[] = [];
 
     if (results) {
-        results = results.filter(t => !environment.disabledTokens.includes(t.symbol));
+        let disabledTokens = null;
+        if (!environment.settings) {
+            environment.settings = await fetchSettings();
+
+            if (environment.settings && environment.settings.disabled_tokens) {
+                disabledTokens = environment.settings.disabled_tokens;
+            } else {
+                disabledTokens = environment.disabledTokens;
+            }
+        } else {
+            disabledTokens = environment.settings.disabled_tokens;
+        }
+
+        console.log(disabledTokens);
+        results = results.filter(t => !disabledTokens.includes(t.symbol));
 
         for (const res of results) {
             tokens.push(mapTokenResultToIToken(res));
@@ -151,6 +166,16 @@ export async function loadTokens(symbols = [], limit = 50, offset = 0): Promise<
     }
 
     return tokens;
+}
+
+export async function fetchSettings() {
+    let url = `${environment.TRIBALDEX_API_URL}settings`;
+
+    const response = await http.fetch(url, {
+        method: 'GET',
+    });
+
+    return response.json() as Promise<any[]>;
 }
 
 export async function loadHivepBalance() {

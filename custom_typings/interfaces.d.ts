@@ -27,6 +27,7 @@ interface IEnvironment {
     DSWAP_SOURCE_ID: string;
     BLOCK_EXPLORER_HE: string;
     BLOCK_EXPLORER_SE: string;
+    TRIBALDEX_API_URL: string;
     dswapEnabled: boolean;
     dswapPaused: boolean;
     marketMakerEnabled: boolean;
@@ -36,6 +37,7 @@ interface IEnvironment {
     swapEnabledCrypto: string[];
     disabledTokens: string[];
     disabledTokens_SE: string[];
+    settings: any;
     peggedToken: string;
     peggedToken_SE: string;
     features: any;

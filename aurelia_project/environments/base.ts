@@ -12,11 +12,13 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     EXCHANGE_URL_HE: 'https://hive-engine.com/',
     EXCHANGE_URL_SE: 'https://steem-engine.net/',
     //DSWAP_API_URL: 'http://localhost:37322/api/',
-    DSWAP_API_URL: 'https://qa.dswap.trade:37322/api/',
+    //DSWAP_API_URL: 'https://qa.dswap.trade:37322/api/',
+    DSWAP_API_URL: 'https://qa-dswap-api.dswap.trade/api/',    
     /*DSWAP_API_URL: 'https://dswap-api.dswap.trade/api/',*/
     /*DSWAP_API_URL: 'https://dswap.azurewebsites.net/api/',*/
     BLOCK_EXPLORER_HE: 'https://he.dtools.dev/',
     BLOCK_EXPLORER_SE: 'https://se.dtools.dev/',
+    TRIBALDEX_API_URL: 'https://api.tribaldex.com/',
     DSWAP_API_VERSION: '3.0',
     DSWAP_ACCOUNT_HE: 'dswap',
     DSWAP_SOURCE_ID: '5fab0821cdef24759c5ae9a9',
@@ -43,6 +45,7 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     dswapPaused: false,
     dswapDcaFee: 0.25,
     dswapDcaCancelFee: 0.001,
+    settings: null,
     features: {
         nfts: {
             enabled: true
