@@ -156,8 +156,7 @@ export async function loadTokens(symbols = [], limit = 50, offset = 0): Promise<
         } else {
             disabledTokens = environment.settings.disabled_tokens;
         }
-
-        console.log(disabledTokens);
+        
         results = results.filter(t => !disabledTokens.includes(t.symbol));
 
         for (const res of results) {

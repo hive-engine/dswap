@@ -116,7 +116,7 @@ export class DswapOrderDcaCancelModal {
         } else {
             var t = this.state.tokens.find(x => x.symbol === symbol);
             if (t) {
-                return t.metadata.icon;
+                return t.metadata.icon.endsWith('.svg') ? t.metadata.icon : `https://images.hive.blog/0x0/${t.metadata.icon}`;
             }
         }
     }
