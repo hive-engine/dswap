@@ -8,11 +8,11 @@
     },
     "license": "MIT",
     "scripts": {
-        "analyze": "NODE_OPTIONS=--openssl-legacy-provider webpack --env.production --analyze",
-        "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --env.production --extractCss",
-        "build:dev": "NODE_OPTIONS=--openssl-legacy-provider  --extractCss",
-        "start": "NODE_OPTIONS=--openssl-legacy-provider webpack-dev-server --extractCss",
-        "test": "NODE_OPTIONS=--openssl-legacy-provider au test"
+        "analyze": "NODE_OPTIONS=webpack --env.production --analyze",
+        "build": "NODE_OPTIONS=webpack --env.production --extractCss",
+        "build:dev": "NODE_OPTIONS=webpack --extractCss",
+        "start": "NODE_OPTIONS=webpack-dev-server --extractCss",
+        "test": "NODE_OPTIONS=au test"
     },
     "jest": {
         "collectCoverage": true,
