@@ -6,11 +6,12 @@ import firebase from 'firebase/app';
 import { ToastMessage, ToastService } from './toast-service';
 import { I18N } from 'aurelia-i18n';
 import { Store } from 'aurelia-store';
-import { loadCoins, loadTokenMetrics, loadUserBalances, loadTokens } from 'common/hive-engine-api';
+import { loadCoins, loadTokenMetrics, loadUserBalances, loadTokens, fetchSettings } from 'common/hive-engine-api';
 import { HiveEngineService } from './hive-engine-service';
 import { getPrices, usdFormat, getSwapTokenByCrypto } from 'common/functions';
 import { Chain } from '../common/enums';
 import { loadUserBalancesSE, loadTokensSE, loadTokenMetricsSE } from '../common/steem-engine-api';
+import { env } from 'process';
 
 const http = new HttpClient();
 
@@ -47,7 +48,10 @@ export class TokenService {
     async getDSwapTokens(includeMetrics = true, chain: Chain = Chain.Hive) {
         const symbols = environment.swapEnabledTokens;
         
-        let dTokens = await loadTokens([], 1000);        
+        let dTokens1 = await loadTokens([], 1000);
+        let dTokens2 = await loadTokens([], 1000, 1000);
+
+        let dTokens = [...dTokens1, ...dTokens2];
 
         if (includeMetrics)
             await this.enrichTokensWithMetrics(dTokens, symbols, chain);
@@ -177,12 +181,12 @@ export class TokenService {
         return dToken;
     }
 
-    async getDSwapTokenBalances(chain: Chain) {
+    async getDSwapTokenBalances(chain: Chain, forceReload?: boolean) {
         if (!this.state.tokens) {
             await this.getDSwapTokens(true, chain);
         }
 
-        if (!this.state.tokens.find((x) => x.userBalance != null)) {
+        if (!this.state.tokens.find((x) => x.userBalance != null) || forceReload) {
             let symbols = this.state.tokens.map(x => x.symbol);
             await this.enrichTokensWithUserBalances(symbols);
         }        
@@ -193,11 +197,24 @@ export class TokenService {
     async getMarketMakerTokens(symbols = [], chain: Chain) {
         let allTokens: any;
         let mmTokens = [];
+        let disabledTokens = null;
+
+         if (!environment.settings) {
+            environment.settings = await fetchSettings();
+
+            if (environment.settings && environment.settings.disabled_tokens) {
+                disabledTokens = environment.settings.disabled_tokens;
+            } else {
+                disabledTokens = environment.disabledTokens;
+            }
+        } else {
+            disabledTokens = environment.settings.disabled_tokens;
+        }
 
         if (chain === Chain.Hive) {
             allTokens = await loadTokens(symbols, 1000);
             for (const token of allTokens) {
-                if (environment.disabledTokens.includes(token.symbol)) {
+                if (disabledTokens.includes(token.symbol)) {
                     continue;
                 }
 

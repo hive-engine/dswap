@@ -8,11 +8,11 @@
     },
     "license": "MIT",
     "scripts": {
-        "analyze": "webpack --env.production --analyze",
-        "build": "webpack --env.production --extractCss",
-        "build:dev": "webpack --extractCss",
-        "start": "webpack-dev-server --extractCss",
-        "test": "au test"
+        "analyze": "NODE_OPTIONS=webpack --env.production --analyze",
+        "build": "NODE_OPTIONS=webpack --env.production --extractCss",
+        "build:dev": "NODE_OPTIONS=webpack --extractCss",
+        "start": "NODE_OPTIONS=webpack-dev-server --extractCss",
+        "test": "NODE_OPTIONS=au test"
     },
     "jest": {
         "collectCoverage": true,

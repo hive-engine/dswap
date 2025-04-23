@@ -27,6 +27,7 @@ interface IEnvironment {
     DSWAP_SOURCE_ID: string;
     BLOCK_EXPLORER_HE: string;
     BLOCK_EXPLORER_SE: string;
+    TRIBALDEX_API_URL: string;
     dswapEnabled: boolean;
     dswapPaused: boolean;
     marketMakerEnabled: boolean;
@@ -36,6 +37,7 @@ interface IEnvironment {
     swapEnabledCrypto: string[];
     disabledTokens: string[];
     disabledTokens_SE: string[];
+    settings: any;
     peggedToken: string;
     peggedToken_SE: string;
     features: any;
@@ -50,6 +52,8 @@ interface IEnvironment {
     marketMakerFeeToken_SE: string;
     isDebug: boolean;
     debugAccount: string;
+    dswapDcaFee: number;
+    dswapDcaCancelFee: number;
 }
 
 interface IState {
@@ -322,6 +326,7 @@ interface ISwapRequestViewModel {
     timestamp_year: string;
     CreatedAt: string;
     SwapStatusId: number;
+    SwapStatusName: string;
 }
 
 interface ISwapRequestTransactionViewModel {
@@ -351,4 +356,93 @@ interface ISwapCalcValuesModel {
     TokenOutputAmount?: number;
     Chain?: number;
     BaseTokenAmount?: number;
+}
+
+/* DCA */
+interface ISwapRequestDCAModel {
+    Account: string;
+    TokenInput: string;
+    TokenInputAmount: number;
+    TokenOutput: string;
+    Chain: number;
+    ChainTransactionId: string;
+    SwapSourceId: string;
+    TokenInputMemo: string;    
+    RecurrenceTypeAmount: number,
+    RecurrenceType: string,
+    OrderCount: number
+}
+
+interface ISwapRequestDCAResponseModel {
+    Id: string;
+    Account: string;
+    TokenInput: string;
+    TokenInputAmount: number;
+    TokenOutput: string;
+    Chain: number;
+    ChainTransactionId: string;
+    SwapSourceId: string;
+    TokenInputMemo: string;    
+    RecurrenceTypeAmount: number,
+    RecurrenceType: string,
+    OrderCount: number
+}
+
+interface ISwapRequestDCAViewModel {
+    Id: string;
+    Account: string;
+    TokenInput: string;
+    TokenInputAmount: number;
+    TokenOutput: string;
+    TokenOutputAmount: number;
+    TokenOutputAmountActual: number;
+    Chain: number;
+    ChainTransactionId: string;
+    SwapSourceId: string;
+    timestamp_month_name: string;
+    timestamp_day: string;
+    timestamp_time: string;
+    timestamp_year: string;
+    CreatedAt: string;
+    SwapStatusId: number;
+    SwapStatusName: string;
+    RecurrenceTypeAmount: number,
+    RecurrenceType: string,
+    OrderCount: number
+    TokenInputMemo: string;
+    CancelRequested: boolean;
+}
+
+interface ISwapRequestDCADetailViewModel {
+    SwapRequestDCA: ISwapRequestDCAViewModel;
+    SwapRequests: ISwapRequestViewModel[];
+    DCARefunds: ISwapRequestTransactionViewModel[];
+}
+
+interface IDCACancelRequestModel {
+    Account: string;
+    Chain: number;
+    ChainTransactionId: string;
+    DCAId: string;
+    SourceId: string; 
+    TokenInputMemo: string;
+    Message: string;
+}
+
+interface IDCACancelViewModel {
+    Id: string;
+    Account: string;
+    Chain: number;
+    ChainTransactionId: string;
+    CreatedAt: string;
+    DCAId: string;
+    Message: string;
+    SourceId: string; 
+    StatusId: number;
+    StatusName: string;
+    timestamp_month_name: string;
+    timestamp_day: string;
+    timestamp_time: string;
+    timestamp_year: string;
+    TokenInputMemo: string;
 }

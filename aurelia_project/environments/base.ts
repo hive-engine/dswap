@@ -11,17 +11,20 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     FIREBASE_API_SE: 'https://us-central1-steem-engine-dex.cloudfunctions.net/api/',
     EXCHANGE_URL_HE: 'https://hive-engine.com/',
     EXCHANGE_URL_SE: 'https://steem-engine.net/',
-    /*DSWAP_API_URL: 'http://localhost:37322/api/',*/
+    //DSWAP_API_URL: 'http://localhost:37322/api/',
+    //DSWAP_API_URL: 'https://qa.dswap.trade:37322/api/',
+    //DSWAP_API_URL: 'https://qa-dswap-api.dswap.trade/api/',    
     DSWAP_API_URL: 'https://dswap-api.dswap.trade/api/',
     /*DSWAP_API_URL: 'https://dswap.azurewebsites.net/api/',*/
     BLOCK_EXPLORER_HE: 'https://he.dtools.dev/',
     BLOCK_EXPLORER_SE: 'https://se.dtools.dev/',
-    DSWAP_API_VERSION: '2.0',
+    TRIBALDEX_API_URL: 'https://api.tribaldex.com/',
+    DSWAP_API_VERSION: '3.0',
     DSWAP_ACCOUNT_HE: 'dswap',
     DSWAP_SOURCE_ID: '5fab0821cdef24759c5ae9a9',
     maintenanceMode: false,
-    swapEnabledTokens: ['BEE', 'DEC', 'KANDA', 'SAND', 'SWAP.BCH', 'SWAP.BTC', 'SWAP.BTS', 'SWAP.DOGE', 'SWAP.ENG', 'SWAP.EOS', 'SWAP.GOLOS', 'SWAP.HBD', 'SWAP.LTC', 'SWAP.SBD', 'SWAP.STEEM', 'SWAP.SWIFT', 'SWAP.TLOS', 'WEED', 'WORKERBEE', 'PAL', 'LEO', 'SWAP.HIVE', 'PLOT'],
-    swapEnabledCrypto: ['STEEM', 'SBD', 'HBD', 'EOS', 'BTS', 'BTC', 'LTC', 'SWIFT', 'BCH', 'DOGE'],
+    swapEnabledTokens: ['BEE', 'DEC'],//, 'KANDA', 'SAND', 'SWAP.BCH', 'SWAP.BTC', 'SWAP.BTS', 'SWAP.DOGE', 'SWAP.ENG', 'SWAP.EOS', 'SWAP.GOLOS', 'SWAP.HBD', 'SWAP.LTC', 'SWAP.SBD', 'SWAP.STEEM', 'SWAP.SWIFT', 'SWAP.TLOS', 'WEED', 'WORKERBEE', 'PAL', 'LEO', 'SWAP.HIVE', 'PLOT'],
+    swapEnabledCrypto: [],//'STEEM', 'SBD', 'HBD', 'EOS', 'BTS', 'BTC', 'LTC', 'SWIFT', 'BCH', 'DOGE'],
     disabledTokens: ['BTC', 'LTC', 'STEEM', 'SBD', 'HIVE', 'HBD', 'BCC', 'XAP', 'XRP', 'GOLOS', 'DISNEY', 'AMAZON', 'VOICE', 'ETH', 'EOS', 'DONE', 'BNB', 'LASSE', 'R', 'SCTR', 'ALLAH', 'ETHER', 'LTCPEG', 'SBC', 'TEST.EON', 'BEEHIVE', 'BEECASH', 'SPL.FUND', 'ATOM.TOKEN', 'DSWAP', 'LEOG', 'PAK', 'APXM', 'LBIM', 'BROAG', 'COIN.HONEY', 'CUB', 'ENJ', 'GUILD', 'RAFFLE', 'CUNT', 'FQX', 'FOX', 'MOOBEE', 'BUILD'],
     disabledTokens_SE: ['BTC', 'LTC', 'STEEM', 'SBD', 'BCC', 'XAP', 'XRP', 'GOLOS', 'DISNEY', 'AMAZON', 'VOICE', 'ETH', 'EOS', 'LASSE', 'TIME', 'R', 'SCTR', 'ALLAH', 'DONE', 'BNB', 'ETHER', 'LTCPEG', 'SBC', 'LASSECASH', 'HIVE', 'TIX', 'TIXM', 'STEM', 'STEMM', 'LEO', 'LEOM', 'LEOMM', 'NEO', 'NEOX', 'PORN', 'SPORTS', 'BATTLE', 'SIM', 'CTP', 'CTPM', 'EMFOUR', 'CCC', 'CCCM', 'BEER', 'WEED', 'WEEDM', 'WEEDMM', 'SPACO', 'SPACOM', 'NEOXAG', 'NEOXAGM', 'KANDA', 'SAND', 'INFOWARS', 'SPI', 'PAL', 'PALM', 'PALMM', 'ENGAGE', 'BRO', 'CC', 'BUILDTEAM', 'ECO', 'GAMER', 'EPC', 'SPT', 'JAHM'],
     peggedToken: 'SWAP.HIVE',
@@ -40,6 +43,9 @@ export const baseEnvironmentConfiguration: Partial<IEnvironment> = {
     dswapEnabled: true,
     marketMakerEnabled: true,
     dswapPaused: false,
+    dswapDcaFee: 0.25,
+    dswapDcaCancelFee: 0.001,
+    settings: null,
     features: {
         nfts: {
             enabled: true

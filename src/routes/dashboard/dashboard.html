@@ -53,7 +53,7 @@
                             <span><strong>From:</strong></span>
                             <div class="action-card-options">
                                 <div class="form-group">
-                                    <select id="selectpicker-sell"
+                                    <select id="selectpicker-sell" data-live-search="true"
                                             class="form-control selectpicker tokenSelect"
                                             value.bind="sellTokenSymbol"
                                             change.delegate="sellTokenSelected()">
@@ -183,7 +183,7 @@
                             <span><strong>To:</strong></span>
                             <div class="action-card-options">
                                 <div class="form-group">
-                                    <select id="selectpicker-buy"
+                                    <select id="selectpicker-buy" data-live-search="true"
                                             class="form-control selectpicker tokenSelect"
                                             value.bind="buyTokenSymbol"
                                             change.delegate="buyTokenSelected()">
@@ -373,7 +373,7 @@
                             <div class="action-card-options">
                                 <div class="form-group">
                                     <select
-                                        id="selectpicker-buy"
+                                        id="selectpicker-buy" data-live-search="true"
                                         class="form-control selectpicker tokenSelect"
                                         value.bind="buyTokenSymbol"
                                         change.delegate="buyTokenSelected()"
@@ -451,7 +451,7 @@
                             <div class="action-card-options">
                                 <div class="form-group">
                                     <select
-                                        id="selectpicker-sell"
+                                        id="selectpicker-sell" data-live-search="true"
                                         class="form-control selectpicker tokenSelect"
                                         value.bind="sellTokenSymbol"
                                         change.delegate="sellTokenSelected()"

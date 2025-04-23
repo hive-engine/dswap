@@ -119,32 +119,42 @@
                                 </td>
                             </tr>
                         </tbody>
-                    </table>
+                    </table>                    
                     <nav class="text-right ml-auto"
                          aria-label="Swap page navigation">
                         <ul class="pagination"
                             style="margin-bottom: 0;">
-                            <li class="page-item pagination-btn">
+                            <!-- <li class="page-item pagination-btn">
                                 <a class="page-link pagination-link text-white-custom"
                                    click.delegate="pageClick('prev')"
                                    aria-label="Previous"
                                    show.bind="page > 1">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
+                            </li> -->
+                            <li>
+                                <select
+                                    id="selectpicker-page"
+                                    class="form-control"
+                                    value.bind="page"
+                                    change.trigger="pageChanged(page)"
+                                >
+                                    <option
+                                        value.bind="p+1"
+                                        repeat.for="p of totalPages"
+                                        data-content="${p+1}"
+                                        >${p+1}</option
+                                    >
+                                </select>
                             </li>
-                            <li class="page-item pagination-btn"
-                                repeat.for="p of totalPages">
-                                <a class="page-link pagination-link text-white-custom ${page == p+1 ? 'active' : ''}"
-                                   click.delegate="pageClick(p+1)">${p+1}</a>
-                            </li>
-                            <li class="page-item pagination-btn">
+                            <!-- <li class="page-item pagination-btn">
                                 <a class="page-link pagination-link text-white-custom"
                                    click.delegate="pageClick('next')"
                                    aria-label="Next"
                                    show.bind="page < totalPages">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
-                            </li>
+                            </li> -->
                         </ul>
                     </nav>
                 </div>                

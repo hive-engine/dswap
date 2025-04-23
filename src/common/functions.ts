@@ -342,6 +342,15 @@ export function getSwapStatusById(swapStatusId: number) {
         case SwapStatus.Success:
             swapStatusName = "Success";
             break;        
+        case SwapStatus.SuccessPartial:
+            swapStatusName = "Success (partial)";
+            break;        
+        case SwapStatus.Cancelled:
+            swapStatusName = "Cancelled";
+            break;        
+        case SwapStatus.Expired:
+            swapStatusName = "Expired";
+            break;        
     }
 
     return swapStatusName;

@@ -175,7 +175,7 @@ export class HiveEngineService {
         return history;
     }
 
-    async sendToken(symbol: string, to: string, quantity: number, memo: string, waitMsg?: string): Promise<any> {
+    async sendToken(symbol: string, to: string, quantity: number, memo: string, waitMsg?: string, successMsg?: string): Promise<any> {
         return new Promise((resolve) => {
             const username = this.getUser();
 
@@ -184,13 +184,15 @@ export class HiveEngineService {
                 return;
             }
 
+            console.log(quantity);
+
             const transaction_data = {
                 'contractName': 'tokens',
                 'contractAction': 'transfer',
                 'contractPayload': {
                     'symbol': symbol,
                     'to': to,
-                    'quantity': quantity,
+                    'quantity': String(quantity),
                     'memo': memo
                 }
             };
@@ -214,9 +216,13 @@ export class HiveEngineService {
 
                             this.toast.success(toast);
 
-                            let tx = await checkTransaction(response.result.id, 3);                            
+                            let tx = await checkTransaction(response.result.id, 3);      
+                            
+                            if (!successMsg) {
+                                successMsg = "tokensSent"
+                            }
 
-                            toast.message = this.i18n.tr('tokensSent', {
+                            toast.message = this.i18n.tr(successMsg, {
                                 quantity,
                                 symbol,
                                 to,

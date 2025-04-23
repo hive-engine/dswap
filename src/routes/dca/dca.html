@@ -1,0 +1,930 @@
+<template bindable="selected">
+    <loader loading.bind="loading" mode="tiny"></loader>
+    <div class="dashboard-wrapper" show.bind="!dswapEnabled">
+        <div class="market-maker-landing-wrapper">
+        <div class="market-maker-landing-wrapper-content">
+            <div class="d-flex justify-center">
+                <img
+                    class="market-maker-logo"
+                    src="../../images/dswap_standalone.png"
+                    alt="logo"
+                />
+            </div>
+            <div class="market-maker-landing-header">
+                <h1 class="market-maker-header-text text-center">
+                    Welcome to DSwap.Trade
+                </h1>
+                <h3 class="text-danger text-center">NOTICE!!!</h3>
+                <h4 class="header-desc text-center text-danger">
+                    The Taking Side of DSwap is still a work in progress
+                </h4>
+                <a
+                    route-href="route: registerMarketMaker"
+                    class="get-started-btn text-center m-auto"
+                    >Go To Market Maker</a
+                >
+            </div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path
+                fill="#142e2b"
+                fill-opacity="1"
+                d="M0,96L48,90.7C96,85,192,75,288,85.3C384,96,480,128,576,154.7C672,181,768,203,864,176C960,149,1056,75,1152,74.7C1248,75,1344,149,1392,186.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+            ></path>
+        </svg>
+    </div>
+    </div>
+    <div class="dashboard-wrapper dcaWrapper d-none d-md-block text-center" show.bind="dswapEnabled">
+        <div class="row" show.bind="sellToken && sellToken.isCrypto">
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-6 alert alert-warning">
+                        <p>Attention: You will need to deposit to a given address!</p>
+                        <p>We recommend a minimum of $10 to deposit, if you do less blockchain fees may eat a substantial portion of your trade request.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>I want to spend:</h4>
+                        <div class="sell action-card">
+                            <div class="action-card-options">
+                                <div class="form-group">
+                                    <select id="selectpicker-sell" data-live-search="true"
+                                            class="form-control selectpicker tokenSelect"
+                                            value.bind="sellTokenSymbol"
+                                            change.delegate="sellTokenSelected()">
+                                        <option model.bind="null">
+                                            ${'Please select a token...' &
+                                            t}
+                                        </option>
+                                        <option value.bind="t.symbol"
+                                                repeat.for="t of sellTokens"
+                                                data-content="${t.symbol & t} (${t.name})">
+                                            ${t.symbol & t} (${t.name})
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="chart-data" show.bind="sellToken">
+                                <div class="price-data">
+                                    <p class="price-title">Current Price</p>
+                                    <span>
+                                        ${'$' +
+                                        sellToken.metrics.lastPriceUsd}
+                                    </span>
+                                </div>
+                                <div class="change-data">
+                                    <p class="change-title">24hrs Change</p>
+                                    <span>
+                                        ${sellToken.metrics.priceChangePercent
+                                        + '%'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="action-input-wrapper">
+                            <div class="action-input">
+                                <input class="form-control transparent-bgn action-input-box text-right"
+                                       type="text"
+                                       readonly.bind="!sellToken"
+                                       value.bind="sellTokenAmount"
+                                       keydown.trigger="sellTokenAmountInViewChanged($event) & debounce:300"
+                                       placeholder="0.000" />
+                                <div class="token-sym">
+                                    <div class="input-group-text token-sym-text h-100 input-group-text-dark">
+                                        ${sellToken ? sellToken.symbol :
+                                        'TOKEN'}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <p class="balance-title">
+                                        Current Balance:
+                                        <strong>${sellToken.userBalance.balance}</strong><br />
+                                        <a class="refreshBalancesLink" href="#" click.delegate="refreshMyBalances()">Refresh balances</a>                                        
+                                    </p>
+                                </div>
+                                <div class="col-sm-3 text-right"
+                                     show.bind="tradePercentage">
+                                    <p class="balance-title">
+                                        <strong>${tradePercentage} %</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row top10">
+                    <div class="col-md-6">
+                        <div class="trade-arrow">
+                            <h4>To Buy</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="action-card">
+                            <div class="action-card-options">
+                                <div class="form-group">
+                                    <select id="selectpicker-buy" data-live-search="true"
+                                            class="form-control selectpicker tokenSelect"
+                                            value.bind="buyTokenSymbol"
+                                            change.delegate="buyTokenSelected()">
+                                        <option model.bind="null">
+                                            ${'Please select a token...' &
+                                            t}
+                                        </option>
+                                        <option value.bind="t.symbol"
+                                                repeat.for="t of buyTokens"
+                                                data-content="${t.symbol & t} (${t.name})">
+                                            ${t.symbol & t} (${t.name})
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="chart-data" show.bind="buyToken">
+                                <div class="price-data">
+                                    <p class="price-title">Current Price</p>
+                                    <span>
+                                        ${'$' +
+                                        buyToken.metrics.lastPriceUsd}
+                                    </span>
+                                </div>
+                                <div class="change-data">
+                                    <p class="change-title">24hrs Change</p>
+                                    <span>
+                                        ${buyToken.metrics.priceChangePercent +
+                                        '%'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>                                
+                <div class="row top20">
+                    <div class="col-md-6">
+                        <div class="estimate-wrapper">
+                            <h4 style="margin-left: 0; margin-bottom: 7px;"
+                                class="action-title">
+                                Market DCA settings                                
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row top10">
+                    <div class="col-md-3">
+                        <div class="action-card dcaDetailsBlock">
+                            <h5>Every</h5>
+                            <input class="form-control transparent-bgn action-input-box text-right mx-auto dcaInput"
+                                    type="text"
+                                    maxlength="4"
+                                    value.bind="dcaRecurrenceTypeAmount"
+                                    placeholder="0" />
+
+                            <div class="form-select dcaInputLastElement">
+                                <select id="recurrenceType"
+                                    class="form-control selectpicker"
+                                    value.bind="recurrenceTypeValue"
+                                    change.delegate="recurrenceTypeSelected()">                                   
+                                <option value.bind="t"
+                                        repeat.for="t of recurrenceTypeValues">
+                                    ${t}
+                                </option>
+                                </select>             
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="action-card dcaDetailsBlock">
+                            <h5>Over</h5>
+                            <input class="form-control transparent-bgn action-input-box text-right mx-auto dcaInput"
+                                    type="text"
+                                    maxlength="4"
+                                    value.bind="dcaOrderNo"
+                                    placeholder="0" />
+                            <div class="dcaInputLastElement">
+                                orders
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row top20">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Market DCA Summary
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">Sell total</div>
+                                    <div class="col-md-6">${sellTokenAmount} ${sellTokenSymbol} <img class="w-6" src.bind="tokenImage(sellTokenSymbol)"/></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">Sell per order</div>
+                                    <div class="col-md-6">${dcaSellPerOrder} ${sellTokenSymbol} <img class="w-6" src.bind="tokenImage(sellTokenSymbol)"/></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">To buy</div>
+                                    <div class="col-md-6">${buyTokenSymbol} <img class="w-6" src.bind="tokenImage(buyTokenSymbol)"/></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">Total orders</div>
+                                    <div class="col-md-6">${dcaOrderNo}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">Order interval</div>
+                                    <div class="col-md-6">Every ${dcaRecurrenceTypeAmount} ${recurrenceTypeValue}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">~ Total time</div>
+                                    <div class="col-md-6">${(dcaOrderNo-1)*dcaRecurrenceTypeAmount} ${recurrenceTypeValue}(s)</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">Platform fee</div>
+                                    <div class="col-md-6">${dswapDcaFee} <span show.bind="sellTokenSymbol">of ${sellTokenSymbol}<img class="w-6" src.bind="tokenImage(sellTokenSymbol)"/> sold</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row top20">
+                    <div class="col-md-6">
+                        <button class="get-started-btn text-center m-auto au-target" click.delegate="startTrade()" show.bind="loggedIn && !dswapPaused">
+                            START DCA
+                        </button>
+                        <div class="warning" show.bind="!loggedIn">
+                            <font-awesome-icon class="warning-icon"
+                                               icon.bind="['fas', 'engine-warning']"></font-awesome-icon>
+                            <p class="login-required">Login Required</p>
+                            <p class="warning-info">
+                                Please <a href="">Signup</a> or
+                                <a href="">Login</a> to continue
+                            </p>
+                        </div>
+                        <div class="warning" show.bind="dswapPaused">
+                            <font-awesome-icon class="warning-icon"
+                                               icon.bind="['fas', 'engine-warning']"></font-awesome-icon>                            
+                            <p class="warning-info">
+                                DSwap is under maintenance for updates. Please use hive-engine / tribaldex market instead until dswap is available.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DCA Overview existing orders and history -->
+                <div class="row top10">
+                    <div class="col-md-6">                        
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a click.delegate="loadDcaActive()" class="nav-link dca-item-link active" id="pills-home-tab" 
+                                data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">DCA Active</a>
+                            </li>
+                            <li class="nav-item">
+                                <a click.delegate="loadDcaHistory()" class="nav-link dca-item-link" id="pills-profile-tab" 
+                                data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">DCA History</a>
+                            </li>
+                            <li class="nav-item nav-item-refresh">
+                                <button alt="Reload" title="Refresh"
+                                        class="btn btn-warning text-center" 
+                                        click.delegate="refreshDcaOverview()">
+                                    Refresh
+                                </button>
+                            </li>
+                        </ul>
+                        
+                    </div>
+                </div>
+                <div class="row dcaOverviewPanel">
+                    <div class="col-md-6">  
+                        <loader loading.bind="loadingDCA" mode="tiny">Loading...</loader>                      
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">                                
+                                <div class="accordion panel panel-default" id="accordionExample">
+                                    <div show.bind="dcaTradesActive.length == 0" class="card noDcaActive">
+                                        There are no active DCA's to be displayed.
+                                    </div>
+                                    <div show.bind="dcaTradesActive.length > 0" class="card" repeat.for="trade of dcaTradesActive">
+                                      <div class="dcaRow card-header panel-heading" id.bind="'heading'+trade.Id" id="headingOne">
+                                        <h2 class="mb-0 dca-trade-h2 panel-title">
+                                          <button class="btn btn-link dca-trade-button" type="button" click.delegate="loadDcaData(trade.Id)" data-toggle="collapse" data-target.bind="'#collapse'+trade.Id" aria-expanded="true" aria-controls="collapseOne">
+                                            <div class="row">
+                                                <div class="col-md-3">   
+                                                    <div class="row dcaIndexRow">
+                                                        <div class="col-md-4 dcaIndexCol">
+                                                            <span class="dcaIndex">${dcaTradesActive.length - $index}</span>
+                                                                <font-awesome-icon
+                                                                class="sidenav-icon dcaArrowDown"
+                                                                icon.bind="['fa', 'caret-down']"
+                                                                ></font-awesome-icon>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <p class="dcaDate">      
+                                                                ${trade.timestamp_month_name}
+                                                                ${trade.timestamp_day} <br />
+                                                                ${trade.timestamp_time}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p>${trade.TokenInput} <img class="w-6" src.bind="tokenImage(trade.TokenInput)"/><br /> <font-awesome-icon
+                                                        class="sidenav-icon"
+                                                        icon.bind="['fa', 'arrow-right']"
+                                                    ></font-awesome-icon> <br />${trade.TokenOutput} <img class="w-6" src.bind="tokenImage(trade.TokenOutput)" />
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p>${trade.TokenInputAmount} ${trade.TokenInput} <img class="w-6" src.bind="tokenImage(trade.TokenInput)" /></p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p>
+                                                        <label show.bind="trade.SwapStatusName == 'Init'" class="btn btn-info">${trade.SwapStatusName}</label>
+                                                        <label show.bind="trade.SwapStatusName == 'In progress'" class="btn btn-primary">${trade.SwapStatusName}</label>     
+                                                        <label show.bind="trade.SwapStatusName == 'Success'" class="btn btn-success">${trade.SwapStatusName}</label>
+                                                        <label show.bind="trade.SwapStatusName == 'Cancelled'" class="btn btn-warning">${trade.SwapStatusName}</label>
+                                                        <label show.bind="trade.SwapStatusName == 'Failed'" class="btn btn-danger">${trade.SwapStatusName}</label>                                                    
+                                                        <label class="btn btn-danger" click.delegate="dcaCancel(trade)"><i class="fa fa-times" aria-hidden="true"></i></label>
+                                                        <label class="btn btn-warning" show.bind="trade.CancelRequested">Cancel requested</label>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                          </button>
+                                        </h2>
+                                      </div>
+                                  
+                                      <div id.bind="'collapse'+trade.Id" class="collapse" aria-labelledby.bind="'heading'+trade.Id" data-parent="#accordionExample">
+                                        <div class="card-body" id.bind="'collapseDetail'+trade.Id">                                            
+                                            <button id.bind="'btn-dca-details'+trade.Id" click.delegate="activateDcaButton('details'+trade.Id)" class="btn dca-item-link active btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample1'+trade.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample1'+trade.Id">DCA Details</a>
+                                            <button id.bind="'btn-dca-orders'+trade.Id" click.delegate="activateDcaButton('orders'+trade.Id)" class="btn dca-item-link btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample2'+trade.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample2'+trade.Id">Orders (${dcaDetail.SwapRequests.length})</button>
+                                            <div class="accordion-group top20">
+                                                <div class="collapse show multi-collapse col-md-12" id.bind="'multiCollapseExample1'+trade.Id" data-parent.bind="'#collapseDetail'+trade.Id">
+                                                    <div class="card card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">Sell total</div>
+                                                            <div class="col-md-6">${trade.TokenInputAmount} ${trade.TokenInput} <img class="w-6" src.bind="tokenImage(trade.TokenInput)"/></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Sell per order</div>
+                                                            <div class="col-md-6">${trade.TokenInputAmount / trade.OrderCount} ${trade.TokenInput}  <img class="w-6" src.bind="tokenImage(trade.TokenInput)"/></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">To buy</div>
+                                                            <div class="col-md-6">${trade.TokenOutput} <img class="w-6" src.bind="tokenImage(trade.TokenOutput)"/></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Total orders</div>
+                                                            <div class="col-md-6">${trade.OrderCount}</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Orders realized</div>
+                                                            <div class="col-md-6">${dcaDetail.SwapRequests.length}</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Remaining orders</div>
+                                                            <div class="col-md-6">${trade.OrderCount - dcaDetail.SwapRequests.length}</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Order interval</div>
+                                                            <div class="col-md-6">Every ${trade.RecurrenceTypeAmount} ${trade.RecurrenceType}</div>
+                                                        </div>  
+                                                        <div class="row">
+                                                            <div class="col-md-6">~ Total time</div>
+                                                            <div class="col-md-6">${(trade.OrderCount-1)*trade.RecurrenceTypeAmount} ${trade.RecurrenceType}(s)</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Total ${trade.TokenOutput} received</div>
+                                                            <div class="col-md-6">${dcaDetail.SwapRequestDCA.TokenOutputAmountActual} ${dcaDetail.SwapRequestDCA.TokenOutput} <img class="w-6" src.bind="tokenImage(trade.TokenOutput)"/></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="collapse multi-collapse" id.bind="'multiCollapseExample2'+trade.Id" data-parent.bind="'#collapseDetail'+trade.Id">
+                                                    <div class="dcaRow card card-body">
+                                                        <div class="row" repeat.for="s of dcaDetail.SwapRequests">                                                            
+                                                            <div class="col-md-4">                                                                
+                                                                <p>
+                                                                    ${s.timestamp_month_name}
+                                                                    ${s.timestamp_day}
+                                                                    ${s.timestamp_time}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <p class="dca-order-item-firstp">
+                                                                    ${s.TokenInputAmount} ${s.TokenInput} <img class="w-6" src.bind="tokenImage(s.TokenInput)"/>    <font-awesome-icon
+                                                                    class="sidenav-icon"
+                                                                    icon.bind="['fa', 'arrow-right']"
+                                                                        ></font-awesome-icon>                                                                  
+                                                                </p>
+                                                                <p><strong>${s.TokenOutputAmountActual} ${s.TokenOutput} <img class="w-6" src.bind="tokenImage(s.TokenOutput)"/></strong></p>
+                                                            </div>                                                
+                                                            <div class="col-md-4">     
+                                                                <p>
+                                                                    <button class="btn ${s.SwapStatusName == 'Success' ? 'btn-success' : s.SwapStatusName == 'Failure' ? 'btn-danger' : 'btn-warning'}">${s.SwapStatusName}</button><br />
+                                                                    <a class="dca-swap-details-link" href="#" click.delegate="viewSwapDetails(s)">Order details</a>
+                                                                </p>                                                                                                                           
+                                                            </div>   
+                                                            <div class="col-md-12 dca-order-item-line"><hr /></div>                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">                                
+                                <div class="accordion" id="accordionExample">
+                                    <div class="card" repeat.for="tradeH of dcaTradesHistory">
+                                      <div class="dcaRow card-header" id.bind="'heading'+tradeH.Id" id="headingOne">
+                                        <h2 class="mb-0 dca-trade-h2">
+                                          <button class="btn btn-link dca-trade-button" type="button" click.delegate="loadDcaData(tradeH.Id)" data-toggle="collapse" data-target.bind="'#collapse'+tradeH.Id" aria-expanded="true" aria-controls="collapseOne">
+                                            <div class="row">
+                                                <div class="col-md-3">  
+                                                    <div class="row dcaIndexRow">
+                                                        <div class="col-md-4 dcaIndexCol">
+                                                            <span class="dcaIndex">${dcaTradesHistory.length - $index}</span>
+                                                                <font-awesome-icon
+                                                                class="sidenav-icon dcaArrowDown"
+                                                                icon.bind="['fa', 'caret-down']"
+                                                                ></font-awesome-icon>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <p class="dcaDate">      
+                                                                ${tradeH.timestamp_month_name}
+                                                                ${tradeH.timestamp_day} <br />
+                                                                ${tradeH.timestamp_time}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p>${tradeH.TokenInput} <img class="w-6" src.bind="tokenImage(tradeH.TokenInput)"/><br /> <font-awesome-icon
+                                                    class="sidenav-icon"
+                                                    icon.bind="['fa', 'arrow-right']"
+                                                        ></font-awesome-icon> <br />${tradeH.TokenOutput} <img class="w-6" src.bind="tokenImage(tradeH.TokenOutput)"/>
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p>${tradeH.TokenInputAmount} ${tradeH.TokenInput}  <img class="w-6" src.bind="tokenImage(tradeH.TokenInput)"/></p>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <p>
+                                                        <label show.bind="tradeH.SwapStatusName == 'Init'" class="btn btn-info">${tradeH.SwapStatusName}</label>
+                                                        <label show.bind="tradeH.SwapStatusName == 'Success'" class="btn btn-success">${tradeH.SwapStatusName}</label>
+                                                        <label show.bind="tradeH.SwapStatusName == 'Success (partial)'" class="btn btn-success">${tradeH.SwapStatusName}</label>
+                                                        <label show.bind="tradeH.SwapStatusName == 'Cancelled'" class="btn btn-warning">${tradeH.SwapStatusName}</label>
+                                                        <label show.bind="tradeH.SwapStatusName == 'Failed'" class="btn btn-danger">${tradeH.SwapStatusName}</label> 
+                                                        <label show.bind="tradeH.SwapStatusName == 'Expired'" class="btn btn-secondary">${tradeH.SwapStatusName}</label> 
+                                                    </p>
+                                                </div>
+                                            </div>
+                                          </button>
+                                        </h2>
+                                      </div>
+                                  
+                                      <div id.bind="'collapse'+tradeH.Id" class="collapse" aria-labelledby.bind="'heading'+tradeH.Id" data-parent="#accordionExample">
+                                        <div class="card-body" id.bind="'collapseDetail'+tradeH.Id">                                            
+                                            <button id.bind="'btn-dca-details'+tradeH.Id" click.delegate="activateDcaButton('details'+tradeH.Id)" class="btn dca-item-link active btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample3'+tradeH.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample3'+tradeH.Id">DCA Details</a>
+                                            <button id.bind="'btn-dca-orders'+tradeH.Id" click.delegate="activateDcaButton('orders'+tradeH.Id)" class="btn dca-item-link btn-dca" data-toggle="collapse" type="button" data-target.bind="'#multiCollapseExample4'+tradeH.Id" aria-expanded="false" aria-controls.bind="'multiCollapseExample4'+tradeH.Id">Orders (${dcaDetail.SwapRequests.length})</button>
+                                            <div class="accordion-group top20">
+                                                <div class="collapse show multi-collapse col-md-12" id.bind="'multiCollapseExample3'+tradeH.Id" data-parent.bind="'#collapseDetail'+tradeH.Id">
+                                                    <div class="card card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">Sell total</div>
+                                                            <div class="col-md-6">${tradeH.TokenInputAmount} ${tradeH.TokenInput} <img class="w-6" src.bind="tokenImage(tradeH.TokenInput)"/></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Sell per order</div>
+                                                            <div class="col-md-6">${tradeH.TokenInputAmount / tradeH.OrderCount} ${tradeH.TokenInput}  <img class="w-6" src.bind="tokenImage(tradeH.TokenInput)"/></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">To buy</div>
+                                                            <div class="col-md-6">${tradeH.TokenOutput} <img class="w-6" src.bind="tokenImage(tradeH.TokenOutput)"/></div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Total orders</div>
+                                                            <div class="col-md-6">${tradeH.OrderCount}</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Orders realized</div>
+                                                            <div class="col-md-6">${dcaDetail.SwapRequests.length}</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Remaining order</div>
+                                                            <div class="col-md-6">${tradeH.OrderCount - dcaDetail.SwapRequests.length}</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Order interval</div>
+                                                            <div class="col-md-6">Every ${tradeH.RecurrenceTypeAmount} ${tradeH.RecurrenceType}</div>
+                                                        </div>  
+                                                        <div class="row">
+                                                            <div class="col-md-6">~ Total time</div>
+                                                            <div class="col-md-6">${(tradeH.OrderCount-1)*tradeH.RecurrenceTypeAmount} ${tradeH.RecurrenceType}(s)</div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">Total ${tradeH.TokenOutput} received</div>
+                                                            <div class="col-md-6">${dcaDetail.SwapRequestDCA.TokenOutputAmountActual} ${dcaDetail.SwapRequestDCA.TokenOutput} <img class="w-6" src.bind="tokenImage(tradeH.TokenOutput)"/></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="collapse multi-collapse" id.bind="'multiCollapseExample4'+tradeH.Id" data-parent.bind="'#collapseDetail'+tradeH.Id">
+                                                    <div class="dcaRow card card-body">
+                                                        <div class="row" repeat.for="dcaRef of dcaDetail.DCARefunds">                                                            
+                                                            <div class="col-md-4">
+                                                                <p class="bg-warning"><strong>Refund transaction</strong></p>
+                                                                <p>
+                                                                    ${dcaRef.timestamp_month_name}
+                                                                    ${dcaRef.timestamp_day}
+                                                                    ${dcaRef.timestamp_time}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <p><strong>${dcaRef.TokenOutputAmount} ${dcaRef.TokenOutput}  <img class="w-6" src.bind="tokenImage(dcaRef.TokenOutput)"/></strong></p>
+                                                            </div>                                                
+                                                            <div class="col-md-4">     
+                                                                <p>
+                                                                    <button class="btn ${dcaRef.SwapStatusName == 'Success' ? 'btn-success' : dcaRef.SwapStatusName == 'Failure' ? 'btn-danger' : 'btn-warning'}">${dcaRef.SwapStatusName}</button><br />
+                                                                    <a class="dca-swap-details-link" href="#" click.delegate="viewSwapDetails(s)">Order details</a>
+                                                                </p>                                                                                                                           
+                                                            </div>   
+                                                            <div class="col-md-12 dca-order-item-line"><hr /></div>                                                            
+                                                        </div>
+                                                        <div class="row" repeat.for="s of dcaDetail.SwapRequests">                                                            
+                                                            <div class="col-md-4">
+                                                                <p>
+                                                                    ${s.timestamp_month_name}
+                                                                    ${s.timestamp_day}
+                                                                    ${s.timestamp_time}
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <p class="dca-order-item-firstp">
+                                                                    ${s.TokenInputAmount} ${s.TokenInput}  <img class="w-6" src.bind="tokenImage(s.TokenInput)"/> <font-awesome-icon
+                                                                    class="sidenav-icon"
+                                                                    icon.bind="['fa', 'arrow-right']"
+                                                                        ></font-awesome-icon>                                                                     
+                                                                </p>
+                                                                <p><strong>${s.TokenOutputAmountActual} ${s.TokenOutput}  <img class="w-6" src.bind="tokenImage(s.TokenOutput)"/></strong></p>
+                                                            </div>                                                
+                                                            <div class="col-md-4">     
+                                                                <p>
+                                                                    <button class="btn ${s.SwapStatusName == 'Success' ? 'btn-success' : s.SwapStatusName == 'Failure' ? 'btn-danger' : 'btn-warning'}">${s.SwapStatusName}</button><br />
+                                                                    <a class="dca-swap-details-link" href="#" click.delegate="viewSwapDetails(s)">Order details</a>
+                                                                </p>                                                                                                                           
+                                                            </div>   
+                                                            <div class="col-md-12 dca-order-item-line"><hr /></div>                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="dashboard-wrapper d-block d-md-none" show.bind="dswapEnabled">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 class="action-title buy">Buy</h4>
+                        <div class="action-card">
+                            <div class="action-card-options">
+                                <div class="form-group">
+                                    <select
+                                        id="selectpicker-buy"
+                                        class="form-control selectpicker tokenSelect"
+                                        value.bind="buyTokenSymbol"
+                                        change.delegate="buyTokenSelected()"
+                                    >
+                                        <option model.bind="null"
+                                            >${'Please select a token...' &
+                                            t}</option
+                                        >
+                                        <option
+                                            value.bind="t.symbol"
+                                            repeat.for="t of buyTokens"
+                                            data-content="${t.symbol & t} (${t.name})"
+                                            >${t.symbol & t} (${t.name})</option
+                                        >
+                                    </select>
+                                </div>
+                                <!-- <div class="token-info">
+                                    <div class="token-info-data">
+                                        <div class="token-icon">
+                                            <img src="../../images/dswap_standalone.png" width="20" alt="" />
+                                        </div>
+                                        <div class="token-name">
+                                            <h4>DSwapToken</h4>
+                                        </div>
+                                    </div>
+                                    <div class="token-name">
+                                        <font-awesome-icon
+                                            class="chart-icon"
+                                            icon.bind="['fas', 'caret-down']"
+                                        ></font-awesome-icon>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="chart">
+                                <chart
+                                    class="exchange-chart"
+                                    data.bind="chartDataBuy"
+                                    view-model.ref="chartRefBuy"
+                                ></chart>
+                            </div>
+                            <!-- <div class="blur"></div> -->
+                            <div class="chart-data" show.bind="buyToken">
+                                <div class="price-data">
+                                    <p class="price-title">Current Price</p>
+                                    <span
+                                        >${'$' +
+                                        buyToken.metrics.lastPriceUsd}</span
+                                    >
+                                </div>
+                                <div class="change-data">
+                                    <p class="change-title">24hrs Change</p>
+                                    <span
+                                        >${buyToken.metrics.priceChangePercent +
+                                        '%'}</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="trade-arrow">
+                            <font-awesome-icon
+                                class="chart-icon"
+                                icon.bind="['fas', 'caret-up']"
+                            ></font-awesome-icon>
+                            <font-awesome-icon
+                                class="chart-icon"
+                                icon.bind="['fas', 'caret-down']"
+                            ></font-awesome-icon>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 class="action-title sell">Sell</h4>
+                        <div class="sell action-card">
+                            <div class="action-card-options">
+                                <div class="form-group">
+                                    <select
+                                        id="selectpicker-sell"
+                                        class="form-control selectpicker tokenSelect"
+                                        value.bind="sellTokenSymbol"
+                                        change.delegate="sellTokenSelected()"
+                                    >
+                                        <option model.bind="null"
+                                            >${'Please select a token...' &
+                                            t}</option
+                                        >
+                                        <option
+                                            value.bind="t.symbol"
+                                            repeat.for="t of sellTokens"
+                                            data-content="${t.symbol & t} (${t.name})"
+                                            >${t.symbol & t} (${t.name})</option
+                                        >
+                                    </select>
+                                    <!-- <div class="token-info">
+                                    <div class="token-info-data">
+                                        <div class="token-icon">
+                                            <img src="../../images/dswap_standalone.png" width="20" alt="" />
+                                        </div>
+                                        <div class="token-name">
+                                            <h4>DSwapToken</h4>
+                                        </div>
+                                    </div>
+                                    <div class="token-name">
+                                        <font-awesome-icon
+                                            class="chart-icon"
+                                            icon.bind="['fas', 'caret-down']"
+                                        ></font-awesome-icon>
+                                    </div>
+                                </div> -->
+                                </div>
+                            </div>
+                            <div class="chart">
+                                <chart
+                                    class="exchange-chart"
+                                    data.bind="chartDataSell"
+                                    view-model.ref="chartRefSell"
+                                ></chart>
+                            </div>
+                            <!-- <div class="blur"></div> -->
+                            <div class="chart-data" show.bind="sellToken">
+                                <div class="price-data">
+                                    <p class="price-title">Current Price</p>
+                                    <span
+                                        >${'$' +
+                                        sellToken.metrics.lastPriceUsd}</span
+                                    >
+                                </div>
+                                <div class="change-data">
+                                    <p class="change-title">24hrs Change</p>
+                                    <span
+                                        >${sellToken.metrics.priceChangePercent
+                                        + '%'}</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="action-input-wrapper">
+                            <div class="action-input">
+                                <input
+                                    class="form-control transparent-bgn action-input-box text-right"
+                                    type="text"
+                                    value.bind="buyTokenAmount"
+                                    keydown.trigger="buyTokenAmountInViewChanged($event) & debounce:300"
+                                    placeholder="0.000"
+                                />
+                                <div class="token-sym">
+                                    <div
+                                        class="input-group-text token-sym-text h-100 input-group-text-dark"
+                                    >
+                                        ${buyToken ? buyToken.symbol : 'TOKEN'}
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="balance-title">
+                                Current Balance:
+                                <strong>${buyToken.userBalance.balance}</strong>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="action-input">
+                            <div class="token-sym">
+                                <div
+                                    class="input-group-text token-sym-text h-100 input-group-text-dark"
+                                >
+                                    $
+                                </div>
+                            </div>
+                            <input
+                                class="form-control transparent-bgn add-border-right action-input-box text-right tradeValueUsd"
+                                type="text"
+                                readonly="readonly"
+                                value.bind="tradeValueUsd"
+                                placeholder="0.00"
+                            />
+                        </div>
+                        <p class="balance-title">EST. USD Value</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="action-input-wrapper">
+                            <div class="action-input">
+                                <input
+                                    class="form-control transparent-bgn action-input-box text-right"
+                                    type="text"
+                                    value.bind="sellTokenAmount"
+                                    keydown.trigger="sellTokenAmountInViewChanged($event) & debounce:300"
+                                    placeholder="0.000"
+                                />
+                                <div class="token-sym">
+                                    <div
+                                        class="input-group-text token-sym-text h-100 input-group-text-dark"
+                                    >
+                                        ${sellToken ? sellToken.symbol :
+                                        'TOKEN'}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <p class="balance-title">
+                                        Current Balance:
+                                        <strong
+                                            >${sellToken.userBalance.balance}</strong
+                                        >
+                                    </p>
+                                </div>
+                                <div
+                                    class="col-sm-3 text-right"
+                                    show.bind="tradePercentage"
+                                >
+                                    <p class="balance-title">
+                                        <strong>${tradePercentage} %</strong>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="action-quantity-slider">
+                                <input
+                                    type="range"
+                                    value.bind="tradePercentage"
+                                    min="1"
+                                    max="100"
+                                    value="50"
+                                    class="slider"
+                                    id="myRange"
+                                />
+                                <div class="quantity-unit-options">
+                                    <p
+                                        class="quantity-unit"
+                                        click.delegate="slideTo(1)"
+                                    >
+                                        min
+                                    </p>
+                                    <p
+                                        class="quantity-unit"
+                                        click.delegate="slideTo(50)"
+                                    >
+                                        half
+                                    </p>
+                                    <p
+                                        class="quantity-unit"
+                                        click.delegate="slideTo(100)"
+                                    >
+                                        max
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="estimate-wrapper">
+                    <h4
+                        style="margin-left: 0; margin-bottom: 7px;"
+                        class="action-title"
+                    >
+                        Your Estimated Trade
+                        <font-awesome-icon
+                            class="chart-icon"
+                            icon.bind="['fas', 'info-circle']"
+                        ></font-awesome-icon>
+                    </h4>
+                    <!--<div
+                        class="estimated-rate-info-wrapper"
+                        show.bind="buyToken && sellToken"
+                    >
+                        <p class="estimated-rate-info">
+                            1 ${buyToken.symbol} = ${unitEstimateRate | toFixed:
+                            3} ${sellToken.symbol}
+                        </p>
+                    </div>-->
+                    <div class="estimated-trade-info-wrapper">
+                        <!--<p class="estimated-trade-info-title">
+                            Estimated Trade Details
+                        </p>-->
+                        <div class="estimated-trade-swap">
+                            <p class="estimated-tokens token-one">
+                                ${sellTokenAmount} ${sellToken.symbol}
+                            </p>
+                            <font-awesome-icon
+                                class="chart-icon"
+                                icon.bind="['fas', 'arrow-right']"
+                            ></font-awesome-icon>
+                            <p class="estimated-tokens token-two">
+                                ${buyTokenAmount} ${buyToken.symbol}
+                            </p>
+                        </div>
+                        <div class="trade-fee">
+                            <p class="trade-fee-title">Miner Fee</p>
+                            <p class="trade-fee-value">0.000ETHP</p>
+                        </div>
+                    </div>
+                    <button class="start-trade" click.delegate="startTrade()" show.bind="!loggedIn">
+                        Start trade
+                    </button>
+                    <div class="warning" show.bind="!loggedIn">
+                        <font-awesome-icon
+                            class="warning-icon"
+                            icon.bind="['fas', 'engine-warning']"
+                        ></font-awesome-icon>
+                        <p class="login-required">Login Required</p>
+                        <p class="warning-info">
+                            Please <a href="">Signup</a> or
+                            <a href="">Login</a> to continue
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

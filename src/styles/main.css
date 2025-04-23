@@ -155,6 +155,18 @@ a:hover {
 .support-bubble i {
     margin-left: 5px;
 }
+.support-bubble-github {
+    position: absolute;
+    bottom: 20px;
+    left: 170px;
+    background-color: rgb(300, 300, 300);
+    color: #fff;
+    border-radius: 25px;
+    position: fixed;
+    padding: 13px 22px;
+    align-self: center;
+}
+
 .item-header {
     padding: 5px 10px;
 }
@@ -1988,4 +2000,123 @@ input.tradeValueUsd {
 
 .tbDepositAddress {
     width: 400px;
+}
+
+.dcaInput {
+    width: 50%;
+    border: none;
+    text-align: center !important;
+}
+
+.dcaInput::placeholder {
+    text-align: center; 
+ }
+
+ .dcaInputLastElement {
+    padding-bottom: 10px;
+ }
+
+ .dcaDetailsBlock {
+    min-height: 130px;
+ }
+
+ .dcaWrapper .card {
+    transition: none;
+    transform: none;
+    border-radius: .25rem;
+ }
+
+ .top10 {
+    margin-top: 10px;
+ }
+
+ .top20 {
+    margin-top: 20px;
+ }
+
+ .dcaDetailsBlock .dcaInput {
+    border: 1px solid #22a275;
+ }
+
+ .dca-item-link,
+ .dca-swap-details-link {
+    color: #05413c !important;
+ }
+
+ .dca-swap-details-link {
+    text-decoration: underline;
+ }
+
+ .dca-item-link.active {
+    color: #fff !important;
+    background-color: #05413c !important;
+ }
+
+ .dca-trade-button {
+    color: #05413c !important;
+    text-align: left;
+    width: 100%;
+    padding: 5px !important;
+ }
+
+ .dca-trade-h2 {
+    text-align: left;
+ }
+
+ .dca-order-item-firstp {
+    margin-bottom: 0px;
+ }
+
+ .dca-order-item-line hr {
+    margin: 0px 0px 5px 0px;
+ }
+
+ .dcaWrapper img, video {
+    max-width: 100%;
+    height: auto;
+}
+
+.dcaWrapper .w-6 {
+    width: 1.5rem;
+}
+
+.dcaArrowDown {
+    /*margin-left: -20px;*/
+    margin-top: 5px;
+}
+
+.dcaOverviewPanel {
+    margin-bottom: 50px;
+}
+
+.noDcaActive {
+    padding: 10px 0px;
+}
+
+.nav-item-refresh {
+    position: absolute;
+    right: 15px;
+    top: 0;
+}
+
+.dcaRow p,
+.dcaRow label {
+    font-size: 14px !important;
+}
+
+.dcaRow {
+    padding: 5px !important;
+}
+
+.dcaIndex {
+    /*margin-left: -20px;*/
+}
+
+.dcaIndexRow div {
+    padding: 5px !important;
+}
+
+.dcaIndexRow div.dcaIndexCol {
+    margin-left: 0px;
+    padding-left: 15px !important;
 }

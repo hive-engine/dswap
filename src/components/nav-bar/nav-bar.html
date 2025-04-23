@@ -54,6 +54,29 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper" show.bind="dswapEnabled">
+                                        <a route-href="route:dca"
+                                           class="item">
+                                            <div class="row">
+                                                <div class="col-3"
+                                                     style="padding: 0;">
+                                                    <div class="item-icon ${activePageId == 'dca' ? 'activateIt' : ''}"
+                                                         id="dca">
+                                                        <font-awesome-icon class="sidenav-icon"
+                                                                           icon.bind="['fas', 'wave-sine']"></font-awesome-icon>
+                                                    </div>
+                                                </div>
+                                                <div class="col-9"
+                                                     style="display: flex;">
+                                                    <div class="item-title">
+                                                        <h4 class="item-title-text">
+                                                            Market DCA
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item-wrapper" show.bind="dswapEnabled">
                                         <a route-href="route:wallet"
                                            class="item">
                                             <div class="row">
@@ -200,6 +223,9 @@
         </nav>
         <div class="support-bubble">
             <a href="https://eng-support.privex.io/open.php" target="_blank" class="support-bubble-text">Support <i class="fas fa-question-circle"></i></a>
+        </div>
+        <div class="support-bubble-github">
+            <a route-href="route:faq" class="support-bubble-text"><img src="../../images/github-bl.png" alt="GitHub" width="25px" /></a>
         </div>
     </section>
     
