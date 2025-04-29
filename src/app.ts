@@ -89,6 +89,13 @@ bind() {
             title: "Market DCA",
         },
         {
+            route: "dcapools",
+            name: "dcapools",
+            moduleId: PLATFORM.moduleName("./routes/dcapools/dcapools"),
+            nav: false,
+            title: "Pools DCA",
+        },
+        {
             route: "wallet",
             name: "wallet",
             moduleId: PLATFORM.moduleName("./routes/wallet/wallet"),

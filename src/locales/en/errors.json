@@ -56,5 +56,6 @@
     "dcaRecurrenceTypeAmountRanges": "Please make sure recurrence settings values are > 0",
     "dcaOrderNoRequired": "Number of orders is required.",
     "dcaOrderNoRanges": "Please make sure total order number is between 2 and 20",
-    "dcaMinimumOrderValueUsd": "Please make sure minimum order value is > $1. Current: ${{dcaTradeValueUsd}}"
+    "dcaMinimumOrderValueUsd": "Please make sure minimum order value is > $1. Current: ${{dcaTradeValueUsd}}",
+    "poolNotAvailable": "There is no pool available for {{buyTokenSymbol}} and {{sellTokenSymbol}}"
 }

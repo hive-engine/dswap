@@ -24,5 +24,11 @@ export enum SwapStep {
     ConvertToSwapToken = 10,
     ConvertToSwapBaseToken = 20,
     ConvertToSwapOutput = 30,
+    PoolSwap = 35,
     TransferToDestionationAccount = 40
+}
+
+export enum DCAType {
+    MarketDCA = 1,
+    PoolsDCA = 2
 }

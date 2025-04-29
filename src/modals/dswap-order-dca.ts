@@ -13,7 +13,7 @@ import { SwapService } from 'services/swap-service';
 import { swapRequest } from 'common/dswap-api';
 import { getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getRandomID } from 'common/functions';
 import { TokenService } from '../services/token-service';
-import { Chain } from 'common/enums';
+import { Chain, DCAType } from 'common/enums';
 
 @autoinject()
 export class DswapOrderDcaModal {
@@ -39,6 +39,7 @@ export class DswapOrderDcaModal {
     private customMemoId;
     private swapV2;
     private dswapDcaFee;
+    private supportedTokens;
 
     constructor(private controller: DialogController, private toast: ToastService, private taskQueue: TaskQueue, private store: Store<IState>,
         private controllerFactory: ValidationControllerFactory, private i18n: I18N, private hes: HiveEngineService, private ss: SwapService, private ts: TokenService) {
@@ -65,37 +66,11 @@ export class DswapOrderDcaModal {
     async activate(swapRequestModel: ISwapRequestDCAModel) {                
         this.swapRequestModel = swapRequestModel;
         this.baseTokenSymbol = await getPeggedTokenSymbolByChain(swapRequestModel.Chain);
-
-        this.sellToken = this.state.tokens.find(x => x.symbol === swapRequestModel.TokenInput);
-        if (this.sellToken && this.sellToken.isCrypto) {
-            let sellTokenSwap = await getSwapTokenByCrypto(this.sellToken.symbol);
-            if (sellTokenSwap == this.baseTokenSymbol) {
-                this.depositAddress = environment.DSWAP_ACCOUNT_HE;
-            } else {
-                this.depositAddress = await this.hes.getDepositAddress(sellTokenSwap, environment.DSWAP_ACCOUNT_HE);
-                
-                if (this.depositAddress) {
-                    this.swapRequestModel.TokenInputMemo = this.depositAddress.address;
-
-                    if (this.depositAddress.memo) {
-                        this.customMemoId = getRandomID();
-                        this.customMemo = this.depositAddress.memo + " " + this.customMemoId;
-                    }
-                } else {
-                    const toast = new ToastMessage();
-
-                    toast.message = this.i18n.tr("converterApiTimeout", {
-                        ns: 'errors'
-                    });
-
-                    this.toast.error(toast);
-                }
-            }
-
-            // calculate 1.001% fee instead of 1% to be safe with rounding differences
-            let amtInclFee = parseFloat((this.swapRequestModel.TokenInputAmount * 100 / 98.999).toFixed(8));
-
-            this.depositAmount = amtInclFee;
+        if (swapRequestModel.DCAType == DCAType.MarketDCA) {
+            this.sellToken = this.state.tokens.find(x => x.symbol === swapRequestModel.TokenInput);
+        } else {
+            this.supportedTokens = await this.ts.getDSwapTokens(true, Chain.Hive, true)
+            this.sellToken = this.supportedTokens.find(x => x.symbol === swapRequestModel.TokenInput);
         }
     }
 
@@ -131,9 +106,20 @@ export class DswapOrderDcaModal {
         if (symbol == environment.marketMakerFeeToken) {
             return environment.EXCHANGE_URL_HE + 'images/logo-small.png';
         } else {
-            var t = this.state.tokens.find(x => x.symbol === symbol);
-            if (t) {
-                return t.metadata.icon.endsWith('.svg') ? t.metadata.icon : `https://images.hive.blog/0x0/${t.metadata.icon}`;
+            if (this.swapRequestModel.DCAType == DCAType.MarketDCA) {
+                var t = this.state.tokens.find(x => x.symbol === symbol);
+                if (t) {
+                    return t.metadata.icon.endsWith('.svg') ? t.metadata.icon : `https://images.hive.blog/0x0/${t.metadata.icon}`;
+                } 
+            } else {
+                var t2 = this.supportedTokens.find(x => x.symbol === symbol);
+                if (t2) {
+                    console.log(t2);
+                    if (!t2.metadata){
+                        t2 = this.ts.getTokenDetails(symbol, Chain.Hive, true, true);
+                    }
+                    return t2.metadata.icon.endsWith('.svg') ? t2.metadata.icon : `https://images.hive.blog/0x0/${t2.metadata.icon}`;
+                } 
             }
         }
     }

@@ -6,7 +6,7 @@ import firebase from 'firebase/app';
 import { ToastMessage, ToastService } from './toast-service';
 import { I18N } from 'aurelia-i18n';
 import { Store } from 'aurelia-store';
-import { loadCoins, loadTokenMetrics, loadUserBalances, loadTokens, fetchSettings } from 'common/hive-engine-api';
+import { loadCoins, loadTokenMetrics, loadUserBalances, loadTokens, fetchSettings, loadPoolTokens } from 'common/hive-engine-api';
 import { HiveEngineService } from './hive-engine-service';
 import { getPrices, usdFormat, getSwapTokenByCrypto } from 'common/functions';
 import { Chain } from '../common/enums';
@@ -45,22 +45,73 @@ export class TokenService {
         });        
     }
 
-    async getDSwapTokens(includeMetrics = true, chain: Chain = Chain.Hive) {
+    async loadPools(){
+        if (!this.state.pools) {
+            let pools = await loadPoolTokens([], 1000);
+            this.state.pools = pools;
+        }
+
+    }
+
+    async getMappedMarketPools(){
+        if (!this.state.pools) {
+            await this.loadPools();
+        }
+
+        const pools = this.state.pools
+        .filter((p) => !environment.settings?.disabled_pools.includes(p.tokenPair))
+        .map<
+          [string, MarketPool & { baseSymbol: string; quoteSymbol: string }]
+        >((p) => {
+          const [baseSymbol, quoteSymbol] = p.tokenPair.split(':');
+
+          return [p.tokenPair, { ...p, baseSymbol, quoteSymbol }];
+        })
+        .filter(
+          (p) =>
+            !environment.settings?.deprecated_tokens.includes(p[1].baseSymbol) &&
+            !environment.settings?.deprecated_tokens.includes(p[1].quoteSymbol),
+        );
+
+      return new Map(pools);
+    }
+
+    getPoolSupportedTokens(mappedMarketPools){
+        const tokens = Array.from(mappedMarketPools.values())
+            .map((m:any) => [m.baseSymbol, m.quoteSymbol])
+            .flat();
+
+        return Array.from(new Set(tokens));
+    }
+
+    async getDSwapTokens(includeMetrics = true, chain: Chain = Chain.Hive, poolTokens = false) {
         const symbols = environment.swapEnabledTokens;
-        
-        let dTokens1 = await loadTokens([], 1000);
-        let dTokens2 = await loadTokens([], 1000, 1000);
 
-        let dTokens = [...dTokens1, ...dTokens2];
+         if (poolTokens) {
+            let mappedPools = await this.getMappedMarketPools();
+            let poolTokens = this.getPoolSupportedTokens(mappedPools);
 
-        if (includeMetrics)
-            await this.enrichTokensWithMetrics(dTokens, symbols, chain);
+            let pTokens = await loadTokens(poolTokens, 1000);
 
-        await this.addEnabledCryptoTokens(dTokens);
+            if (includeMetrics)
+                await this.enrichTokensWithMetrics(pTokens, symbols, chain);
 
-        this.state.tokens = dTokens;
+            return pTokens;
+         } else {        
+            let dTokens1 = await loadTokens([], 1000);
+            let dTokens2 = await loadTokens([], 1000, 1000);
 
-        return dTokens;
+            let dTokens = [...dTokens1, ...dTokens2];
+
+            if (includeMetrics)
+                await this.enrichTokensWithMetrics(dTokens, symbols, chain);
+
+            await this.addEnabledCryptoTokens(dTokens);
+
+            this.state.tokens = dTokens;
+
+            return dTokens;
+        }
     }   
 
     async addEnabledCryptoTokens(dTokens: IToken[]) {
@@ -111,6 +162,24 @@ export class TokenService {
                 m.lastPriceUsd = usdFormat(parseFloat(m.lastPrice), token.precision, this.state.hivePriceUsd, true); 
 
                 token.metrics = m;                
+            }
+        }
+    }
+
+    async enrichTokensWithUserBalancesDcaPools(tokens) {
+        let account = environment.isDebug && environment.debugAccount ? environment.debugAccount : this.user.name;
+        let symbols = [];
+        for (let t of tokens) {
+            symbols.push(t.symbol);
+        }
+        
+        let userBalances = await loadUserBalances(account, symbols);
+        for(let t of tokens) {
+            let balance = userBalances.find(x => x.symbol == t.symbol);
+            if (balance) {
+                t.userBalance = balance;
+            } else {
+                t.userBalance = { _id: 0, account: account, balance: 0, stake: "0", symbol: t.symbol };
             }
         }
     }

@@ -24,8 +24,8 @@ import { DswapSwapdetailsModal } from 'modals/dswap-swapdetails';
 import { DswapOrderDcaCancelModal } from 'modals/dswap-order-dca-cancel';
 
 @autoinject()
-@customElement('dca')
-export class DCA {
+@customElement('dcapools')
+export class DCAPools {
     public storeSubscription: Subscription;
     public state: IState;
     public buyTokens: IToken[];
@@ -67,6 +67,9 @@ export class DCA {
     @bindable() dcaTradesActive: ISwapRequestDCAViewModel[];
     @bindable() dcaTradesHistory: ISwapRequestDCAViewModel[];
     @bindable() dcaDetail: ISwapRequestDCADetailViewModel;
+    private mappedMarketPools;
+    private supportedTokens;
+    private poolTokenPair;
 
     constructor(private dialogService: DialogService, 
                 private ts: TokenService, 
@@ -92,9 +95,13 @@ export class DCA {
 
     async canActivate({ symbol, transactionType }) {        
         try {
-            if (!this.state.tokens) {
-                await this.ts.getDSwapTokens(true, Chain.Hive);
+            if (!this.state.pools) {
+                this.supportedTokens = await this.ts.getDSwapTokens(true, Chain.Hive, true);
+                await this.ts.enrichTokensWithUserBalancesDcaPools(this.supportedTokens);
             }
+            
+            this.mappedMarketPools = await this.ts.getMappedMarketPools();
+
             await dispatchify(getCurrentFirebaseUser)();
             await dispatchify(getMarketMakerUser)();
 
@@ -111,7 +118,7 @@ export class DCA {
                 }
             }
 
-            this.state.activePageId = "dca";
+            this.state.activePageId = "dcapools";
             this.currentChainId = await getChainByState(this.state);            
         } catch {
             return new Redirect('');
@@ -128,7 +135,7 @@ export class DCA {
         if (symbol == environment.marketMakerFeeToken) {
             return environment.EXCHANGE_URL_HE + 'images/logo-small.png';
         } else {
-            var t = this.state.tokens.find(x => x.symbol === symbol);
+            var t = this.supportedTokens.find(x => x.symbol === symbol);
             if (t) {
                 return t.metadata.icon.endsWith('.svg') ? t.metadata.icon : `https://images.hive.blog/0x0/${t.metadata.icon}`;
             }
@@ -156,7 +163,7 @@ export class DCA {
                     sellTokenSymbol: this.sellTokenSymbol,
                     buyTokenAmount: this.buyTokenAmount,
                     sellTokenAmount: this.sellTokenAmount,
-                    sellTokenBalance: this.sellToken != null ? this.sellToken.userBalance.balance : "",
+                    sellTokenBalance: this.sellToken != null ? (this.sellToken.userBalance != null ? this.sellToken.userBalance.balance : 0) : 0,
                     dcaTradeValueUsd: this.sellToken != null && this.sellToken.metrics != null ? parseFloat(this.sellToken.metrics.lastPriceUsd) * this.sellTokenAmount : "",
                     ns: 'errors' 
                 });
@@ -178,8 +185,8 @@ export class DCA {
                 RecurrenceType: this.recurrenceTypeValue,
                 RecurrenceTypeAmount: this.dcaRecurrenceTypeAmount,
                 OrderCount: this.dcaOrderNo,
-                DCAType: DCAType.MarketDCA,
-                PoolTokenPair: ""
+                DCAType: DCAType.PoolsDCA,
+                PoolTokenPair: this.poolTokenPair
             };                        
 
             this.loading = true;
@@ -193,23 +200,74 @@ export class DCA {
     }
 
     async refreshTokenLists(){
-        if (!this.state.tokens) {
-            await this.ts.getDSwapTokens(true, Chain.Hive);
-        }
+        if (!this.state.pools || !this.supportedTokens) {
+            this.supportedTokens = await this.ts.getDSwapTokens(true, Chain.Hive, true);            
+            await this.ts.enrichTokensWithUserBalancesDcaPools(this.supportedTokens);
+        } 
 
-        this.buyTokens = [...this.state.tokens];
-        this.sellTokens = [...this.state.tokens];
+        this.buyTokens = [...this.supportedTokens];
+        this.sellTokens = [...this.supportedTokens];
 
         // filter out crypto from buy token list for now
         // filter out 0 precision tokens to prevent loss
         this.buyTokens = this.buyTokens.filter(x => !x.isCrypto && x.precision != 0);
         this.sellTokens = this.sellTokens.filter(x => x.precision != 0);
         
-        if (this.buyToken)
-            this.sellTokens.splice(this.sellTokens.indexOf(this.sellTokens.find(x => x.symbol == this.buyToken.symbol)), 1);
+        if (this.buyToken) {
+            let pools = this.state.pools.filter(x =>  x.token1 == this.buyToken.symbol || x.token2 == this.buyToken.symbol);
 
-        if (this.sellToken)
+            this.sellTokens = [];
+            let sellTokenSymbols = [];
+            for (let i = 0; i < pools.length; i++) {
+                let tokenSymbol = "";
+                if (pools[i].token1 != this.buyToken.symbol) {
+                    tokenSymbol = pools[i].token1;
+                } else if (pools[i].token2 != this.buyToken.symbol) {
+                    tokenSymbol = pools[i].token2;
+                }
+
+                if (tokenSymbol != "")
+                    sellTokenSymbols.push(tokenSymbol);
+            }
+
+            if (sellTokenSymbols.length > 0) {
+                for (let j = 0; j < sellTokenSymbols.length; j++) {
+                    let tokenFound = this.supportedTokens.find(x => x.symbol == sellTokenSymbols[j]);
+                    if (tokenFound)
+                        this.sellTokens.push(tokenFound);
+                }
+            }
+        
+            this.sellTokens.splice(this.sellTokens.indexOf(this.sellTokens.find(x => x.symbol == this.buyToken.symbol)), 1);
+        }
+
+        if (this.sellToken) {
+            let pools = this.state.pools.filter(x =>  x.token1 == this.sellToken.symbol || x.token2 == this.sellToken.symbol);
+
+            this.buyTokens = [];
+            let buyTokenSymbols = [];
+            for (let i = 0; i < pools.length; i++) {
+                let tokenSymbol = "";
+                if (pools[i].token1 != this.sellToken.symbol) {
+                    tokenSymbol = pools[i].token1;
+                } else if (pools[i].token2 != this.sellToken.symbol) {
+                    tokenSymbol = pools[i].token2;
+                }
+
+                if (tokenSymbol != "")
+                    buyTokenSymbols.push(tokenSymbol);
+            }
+
+            if (buyTokenSymbols.length > 0) {
+                for (let j = 0; j < buyTokenSymbols.length; j++) {
+                    let tokenFound = this.supportedTokens.find(x => x.symbol == buyTokenSymbols[j]);
+                    if (tokenFound)
+                        this.buyTokens.push(tokenFound);
+                }
+            }
+            
             this.buyTokens.splice(this.buyTokens.indexOf(this.buyTokens.find(x => x.symbol == this.sellToken.symbol)), 1);
+        }
 
         await this.refreshSelectPicker();
     }
@@ -230,16 +288,16 @@ export class DCA {
         this.updateDcaSummary();
     }
 
-    async buyTokenSelected() {        
+    async buyTokenSelected() {       
         if (this.chartRefBuy)
             this.chartRefBuy.detached();
 
-        this.chartDataBuy = await this.loadTokenHistoryData(this.buyTokenSymbol);
+        //this.chartDataBuy = await this.loadTokenHistoryData(this.buyTokenSymbol);
 
-        if (this.chartRefBuy)
-            this.chartRefBuy.attached();
+        // if (this.chartRefBuy)
+        //     this.chartRefBuy.attached();
         
-        this.buyToken = this.state.tokens.find(x => x.symbol == this.buyTokenSymbol);
+        this.buyToken = this.supportedTokens.find(x => x.symbol == this.buyTokenSymbol);
         this.fillPeggedTokenMetrics(this.buyToken);
         this.refreshTokenLists();
 
@@ -295,18 +353,17 @@ export class DCA {
         if (this.chartRefSell)
             this.chartRefSell.detached();
 
-        this.chartDataSell = await this.loadTokenHistoryData(this.sellTokenSymbol);
+        // this.chartDataSell = await this.loadTokenHistoryData(this.sellTokenSymbol);
 
-        if (this.chartRefSell)
-            this.chartRefSell.attached();
+        // if (this.chartRefSell)
+        //     this.chartRefSell.attached();
         
-        this.sellToken = this.state.tokens.find(x => x.symbol == this.sellTokenSymbol);
+        this.sellToken = this.supportedTokens.find(x => x.symbol == this.sellTokenSymbol);
 
         if (!this.sellToken.metrics) {
             await this.ts.enrichTokensWithMetrics([this.sellToken], [this.sellToken.symbol], Chain.Hive);
         }
 
-        console.log(this.sellToken);
         this.fillPeggedTokenMetrics(this.sellToken);
         this.refreshTokenLists();
 
@@ -347,7 +404,7 @@ export class DCA {
 
     async getTokenSymbolToCheck(tokenSymbol) {
         let tokenSymbolToCheck = tokenSymbol;
-        let tokenToCheck = this.state.tokens.find(x => x.symbol == tokenSymbol);
+        let tokenToCheck = this.supportedTokens.find(x => x.symbol == tokenSymbol);
         if (tokenToCheck && tokenToCheck.isCrypto)
             tokenSymbolToCheck = getSwapTokenByCrypto(tokenSymbol);
 
@@ -361,7 +418,7 @@ export class DCA {
     // DCA overview & history
     async getActiveDCARequests(){               
         this.loadingDCA = true;
-        let tradesActive = await getSwapDCARequests(this.state.account.name, 100, 0, DCAType.MarketDCA, [SwapStatus.Init, SwapStatus.InProgress]);
+        let tradesActive = await getSwapDCARequests(this.state.account.name, 100, 0, DCAType.PoolsDCA, [SwapStatus.Init, SwapStatus.InProgress]);
         for (let t of tradesActive) {
             t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
             t.timestamp_day = moment(t.CreatedAt).format('DD');
@@ -392,7 +449,7 @@ export class DCA {
 
     async getHistoricalDCARequests(){
         this.loadingDCA = true;
-        let tradesHistory = await getSwapDCARequests(this.state.account.name, 100, 0, DCAType.MarketDCA, [SwapStatus.Success, SwapStatus.Failure, SwapStatus.SuccessPartial, SwapStatus.Cancelled, SwapStatus.Expired]);
+        let tradesHistory = await getSwapDCARequests(this.state.account.name, 100, 0, DCAType.PoolsDCA, [SwapStatus.Success, SwapStatus.Failure, SwapStatus.SuccessPartial, SwapStatus.Cancelled, SwapStatus.Expired]);
         for (let t of tradesHistory) {
             t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
             t.timestamp_day = moment(t.CreatedAt).format('DD');
@@ -467,6 +524,7 @@ export class DCA {
     async refreshMyBalances(){
         this.loading = true;
         await this.ts.getDSwapTokenBalances(Chain.Hive, true);
+        console.log(this.sellToken);
         this.loading = false;
     }
 
@@ -524,7 +582,22 @@ export class DCA {
                 }
 
                 return false;
-            }).withMessageKey('errors:dashboardInsufficientBalance')
+            }).withMessageKey('errors:dashboardInsufficientBalance').then()
+            .satisfies((value: any, object: any) => {
+                if (this.mappedMarketPools.get(this.sellTokenSymbol+":"+this.buyTokenSymbol)) {
+                    this.poolTokenPair = this.sellTokenSymbol+":"+this.buyTokenSymbol;
+                } else if (this.mappedMarketPools.get(this.buyTokenSymbol+":"+this.sellTokenSymbol)){ 
+                    this.poolTokenPair = this.buyTokenSymbol+":"+this.sellTokenSymbol;
+                }
+
+                if (this.poolTokenPair) {
+                    console.log('found pair');
+                    console.log(this.poolTokenPair);
+                    return true;
+                }
+
+                return false;
+            }).withMessageKey('errors:poolNotAvailable')
             // .then()
             // .satisfies((value: any, object: any) => {
             //     if(parseFloat(this.sellToken.metrics.lastPriceUsd) * this.sellTokenAmount < 1) {

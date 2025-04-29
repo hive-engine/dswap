@@ -77,6 +77,29 @@
                                         </a>
                                     </div>
                                     <div class="item-wrapper" show.bind="dswapEnabled">
+                                        <a route-href="route:dcapools"
+                                           class="item">
+                                            <div class="row">
+                                                <div class="col-3"
+                                                     style="padding: 0;">
+                                                    <div class="item-icon ${activePageId == 'dcapools' ? 'activateIt' : ''}"
+                                                         id="dcapools">
+                                                        <font-awesome-icon class="sidenav-icon"
+                                                                           icon.bind="['fas', 'wave-sine']"></font-awesome-icon>
+                                                    </div>
+                                                </div>
+                                                <div class="col-9"
+                                                     style="display: flex;">
+                                                    <div class="item-title">
+                                                        <h4 class="item-title-text">
+                                                            Pools DCA
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item-wrapper" show.bind="dswapEnabled">
                                         <a route-href="route:wallet"
                                            class="item">
                                             <div class="row">

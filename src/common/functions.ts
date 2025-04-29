@@ -233,6 +233,13 @@ export async function getPeggedTokenPriceByChain(chain: Chain) {
     return price;
 }
 
+export function getByValue(map, searchValue) {
+    for (let [key, value] of map.entries()) {
+      if (value === searchValue)
+        return key;
+    }
+  }
+
 export async function getHivePrice() {
     try {
         const response = await getPrices();
@@ -368,6 +375,9 @@ export async function getSwapStepById(swapStepId: number) {
             break;
         case SwapStep.ConvertToSwapOutput:
             swapStepName = "Convert to output token";
+            break;
+        case SwapStep.PoolSwap:
+            swapStepName = "Pool Swap";
             break;
         case SwapStep.TransferToDestionationAccount:
             swapStepName = "Transfer tokens to receiver";

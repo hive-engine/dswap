@@ -14,6 +14,27 @@ export function mapTokenResultToIToken(token) {
     return mapped;
 }
 
+export function mapResultToMarketPool(p) {    
+    let tokenPairSplit = p.tokenPair.split(":");
+    let mapped : MarketPool = {
+        _id: p._id,
+        tokenPair: p.tokenPair,
+        baseQuantity: p.baseQuantity,
+        baseVolume: p.baseVolume,
+        basePrice: p.basePrice,
+        quoteQuantity: p.quoteQuantity,
+        quoteVolume: p.quoteVolume,
+        quotePrice: p.quotePrice,
+        totalShares: p.totalShares,
+        precision: p.precision,
+        creator: p.creator,
+        token1: tokenPairSplit[0],
+        token2: tokenPairSplit[1]
+    }
+
+    return mapped;
+}
+
 export function mapMetadataToTokenMetadata(metadata) {
     let metadataParsed = JSON.parse(metadata);
 

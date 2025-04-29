@@ -35,6 +35,7 @@ export const initialState: IState = {
   loggedIn: false,
   loading: false,
   tokens: [],
+  pools: [],
   buyBook: [],
   sellBook: [],
   tradeHistory: [],

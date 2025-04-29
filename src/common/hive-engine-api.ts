@@ -5,7 +5,7 @@ import { HttpClient } from 'aurelia-fetch-client';
 import { queryParam } from 'common/functions';
 import { environment } from 'environment';
 import { ssc } from './ssc';
-import { mapTokenResultToIToken, mapBalanceResultToIBalance, mapMetricsResultToTokenMetrics } from './mappers';
+import { mapTokenResultToIToken, mapBalanceResultToIBalance, mapMetricsResultToTokenMetrics, mapResultToMarketPool } from './mappers';
 import { env } from 'process';
 
 const http = new HttpClient();
@@ -165,6 +165,25 @@ export async function loadTokens(symbols = [], limit = 50, offset = 0): Promise<
     }
 
     return tokens;
+}
+
+export async function loadPoolTokens(symbols = [], limit = 50, offset = 0): Promise<MarketPool[]> {
+    const queryConfig: any = {};
+
+    if (symbols.length) {
+        queryConfig.symbol = { $in: symbols };
+    }
+
+    let results: any[] = await ssc.find('marketpools', 'pools', queryConfig, limit, offset, [{ index: '_id', descending: false }]);
+    let pools: MarketPool[] = [];
+
+    if (results) {
+        for (const res of results) {
+            pools.push(mapResultToMarketPool(res));
+        }
+    }
+
+    return pools;
 }
 
 export async function fetchSettings() {

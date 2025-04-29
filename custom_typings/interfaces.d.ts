@@ -64,6 +64,7 @@ interface IState {
     loggedIn: boolean;
     loading: boolean;
     tokens: IToken[];
+    pools: MarketPool[];
     tokensLoaded: boolean;
     buyBook: any[];
     sellBook: any[];
@@ -370,7 +371,9 @@ interface ISwapRequestDCAModel {
     TokenInputMemo: string;    
     RecurrenceTypeAmount: number,
     RecurrenceType: string,
-    OrderCount: number
+    OrderCount: number,
+    DCAType: number,
+    PoolTokenPair: string
 }
 
 interface ISwapRequestDCAResponseModel {
@@ -446,3 +449,19 @@ interface IDCACancelViewModel {
     timestamp_year: string;
     TokenInputMemo: string;
 }
+
+interface MarketPool {
+    _id: number;
+    tokenPair: string;
+    baseQuantity: string;
+    baseVolume: string;
+    basePrice: string;
+    quoteQuantity: string;
+    quoteVolume: string;
+    quotePrice: string;
+    totalShares: string;
+    precision: number;
+    creator: string;
+    token1: string;
+    token2: string;
+  }
