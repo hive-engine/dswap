@@ -49,6 +49,7 @@
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-md-6">
+                        <h2>Market DCA</h2>
                         <h4>I want to spend:</h4>
                         <div class="sell action-card">
                             <div class="action-card-options">
@@ -249,7 +250,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">~ Total time</div>
-                                    <div class="col-md-6">${(dcaOrderNo-1)*dcaRecurrenceTypeAmount} ${recurrenceTypeValue}(s)</div>
+                                    <div class="col-md-6">${(dcaOrderNo)*dcaRecurrenceTypeAmount} ${recurrenceTypeValue}(s)</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">Platform fee</div>
@@ -402,7 +403,11 @@
                                                         </div>  
                                                         <div class="row">
                                                             <div class="col-md-6">~ Total time</div>
-                                                            <div class="col-md-6">${(trade.OrderCount-1)*trade.RecurrenceTypeAmount} ${trade.RecurrenceType}(s)</div>
+                                                            <div class="col-md-6">${(trade.OrderCount)*trade.RecurrenceTypeAmount} ${trade.RecurrenceType}(s)</div>
+                                                        </div>
+                                                        <div class="row nextOrderIn">
+                                                            <div class="col-md-6">~ Next order in</div>
+                                                            <div class="col-md-6">${timeUntilNextOrder}</div>
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-6">Total ${trade.TokenOutput} received</div>

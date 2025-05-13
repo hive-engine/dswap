@@ -8,7 +8,7 @@ import { Store, dispatchify } from 'aurelia-store';
 import { ChartComponent } from 'components/chart/chart';
 import { loadTokenMarketHistory, loadBuyBook, loadSellBook, loadTokens } from 'common/hive-engine-api';
 import moment from 'moment';
-import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getPeggedTokenPriceByChain, isNumeric, getSwapStatusById } from 'common/functions';
+import { getPrices, usdFormat, getChainByState, getPeggedTokenSymbolByChain, getSwapTokenByCrypto, getPeggedTokenPriceByChain, isNumeric, getSwapStatusById, getNextOrderDateTime } from 'common/functions';
 import { getCurrentFirebaseUser, getMarketMakerUser } from 'store/actions';
 import { TokenService } from 'services/token-service';
 import { ValidationControllerFactory, ControllerValidateResult, ValidationRules } from 'aurelia-validation';
@@ -67,6 +67,7 @@ export class DCA {
     @bindable() dcaTradesActive: ISwapRequestDCAViewModel[];
     @bindable() dcaTradesHistory: ISwapRequestDCAViewModel[];
     @bindable() dcaDetail: ISwapRequestDCADetailViewModel;
+    @bindable() timeUntilNextOrder;
 
     constructor(private dialogService: DialogService, 
                 private ts: TokenService, 
@@ -407,13 +408,22 @@ export class DCA {
 
     async loadDcaData(dcaId) {
         let dcaDetail = await getSwapDCADetail(dcaId);
+        dcaDetail.SwapRequestDCA.LastOrderDateTime = dcaDetail.SwapRequestDCA.CreatedAt;
+
         if (dcaDetail.SwapRequests){
+            let i = 0;
+
             for (let t of dcaDetail.SwapRequests) {
+                if (i == 0)
+                    dcaDetail.SwapRequestDCA.LastOrderDateTime = t.CreatedAt;
+
                 t.timestamp_month_name = moment(t.CreatedAt).format('MMMM');
                 t.timestamp_day = moment(t.CreatedAt).format('DD');
                 t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
                 t.timestamp_year = moment(t.CreatedAt).format('YYYY');
                 t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
+
+                i++;
             }            
         }
 
@@ -427,6 +437,8 @@ export class DCA {
             }            
         }
         this.dcaDetail = dcaDetail;  
+
+        this.timeUntilNextOrder = getNextOrderDateTime(this.dcaDetail);
         
         this.activateDcaButton('details'+dcaId);
     }

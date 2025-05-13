@@ -8,6 +8,7 @@ import { HttpClient } from 'aurelia-fetch-client';
 import trim from 'trim-character';
 import { Chain, SwapStatus, SwapStep } from './enums';
 import { DefaultChainId } from './constants';
+import moment from 'moment';
 
 const http: HttpClient = new HttpClient();
 const toastService: ToastService = Container.instance.get(ToastService);
@@ -404,4 +405,30 @@ export function isPeggedToken(token: IToken) {
 
 export function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+export function getNextOrderDateTime(dcaDetail: ISwapRequestDCADetailViewModel) {
+    let initDate = dcaDetail.SwapRequestDCA.LastOrderDateTime;
+    let initDateMoment = moment(initDate);        
+    let targetDateMoment = initDateMoment;       
+    let timeToReturn = ""; 
+
+    if (dcaDetail.SwapRequestDCA.RecurrenceType == "minute") {
+        targetDateMoment = initDateMoment.add(dcaDetail.SwapRequestDCA.RecurrenceTypeAmount, 'minutes');            
+        timeToReturn = targetDateMoment.diff(moment(), 'seconds') + ' seconds';
+    } else if (dcaDetail.SwapRequestDCA.RecurrenceType == "hour") {
+        targetDateMoment = initDateMoment.add(dcaDetail.SwapRequestDCA.RecurrenceTypeAmount, 'hours');
+        timeToReturn = targetDateMoment.diff(moment(), 'minutes') + ' minutes';
+    } else if (dcaDetail.SwapRequestDCA.RecurrenceType == "day") {
+        targetDateMoment = initDateMoment.add(dcaDetail.SwapRequestDCA.RecurrenceTypeAmount, 'days');
+        timeToReturn = targetDateMoment.diff(moment(), 'hours') + ' hours';
+    } else if (dcaDetail.SwapRequestDCA.RecurrenceType == "week") {
+        targetDateMoment = initDateMoment.add(dcaDetail.SwapRequestDCA.RecurrenceTypeAmount, 'weeks');
+        timeToReturn = targetDateMoment.diff(moment(), 'days') + ' days';
+    } else if (dcaDetail.SwapRequestDCA.RecurrenceType == "month") {
+        targetDateMoment = initDateMoment.add(dcaDetail.SwapRequestDCA.RecurrenceTypeAmount, 'months');
+        timeToReturn = targetDateMoment.diff(moment(), 'weeks') + ' weeks';
+    }
+
+    return timeToReturn;
 }

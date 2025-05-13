@@ -2120,3 +2120,8 @@ input.tradeValueUsd {
     margin-left: 0px;
     padding-left: 15px !important;
 }
+.nextOrderIn {
+    color: #05413c;
+    font-weight: bold;
+    text-decoration: underline;
+}

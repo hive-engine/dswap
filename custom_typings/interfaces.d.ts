@@ -414,6 +414,7 @@ interface ISwapRequestDCAViewModel {
     OrderCount: number
     TokenInputMemo: string;
     CancelRequested: boolean;
+    LastOrderDateTime: string;
 }
 
 interface ISwapRequestDCADetailViewModel {
