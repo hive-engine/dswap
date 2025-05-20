@@ -307,7 +307,7 @@ export class DCA {
             await this.ts.enrichTokensWithMetrics([this.sellToken], [this.sellToken.symbol], Chain.Hive);
         }
 
-        console.log(this.sellToken);
+        //console.log(this.sellToken);
         this.fillPeggedTokenMetrics(this.sellToken);
         this.refreshTokenLists();
 
@@ -537,13 +537,14 @@ export class DCA {
 
                 return false;
             }).withMessageKey('errors:dashboardInsufficientBalance')
-            // .then()
-            // .satisfies((value: any, object: any) => {
-            //     if(parseFloat(this.sellToken.metrics.lastPriceUsd) * this.sellTokenAmount < 1) {
-            //         return false;
-            //     };
-            //     return true;
-            // }).withMessageKey('errors:dcaMinimumOrderValueUsd')
+            .then()
+            .satisfies((value: any, object: any) => {
+                if(parseFloat(this.sellToken.metrics.lastPriceUsd) * this.sellTokenAmount >= 1) {
+                    return true;
+                };
+
+                return false;
+            }).withMessageKey('errors:dcaMinimumOrderValueUsd')
         .rules;
 
         this.validationController.addObject(this, rules);

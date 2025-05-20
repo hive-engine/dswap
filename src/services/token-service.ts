@@ -8,7 +8,7 @@ import { I18N } from 'aurelia-i18n';
 import { Store } from 'aurelia-store';
 import { loadCoins, loadTokenMetrics, loadUserBalances, loadTokens, fetchSettings, loadPoolTokens } from 'common/hive-engine-api';
 import { HiveEngineService } from './hive-engine-service';
-import { getPrices, usdFormat, getSwapTokenByCrypto } from 'common/functions';
+import { getPrices, usdFormat, getSwapTokenByCrypto, getPeggedTokenSymbolByChain } from 'common/functions';
 import { Chain } from '../common/enums';
 import { loadUserBalancesSE, loadTokensSE, loadTokenMetricsSE } from '../common/steem-engine-api';
 import { env } from 'process';
@@ -143,25 +143,46 @@ export class TokenService {
         } else if (chain === Chain.Steem) {
             metrics = await loadTokenMetricsSE(symbols);
         }
-        
-        for(const m of metrics) {
-            let token = dTokens.find(x => x.symbol == m.symbol);
-            if (token) {
-                m.marketCap = m.lastPrice * parseFloat(token.circulatingSupply);
 
-                if (Date.now() / 1000 < m.volumeExpiration) {
-                    m.volume = parseFloat(m.volume);
+        if (metrics && metrics.length > 0) {            
+            for(const m of metrics) {
+                let token = dTokens.find(x => x.symbol == m.symbol);
+                if (token) {
+                    m.marketCap = m.lastPrice * parseFloat(token.circulatingSupply);
+
+                    if (Date.now() / 1000 < m.volumeExpiration) {
+                        m.volume = parseFloat(m.volume);
+                    }
+
+                    if (!this.state.hivePriceUsd) {
+                        let prices = await getPrices();                    
+                        if (prices)
+                            this.state.hivePriceUsd = prices.hive.usd;                   
+                    }
+
+                    m.lastPriceUsd = usdFormat(parseFloat(m.lastPrice), token.precision, this.state.hivePriceUsd, true); 
+
+                    token.metrics = m;                
                 }
-
-                if (!this.state.hivePriceUsd) {
-                    let prices = await getPrices();                    
-                    if (prices)
-                        this.state.hivePriceUsd = prices.hive.usd;                   
+            }
+        } else {
+            var peggedSymbol = await getPeggedTokenSymbolByChain(Chain.Hive);
+            if (symbols.length == 1 && symbols[0] == peggedSymbol) {
+                let token = dTokens.find(x => x.symbol == peggedSymbol);
+                if (token) {
+                    token.metrics = {
+                        highestBid: 0,
+                        lastPrice: 0,
+                        lastPriceUsd: this.state.hivePriceUsd,
+                        lowestAsk: 0,
+                        marketCap: 0,
+                        priceChangeHive: 0,
+                        priceChangePercent: 0,
+                        symbol: peggedSymbol,
+                        volume: 0,
+                        volumeExpiration: 0        
+                    }
                 }
-
-                m.lastPriceUsd = usdFormat(parseFloat(m.lastPrice), token.precision, this.state.hivePriceUsd, true); 
-
-                token.metrics = m;                
             }
         }
     }

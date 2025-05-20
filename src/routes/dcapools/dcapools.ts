@@ -478,7 +478,7 @@ export class DCAPools {
                 t.timestamp_time = moment(t.CreatedAt).format('HH:mm');
                 t.timestamp_year = moment(t.CreatedAt).format('YYYY');
                 t.SwapStatusName = await getSwapStatusById(t.SwapStatusId);
-                
+
                 i++;
             }            
         } 
@@ -534,7 +534,7 @@ export class DCAPools {
     async refreshMyBalances(){
         this.loading = true;
         await this.ts.getDSwapTokenBalances(Chain.Hive, true);
-        console.log(this.sellToken);
+        //console.log(this.sellToken);
         this.loading = false;
     }
 
@@ -608,13 +608,14 @@ export class DCAPools {
 
                 return false;
             }).withMessageKey('errors:poolNotAvailable')
-            // .then()
-            // .satisfies((value: any, object: any) => {
-            //     if(parseFloat(this.sellToken.metrics.lastPriceUsd) * this.sellTokenAmount < 1) {
-            //         return false;
-            //     };
-            //     return true;
-            // }).withMessageKey('errors:dcaMinimumOrderValueUsd')
+            .then()
+            .satisfies((value: any, object: any) => {
+                if(parseFloat(this.sellToken.metrics.lastPriceUsd) * this.sellTokenAmount >= 1) {
+                    return true;
+                };
+
+                return false;
+            }).withMessageKey('errors:dcaMinimumOrderValueUsd')
         .rules;
 
         this.validationController.addObject(this, rules);
