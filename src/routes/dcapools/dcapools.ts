@@ -136,9 +136,11 @@ export class DCAPools {
         if (symbol == environment.marketMakerFeeToken) {
             return environment.EXCHANGE_URL_HE + 'images/logo-small.png';
         } else {
-            var t = this.supportedTokens.find(x => x.symbol === symbol);
-            if (t) {
-                return t.metadata.icon.endsWith('.svg') ? t.metadata.icon : `https://images.hive.blog/0x0/${t.metadata.icon}`;
+            if (this.supportedTokens) {
+                var t = this.supportedTokens.find(x => x.symbol === symbol);
+                if (t) {
+                    return t.metadata.icon.endsWith('.svg') ? t.metadata.icon : `https://images.hive.blog/0x0/${t.metadata.icon}`;
+                }
             }
         }
     }
